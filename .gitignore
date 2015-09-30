@@ -1,7 +1,7 @@
 .gradle
-/local.properties
-/.idea/workspace.xml
-/.idea/libraries
+/BluNote/local.properties
+/BluNote/.idea/workspace.xml
+/BluNote/.idea/libraries
 .DS_Store
 /build
 /captures
