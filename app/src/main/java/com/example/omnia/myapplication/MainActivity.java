@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -29,13 +28,12 @@ public class MainActivity extends AppCompatActivity {
     private Set<BluetoothDevice> pairedDevices;
 
     private AcceptThread serverThread;
-    private ConnectThread clientThread;
 
     private final ArrayList<BluetoothDevice> devices = new ArrayList<>();
-    private BluetoothSocket connectedSocket = null;
+    private BluetoothSocket connectedSocket;
 
     private static final UUID MY_UUID = UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a");
-    private static final String NAME = "BlueNote";
+    private static final String NAME = "BluNote";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +58,6 @@ public class MainActivity extends AppCompatActivity {
         ListView deviceListView = (ListView) findViewById(R.id.deviceList);
         deviceListView.setAdapter(deviceAdapter);
         deviceListView.setOnItemClickListener(mDeviceClickListener);
-
-
 
         // Set Floating Action Button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -114,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
                     // Get Device MAC Address
                     BluetoothDevice targetDevice = devices.get(arg2);
-                    clientThread = new ConnectThread(targetDevice);
+                    ConnectThread clientThread = new ConnectThread(targetDevice);
                     clientThread.start();
                     // Do stuff with it
                 }
@@ -129,7 +125,9 @@ public class MainActivity extends AppCompatActivity {
             BluetoothServerSocket tmp = null;
             try {
                 tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID);
-            } catch (IOException e) { }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             mmServerSocket = tmp;
         }
 
@@ -156,7 +154,9 @@ public class MainActivity extends AppCompatActivity {
         public void cancel() {
             try {
                 mmServerSocket.close();
-            } catch (IOException e) { }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -171,7 +171,9 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 tmp = mmDevice.createRfcommSocketToServiceRecord(MY_UUID);
-            } catch (IOException e) { }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             mmSocket = tmp;
         }
 
@@ -181,7 +183,9 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException connectException) {
                 try {
                     mmSocket.close();
-                } catch(IOException closeException) { }
+                } catch(IOException closeException) {
+                    closeException.printStackTrace();
+                }
                 return;
             }
 
@@ -194,7 +198,9 @@ public class MainActivity extends AppCompatActivity {
         public void cancel() {
             try {
                 mmSocket.close();
-            } catch (IOException e) { }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
