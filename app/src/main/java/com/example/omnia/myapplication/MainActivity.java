@@ -1,11 +1,7 @@
 package com.example.omnia.myapplication;
 
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -25,20 +21,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,9 +38,11 @@ public class MainActivity extends AppCompatActivity {
     private Set<BluetoothDevice> pairedDevices;
 
     private final ArrayList<BluetoothDevice> devices = new ArrayList<>();
-    private BluetoothSocket connectedSocket;
 
-
+    private interface bluetoothCommands {
+        int DEBUG_TOAST = 0;
+        int PLAY_SONG = 1;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,60 +85,13 @@ public class MainActivity extends AppCompatActivity {
         rightFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Todo: Fix mBluetoothService.isConnected()
-                //if (mBluetoothService.isConnected()) {
-                //    showToast("Not connected to a device");
-                //    return;
-                //}
-
-                showToast("Sending. . .");
-
                 // Get Music
-                ContentResolver cr = getContentResolver();
-                Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                Uri newUri;
-                String selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0";
-                String sortOrder = MediaStore.Audio.Media.SIZE + " ASC";
-                Cursor cur = cr.query(uri, null, selection, null, sortOrder);
-                int count;
-                String data;
-
-
-                if (cur != null) {
-                    count = cur.getCount();
-                    if (count > 0 && cur.moveToFirst()) {
-                        data = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DATA));
-                        newUri = Uri.parse("file:///" + data);
-                        Log.w("Song: ", newUri.toString());
-
-                        try {
-                            InputStream inputStream = getContentResolver().openInputStream(newUri);
-                            ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-                            int bufferSize = 1024;
-                            int len;
-                            byte[] buffer = new byte[bufferSize];
-
-                            while((len = inputStream.read(buffer)) != -1) {
-                                byteBuffer.write(buffer, 0 , len);
-                            }
-
-                            if (byteBuffer.size() > 0 ){
-                                mBluetoothService.write(byteBuffer.toByteArray());
-                            }
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                cur.close();
-
-
-
-                // Send Data
+                showToast("Sending . . .");
+                mBluetoothService.write(mBluetoothService.getConnectedDevices().get(0),
+                        bluetoothCommands.PLAY_SONG,
+                        getSongByteArray());
             }
         });
-
 
     }
 
@@ -180,33 +125,32 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Handler for Bluetooth Service to call on events
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
-            byte[] writeBuf = (byte[]) msg.obj;
-            int bytes = (int)msg.arg2;
-            Log.w("Handler Called, size: ", Integer.toString(bytes));
-            Log.w("Message Size:", Integer.toString(writeBuf.length));
-            Log.w("Hash Code: ", Integer.toString(writeBuf.hashCode()));
-
-            try {
-                File tempMp3 = File.createTempFile("TempSong", "mp3", getCacheDir());
-                tempMp3.setReadable(true, false);
-                FileOutputStream fos = new FileOutputStream(tempMp3);
-                fos.write(writeBuf, 0, bytes);
-                fos.close();
-
-                FileInputStream fis = new FileInputStream(tempMp3);
-                mediaPlayer.reset();
-                mediaPlayer.setDataSource(fis.getFD());
-                mediaPlayer.prepare();
-                mediaPlayer.start();
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (msg.what == bluetoothCommands.DEBUG_TOAST) {
+                showToast((String)msg.obj);
+                return;
             }
 
+            if (mBluetoothService.numConnectedThreads() > 1) {
+                // Multiple connected devices, perform daisy chain
+                BluetoothDevice sender = mBluetoothService.getDeviceById(msg.arg1);
+                ArrayList<BluetoothDevice> otherDevices = mBluetoothService.getConnectedDevices();
+                otherDevices.remove(sender);
+                for (BluetoothDevice device : otherDevices) {
+                    mBluetoothService.write(device, bluetoothCommands.PLAY_SONG,
+                            (byte[]) msg.obj);
+                }
+            } else {
+                // Single connected Device, recieve and play song
+                switch(msg.what) {
+                    case bluetoothCommands.PLAY_SONG:
+                        convertToFileAndPlay((byte[]) msg.obj);
+                        break;
+                }
+            }
         }
     };
 
@@ -220,6 +164,67 @@ public class MainActivity extends AppCompatActivity {
                     // Do stuff with it
                 }
             };
+
+    // Get Smallest song on device and convert to byte array
+    private byte[] getSongByteArray() {
+        ContentResolver cr = getContentResolver();
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Uri newUri;
+        String selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0",
+                sortOrder = MediaStore.Audio.Media.SIZE + " ASC",
+                data;
+        int count, len, bufferSize = 1024;
+        Cursor cur = cr.query(uri, null, selection, null, sortOrder);
+        byte[] buffer = new byte[0];
+
+        if (cur != null) {
+            count = cur.getCount();
+            if (count > 0 && cur.moveToFirst()) {
+                data = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DATA));
+                newUri = Uri.parse("file:///" + data);
+                Log.w("Song: ", newUri.toString());
+
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(newUri);
+                    ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+                    buffer = new byte[bufferSize];
+
+                    while((len = inputStream.read(buffer)) != -1) {
+                        byteBuffer.write(buffer, 0 , len);
+                    }
+
+                    if (byteBuffer.size() > 0 ){
+                        return byteBuffer.toByteArray();
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            cur.close();
+        }
+        return buffer;
+    }
+
+    // Convert byte array into file and play with Media Player
+    private void convertToFileAndPlay(byte[] bytes) {
+        try {
+            File tempMp3 = File.createTempFile("TempSong", "mp3", getCacheDir());
+            tempMp3.setReadable(true, false);
+            FileOutputStream fos = new FileOutputStream(tempMp3);
+            fos.write(bytes);
+            fos.close();
+
+            FileInputStream fis = new FileInputStream(tempMp3);
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(fis.getFD());
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (IOException e ) {
+            e.printStackTrace();
+        }
+
+    }
 
     // Toasty - Allows Threads to make a Toast Message
     public void showToast(final String toast) {

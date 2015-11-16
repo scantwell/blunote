@@ -14,6 +14,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -22,42 +26,52 @@ public class BluetoothService {
     private BluetoothAdapter bluetoothAdapter;
     private AcceptThread serverThread;
     private ConnectThread clientThread;
-    private BluetoothSocket connectedSocket;
-    private ConnectedThread connectedThread;
+    private int uniqueId = 0;
+    public Map<Integer, BluetoothDevice> connectedDevices;
+    private Map<BluetoothDevice, ConnectedThread> connectedThreads;
     private Handler handler;
 
     private static final UUID MY_UUID = UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a");
     private static final String NAME = "BluNote";
 
+    // Constructor, Takes handler
     public BluetoothService(Handler handler) {
         // Setup Bluetooth Adapter
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        connectedDevices = new HashMap<>();
+        connectedThreads = new HashMap<>();
         serverThread = new AcceptThread();
         serverThread.start();
         this.handler = handler;
     }
 
+    // Get All Devices that have been paired to this device
     public Set<BluetoothDevice> getBondedDevices() {
         return bluetoothAdapter.getBondedDevices();
     }
 
+    // Start a Client connection thread to connect to the given device
     public void connectToDevice(BluetoothDevice device) {
         clientThread = new ConnectThread(device);
         clientThread.start();
     }
 
-    public boolean write(byte[] buffer) {
-        if (connectedThread == null) {
+    // Write to the Connected Thread for the given BluetoothDevice
+    public boolean write(BluetoothDevice device, int command, byte[] buffer) {
+        if (connectedThreads.size() == 0) {
             return false;
         }
-        connectedThread.write(buffer);
+        ConnectedThread connectedThread = connectedThreads.get(device);
+        connectedThread.write(command, buffer);
         return true;
     }
 
-    public boolean isConnected() {
-        return connectedSocket.isConnected();
+    // Get Number of Connected Threads
+    public int numConnectedThreads() {
+        return connectedThreads.size();
     }
 
+    // Clean up
     public void cancel() {
         if (serverThread != null) {
             serverThread.interrupt();
@@ -67,10 +81,31 @@ public class BluetoothService {
             clientThread.interrupt();
             clientThread.cancel();
         }
-        if (connectedThread != null) {
-            connectedThread.interrupt();
-            connectedThread.cancel();
+
+        for (ConnectedThread thread : connectedThreads.values()) {
+            thread.interrupt();
+            thread.cancel();
         }
+    }
+
+    // Get connected devices
+    public ArrayList<BluetoothDevice> getConnectedDevices() {
+        return new ArrayList<>(connectedDevices.values());
+    }
+
+    // Get ID using Device
+    public int getIdByDevice(BluetoothDevice device) {
+        for (Map.Entry<Integer, BluetoothDevice> entry: connectedDevices.entrySet()) {
+            if(Objects.equals(device, entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return -1;
+    }
+
+    // Get Device using ID
+    public BluetoothDevice getDeviceById(int id) {
+        return connectedDevices.get(id);
     }
 
 
@@ -95,11 +130,11 @@ public class BluetoothService {
                     socket = mmServerSocket.accept();
                     if (socket != null) {
                         Log.w("Connection", "Received");
-                        connectedSocket = socket;
-                        connectedThread = new ConnectedThread(socket);
+                        handler.obtainMessage(0, 0, 0, "Connection Received").sendToTarget();
+                        ConnectedThread connectedThread = new ConnectedThread(socket);
                         connectedThread.start();
-                        mmServerSocket.close();
-                        break;
+                        connectedDevices.put(uniqueId++, socket.getRemoteDevice());
+                        connectedThreads.put(socket.getRemoteDevice(), connectedThread);
                     }
                 } catch (IOException e) {
                     break;
@@ -145,9 +180,11 @@ public class BluetoothService {
                 return;
             }
             Log.w("Connection", "Accepted");
-            connectedSocket = mmSocket;
-            connectedThread = new ConnectedThread(mmSocket);
+            handler.obtainMessage(0, 0, 0, "Connection Accepted").sendToTarget();
+            ConnectedThread connectedThread = new ConnectedThread(mmSocket);
             connectedThread.start();
+            connectedDevices.put(uniqueId++, mmSocket.getRemoteDevice());
+            connectedThreads.put(mmSocket.getRemoteDevice(), connectedThread);
         }
 
         public void cancel() {
@@ -171,8 +208,8 @@ public class BluetoothService {
             OutputStream tmpOut = null;
 
             try {
-                tmpIn = socket.getInputStream();
-                tmpOut = socket.getOutputStream();
+                tmpIn = mmSocket.getInputStream();
+                tmpOut = mmSocket.getOutputStream();
             } catch (IOException e ) {
                 e.printStackTrace();
             }
@@ -185,17 +222,20 @@ public class BluetoothService {
         public void run() {
             DataInputStream inStream = new DataInputStream(new BufferedInputStream(mmInStream));
             byte[] buffer;
-            int messageSize;
-            int bytes;
+            int command, messageSize, bytes;
             while(true) {
                 try {
+                    command = inStream.readInt();
                     messageSize = inStream.readInt();
                     bytes = 0;
                     buffer = new byte[messageSize];
                     while (bytes < messageSize) {
                         bytes += inStream.read(buffer, bytes, messageSize - bytes);
                     }
-                    handler.obtainMessage(1, 0, bytes, buffer).sendToTarget();
+                    handler.obtainMessage(command,
+                            getIdByDevice(mmSocket.getRemoteDevice()),
+                            bytes,
+                            buffer).sendToTarget();
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -205,12 +245,13 @@ public class BluetoothService {
             }
         }
 
-        public void write(byte[] bytes) {
+        public void write(int command, byte[] bytes) {
             try {
                 // Get Data Output Stream for Bluetooth Communication
                 DataOutputStream d = new DataOutputStream(new BufferedOutputStream(mmOutStream, bytes.length + 4));
 
-                // Write length of bytes to Transfer
+                // Write Command, then length of bytes to Transfer
+                d.writeInt(command);
                 d.writeInt(bytes.length);
 
                 // Send Bytes in 1K "packets"
@@ -220,9 +261,6 @@ public class BluetoothService {
                     d.write(bytes, i, b);
                     d.flush();
                 }
-
-                // Trigger Message Handler
-                handler.obtainMessage(1, 0, bytes.length, bytes).sendToTarget();
             } catch (IOException e) {
                 e.printStackTrace();
             }
