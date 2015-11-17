@@ -123,6 +123,7 @@ public class BluetoothService {
             mmServerSocket = tmp;
         }
 
+        @SuppressWarnings("InfiniteLoopStatement")
         public void run() {
             BluetoothSocket socket;
             while(true) {
@@ -137,6 +138,7 @@ public class BluetoothService {
                         connectedThreads.put(socket.getRemoteDevice(), connectedThread);
                     }
                 } catch (IOException e) {
+                    e.printStackTrace();
                     break;
                 }
             }
@@ -177,6 +179,8 @@ public class BluetoothService {
                 } catch(IOException closeException) {
                     closeException.printStackTrace();
                 }
+                Log.w("Connection","Refused");
+                handler.obtainMessage(0, 0, 0, "Connection Refused").sendToTarget();
                 return;
             }
             Log.w("Connection", "Accepted");
@@ -222,15 +226,17 @@ public class BluetoothService {
         public void run() {
             DataInputStream inStream = new DataInputStream(new BufferedInputStream(mmInStream));
             byte[] buffer;
-            int command, messageSize, bytes;
+            int command, messageSize, bytes, bufferSize = 1024 * 10;
             while(true) {
                 try {
                     command = inStream.readInt();
                     messageSize = inStream.readInt();
                     bytes = 0;
                     buffer = new byte[messageSize];
+
                     while (bytes < messageSize) {
-                        bytes += inStream.read(buffer, bytes, messageSize - bytes);
+                        int b = ((bytes + bufferSize) < messageSize) ? bufferSize : messageSize - bytes;
+                        bytes += inStream.read(buffer, bytes, b);
                     }
                     handler.obtainMessage(command,
                             getIdByDevice(mmSocket.getRemoteDevice()),
@@ -248,14 +254,14 @@ public class BluetoothService {
         public void write(int command, byte[] bytes) {
             try {
                 // Get Data Output Stream for Bluetooth Communication
-                DataOutputStream d = new DataOutputStream(new BufferedOutputStream(mmOutStream, bytes.length + 4));
+                DataOutputStream d = new DataOutputStream(new BufferedOutputStream(mmOutStream, bytes.length + 8));
 
                 // Write Command, then length of bytes to Transfer
                 d.writeInt(command);
                 d.writeInt(bytes.length);
 
                 // Send Bytes in 1K "packets"
-                int bufferSize = 1024;
+                int bufferSize = 1024 * 10;
                 for (int i = 0; i < bytes.length; i+=bufferSize) {
                     int b = ((i + bufferSize) < bytes.length) ? bufferSize : bytes.length - i;
                     d.write(bytes, i, b);

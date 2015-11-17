@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
         mBluetoothService = new BluetoothService(mHandler);
 
         // Setup List Array Adapter
-        final ArrayAdapter<String> deviceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        final ArrayAdapter<String> deviceAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1);
         ListView deviceListView = (ListView) findViewById(R.id.deviceList);
         deviceListView.setAdapter(deviceAdapter);
         deviceListView.setOnItemClickListener(mDeviceClickListener);
@@ -85,11 +86,17 @@ public class MainActivity extends AppCompatActivity {
         rightFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Get Music
-                showToast("Sending . . .");
-                mBluetoothService.write(mBluetoothService.getConnectedDevices().get(0),
-                        bluetoothCommands.PLAY_SONG,
-                        getSongByteArray());
+                // Get Song byte array
+                showToast("Loading Song. . .");
+                new Thread(new Runnable()  {
+                    public void run() {
+                        byte[] song = getSongByteArray();
+                        showToast("Sending . . .");
+                        mBluetoothService.write(mBluetoothService.getConnectedDevices().get(0),
+                                bluetoothCommands.PLAY_SONG,
+                                song);
+                    }
+                }).start();
             }
         });
 
@@ -140,11 +147,12 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<BluetoothDevice> otherDevices = mBluetoothService.getConnectedDevices();
                 otherDevices.remove(sender);
                 for (BluetoothDevice device : otherDevices) {
+                    showToast("Sending . . .");
                     mBluetoothService.write(device, bluetoothCommands.PLAY_SONG,
                             (byte[]) msg.obj);
                 }
             } else {
-                // Single connected Device, recieve and play song
+                // Single connected Device, receive and play song
                 switch(msg.what) {
                     case bluetoothCommands.PLAY_SONG:
                         convertToFileAndPlay((byte[]) msg.obj);
@@ -189,8 +197,10 @@ public class MainActivity extends AppCompatActivity {
                     ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
                     buffer = new byte[bufferSize];
 
-                    while((len = inputStream.read(buffer)) != -1) {
-                        byteBuffer.write(buffer, 0 , len);
+                    if (inputStream != null) {
+                        while((len = inputStream.read(buffer)) != -1) {
+                            byteBuffer.write(buffer, 0 , len);
+                        }
                     }
 
                     if (byteBuffer.size() > 0 ){
@@ -210,7 +220,6 @@ public class MainActivity extends AppCompatActivity {
     private void convertToFileAndPlay(byte[] bytes) {
         try {
             File tempMp3 = File.createTempFile("TempSong", "mp3", getCacheDir());
-            tempMp3.setReadable(true, false);
             FileOutputStream fos = new FileOutputStream(tempMp3);
             fos.write(bytes);
             fos.close();
