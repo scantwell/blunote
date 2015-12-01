@@ -116,7 +116,7 @@ public class BluetoothService {
         public AcceptThread() {
             BluetoothServerSocket tmp = null;
             try {
-                tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID);
+                tmp = bluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(NAME, MY_UUID);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -163,7 +163,7 @@ public class BluetoothService {
             mmDevice = device;
 
             try {
-                tmp = mmDevice.createRfcommSocketToServiceRecord(MY_UUID);
+                tmp = mmDevice.createInsecureRfcommSocketToServiceRecord(MY_UUID);
             } catch (IOException e) {
                 e.printStackTrace();
             }
