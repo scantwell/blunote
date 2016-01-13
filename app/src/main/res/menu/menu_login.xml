@@ -4,33 +4,26 @@
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
-        android:icon="@android:drawable/ic_menu_preferences"
+        android:icon="@drawable/ic_settings"
         android:orderInCategory="100"
         app:showAsAction="always" >
         <menu>
             <item
                 android:id="@+id/action_network"
                 android:title="Network Settings"
-                app:showAsAction="always" />
+                app:showAsAction="always"
+                android:onClick="networkSettings" />
             <item
-                android:id="@+id/action_personal"
+                android:id="@+id/action_preferences"
                 android:title="Preferences"
-                app:showAsAction="always" />
+                app:showAsAction="always"
+                android:onClick="preferences" />
         </menu>
     </item>
     <item
-        android:id="@+id/action_mediactl"
-        android:title="Media Control"
-        android:icon="@android:drawable/ic_menu_send"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/action_songs"
-        android:title="Songs"
-        android:icon="@android:drawable/ic_menu_share"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/action_disconnect"
+        android:id="@+id/action_search"
         android:title="Disconnect"
-        android:icon="@android:drawable/ic_menu_close_clear_cancel"
-        app:showAsAction="always" />
+        android:icon="@drawable/ic_search"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
 </menu>
