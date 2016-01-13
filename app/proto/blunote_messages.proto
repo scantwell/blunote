@@ -1,0 +1,56 @@
+package blunote;
+
+option java_package = "com.drexelsp.blunote";
+option java_outer_classname = "BlunoteMessages";
+
+// Initiated by the Host when enough songs have been requested etc
+message PollRequest {
+	required int32 requestId = 1;
+	required string question = 2;
+	repeated string options = 3;
+}
+
+// Response sent back by the user
+message PollResponse {
+	required string choice = 1;
+	required int32 requestId = 2;
+}
+
+// User requests a song to be played
+message SongRequest {
+	required string username = 1;
+	required string songKey = 2; // The hosts songkey
+}
+
+message SongFragment {
+	required int64 songId = 1;
+	optional int64	songKey = 2;
+	required bytes fragment = 3;
+	required int64 fragmentId = 4;
+	required int32 totalFragments = 5;
+}
+
+message DeliveryInfo {
+	required int64 timestamp = 1;
+	optional string username = 2;
+	optional int32 id = 3;
+}
+
+message WrapperMessage {
+
+	enum Type { POLLREQ = 1; POLLRESP = 2; SONGREQ = 3; SONGFRAG = 4;}
+
+	required Type type = 1;
+	optional PollRequest pollRequest = 2;
+	optional PollResponse pollResponse = 3;
+	optional SongRequest songRequest = 4;
+	optional SongFragment songFragment = 5;
+}
+
+
+message Pdu {
+	required DeliveryInfo deliveryInfo = 1;
+	required WrapperMessage message = 2;
+}
+
+
