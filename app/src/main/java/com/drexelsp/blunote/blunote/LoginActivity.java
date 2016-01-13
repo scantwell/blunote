@@ -20,6 +20,8 @@ import android.view.MenuItem;
 
 public class LoginActivity extends AppCompatActivity {
 
+    final String TAG = "LoginActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +33,16 @@ public class LoginActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (mBound)
+                {
+                    try {
+                        Log.v(TAG, "Creating a message to send.");
+                        Message msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
+                        mService.send(msg);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
         Intent intent = new Intent(this, NetworkService.class);

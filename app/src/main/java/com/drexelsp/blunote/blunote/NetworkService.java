@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.os.Messenger;
 import android.util.Log;
@@ -13,12 +14,20 @@ import android.content.Context;
 
 /**
  * Created by scantwell on 1/12/2016.
+ *
+ * NetworkService exposes the meshnetwork
  */
 public class NetworkService extends Service {
 
-    private Messenger messenger = new Messenger(new ClientHandler());
+    private Messenger messenger = new Messenger(new ClientHandler(this));
     private String TAG = "NetworkService";
     private int NOTIFICATION_ID = 1234;
+
+
+    public void send(Message msg)
+    {
+        Log.v(TAG, "Sending message.");
+    }
 
     @Nullable
     @Override
@@ -44,8 +53,10 @@ public class NetworkService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
+        // Increases the priority of this running process
         // Must be created in onStartCommand else NotificationManager will be null.
         this.createNotification();
+
         // If the service is stopped it will be started again with original intent
         // Needed for determining the type of mesh network
         return START_REDELIVER_INTENT;

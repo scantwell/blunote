@@ -3,6 +3,8 @@ package com.drexelsp.blunote.blunote;
 import android.os.Message;
 import android.util.Log;
 import android.os.Handler;
+
+import java.lang.ref.WeakReference;
 import java.util.logging.LogRecord;
 
 /**
@@ -13,7 +15,12 @@ import java.util.logging.LogRecord;
 public class ClientHandler extends Handler {
 
     static public final int SEND = 1;
+    private final WeakReference<NetworkService> mService;
     private String TAG = "NetworkServiceClientHandler";
+
+    public ClientHandler(NetworkService service) {
+        mService = new WeakReference<NetworkService>(service);
+    }
 
     @Override
     public void handleMessage(Message msg)
@@ -22,6 +29,7 @@ public class ClientHandler extends Handler {
         switch (msg.what) {
             case SEND:
                 Log.v(TAG, "Sending message.");
+                mService.get().send(msg);
                 break;
             default:
                 Log.v(TAG, "Unknown message type, sending to parent handleMessage().");
