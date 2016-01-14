@@ -1,8 +1,11 @@
 package com.drexelsp.blunote.blunote;
 
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -23,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     final String TAG = "LoginActivity";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mBound)
-                {
+                if (mBound) {
                     try {
                         Log.v(TAG, "Creating a message to send.");
                         Message msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
@@ -48,6 +51,10 @@ public class LoginActivity extends AppCompatActivity {
         });
         Intent intent = new Intent(this, NetworkService.class);
         startService(intent);
+
+        IntentFilter intentFilter = new IntentFilter("networkservice.onrecieved");
+        MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
+        registerReceiver(myBroadcastReceiver, intentFilter);
     }
 
     @Override
@@ -98,17 +105,6 @@ public class LoginActivity extends AppCompatActivity {
             mBound = false;
         }
     };
-
-    public void sayHello(View v) {
-        if (!mBound) return;
-        // Create and send a message to the service, using a supported 'what' value
-        Message msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
-        try {
-            mService.send(msg);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     protected void onStart() {

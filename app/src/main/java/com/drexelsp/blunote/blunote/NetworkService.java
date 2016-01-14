@@ -23,10 +23,19 @@ public class NetworkService extends Service {
     private String TAG = "NetworkService";
     private int NOTIFICATION_ID = 1234;
 
+    public void onReceived(String data)
+    {
+        Log.v(TAG, "Received a message.");
+        Intent intent = new Intent();
+        intent.setAction("networkservice.onrecieved");
+        intent.putExtra("data", data);
+        sendBroadcast(intent);
+    }
 
     public void send(Message msg)
     {
         Log.v(TAG, "Sending message.");
+        this.onReceived("Hello World!");
     }
 
     @Nullable
