@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".LoginActivity">
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".SongViewActivity">
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
@@ -11,19 +11,30 @@
             <item
                 android:id="@+id/action_network"
                 android:title="Network Settings"
-                app:showAsAction="always"
-                android:onClick="networkSettings" />
+                app:showAsAction="always" />
             <item
                 android:id="@+id/action_preferences"
                 android:title="Preferences"
-                app:showAsAction="always"
-                android:onClick="preferences" />
+                app:showAsAction="always" />
         </menu>
     </item>
     <item
         android:id="@+id/action_search"
-        android:title="Disconnect"
+        android:title="Search"
         android:icon="@drawable/ic_search"
-        app:showAsAction="ifRoom|collapseActionView"
+        android:orderInCategory="90"
+        app:showAsAction="always"
         app:actionViewClass="android.support.v7.widget.SearchView" />
+    <item
+        android:id="@+id/action_songList"
+        android:title="Song List"
+        android:icon="@drawable/ic_song_list"
+        android:orderInCategory="70"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_mediaControl"
+        android:title="Media Control"
+        android:icon="@drawable/ic_media_control"
+        android:orderInCategory="80"
+        app:showAsAction="always" />
 </menu>

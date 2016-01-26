@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:background="@color/offWhite"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_login" tools:context=".LoginActivity">
+    tools:showIn="@layout/activity_login"
+    tools:context=".LoginActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -24,11 +27,12 @@
             android:text="Available Networks"
             android:layout_gravity="center_horizontal"
             android:background="@color/colorPrimary"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="325dp"
             android:id="@+id/connection_list"
             android:layout_gravity="center_horizontal" />
 

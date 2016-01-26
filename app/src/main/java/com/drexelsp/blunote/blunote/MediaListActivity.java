@@ -5,18 +5,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Activity for the Settings/Preferences page
+ * Created by U6020377 on 1/25/2016.
  */
-public class PreferencesActivity extends AppCompatActivity
+public class MediaListActivity extends AppCompatActivity
 {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preferences);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.preferences_toolbar);
+        setContentView(R.layout.activity_media_list);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.media_toolbar);
         setSupportActionBar(toolbar);
+
+        List<String> list = new ArrayList<>();
+        for(int i = 1; i < 20; ++i)
+            list.add("Song " + i);
+
+        ListView view = (ListView) findViewById(R.id.media_list);
+        final ArrayAdapter adapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, list);
+        view.setAdapter(adapter);
     }
 
     @Override

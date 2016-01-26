@@ -2,6 +2,7 @@ package com.drexelsp.blunote.blunote;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +13,7 @@ import com.drexelsp.blunote.beans.ConnectionListItem;
 
 import java.util.ArrayList;
 
-public class LoginActivity extends BaseBluNoteActivity {
+public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class LoginActivity extends BaseBluNoteActivity {
         NetworkArrayAdapter adapter = new NetworkArrayAdapter(this, getCurrentAvailableNetworks());
         networkListView.setAdapter(adapter);
 
-        dialog.hide();
+       dialog.hide();
 
     }
 

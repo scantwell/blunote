@@ -7,15 +7,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 /**
- * Activity for the Settings/Preferences page
+ * Created by U6020377 on 1/25/2016.
  */
-public class PreferencesActivity extends AppCompatActivity
+public class SongViewActivity extends AppCompatActivity
 {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preferences);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.preferences_toolbar);
+        setContentView(R.layout.activity_song_view);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.song_view_toolbar);
         setSupportActionBar(toolbar);
     }
 
