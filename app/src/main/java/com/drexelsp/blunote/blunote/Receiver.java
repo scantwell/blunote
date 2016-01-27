@@ -5,10 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-/**
- * Created by scantwell on 1/13/2016.
- */
-public class MyBroadcastReceiver extends BroadcastReceiver {
+public class Receiver extends android.content.BroadcastReceiver {
+
+    private ClientService cService;
+
+    public Receiver(ClientService service)
+    {
+        cService = service;
+    }
 
     @Override
     public void onReceive(Context context, Intent intent)

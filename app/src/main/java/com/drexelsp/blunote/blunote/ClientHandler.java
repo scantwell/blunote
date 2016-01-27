@@ -4,6 +4,8 @@ import android.os.Message;
 import android.util.Log;
 import android.os.Handler;
 
+import com.drexelsp.blunote.BlunoteMessages;
+
 import java.lang.ref.WeakReference;
 import java.util.logging.LogRecord;
 
@@ -15,6 +17,7 @@ import java.util.logging.LogRecord;
 public class ClientHandler extends Handler {
 
     static public final int SEND = 1;
+    static public final int SONG_RECOMMENDATION = 2;
     private final WeakReference<NetworkService> mService;
     private String TAG = "NetworkServiceClientHandler";
 
@@ -25,8 +28,10 @@ public class ClientHandler extends Handler {
     @Override
     public void handleMessage(Message msg)
     {
-
         switch (msg.what) {
+            case SONG_RECOMMENDATION:
+                msg.getData();
+                break;
             case SEND:
                 Log.v(TAG, "Sending message.");
                 mService.get().send(msg);

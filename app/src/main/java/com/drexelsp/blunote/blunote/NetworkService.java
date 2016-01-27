@@ -32,6 +32,7 @@ public class NetworkService extends Service {
         sendBroadcast(intent);
     }
 
+    // Sends to another application via bluetooth/etc
     public void send(Message msg)
     {
         Log.v(TAG, "Sending message.");
