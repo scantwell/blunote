@@ -26,4 +26,11 @@
     <string name="album_length">Album Length</string>
     <string name="album_number_tracks"># of Tracks</string>
     <string name="album_year_released">Album Release Date</string>
+    <string name="current_playlist">Current Playlist</string>
+    <array name="playlist_context_array">
+        <item>Play Now</item>
+        <item>Upvote</item>
+        <item>Downvote</item>
+        <item>View Details</item>
+    </array>
 </resources>
