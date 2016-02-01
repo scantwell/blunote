@@ -15,8 +15,8 @@ public class MediaPlayerActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_playlist_view);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.playlist_view_toolbar);
+        setContentView(R.layout.activity_media_player);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.media_player_toolbar);
         setSupportActionBar(toolbar);
     }
 
