@@ -20,8 +20,8 @@ public class ArtistViewActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_album_view);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.album_view_toolbar);
+        setContentView(R.layout.activity_artist_view);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.artist_view_toolbar);
         setSupportActionBar(toolbar);
 
         List<String> list = new ArrayList<>();
