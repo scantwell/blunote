@@ -3,11 +3,7 @@ package com.drexelsp.blunote.blunote;
 import android.os.Message;
 import android.util.Log;
 import android.os.Handler;
-
-import com.drexelsp.blunote.BlunoteMessages;
-
 import java.lang.ref.WeakReference;
-import java.util.logging.LogRecord;
 
 /**
  * Created by scantwell on 1/12/2016.
