@@ -14,7 +14,7 @@ import android.content.Context;
 
 /**
  * Created by scantwell on 1/12/2016.
- *
+ * <p/>
  * NetworkService exposes the meshnetwork
  */
 public class NetworkService extends Service {
@@ -23,8 +23,7 @@ public class NetworkService extends Service {
     private String TAG = "NetworkService";
     private int NOTIFICATION_ID = 1234;
 
-    public void onReceived(String data)
-    {
+    public void onReceived(String data) {
         Log.v(TAG, "Received a message.");
         Intent intent = new Intent();
         intent.setAction("networkservice.onrecieved");
@@ -33,26 +32,25 @@ public class NetworkService extends Service {
     }
 
     // Sends to another application via bluetooth/etc
-    public void send(Message msg)
-    {
+    public void send(Message msg) {
         Log.v(TAG, "Sending message.");
         this.onReceived("Hello World!");
     }
 
     @Nullable
     @Override
-    public IBinder onBind(Intent intent)
-    {
+    public IBinder onBind(Intent intent) {
         Log.v(TAG, "Binding user.");
         return messenger.getBinder();
     }
 
     @Override
-    public void onCreate() { Log.v(TAG, "Created service."); }
+    public void onCreate() {
+        Log.v(TAG, "Created service.");
+    }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // notificationId allows you to update the notification later on.
@@ -61,8 +59,7 @@ public class NetworkService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId)
-    {
+    public int onStartCommand(Intent intent, int flags, int startId) {
         // Increases the priority of this running process
         // Must be created in onStartCommand else NotificationManager will be null.
         this.createNotification();
@@ -73,19 +70,19 @@ public class NetworkService extends Service {
     }
 
     @Override
-    public boolean onUnbind(Intent intent)
-    {
+    public boolean onUnbind(Intent intent) {
         Log.v(TAG, "Unbinding user.");
         return true;
     }
 
     @Override
-    public void onRebind(Intent intent) { Log.v(TAG, "Rebind user."); }
+    public void onRebind(Intent intent) {
+        Log.v(TAG, "Rebind user.");
+    }
 
     // Private
 
-    private void createNotification()
-    {
+    private void createNotification() {
         Notification note =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.notification_icon)

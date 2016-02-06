@@ -20,9 +20,9 @@ import java.util.UUID;
 
 /**
  * Created by omnia on 1/13/16.
- *
+ * <p/>
  * Manages Bluetooth Adapter and Client / Server / Data Transfer Threads
- *
+ * <p/>
  * TODO: Use Bluetooth Beacons
  * TODO: Change writes to use Messages, then convert to byte[]
  * TODO: Replace Handler callback for communication back to NetworkService?
@@ -55,6 +55,7 @@ public class BluetoothManager {
 
     /**
      * Get Bonded Devices
+     *
      * @return Set of Bluetooth Devices that have been paired to this device
      */
     public Set<BluetoothDevice> getBondedDevices() {
@@ -119,7 +120,7 @@ public class BluetoothManager {
     /**
      * Get Host Device
      *
-     * @return  Current host device used for upstream communication
+     * @return Current host device used for upstream communication
      */
     public BluetoothDevice getHostDevice() {
         if (upStream != null) {
@@ -162,7 +163,7 @@ public class BluetoothManager {
         @SuppressWarnings("InfiniteLoopStatement")
         public void run() {
             BluetoothSocket socket;
-            while(true) {
+            while (true) {
                 try {
                     socket = mmServerSocket.accept();
                     if (socket != null) {
@@ -217,7 +218,7 @@ public class BluetoothManager {
                 Log.e(TAG, "Connection to a host Refused: " + connectException.getMessage());
                 try {
                     mmSocket.close();
-                } catch(IOException closeException) {
+                } catch (IOException closeException) {
                     Log.e(TAG, "Error closing socket: " + closeException.getMessage());
                 }
             }
@@ -253,7 +254,7 @@ public class BluetoothManager {
             try {
                 tmpIn = mmSocket.getInputStream();
                 tmpOut = mmSocket.getOutputStream();
-            } catch (IOException e ) {
+            } catch (IOException e) {
                 Log.e(TAG, "Error setting Input/Output Stream: " + e.getMessage());
             }
 
@@ -270,7 +271,7 @@ public class BluetoothManager {
             DataInputStream inStream = new DataInputStream(new BufferedInputStream(mmInStream));
             byte[] buffer;
             int command, messageSize, bytes, bufferSize = 1024 * 10;
-            while(true) {
+            while (true) {
                 try {
                     command = inStream.readInt();
                     messageSize = inStream.readInt();
@@ -305,7 +306,7 @@ public class BluetoothManager {
 
                 // Send Bytes in 1K "packets"
                 int bufferSize = 1024 * 10;
-                for (int i = 0; i < bytes.length; i+=bufferSize) {
+                for (int i = 0; i < bytes.length; i += bufferSize) {
                     int b = ((i + bufferSize) < bytes.length) ? bufferSize : bytes.length - i;
                     d.write(bytes, i, b);
                     d.flush();

@@ -3,11 +3,12 @@ package com.drexelsp.blunote.blunote;
 import android.os.Message;
 import android.util.Log;
 import android.os.Handler;
+
 import java.lang.ref.WeakReference;
 
 /**
  * Created by scantwell on 1/12/2016.
- *
+ * <p/>
  * Handles messages from activities or binding service to the background service
  */
 public class ClientHandler extends Handler {
@@ -18,12 +19,11 @@ public class ClientHandler extends Handler {
     private String TAG = "NetworkServiceClientHandler";
 
     public ClientHandler(NetworkService service) {
-        mService = new WeakReference<NetworkService>(service);
+        mService = new WeakReference<>(service);
     }
 
     @Override
-    public void handleMessage(Message msg)
-    {
+    public void handleMessage(Message msg) {
         switch (msg.what) {
             case SONG_RECOMMENDATION:
                 msg.getData();

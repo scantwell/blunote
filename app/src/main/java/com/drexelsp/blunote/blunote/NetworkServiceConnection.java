@@ -1,16 +1,18 @@
 package com.drexelsp.blunote.blunote;
 
-        import android.content.ComponentName;
-        import android.content.ServiceConnection;
-        import android.os.IBinder;
-        import android.os.Message;
-        import android.os.Messenger;
-        import android.os.RemoteException;
+import android.content.ComponentName;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 
 public class NetworkServiceConnection implements ServiceConnection {
 
     Messenger mService = null;
-    /** Flag indicating whether we have called bind on the service. */
+    /**
+     * Flag indicating whether we have called bind on the service.
+     */
     boolean mBound;
 
 
@@ -32,8 +34,7 @@ public class NetworkServiceConnection implements ServiceConnection {
     }
 
     public void send(Message msg) throws RemoteException {
-        if (mBound)
-        {
+        if (mBound) {
             mService.send(msg);
         }
     }

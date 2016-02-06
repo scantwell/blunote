@@ -15,8 +15,7 @@ import android.util.Log;
 public class ClientService extends Service {
 
     public class LocalBinder extends Binder {
-        ClientService getService()
-        {
+        ClientService getService() {
             return ClientService.this;
         }
     }
@@ -32,14 +31,12 @@ public class ClientService extends Service {
         return mBinder;
     }
 
-    public void onReceived(String data)
-    {
+    public void onReceived(String data) {
         Log.v(TAG, "Received a message.");
     }
 
     // Sends to another application via bluetooth/etc
-    public void send(String data)
-    {
+    public void send(String data) {
         Log.v(TAG, "Sending message.");
         Message msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
         try {
@@ -50,8 +47,7 @@ public class ClientService extends Service {
     }
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         Log.v(TAG, "Created service.");
 
         IntentFilter intentFilter = new IntentFilter("networkservice.onrecieved");
@@ -65,27 +61,26 @@ public class ClientService extends Service {
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         unbindService(mConnection);
         Log.v(TAG, "Destroyed service.");
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId)
-    {
+    public int onStartCommand(Intent intent, int flags, int startId) {
         // If the service is stopped it will be started again with original intent
         // Needed for determining the type of mesh network
         return START_REDELIVER_INTENT;
     }
 
     @Override
-    public boolean onUnbind(Intent intent)
-    {
+    public boolean onUnbind(Intent intent) {
         Log.v(TAG, "Unbinding user.");
         return true;
     }
 
     @Override
-    public void onRebind(Intent intent) { Log.v(TAG, "Rebind user."); }
+    public void onRebind(Intent intent) {
+        Log.v(TAG, "Rebind user.");
+    }
 }
