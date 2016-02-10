@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ViewFlipper;
 
 /**
  * Activity for the Network Settings page
@@ -19,6 +20,9 @@ public class NetworkSettingsActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ViewFlipper vf = ((ViewFlipper) findViewById(R.id.view_flipper));
+        vf.setDisplayedChild(Constants.ACTIVITY_NETWORK_SETTINGS);
     }
 
     @Override
@@ -40,12 +44,7 @@ public class NetworkSettingsActivity extends AppCompatActivity
         int id = item.getItemId();
         Intent intent;
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_network) {
-            intent = new Intent(NetworkSettingsActivity.this, NetworkSettingsActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        else if (id == R.id.action_preferences) {
+        if (id == R.id.action_preferences) {
             intent = new Intent(NetworkSettingsActivity.this, PreferencesActivity.class);
             startActivity(intent);
             return true;

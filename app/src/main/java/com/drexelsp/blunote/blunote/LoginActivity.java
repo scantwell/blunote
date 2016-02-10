@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ViewFlipper;
 
@@ -16,6 +18,8 @@ import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
 
+    Button joinNetworkButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +29,16 @@ public class LoginActivity extends AppCompatActivity {
 
         ViewFlipper vf = ((ViewFlipper) findViewById(R.id.view_flipper));
         vf.setDisplayedChild(Constants.ACTIVITY_LOGIN);
+
+        joinNetworkButton = (Button) findViewById(R.id.join_network_button);
+
+        joinNetworkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
+                startActivity(intent);
+            }
+        });
 
         /*ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Loading Available Networks");

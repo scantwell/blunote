@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ViewFlipper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,9 @@ public class ArtistViewActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ViewFlipper vf = ((ViewFlipper) findViewById(R.id.view_flipper));
+        vf.setDisplayedChild(Constants.ACTIVITY_ARTIST_VIEW);
 
         List<String> list = new ArrayList<>();
         for(int i = 1; i < 20; ++i)

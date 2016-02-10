@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
 
@@ -23,6 +24,7 @@ public class MediaListActivity extends AppCompatActivity {
     ToggleButton songsToggle;
     ToggleButton albumsToggle;
     ToggleButton artistsToggle;
+    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class MediaListActivity extends AppCompatActivity {
         ViewFlipper vf = ((ViewFlipper) findViewById(R.id.view_flipper));
         vf.setDisplayedChild(Constants.ACTIVITY_MEDIA_LIST);
 
+        title = (TextView) findViewById(R.id.media_list_title);
         mediaList = (ListView) findViewById(R.id.media_list);
         setSongList();
 
@@ -106,10 +109,6 @@ public class MediaListActivity extends AppCompatActivity {
             intent = new Intent(MediaListActivity.this, PreferencesActivity.class);
             startActivity(intent);
             return true;
-        } else if (id == R.id.action_songList) {
-            intent = new Intent(MediaListActivity.this, MediaListActivity.class);
-            startActivity(intent);
-            return true;
         } else if (id == R.id.action_mediaControl) {
             intent = new Intent(MediaListActivity.this, MediaPlayerActivity.class);
             startActivity(intent);
@@ -119,7 +118,11 @@ public class MediaListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Replace with code to generate song list
+     */
     private void setSongList() {
+        title.setText(getResources().getString(R.string.all_songs));
         List<String> list = new ArrayList<>();
         for (int i = 1; i < 20; ++i)
             list.add("Song " + i);
@@ -129,7 +132,11 @@ public class MediaListActivity extends AppCompatActivity {
         mediaList.setAdapter(adapter);
     }
 
+    /**
+     * Replace with code to generate album list
+     */
     private void setAlbumList() {
+        title.setText(getResources().getString(R.string.all_albums));
         List<String> list = new ArrayList<>();
         for (int i = 1; i < 20; ++i)
             list.add("Album " + i);
@@ -139,7 +146,11 @@ public class MediaListActivity extends AppCompatActivity {
         mediaList.setAdapter(adapter);
     }
 
+    /**
+     * Replace with code to generate artist list
+     */
     private void setArtistList() {
+        title.setText(getResources().getString(R.string.all_artists));
         List<String> list = new ArrayList<>();
         for (int i = 1; i < 20; ++i)
             list.add("Artist " + i);

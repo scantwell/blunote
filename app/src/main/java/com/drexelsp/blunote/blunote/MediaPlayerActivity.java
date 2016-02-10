@@ -2,10 +2,13 @@ package com.drexelsp.blunote.blunote;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ViewFlipper;
 
 /**
  * Created by Brisbin on 1/29/2016.
@@ -19,6 +22,17 @@ public class MediaPlayerActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ViewFlipper vf = ((ViewFlipper) findViewById(R.id.view_flipper));
+        vf.setDisplayedChild(Constants.ACTIVITY_MEDIA_PLAYER);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.playlist_FAB);
+        fab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaPlayerActivity.this, PlaylistActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -48,11 +62,6 @@ public class MediaPlayerActivity extends AppCompatActivity
         }
         else if (id == R.id.action_songList){
             intent = new Intent(MediaPlayerActivity.this, MediaListActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        else if (id == R.id.action_mediaControl){
-            intent = new Intent(MediaPlayerActivity.this, MediaPlayerActivity.class);
             startActivity(intent);
             return true;
         }

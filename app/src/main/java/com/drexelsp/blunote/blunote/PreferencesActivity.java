@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ViewFlipper;
 
 /**
@@ -13,6 +15,8 @@ import android.widget.ViewFlipper;
  */
 public class PreferencesActivity extends AppCompatActivity
 {
+    Button leaveNetworkButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +26,15 @@ public class PreferencesActivity extends AppCompatActivity
 
         ViewFlipper vf = ((ViewFlipper) findViewById(R.id.view_flipper));
         vf.setDisplayedChild(Constants.ACTIVITY_PREFERENCES);
+
+        leaveNetworkButton = (Button) findViewById(R.id.leave_network_button);
+        leaveNetworkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PreferencesActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -29,9 +42,9 @@ public class PreferencesActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_login, menu);
         menu.getItem(Constants.MENU_ITEM_SONG_LIST)
-                .setVisible(true);
+                .setVisible(false);
         menu.getItem(Constants.MENU_ITEM_MEDIA_PLAYER)
-                .setVisible(true);
+                .setVisible(false);
         return true;
     }
 
@@ -45,11 +58,6 @@ public class PreferencesActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_network) {
             intent = new Intent(PreferencesActivity.this, NetworkSettingsActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        else if (id == R.id.action_preferences) {
-            intent = new Intent(PreferencesActivity.this, PreferencesActivity.class);
             startActivity(intent);
             return true;
         }

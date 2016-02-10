@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ViewFlipper;
 
 /**
  * Need to handle a long press for options menu
@@ -26,6 +27,9 @@ public class PlaylistActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ViewFlipper vf = ((ViewFlipper) findViewById(R.id.view_flipper));
+        vf.setDisplayedChild(Constants.ACTIVITY_PLAYLIST_VIEW);
 
         list = new String[20];
         for(int i = 0; i < 20; ++i)

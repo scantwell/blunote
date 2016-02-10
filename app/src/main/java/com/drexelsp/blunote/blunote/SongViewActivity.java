@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ViewFlipper;
 
 /**
  * Created by U6020377 on 1/25/2016.
@@ -19,6 +20,9 @@ public class SongViewActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ViewFlipper vf = ((ViewFlipper) findViewById(R.id.view_flipper));
+        vf.setDisplayedChild(Constants.ACTIVITY_SONG_VIEW);
     }
 
     @Override
