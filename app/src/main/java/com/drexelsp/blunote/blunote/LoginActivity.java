@@ -1,12 +1,13 @@
 package com.drexelsp.blunote.blunote;
 
-import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.ViewFlipper;
 
 import com.drexelsp.blunote.adapters.NetworkArrayAdapter;
 import com.drexelsp.blunote.beans.ConnectionListItem;
@@ -18,22 +19,25 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ProgressDialog dialog = new ProgressDialog(this);
+        ViewFlipper vf = ((ViewFlipper) findViewById(R.id.view_flipper));
+        vf.setDisplayedChild(Constants.ACTIVITY_LOGIN);
+
+        /*ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Loading Available Networks");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
-        dialog.show();
+        dialog.show();*/
 
         //Make Call to load networks
         ListView networkListView = (ListView) findViewById(R.id.connection_list);
         NetworkArrayAdapter adapter = new NetworkArrayAdapter(this, getCurrentAvailableNetworks());
         networkListView.setAdapter(adapter);
 
-       dialog.hide();
+        //dialog.hide();
 
     }
 
@@ -41,6 +45,10 @@ public class LoginActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_login, menu);
+        menu.getItem(Constants.MENU_ITEM_SONG_LIST)
+                .setVisible(false);
+        menu.getItem(Constants.MENU_ITEM_MEDIA_PLAYER)
+                .setVisible(false);
         return true;
     }
 
@@ -52,7 +60,14 @@ public class LoginActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_network) {
+            Intent intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        if (id == R.id.action_preferences) {
+            Intent intent = new Intent(LoginActivity.this, PreferencesActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -61,10 +76,10 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * This method is a stub that should be switched out for the real way that we gather the active networks in range.
+     *
      * @return a list of list items representing the current active networks - currently just some static garbage data
      */
-    private ArrayList<ConnectionListItem> getCurrentAvailableNetworks()
-    {
+    private ArrayList<ConnectionListItem> getCurrentAvailableNetworks() {
         ConnectionListItem item1 = new ConnectionListItem();
         item1.setConnectionName("Network 1");
         item1.setTotalConnections("22");
