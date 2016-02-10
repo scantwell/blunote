@@ -1,5 +1,6 @@
 package com.drexelsp.blunote.blunote;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,10 @@ public class NetworkSettingsActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_login, menu);
+        menu.getItem(Constants.MENU_ITEM_SONG_LIST)
+                .setVisible(false);
+        menu.getItem(Constants.MENU_ITEM_MEDIA_PLAYER)
+                .setVisible(false);
         return true;
     }
 
@@ -33,9 +38,16 @@ public class NetworkSettingsActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        Intent intent;
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_network) {
+            intent = new Intent(NetworkSettingsActivity.this, NetworkSettingsActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        else if (id == R.id.action_preferences) {
+            intent = new Intent(NetworkSettingsActivity.this, PreferencesActivity.class);
+            startActivity(intent);
             return true;
         }
 

@@ -58,15 +58,15 @@ public class LoginActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        Intent intent;
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_network) {
-            Intent intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);
+            intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);
             startActivity(intent);
             return true;
         }
-        if (id == R.id.action_preferences) {
-            Intent intent = new Intent(LoginActivity.this, PreferencesActivity.class);
+        else if (id == R.id.action_preferences) {
+            intent = new Intent(LoginActivity.this, PreferencesActivity.class);
             startActivity(intent);
             return true;
         }

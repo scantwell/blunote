@@ -1,5 +1,6 @@
 package com.drexelsp.blunote.blunote;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,9 +48,26 @@ public class AlbumViewActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        Intent intent;
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_network) {
+            intent = new Intent(AlbumViewActivity.this, NetworkSettingsActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        else if (id == R.id.action_preferences) {
+            intent = new Intent(AlbumViewActivity.this, PreferencesActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        else if (id == R.id.action_songList){
+            intent = new Intent(AlbumViewActivity.this, MediaListActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        else if (id == R.id.action_mediaControl){
+            intent = new Intent(AlbumViewActivity.this, MediaPlayerActivity.class);
+            startActivity(intent);
             return true;
         }
 
