@@ -1,22 +1,19 @@
 package com.drexelsp.blunote.blunote;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ViewFlipper;
 
 import com.drexelsp.blunote.adapters.NetworkArrayAdapter;
 import com.drexelsp.blunote.beans.ConnectionListItem;
 
 import java.util.ArrayList;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseBlueNoteActivity {
 
     Button joinNetworkButton;
 
@@ -26,9 +23,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        ViewFlipper vf = ((ViewFlipper) findViewById(R.id.view_flipper));
-        vf.setDisplayedChild(Constants.ACTIVITY_LOGIN);
 
         joinNetworkButton = (Button) findViewById(R.id.join_network_button);
 
@@ -56,36 +50,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        menu.getItem(Constants.MENU_ITEM_SONG_LIST)
-                .setVisible(false);
-        menu.getItem(Constants.MENU_ITEM_MEDIA_PLAYER)
-                .setVisible(false);
-        return true;
+    public int getViewConstant() {
+        return Constants.ACTIVITY_LOGIN;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        Intent intent;
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_network) {
-            intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        else if (id == R.id.action_preferences) {
-            intent = new Intent(LoginActivity.this, PreferencesActivity.class);
-            startActivity(intent);
-            return true;
-        }
+    public boolean showMusicMenuItems() {
+        return false;
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    public Context getCurrentContext() {
+        return LoginActivity.this;
     }
 
     /**
