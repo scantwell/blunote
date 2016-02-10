@@ -1,14 +1,10 @@
 package com.drexelsp.blunote.blunote;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ViewFlipper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +12,7 @@ import java.util.List;
 /**
  * Created by U6020377 on 1/25/2016.
  */
-public class AlbumViewActivity extends AppCompatActivity
+public class AlbumViewActivity extends BaseBluNoteActivity
 {
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -25,9 +21,6 @@ public class AlbumViewActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        ViewFlipper vf = ((ViewFlipper) findViewById(R.id.view_flipper));
-        vf.setDisplayedChild(Constants.ACTIVITY_ALBUM_VIEW);
 
         List<String> list = new ArrayList<>();
         for(int i = 1; i < 20; ++i)
@@ -40,41 +33,17 @@ public class AlbumViewActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
+    public Context getCurrentContext() {
+        return AlbumViewActivity.this;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        Intent intent;
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_network) {
-            intent = new Intent(AlbumViewActivity.this, NetworkSettingsActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        else if (id == R.id.action_preferences) {
-            intent = new Intent(AlbumViewActivity.this, PreferencesActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        else if (id == R.id.action_songList){
-            intent = new Intent(AlbumViewActivity.this, MediaListActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        else if (id == R.id.action_mediaControl){
-            intent = new Intent(AlbumViewActivity.this, MediaPlayerActivity.class);
-            startActivity(intent);
-            return true;
-        }
+    public int getViewConstant() {
+        return Constants.ACTIVITY_ALBUM_VIEW;
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    public boolean showMusicMenuItems() {
+        return true;
     }
 }

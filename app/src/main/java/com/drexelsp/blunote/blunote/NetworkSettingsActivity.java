@@ -1,17 +1,13 @@
 package com.drexelsp.blunote.blunote;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ViewFlipper;
 
 /**
  * Activity for the Network Settings page
  */
-public class NetworkSettingsActivity extends AppCompatActivity
+public class NetworkSettingsActivity extends BaseBluNoteActivity
 {
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -21,35 +17,25 @@ public class NetworkSettingsActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ViewFlipper vf = ((ViewFlipper) findViewById(R.id.view_flipper));
-        vf.setDisplayedChild(Constants.ACTIVITY_NETWORK_SETTINGS);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        menu.getItem(Constants.MENU_ITEM_SONG_LIST)
-                .setVisible(false);
-        menu.getItem(Constants.MENU_ITEM_MEDIA_PLAYER)
-                .setVisible(false);
-        return true;
+    public Context getCurrentContext() {
+        return NetworkSettingsActivity.this;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        Intent intent;
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_preferences) {
-            intent = new Intent(NetworkSettingsActivity.this, PreferencesActivity.class);
-            startActivity(intent);
-            return true;
-        }
+    public int getViewConstant() {
+        return Constants.ACTIVITY_NETWORK_SETTINGS;
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    public boolean showMusicMenuItems() {
+        return false;
+    }
+
+    @Override
+    public boolean showSearchMenuItem() {
+        return false;
     }
 }

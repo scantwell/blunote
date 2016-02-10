@@ -13,7 +13,7 @@ import com.drexelsp.blunote.beans.ConnectionListItem;
 
 import java.util.ArrayList;
 
-public class LoginActivity extends BaseBlueNoteActivity {
+public class LoginActivity extends BaseBluNoteActivity {
 
     Button joinNetworkButton;
 
@@ -62,6 +62,11 @@ public class LoginActivity extends BaseBlueNoteActivity {
     @Override
     public Context getCurrentContext() {
         return LoginActivity.this;
+    }
+
+    @Override
+    public boolean showSearchMenuItem() {
+        return false;
     }
 
     /**
