@@ -46,4 +46,9 @@ public class AlbumViewActivity extends BaseBluNoteActivity
     public boolean showMusicMenuItems() {
         return true;
     }
+
+    @Override
+    public boolean showSearchMenuItem() {
+        return false;
+    }
 }

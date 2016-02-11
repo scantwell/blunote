@@ -66,7 +66,7 @@ public class LoginActivity extends BaseBluNoteActivity {
 
     @Override
     public boolean showSearchMenuItem() {
-        return false;
+        return true;
     }
 
     /**
