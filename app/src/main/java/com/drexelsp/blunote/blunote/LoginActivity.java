@@ -16,6 +16,8 @@ import java.util.ArrayList;
 public class LoginActivity extends BaseBluNoteActivity {
 
     Button joinNetworkButton;
+	final String TAG = "LoginActivity";
+    private ClientServiceConnection connection = new ClientServiceConnection();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,8 @@ public class LoginActivity extends BaseBluNoteActivity {
                 startActivity(intent);
             }
         });
+        Intent intent = new Intent(this, ClientService.class);
+        startService(intent);
 
         /*ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Loading Available Networks");
@@ -63,10 +67,22 @@ public class LoginActivity extends BaseBluNoteActivity {
     public Context getCurrentContext() {
         return LoginActivity.this;
     }
-
     @Override
     public boolean showSearchMenuItem() {
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to the service
+        bindService(new Intent(this, ClientService.class), connection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unbindService(connection);
     }
 
     /**
