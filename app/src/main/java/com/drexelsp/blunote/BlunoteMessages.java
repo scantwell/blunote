@@ -8,76 +8,146 @@ public final class BlunoteMessages {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface PollRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:blunote.PollRequest)
+  public interface VoteOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:blunote.Vote)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>required int32 requestId = 1;</code>
+     * <code>required int32 voteId = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique vote ID
+     * </pre>
      */
-    boolean hasRequestId();
+    boolean hasVoteId();
     /**
-     * <code>required int32 requestId = 1;</code>
+     * <code>required int32 voteId = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique vote ID
+     * </pre>
      */
-    int getRequestId();
+    int getVoteId();
 
     /**
-     * <code>required string question = 2;</code>
+     * <code>required .blunote.Vote.AnswerType response_type = 2;</code>
+     *
+     * <pre>
+     *&#47; Type of vote and expected response type
+     * </pre>
+     */
+    boolean hasResponseType();
+    /**
+     * <code>required .blunote.Vote.AnswerType response_type = 2;</code>
+     *
+     * <pre>
+     *&#47; Type of vote and expected response type
+     * </pre>
+     */
+    com.drexelsp.blunote.BlunoteMessages.Vote.AnswerType getResponseType();
+
+    /**
+     * <code>required string question = 3;</code>
+     *
+     * <pre>
+     *&#47; The question to be displayed
+     * </pre>
      */
     boolean hasQuestion();
     /**
-     * <code>required string question = 2;</code>
+     * <code>required string question = 3;</code>
+     *
+     * <pre>
+     *&#47; The question to be displayed
+     * </pre>
      */
     java.lang.String getQuestion();
     /**
-     * <code>required string question = 2;</code>
+     * <code>required string question = 3;</code>
+     *
+     * <pre>
+     *&#47; The question to be displayed
+     * </pre>
      */
     com.google.protobuf.ByteString
         getQuestionBytes();
 
     /**
-     * <code>repeated string options = 3;</code>
+     * <code>repeated string options = 4;</code>
+     *
+     * <pre>
+     *&#47; Options to be displayed
+     * </pre>
      */
     com.google.protobuf.ProtocolStringList
         getOptionsList();
     /**
-     * <code>repeated string options = 3;</code>
+     * <code>repeated string options = 4;</code>
+     *
+     * <pre>
+     *&#47; Options to be displayed
+     * </pre>
      */
     int getOptionsCount();
     /**
-     * <code>repeated string options = 3;</code>
+     * <code>repeated string options = 4;</code>
+     *
+     * <pre>
+     *&#47; Options to be displayed
+     * </pre>
      */
     java.lang.String getOptions(int index);
     /**
-     * <code>repeated string options = 3;</code>
+     * <code>repeated string options = 4;</code>
+     *
+     * <pre>
+     *&#47; Options to be displayed
+     * </pre>
      */
     com.google.protobuf.ByteString
         getOptionsBytes(int index);
+
+    /**
+     * <code>required .blunote.Vote.DisplayType display_type = 5;</code>
+     *
+     * <pre>
+     *&#47; Determines how to display the options to the user
+     * </pre>
+     */
+    boolean hasDisplayType();
+    /**
+     * <code>required .blunote.Vote.DisplayType display_type = 5;</code>
+     *
+     * <pre>
+     *&#47; Determines how to display the options to the user
+     * </pre>
+     */
+    com.drexelsp.blunote.BlunoteMessages.Vote.DisplayType getDisplayType();
   }
   /**
-   * Protobuf type {@code blunote.PollRequest}
+   * Protobuf type {@code blunote.Vote}
    *
    * <pre>
-   * Initiated by the Host when enough songs have been requested etc
+   **
    * </pre>
    */
-  public static final class PollRequest extends
+  public static final class Vote extends
       com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:blunote.PollRequest)
-      PollRequestOrBuilder {
-    // Use PollRequest.newBuilder() to construct.
-    private PollRequest(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:blunote.Vote)
+      VoteOrBuilder {
+    // Use Vote.newBuilder() to construct.
+    private Vote(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private PollRequest(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private Vote(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final PollRequest defaultInstance;
-    public static PollRequest getDefaultInstance() {
+    private static final Vote defaultInstance;
+    public static Vote getDefaultInstance() {
       return defaultInstance;
     }
 
-    public PollRequest getDefaultInstanceForType() {
+    public Vote getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -87,7 +157,7 @@ public final class BlunoteMessages {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private PollRequest(
+    private Vote(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -112,22 +182,44 @@ public final class BlunoteMessages {
             }
             case 8: {
               bitField0_ |= 0x00000001;
-              requestId_ = input.readInt32();
+              voteId_ = input.readInt32();
               break;
             }
-            case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000002;
-              question_ = bs;
+            case 16: {
+              int rawValue = input.readEnum();
+              com.drexelsp.blunote.BlunoteMessages.Vote.AnswerType value = com.drexelsp.blunote.BlunoteMessages.Vote.AnswerType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                responseType_ = value;
+              }
               break;
             }
             case 26: {
               com.google.protobuf.ByteString bs = input.readBytes();
-              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+              bitField0_ |= 0x00000004;
+              question_ = bs;
+              break;
+            }
+            case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
                 options_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000004;
+                mutable_bitField0_ |= 0x00000008;
               }
               options_.add(bs);
+              break;
+            }
+            case 40: {
+              int rawValue = input.readEnum();
+              com.drexelsp.blunote.BlunoteMessages.Vote.DisplayType value = com.drexelsp.blunote.BlunoteMessages.Vote.DisplayType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(5, rawValue);
+              } else {
+                bitField0_ |= 0x00000008;
+                displayType_ = value;
+              }
               break;
             }
           }
@@ -138,7 +230,7 @@ public final class BlunoteMessages {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
           options_ = options_.getUnmodifiableView();
         }
         this.unknownFields = unknownFields.build();
@@ -147,57 +239,269 @@ public final class BlunoteMessages {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_PollRequest_descriptor;
+      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_Vote_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_PollRequest_fieldAccessorTable
+      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_Vote_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.drexelsp.blunote.BlunoteMessages.PollRequest.class, com.drexelsp.blunote.BlunoteMessages.PollRequest.Builder.class);
+              com.drexelsp.blunote.BlunoteMessages.Vote.class, com.drexelsp.blunote.BlunoteMessages.Vote.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<PollRequest> PARSER =
-        new com.google.protobuf.AbstractParser<PollRequest>() {
-      public PollRequest parsePartialFrom(
+    public static com.google.protobuf.Parser<Vote> PARSER =
+        new com.google.protobuf.AbstractParser<Vote>() {
+      public Vote parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PollRequest(input, extensionRegistry);
+        return new Vote(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<PollRequest> getParserForType() {
+    public com.google.protobuf.Parser<Vote> getParserForType() {
       return PARSER;
     }
 
-    private int bitField0_;
-    public static final int REQUESTID_FIELD_NUMBER = 1;
-    private int requestId_;
     /**
-     * <code>required int32 requestId = 1;</code>
+     * Protobuf enum {@code blunote.Vote.AnswerType}
      */
-    public boolean hasRequestId() {
+    public enum AnswerType
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>SINGLE = 1;</code>
+       */
+      SINGLE(0, 1),
+      /**
+       * <code>MULTI = 2;</code>
+       */
+      MULTI(1, 2),
+      /**
+       * <code>RANKED = 3;</code>
+       */
+      RANKED(2, 3),
+      ;
+
+      /**
+       * <code>SINGLE = 1;</code>
+       */
+      public static final int SINGLE_VALUE = 1;
+      /**
+       * <code>MULTI = 2;</code>
+       */
+      public static final int MULTI_VALUE = 2;
+      /**
+       * <code>RANKED = 3;</code>
+       */
+      public static final int RANKED_VALUE = 3;
+
+
+      public final int getNumber() { return value; }
+
+      public static AnswerType valueOf(int value) {
+        switch (value) {
+          case 1: return SINGLE;
+          case 2: return MULTI;
+          case 3: return RANKED;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<AnswerType>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<AnswerType>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<AnswerType>() {
+              public AnswerType findValueByNumber(int number) {
+                return AnswerType.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.drexelsp.blunote.BlunoteMessages.Vote.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final AnswerType[] VALUES = values();
+
+      public static AnswerType valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private AnswerType(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:blunote.Vote.AnswerType)
+    }
+
+    /**
+     * Protobuf enum {@code blunote.Vote.DisplayType}
+     */
+    public enum DisplayType
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>ALPHA = 1;</code>
+       */
+      ALPHA(0, 1),
+      /**
+       * <code>NUMERICAL = 2;</code>
+       */
+      NUMERICAL(1, 2),
+      ;
+
+      /**
+       * <code>ALPHA = 1;</code>
+       */
+      public static final int ALPHA_VALUE = 1;
+      /**
+       * <code>NUMERICAL = 2;</code>
+       */
+      public static final int NUMERICAL_VALUE = 2;
+
+
+      public final int getNumber() { return value; }
+
+      public static DisplayType valueOf(int value) {
+        switch (value) {
+          case 1: return ALPHA;
+          case 2: return NUMERICAL;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<DisplayType>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<DisplayType>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<DisplayType>() {
+              public DisplayType findValueByNumber(int number) {
+                return DisplayType.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.drexelsp.blunote.BlunoteMessages.Vote.getDescriptor().getEnumTypes().get(1);
+      }
+
+      private static final DisplayType[] VALUES = values();
+
+      public static DisplayType valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private DisplayType(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:blunote.Vote.DisplayType)
+    }
+
+    private int bitField0_;
+    public static final int VOTEID_FIELD_NUMBER = 1;
+    private int voteId_;
+    /**
+     * <code>required int32 voteId = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique vote ID
+     * </pre>
+     */
+    public boolean hasVoteId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required int32 requestId = 1;</code>
+     * <code>required int32 voteId = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique vote ID
+     * </pre>
      */
-    public int getRequestId() {
-      return requestId_;
+    public int getVoteId() {
+      return voteId_;
     }
 
-    public static final int QUESTION_FIELD_NUMBER = 2;
-    private java.lang.Object question_;
+    public static final int RESPONSE_TYPE_FIELD_NUMBER = 2;
+    private com.drexelsp.blunote.BlunoteMessages.Vote.AnswerType responseType_;
     /**
-     * <code>required string question = 2;</code>
+     * <code>required .blunote.Vote.AnswerType response_type = 2;</code>
+     *
+     * <pre>
+     *&#47; Type of vote and expected response type
+     * </pre>
      */
-    public boolean hasQuestion() {
+    public boolean hasResponseType() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required string question = 2;</code>
+     * <code>required .blunote.Vote.AnswerType response_type = 2;</code>
+     *
+     * <pre>
+     *&#47; Type of vote and expected response type
+     * </pre>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.Vote.AnswerType getResponseType() {
+      return responseType_;
+    }
+
+    public static final int QUESTION_FIELD_NUMBER = 3;
+    private java.lang.Object question_;
+    /**
+     * <code>required string question = 3;</code>
+     *
+     * <pre>
+     *&#47; The question to be displayed
+     * </pre>
+     */
+    public boolean hasQuestion() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required string question = 3;</code>
+     *
+     * <pre>
+     *&#47; The question to be displayed
+     * </pre>
      */
     public java.lang.String getQuestion() {
       java.lang.Object ref = question_;
@@ -214,7 +518,11 @@ public final class BlunoteMessages {
       }
     }
     /**
-     * <code>required string question = 2;</code>
+     * <code>required string question = 3;</code>
+     *
+     * <pre>
+     *&#47; The question to be displayed
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getQuestionBytes() {
@@ -230,39 +538,80 @@ public final class BlunoteMessages {
       }
     }
 
-    public static final int OPTIONS_FIELD_NUMBER = 3;
+    public static final int OPTIONS_FIELD_NUMBER = 4;
     private com.google.protobuf.LazyStringList options_;
     /**
-     * <code>repeated string options = 3;</code>
+     * <code>repeated string options = 4;</code>
+     *
+     * <pre>
+     *&#47; Options to be displayed
+     * </pre>
      */
     public com.google.protobuf.ProtocolStringList
         getOptionsList() {
       return options_;
     }
     /**
-     * <code>repeated string options = 3;</code>
+     * <code>repeated string options = 4;</code>
+     *
+     * <pre>
+     *&#47; Options to be displayed
+     * </pre>
      */
     public int getOptionsCount() {
       return options_.size();
     }
     /**
-     * <code>repeated string options = 3;</code>
+     * <code>repeated string options = 4;</code>
+     *
+     * <pre>
+     *&#47; Options to be displayed
+     * </pre>
      */
     public java.lang.String getOptions(int index) {
       return options_.get(index);
     }
     /**
-     * <code>repeated string options = 3;</code>
+     * <code>repeated string options = 4;</code>
+     *
+     * <pre>
+     *&#47; Options to be displayed
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getOptionsBytes(int index) {
       return options_.getByteString(index);
     }
 
+    public static final int DISPLAY_TYPE_FIELD_NUMBER = 5;
+    private com.drexelsp.blunote.BlunoteMessages.Vote.DisplayType displayType_;
+    /**
+     * <code>required .blunote.Vote.DisplayType display_type = 5;</code>
+     *
+     * <pre>
+     *&#47; Determines how to display the options to the user
+     * </pre>
+     */
+    public boolean hasDisplayType() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>required .blunote.Vote.DisplayType display_type = 5;</code>
+     *
+     * <pre>
+     *&#47; Determines how to display the options to the user
+     * </pre>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.Vote.DisplayType getDisplayType() {
+      return displayType_;
+    }
+
     private void initFields() {
-      requestId_ = 0;
+      voteId_ = 0;
+      responseType_ = com.drexelsp.blunote.BlunoteMessages.Vote.AnswerType.SINGLE;
       question_ = "";
       options_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      displayType_ = com.drexelsp.blunote.BlunoteMessages.Vote.DisplayType.ALPHA;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -270,11 +619,19 @@ public final class BlunoteMessages {
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
-      if (!hasRequestId()) {
+      if (!hasVoteId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasResponseType()) {
         memoizedIsInitialized = 0;
         return false;
       }
       if (!hasQuestion()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasDisplayType()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -286,13 +643,19 @@ public final class BlunoteMessages {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, requestId_);
+        output.writeInt32(1, voteId_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getQuestionBytes());
+        output.writeEnum(2, responseType_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getQuestionBytes());
       }
       for (int i = 0; i < options_.size(); i++) {
-        output.writeBytes(3, options_.getByteString(i));
+        output.writeBytes(4, options_.getByteString(i));
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeEnum(5, displayType_.getNumber());
       }
       getUnknownFields().writeTo(output);
     }
@@ -305,11 +668,15 @@ public final class BlunoteMessages {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, requestId_);
+          .computeInt32Size(1, voteId_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getQuestionBytes());
+          .computeEnumSize(2, responseType_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getQuestionBytes());
       }
       {
         int dataSize = 0;
@@ -319,6 +686,10 @@ public final class BlunoteMessages {
         }
         size += dataSize;
         size += 1 * getOptionsList().size();
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(5, displayType_.getNumber());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -332,53 +703,53 @@ public final class BlunoteMessages {
       return super.writeReplace();
     }
 
-    public static com.drexelsp.blunote.BlunoteMessages.PollRequest parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.Vote parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollRequest parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.Vote parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollRequest parseFrom(byte[] data)
+    public static com.drexelsp.blunote.BlunoteMessages.Vote parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollRequest parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.Vote parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollRequest parseFrom(java.io.InputStream input)
+    public static com.drexelsp.blunote.BlunoteMessages.Vote parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollRequest parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.Vote parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollRequest parseDelimitedFrom(java.io.InputStream input)
+    public static com.drexelsp.blunote.BlunoteMessages.Vote parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollRequest parseDelimitedFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.Vote parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollRequest parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.Vote parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollRequest parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.Vote parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -387,7 +758,7 @@ public final class BlunoteMessages {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.drexelsp.blunote.BlunoteMessages.PollRequest prototype) {
+    public static Builder newBuilder(com.drexelsp.blunote.BlunoteMessages.Vote prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -399,29 +770,29 @@ public final class BlunoteMessages {
       return builder;
     }
     /**
-     * Protobuf type {@code blunote.PollRequest}
+     * Protobuf type {@code blunote.Vote}
      *
      * <pre>
-     * Initiated by the Host when enough songs have been requested etc
+     **
      * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:blunote.PollRequest)
-        com.drexelsp.blunote.BlunoteMessages.PollRequestOrBuilder {
+        // @@protoc_insertion_point(builder_implements:blunote.Vote)
+        com.drexelsp.blunote.BlunoteMessages.VoteOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_PollRequest_descriptor;
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_Vote_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_PollRequest_fieldAccessorTable
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_Vote_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.drexelsp.blunote.BlunoteMessages.PollRequest.class, com.drexelsp.blunote.BlunoteMessages.PollRequest.Builder.class);
+                com.drexelsp.blunote.BlunoteMessages.Vote.class, com.drexelsp.blunote.BlunoteMessages.Vote.Builder.class);
       }
 
-      // Construct using com.drexelsp.blunote.BlunoteMessages.PollRequest.newBuilder()
+      // Construct using com.drexelsp.blunote.BlunoteMessages.Vote.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -441,12 +812,16 @@ public final class BlunoteMessages {
 
       public Builder clear() {
         super.clear();
-        requestId_ = 0;
+        voteId_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
-        question_ = "";
+        responseType_ = com.drexelsp.blunote.BlunoteMessages.Vote.AnswerType.SINGLE;
         bitField0_ = (bitField0_ & ~0x00000002);
-        options_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        question_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
+        options_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        displayType_ = com.drexelsp.blunote.BlunoteMessages.Vote.DisplayType.ALPHA;
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -456,82 +831,104 @@ public final class BlunoteMessages {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_PollRequest_descriptor;
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_Vote_descriptor;
       }
 
-      public com.drexelsp.blunote.BlunoteMessages.PollRequest getDefaultInstanceForType() {
-        return com.drexelsp.blunote.BlunoteMessages.PollRequest.getDefaultInstance();
+      public com.drexelsp.blunote.BlunoteMessages.Vote getDefaultInstanceForType() {
+        return com.drexelsp.blunote.BlunoteMessages.Vote.getDefaultInstance();
       }
 
-      public com.drexelsp.blunote.BlunoteMessages.PollRequest build() {
-        com.drexelsp.blunote.BlunoteMessages.PollRequest result = buildPartial();
+      public com.drexelsp.blunote.BlunoteMessages.Vote build() {
+        com.drexelsp.blunote.BlunoteMessages.Vote result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public com.drexelsp.blunote.BlunoteMessages.PollRequest buildPartial() {
-        com.drexelsp.blunote.BlunoteMessages.PollRequest result = new com.drexelsp.blunote.BlunoteMessages.PollRequest(this);
+      public com.drexelsp.blunote.BlunoteMessages.Vote buildPartial() {
+        com.drexelsp.blunote.BlunoteMessages.Vote result = new com.drexelsp.blunote.BlunoteMessages.Vote(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.requestId_ = requestId_;
+        result.voteId_ = voteId_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
+        result.responseType_ = responseType_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
         result.question_ = question_;
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        if (((bitField0_ & 0x00000008) == 0x00000008)) {
           options_ = options_.getUnmodifiableView();
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000008);
         }
         result.options_ = options_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.displayType_ = displayType_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.drexelsp.blunote.BlunoteMessages.PollRequest) {
-          return mergeFrom((com.drexelsp.blunote.BlunoteMessages.PollRequest)other);
+        if (other instanceof com.drexelsp.blunote.BlunoteMessages.Vote) {
+          return mergeFrom((com.drexelsp.blunote.BlunoteMessages.Vote)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.drexelsp.blunote.BlunoteMessages.PollRequest other) {
-        if (other == com.drexelsp.blunote.BlunoteMessages.PollRequest.getDefaultInstance()) return this;
-        if (other.hasRequestId()) {
-          setRequestId(other.getRequestId());
+      public Builder mergeFrom(com.drexelsp.blunote.BlunoteMessages.Vote other) {
+        if (other == com.drexelsp.blunote.BlunoteMessages.Vote.getDefaultInstance()) return this;
+        if (other.hasVoteId()) {
+          setVoteId(other.getVoteId());
+        }
+        if (other.hasResponseType()) {
+          setResponseType(other.getResponseType());
         }
         if (other.hasQuestion()) {
-          bitField0_ |= 0x00000002;
+          bitField0_ |= 0x00000004;
           question_ = other.question_;
           onChanged();
         }
         if (!other.options_.isEmpty()) {
           if (options_.isEmpty()) {
             options_ = other.options_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000008);
           } else {
             ensureOptionsIsMutable();
             options_.addAll(other.options_);
           }
           onChanged();
         }
+        if (other.hasDisplayType()) {
+          setDisplayType(other.getDisplayType());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasRequestId()) {
+        if (!hasVoteId()) {
+          
+          return false;
+        }
+        if (!hasResponseType()) {
           
           return false;
         }
         if (!hasQuestion()) {
+          
+          return false;
+        }
+        if (!hasDisplayType()) {
           
           return false;
         }
@@ -542,11 +939,11 @@ public final class BlunoteMessages {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.drexelsp.blunote.BlunoteMessages.PollRequest parsedMessage = null;
+        com.drexelsp.blunote.BlunoteMessages.Vote parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.drexelsp.blunote.BlunoteMessages.PollRequest) e.getUnfinishedMessage();
+          parsedMessage = (com.drexelsp.blunote.BlunoteMessages.Vote) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -557,47 +954,122 @@ public final class BlunoteMessages {
       }
       private int bitField0_;
 
-      private int requestId_ ;
+      private int voteId_ ;
       /**
-       * <code>required int32 requestId = 1;</code>
+       * <code>required int32 voteId = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique vote ID
+       * </pre>
        */
-      public boolean hasRequestId() {
+      public boolean hasVoteId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required int32 requestId = 1;</code>
+       * <code>required int32 voteId = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique vote ID
+       * </pre>
        */
-      public int getRequestId() {
-        return requestId_;
+      public int getVoteId() {
+        return voteId_;
       }
       /**
-       * <code>required int32 requestId = 1;</code>
+       * <code>required int32 voteId = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique vote ID
+       * </pre>
        */
-      public Builder setRequestId(int value) {
+      public Builder setVoteId(int value) {
         bitField0_ |= 0x00000001;
-        requestId_ = value;
+        voteId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 requestId = 1;</code>
+       * <code>required int32 voteId = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique vote ID
+       * </pre>
        */
-      public Builder clearRequestId() {
+      public Builder clearVoteId() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        requestId_ = 0;
+        voteId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private com.drexelsp.blunote.BlunoteMessages.Vote.AnswerType responseType_ = com.drexelsp.blunote.BlunoteMessages.Vote.AnswerType.SINGLE;
+      /**
+       * <code>required .blunote.Vote.AnswerType response_type = 2;</code>
+       *
+       * <pre>
+       *&#47; Type of vote and expected response type
+       * </pre>
+       */
+      public boolean hasResponseType() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required .blunote.Vote.AnswerType response_type = 2;</code>
+       *
+       * <pre>
+       *&#47; Type of vote and expected response type
+       * </pre>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.Vote.AnswerType getResponseType() {
+        return responseType_;
+      }
+      /**
+       * <code>required .blunote.Vote.AnswerType response_type = 2;</code>
+       *
+       * <pre>
+       *&#47; Type of vote and expected response type
+       * </pre>
+       */
+      public Builder setResponseType(com.drexelsp.blunote.BlunoteMessages.Vote.AnswerType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        responseType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .blunote.Vote.AnswerType response_type = 2;</code>
+       *
+       * <pre>
+       *&#47; Type of vote and expected response type
+       * </pre>
+       */
+      public Builder clearResponseType() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        responseType_ = com.drexelsp.blunote.BlunoteMessages.Vote.AnswerType.SINGLE;
         onChanged();
         return this;
       }
 
       private java.lang.Object question_ = "";
       /**
-       * <code>required string question = 2;</code>
+       * <code>required string question = 3;</code>
+       *
+       * <pre>
+       *&#47; The question to be displayed
+       * </pre>
        */
       public boolean hasQuestion() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required string question = 2;</code>
+       * <code>required string question = 3;</code>
+       *
+       * <pre>
+       *&#47; The question to be displayed
+       * </pre>
        */
       public java.lang.String getQuestion() {
         java.lang.Object ref = question_;
@@ -614,7 +1086,11 @@ public final class BlunoteMessages {
         }
       }
       /**
-       * <code>required string question = 2;</code>
+       * <code>required string question = 3;</code>
+       *
+       * <pre>
+       *&#47; The question to be displayed
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getQuestionBytes() {
@@ -630,36 +1106,48 @@ public final class BlunoteMessages {
         }
       }
       /**
-       * <code>required string question = 2;</code>
+       * <code>required string question = 3;</code>
+       *
+       * <pre>
+       *&#47; The question to be displayed
+       * </pre>
        */
       public Builder setQuestion(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000002;
+  bitField0_ |= 0x00000004;
         question_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string question = 2;</code>
+       * <code>required string question = 3;</code>
+       *
+       * <pre>
+       *&#47; The question to be displayed
+       * </pre>
        */
       public Builder clearQuestion() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000004);
         question_ = getDefaultInstance().getQuestion();
         onChanged();
         return this;
       }
       /**
-       * <code>required string question = 2;</code>
+       * <code>required string question = 3;</code>
+       *
+       * <pre>
+       *&#47; The question to be displayed
+       * </pre>
        */
       public Builder setQuestionBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000002;
+  bitField0_ |= 0x00000004;
         question_ = value;
         onChanged();
         return this;
@@ -667,39 +1155,59 @@ public final class BlunoteMessages {
 
       private com.google.protobuf.LazyStringList options_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureOptionsIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
           options_ = new com.google.protobuf.LazyStringArrayList(options_);
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000008;
          }
       }
       /**
-       * <code>repeated string options = 3;</code>
+       * <code>repeated string options = 4;</code>
+       *
+       * <pre>
+       *&#47; Options to be displayed
+       * </pre>
        */
       public com.google.protobuf.ProtocolStringList
           getOptionsList() {
         return options_.getUnmodifiableView();
       }
       /**
-       * <code>repeated string options = 3;</code>
+       * <code>repeated string options = 4;</code>
+       *
+       * <pre>
+       *&#47; Options to be displayed
+       * </pre>
        */
       public int getOptionsCount() {
         return options_.size();
       }
       /**
-       * <code>repeated string options = 3;</code>
+       * <code>repeated string options = 4;</code>
+       *
+       * <pre>
+       *&#47; Options to be displayed
+       * </pre>
        */
       public java.lang.String getOptions(int index) {
         return options_.get(index);
       }
       /**
-       * <code>repeated string options = 3;</code>
+       * <code>repeated string options = 4;</code>
+       *
+       * <pre>
+       *&#47; Options to be displayed
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getOptionsBytes(int index) {
         return options_.getByteString(index);
       }
       /**
-       * <code>repeated string options = 3;</code>
+       * <code>repeated string options = 4;</code>
+       *
+       * <pre>
+       *&#47; Options to be displayed
+       * </pre>
        */
       public Builder setOptions(
           int index, java.lang.String value) {
@@ -712,7 +1220,11 @@ public final class BlunoteMessages {
         return this;
       }
       /**
-       * <code>repeated string options = 3;</code>
+       * <code>repeated string options = 4;</code>
+       *
+       * <pre>
+       *&#47; Options to be displayed
+       * </pre>
        */
       public Builder addOptions(
           java.lang.String value) {
@@ -725,7 +1237,11 @@ public final class BlunoteMessages {
         return this;
       }
       /**
-       * <code>repeated string options = 3;</code>
+       * <code>repeated string options = 4;</code>
+       *
+       * <pre>
+       *&#47; Options to be displayed
+       * </pre>
        */
       public Builder addAllOptions(
           java.lang.Iterable<java.lang.String> values) {
@@ -736,16 +1252,24 @@ public final class BlunoteMessages {
         return this;
       }
       /**
-       * <code>repeated string options = 3;</code>
+       * <code>repeated string options = 4;</code>
+       *
+       * <pre>
+       *&#47; Options to be displayed
+       * </pre>
        */
       public Builder clearOptions() {
         options_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated string options = 3;</code>
+       * <code>repeated string options = 4;</code>
+       *
+       * <pre>
+       *&#47; Options to be displayed
+       * </pre>
        */
       public Builder addOptionsBytes(
           com.google.protobuf.ByteString value) {
@@ -758,68 +1282,141 @@ public final class BlunoteMessages {
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:blunote.PollRequest)
+      private com.drexelsp.blunote.BlunoteMessages.Vote.DisplayType displayType_ = com.drexelsp.blunote.BlunoteMessages.Vote.DisplayType.ALPHA;
+      /**
+       * <code>required .blunote.Vote.DisplayType display_type = 5;</code>
+       *
+       * <pre>
+       *&#47; Determines how to display the options to the user
+       * </pre>
+       */
+      public boolean hasDisplayType() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>required .blunote.Vote.DisplayType display_type = 5;</code>
+       *
+       * <pre>
+       *&#47; Determines how to display the options to the user
+       * </pre>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.Vote.DisplayType getDisplayType() {
+        return displayType_;
+      }
+      /**
+       * <code>required .blunote.Vote.DisplayType display_type = 5;</code>
+       *
+       * <pre>
+       *&#47; Determines how to display the options to the user
+       * </pre>
+       */
+      public Builder setDisplayType(com.drexelsp.blunote.BlunoteMessages.Vote.DisplayType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000010;
+        displayType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .blunote.Vote.DisplayType display_type = 5;</code>
+       *
+       * <pre>
+       *&#47; Determines how to display the options to the user
+       * </pre>
+       */
+      public Builder clearDisplayType() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        displayType_ = com.drexelsp.blunote.BlunoteMessages.Vote.DisplayType.ALPHA;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:blunote.Vote)
     }
 
     static {
-      defaultInstance = new PollRequest(true);
+      defaultInstance = new Vote(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:blunote.PollRequest)
+    // @@protoc_insertion_point(class_scope:blunote.Vote)
   }
 
-  public interface PollResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:blunote.PollResponse)
+  public interface SingleAnswerOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:blunote.SingleAnswer)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>required string choice = 1;</code>
+     * <code>required int32 voteId = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique vote ID of the vote message from the sender
+     * </pre>
+     */
+    boolean hasVoteId();
+    /**
+     * <code>required int32 voteId = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique vote ID of the vote message from the sender
+     * </pre>
+     */
+    int getVoteId();
+
+    /**
+     * <code>required string choice = 2;</code>
+     *
+     * <pre>
+     *&#47; single selection choice
+     * </pre>
      */
     boolean hasChoice();
     /**
-     * <code>required string choice = 1;</code>
+     * <code>required string choice = 2;</code>
+     *
+     * <pre>
+     *&#47; single selection choice
+     * </pre>
      */
     java.lang.String getChoice();
     /**
-     * <code>required string choice = 1;</code>
+     * <code>required string choice = 2;</code>
+     *
+     * <pre>
+     *&#47; single selection choice
+     * </pre>
      */
     com.google.protobuf.ByteString
         getChoiceBytes();
-
-    /**
-     * <code>required int32 requestId = 2;</code>
-     */
-    boolean hasRequestId();
-    /**
-     * <code>required int32 requestId = 2;</code>
-     */
-    int getRequestId();
   }
   /**
-   * Protobuf type {@code blunote.PollResponse}
+   * Protobuf type {@code blunote.SingleAnswer}
    *
    * <pre>
-   * Response sent back by the user
+   **
+   * Answer to a vote type of SINGLE
+   * This vote type only allows for one answer
    * </pre>
    */
-  public static final class PollResponse extends
+  public static final class SingleAnswer extends
       com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:blunote.PollResponse)
-      PollResponseOrBuilder {
-    // Use PollResponse.newBuilder() to construct.
-    private PollResponse(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:blunote.SingleAnswer)
+      SingleAnswerOrBuilder {
+    // Use SingleAnswer.newBuilder() to construct.
+    private SingleAnswer(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private PollResponse(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private SingleAnswer(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final PollResponse defaultInstance;
-    public static PollResponse getDefaultInstance() {
+    private static final SingleAnswer defaultInstance;
+    public static SingleAnswer getDefaultInstance() {
       return defaultInstance;
     }
 
-    public PollResponse getDefaultInstanceForType() {
+    public SingleAnswer getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -829,7 +1426,7 @@ public final class BlunoteMessages {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private PollResponse(
+    private SingleAnswer(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -852,15 +1449,15 @@ public final class BlunoteMessages {
               }
               break;
             }
-            case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
+            case 8: {
               bitField0_ |= 0x00000001;
-              choice_ = bs;
+              voteId_ = input.readInt32();
               break;
             }
-            case 16: {
+            case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              requestId_ = input.readInt32();
+              choice_ = bs;
               break;
             }
           }
@@ -877,42 +1474,73 @@ public final class BlunoteMessages {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_PollResponse_descriptor;
+      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SingleAnswer_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_PollResponse_fieldAccessorTable
+      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SingleAnswer_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.drexelsp.blunote.BlunoteMessages.PollResponse.class, com.drexelsp.blunote.BlunoteMessages.PollResponse.Builder.class);
+              com.drexelsp.blunote.BlunoteMessages.SingleAnswer.class, com.drexelsp.blunote.BlunoteMessages.SingleAnswer.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<PollResponse> PARSER =
-        new com.google.protobuf.AbstractParser<PollResponse>() {
-      public PollResponse parsePartialFrom(
+    public static com.google.protobuf.Parser<SingleAnswer> PARSER =
+        new com.google.protobuf.AbstractParser<SingleAnswer>() {
+      public SingleAnswer parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PollResponse(input, extensionRegistry);
+        return new SingleAnswer(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<PollResponse> getParserForType() {
+    public com.google.protobuf.Parser<SingleAnswer> getParserForType() {
       return PARSER;
     }
 
     private int bitField0_;
-    public static final int CHOICE_FIELD_NUMBER = 1;
-    private java.lang.Object choice_;
+    public static final int VOTEID_FIELD_NUMBER = 1;
+    private int voteId_;
     /**
-     * <code>required string choice = 1;</code>
+     * <code>required int32 voteId = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique vote ID of the vote message from the sender
+     * </pre>
      */
-    public boolean hasChoice() {
+    public boolean hasVoteId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required string choice = 1;</code>
+     * <code>required int32 voteId = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique vote ID of the vote message from the sender
+     * </pre>
+     */
+    public int getVoteId() {
+      return voteId_;
+    }
+
+    public static final int CHOICE_FIELD_NUMBER = 2;
+    private java.lang.Object choice_;
+    /**
+     * <code>required string choice = 2;</code>
+     *
+     * <pre>
+     *&#47; single selection choice
+     * </pre>
+     */
+    public boolean hasChoice() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required string choice = 2;</code>
+     *
+     * <pre>
+     *&#47; single selection choice
+     * </pre>
      */
     public java.lang.String getChoice() {
       java.lang.Object ref = choice_;
@@ -929,7 +1557,11 @@ public final class BlunoteMessages {
       }
     }
     /**
-     * <code>required string choice = 1;</code>
+     * <code>required string choice = 2;</code>
+     *
+     * <pre>
+     *&#47; single selection choice
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getChoiceBytes() {
@@ -945,24 +1577,9 @@ public final class BlunoteMessages {
       }
     }
 
-    public static final int REQUESTID_FIELD_NUMBER = 2;
-    private int requestId_;
-    /**
-     * <code>required int32 requestId = 2;</code>
-     */
-    public boolean hasRequestId() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required int32 requestId = 2;</code>
-     */
-    public int getRequestId() {
-      return requestId_;
-    }
-
     private void initFields() {
+      voteId_ = 0;
       choice_ = "";
-      requestId_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -970,11 +1587,11 @@ public final class BlunoteMessages {
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
-      if (!hasChoice()) {
+      if (!hasVoteId()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasRequestId()) {
+      if (!hasChoice()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -986,10 +1603,10 @@ public final class BlunoteMessages {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getChoiceBytes());
+        output.writeInt32(1, voteId_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, requestId_);
+        output.writeBytes(2, getChoiceBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -1002,11 +1619,11 @@ public final class BlunoteMessages {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getChoiceBytes());
+          .computeInt32Size(1, voteId_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, requestId_);
+          .computeBytesSize(2, getChoiceBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1020,53 +1637,53 @@ public final class BlunoteMessages {
       return super.writeReplace();
     }
 
-    public static com.drexelsp.blunote.BlunoteMessages.PollResponse parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.SingleAnswer parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollResponse parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.SingleAnswer parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollResponse parseFrom(byte[] data)
+    public static com.drexelsp.blunote.BlunoteMessages.SingleAnswer parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollResponse parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.SingleAnswer parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollResponse parseFrom(java.io.InputStream input)
+    public static com.drexelsp.blunote.BlunoteMessages.SingleAnswer parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollResponse parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.SingleAnswer parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollResponse parseDelimitedFrom(java.io.InputStream input)
+    public static com.drexelsp.blunote.BlunoteMessages.SingleAnswer parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollResponse parseDelimitedFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.SingleAnswer parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollResponse parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.SingleAnswer parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.PollResponse parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.SingleAnswer parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1075,7 +1692,7 @@ public final class BlunoteMessages {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.drexelsp.blunote.BlunoteMessages.PollResponse prototype) {
+    public static Builder newBuilder(com.drexelsp.blunote.BlunoteMessages.SingleAnswer prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -1087,29 +1704,31 @@ public final class BlunoteMessages {
       return builder;
     }
     /**
-     * Protobuf type {@code blunote.PollResponse}
+     * Protobuf type {@code blunote.SingleAnswer}
      *
      * <pre>
-     * Response sent back by the user
+     **
+     * Answer to a vote type of SINGLE
+     * This vote type only allows for one answer
      * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:blunote.PollResponse)
-        com.drexelsp.blunote.BlunoteMessages.PollResponseOrBuilder {
+        // @@protoc_insertion_point(builder_implements:blunote.SingleAnswer)
+        com.drexelsp.blunote.BlunoteMessages.SingleAnswerOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_PollResponse_descriptor;
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SingleAnswer_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_PollResponse_fieldAccessorTable
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SingleAnswer_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.drexelsp.blunote.BlunoteMessages.PollResponse.class, com.drexelsp.blunote.BlunoteMessages.PollResponse.Builder.class);
+                com.drexelsp.blunote.BlunoteMessages.SingleAnswer.class, com.drexelsp.blunote.BlunoteMessages.SingleAnswer.Builder.class);
       }
 
-      // Construct using com.drexelsp.blunote.BlunoteMessages.PollResponse.newBuilder()
+      // Construct using com.drexelsp.blunote.BlunoteMessages.SingleAnswer.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1129,9 +1748,9 @@ public final class BlunoteMessages {
 
       public Builder clear() {
         super.clear();
-        choice_ = "";
+        voteId_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
-        requestId_ = 0;
+        choice_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
@@ -1142,67 +1761,67 @@ public final class BlunoteMessages {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_PollResponse_descriptor;
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SingleAnswer_descriptor;
       }
 
-      public com.drexelsp.blunote.BlunoteMessages.PollResponse getDefaultInstanceForType() {
-        return com.drexelsp.blunote.BlunoteMessages.PollResponse.getDefaultInstance();
+      public com.drexelsp.blunote.BlunoteMessages.SingleAnswer getDefaultInstanceForType() {
+        return com.drexelsp.blunote.BlunoteMessages.SingleAnswer.getDefaultInstance();
       }
 
-      public com.drexelsp.blunote.BlunoteMessages.PollResponse build() {
-        com.drexelsp.blunote.BlunoteMessages.PollResponse result = buildPartial();
+      public com.drexelsp.blunote.BlunoteMessages.SingleAnswer build() {
+        com.drexelsp.blunote.BlunoteMessages.SingleAnswer result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public com.drexelsp.blunote.BlunoteMessages.PollResponse buildPartial() {
-        com.drexelsp.blunote.BlunoteMessages.PollResponse result = new com.drexelsp.blunote.BlunoteMessages.PollResponse(this);
+      public com.drexelsp.blunote.BlunoteMessages.SingleAnswer buildPartial() {
+        com.drexelsp.blunote.BlunoteMessages.SingleAnswer result = new com.drexelsp.blunote.BlunoteMessages.SingleAnswer(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.choice_ = choice_;
+        result.voteId_ = voteId_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.requestId_ = requestId_;
+        result.choice_ = choice_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.drexelsp.blunote.BlunoteMessages.PollResponse) {
-          return mergeFrom((com.drexelsp.blunote.BlunoteMessages.PollResponse)other);
+        if (other instanceof com.drexelsp.blunote.BlunoteMessages.SingleAnswer) {
+          return mergeFrom((com.drexelsp.blunote.BlunoteMessages.SingleAnswer)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.drexelsp.blunote.BlunoteMessages.PollResponse other) {
-        if (other == com.drexelsp.blunote.BlunoteMessages.PollResponse.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.drexelsp.blunote.BlunoteMessages.SingleAnswer other) {
+        if (other == com.drexelsp.blunote.BlunoteMessages.SingleAnswer.getDefaultInstance()) return this;
+        if (other.hasVoteId()) {
+          setVoteId(other.getVoteId());
+        }
         if (other.hasChoice()) {
-          bitField0_ |= 0x00000001;
+          bitField0_ |= 0x00000002;
           choice_ = other.choice_;
           onChanged();
-        }
-        if (other.hasRequestId()) {
-          setRequestId(other.getRequestId());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasChoice()) {
+        if (!hasVoteId()) {
           
           return false;
         }
-        if (!hasRequestId()) {
+        if (!hasChoice()) {
           
           return false;
         }
@@ -1213,11 +1832,11 @@ public final class BlunoteMessages {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.drexelsp.blunote.BlunoteMessages.PollResponse parsedMessage = null;
+        com.drexelsp.blunote.BlunoteMessages.SingleAnswer parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.drexelsp.blunote.BlunoteMessages.PollResponse) e.getUnfinishedMessage();
+          parsedMessage = (com.drexelsp.blunote.BlunoteMessages.SingleAnswer) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -1228,15 +1847,71 @@ public final class BlunoteMessages {
       }
       private int bitField0_;
 
-      private java.lang.Object choice_ = "";
+      private int voteId_ ;
       /**
-       * <code>required string choice = 1;</code>
+       * <code>required int32 voteId = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique vote ID of the vote message from the sender
+       * </pre>
        */
-      public boolean hasChoice() {
+      public boolean hasVoteId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required string choice = 1;</code>
+       * <code>required int32 voteId = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique vote ID of the vote message from the sender
+       * </pre>
+       */
+      public int getVoteId() {
+        return voteId_;
+      }
+      /**
+       * <code>required int32 voteId = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique vote ID of the vote message from the sender
+       * </pre>
+       */
+      public Builder setVoteId(int value) {
+        bitField0_ |= 0x00000001;
+        voteId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 voteId = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique vote ID of the vote message from the sender
+       * </pre>
+       */
+      public Builder clearVoteId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        voteId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object choice_ = "";
+      /**
+       * <code>required string choice = 2;</code>
+       *
+       * <pre>
+       *&#47; single selection choice
+       * </pre>
+       */
+      public boolean hasChoice() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string choice = 2;</code>
+       *
+       * <pre>
+       *&#47; single selection choice
+       * </pre>
        */
       public java.lang.String getChoice() {
         java.lang.Object ref = choice_;
@@ -1253,7 +1928,11 @@ public final class BlunoteMessages {
         }
       }
       /**
-       * <code>required string choice = 1;</code>
+       * <code>required string choice = 2;</code>
+       *
+       * <pre>
+       *&#47; single selection choice
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getChoiceBytes() {
@@ -1269,86 +1948,766 @@ public final class BlunoteMessages {
         }
       }
       /**
-       * <code>required string choice = 1;</code>
+       * <code>required string choice = 2;</code>
+       *
+       * <pre>
+       *&#47; single selection choice
+       * </pre>
        */
       public Builder setChoice(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000001;
+  bitField0_ |= 0x00000002;
         choice_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string choice = 1;</code>
+       * <code>required string choice = 2;</code>
+       *
+       * <pre>
+       *&#47; single selection choice
+       * </pre>
        */
       public Builder clearChoice() {
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000002);
         choice_ = getDefaultInstance().getChoice();
         onChanged();
         return this;
       }
       /**
-       * <code>required string choice = 1;</code>
+       * <code>required string choice = 2;</code>
+       *
+       * <pre>
+       *&#47; single selection choice
+       * </pre>
        */
       public Builder setChoiceBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000001;
+  bitField0_ |= 0x00000002;
         choice_ = value;
         onChanged();
         return this;
       }
 
-      private int requestId_ ;
-      /**
-       * <code>required int32 requestId = 2;</code>
-       */
-      public boolean hasRequestId() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required int32 requestId = 2;</code>
-       */
-      public int getRequestId() {
-        return requestId_;
-      }
-      /**
-       * <code>required int32 requestId = 2;</code>
-       */
-      public Builder setRequestId(int value) {
-        bitField0_ |= 0x00000002;
-        requestId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required int32 requestId = 2;</code>
-       */
-      public Builder clearRequestId() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        requestId_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:blunote.PollResponse)
+      // @@protoc_insertion_point(builder_scope:blunote.SingleAnswer)
     }
 
     static {
-      defaultInstance = new PollResponse(true);
+      defaultInstance = new SingleAnswer(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:blunote.PollResponse)
+    // @@protoc_insertion_point(class_scope:blunote.SingleAnswer)
   }
 
-  public interface SongRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:blunote.SongRequest)
+  public interface MultiAnswerOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:blunote.MultiAnswer)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>required int32 voteId = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique vote ID of the vote message from the sender
+     * </pre>
+     */
+    boolean hasVoteId();
+    /**
+     * <code>required int32 voteId = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique vote ID of the vote message from the sender
+     * </pre>
+     */
+    int getVoteId();
+
+    /**
+     * <code>repeated string choices = 2;</code>
+     *
+     * <pre>
+     *&#47; One or more choices from the vote
+     * </pre>
+     */
+    com.google.protobuf.ProtocolStringList
+        getChoicesList();
+    /**
+     * <code>repeated string choices = 2;</code>
+     *
+     * <pre>
+     *&#47; One or more choices from the vote
+     * </pre>
+     */
+    int getChoicesCount();
+    /**
+     * <code>repeated string choices = 2;</code>
+     *
+     * <pre>
+     *&#47; One or more choices from the vote
+     * </pre>
+     */
+    java.lang.String getChoices(int index);
+    /**
+     * <code>repeated string choices = 2;</code>
+     *
+     * <pre>
+     *&#47; One or more choices from the vote
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getChoicesBytes(int index);
+  }
+  /**
+   * Protobuf type {@code blunote.MultiAnswer}
+   *
+   * <pre>
+   **
+   * Answer to a vote type of MULTI or RANKED
+   * This vote type allows for at most n choices where n is the total number of choices in the vote.
+   * </pre>
+   */
+  public static final class MultiAnswer extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:blunote.MultiAnswer)
+      MultiAnswerOrBuilder {
+    // Use MultiAnswer.newBuilder() to construct.
+    private MultiAnswer(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private MultiAnswer(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final MultiAnswer defaultInstance;
+    public static MultiAnswer getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public MultiAnswer getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private MultiAnswer(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              voteId_ = input.readInt32();
+              break;
+            }
+            case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                choices_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              choices_.add(bs);
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          choices_ = choices_.getUnmodifiableView();
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_MultiAnswer_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_MultiAnswer_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.drexelsp.blunote.BlunoteMessages.MultiAnswer.class, com.drexelsp.blunote.BlunoteMessages.MultiAnswer.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<MultiAnswer> PARSER =
+        new com.google.protobuf.AbstractParser<MultiAnswer>() {
+      public MultiAnswer parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new MultiAnswer(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<MultiAnswer> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int VOTEID_FIELD_NUMBER = 1;
+    private int voteId_;
+    /**
+     * <code>required int32 voteId = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique vote ID of the vote message from the sender
+     * </pre>
+     */
+    public boolean hasVoteId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required int32 voteId = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique vote ID of the vote message from the sender
+     * </pre>
+     */
+    public int getVoteId() {
+      return voteId_;
+    }
+
+    public static final int CHOICES_FIELD_NUMBER = 2;
+    private com.google.protobuf.LazyStringList choices_;
+    /**
+     * <code>repeated string choices = 2;</code>
+     *
+     * <pre>
+     *&#47; One or more choices from the vote
+     * </pre>
+     */
+    public com.google.protobuf.ProtocolStringList
+        getChoicesList() {
+      return choices_;
+    }
+    /**
+     * <code>repeated string choices = 2;</code>
+     *
+     * <pre>
+     *&#47; One or more choices from the vote
+     * </pre>
+     */
+    public int getChoicesCount() {
+      return choices_.size();
+    }
+    /**
+     * <code>repeated string choices = 2;</code>
+     *
+     * <pre>
+     *&#47; One or more choices from the vote
+     * </pre>
+     */
+    public java.lang.String getChoices(int index) {
+      return choices_.get(index);
+    }
+    /**
+     * <code>repeated string choices = 2;</code>
+     *
+     * <pre>
+     *&#47; One or more choices from the vote
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getChoicesBytes(int index) {
+      return choices_.getByteString(index);
+    }
+
+    private void initFields() {
+      voteId_ = 0;
+      choices_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasVoteId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, voteId_);
+      }
+      for (int i = 0; i < choices_.size(); i++) {
+        output.writeBytes(2, choices_.getByteString(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, voteId_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < choices_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(choices_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getChoicesList().size();
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static com.drexelsp.blunote.BlunoteMessages.MultiAnswer parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.MultiAnswer parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.MultiAnswer parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.MultiAnswer parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.MultiAnswer parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.MultiAnswer parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.MultiAnswer parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.MultiAnswer parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.MultiAnswer parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.MultiAnswer parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.drexelsp.blunote.BlunoteMessages.MultiAnswer prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code blunote.MultiAnswer}
+     *
+     * <pre>
+     **
+     * Answer to a vote type of MULTI or RANKED
+     * This vote type allows for at most n choices where n is the total number of choices in the vote.
+     * </pre>
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:blunote.MultiAnswer)
+        com.drexelsp.blunote.BlunoteMessages.MultiAnswerOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_MultiAnswer_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_MultiAnswer_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.drexelsp.blunote.BlunoteMessages.MultiAnswer.class, com.drexelsp.blunote.BlunoteMessages.MultiAnswer.Builder.class);
+      }
+
+      // Construct using com.drexelsp.blunote.BlunoteMessages.MultiAnswer.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        voteId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        choices_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_MultiAnswer_descriptor;
+      }
+
+      public com.drexelsp.blunote.BlunoteMessages.MultiAnswer getDefaultInstanceForType() {
+        return com.drexelsp.blunote.BlunoteMessages.MultiAnswer.getDefaultInstance();
+      }
+
+      public com.drexelsp.blunote.BlunoteMessages.MultiAnswer build() {
+        com.drexelsp.blunote.BlunoteMessages.MultiAnswer result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.drexelsp.blunote.BlunoteMessages.MultiAnswer buildPartial() {
+        com.drexelsp.blunote.BlunoteMessages.MultiAnswer result = new com.drexelsp.blunote.BlunoteMessages.MultiAnswer(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.voteId_ = voteId_;
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          choices_ = choices_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        }
+        result.choices_ = choices_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.drexelsp.blunote.BlunoteMessages.MultiAnswer) {
+          return mergeFrom((com.drexelsp.blunote.BlunoteMessages.MultiAnswer)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.drexelsp.blunote.BlunoteMessages.MultiAnswer other) {
+        if (other == com.drexelsp.blunote.BlunoteMessages.MultiAnswer.getDefaultInstance()) return this;
+        if (other.hasVoteId()) {
+          setVoteId(other.getVoteId());
+        }
+        if (!other.choices_.isEmpty()) {
+          if (choices_.isEmpty()) {
+            choices_ = other.choices_;
+            bitField0_ = (bitField0_ & ~0x00000002);
+          } else {
+            ensureChoicesIsMutable();
+            choices_.addAll(other.choices_);
+          }
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasVoteId()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.drexelsp.blunote.BlunoteMessages.MultiAnswer parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.drexelsp.blunote.BlunoteMessages.MultiAnswer) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private int voteId_ ;
+      /**
+       * <code>required int32 voteId = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique vote ID of the vote message from the sender
+       * </pre>
+       */
+      public boolean hasVoteId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required int32 voteId = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique vote ID of the vote message from the sender
+       * </pre>
+       */
+      public int getVoteId() {
+        return voteId_;
+      }
+      /**
+       * <code>required int32 voteId = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique vote ID of the vote message from the sender
+       * </pre>
+       */
+      public Builder setVoteId(int value) {
+        bitField0_ |= 0x00000001;
+        voteId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 voteId = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique vote ID of the vote message from the sender
+       * </pre>
+       */
+      public Builder clearVoteId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        voteId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.LazyStringList choices_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureChoicesIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          choices_ = new com.google.protobuf.LazyStringArrayList(choices_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+      /**
+       * <code>repeated string choices = 2;</code>
+       *
+       * <pre>
+       *&#47; One or more choices from the vote
+       * </pre>
+       */
+      public com.google.protobuf.ProtocolStringList
+          getChoicesList() {
+        return choices_.getUnmodifiableView();
+      }
+      /**
+       * <code>repeated string choices = 2;</code>
+       *
+       * <pre>
+       *&#47; One or more choices from the vote
+       * </pre>
+       */
+      public int getChoicesCount() {
+        return choices_.size();
+      }
+      /**
+       * <code>repeated string choices = 2;</code>
+       *
+       * <pre>
+       *&#47; One or more choices from the vote
+       * </pre>
+       */
+      public java.lang.String getChoices(int index) {
+        return choices_.get(index);
+      }
+      /**
+       * <code>repeated string choices = 2;</code>
+       *
+       * <pre>
+       *&#47; One or more choices from the vote
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getChoicesBytes(int index) {
+        return choices_.getByteString(index);
+      }
+      /**
+       * <code>repeated string choices = 2;</code>
+       *
+       * <pre>
+       *&#47; One or more choices from the vote
+       * </pre>
+       */
+      public Builder setChoices(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureChoicesIsMutable();
+        choices_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string choices = 2;</code>
+       *
+       * <pre>
+       *&#47; One or more choices from the vote
+       * </pre>
+       */
+      public Builder addChoices(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureChoicesIsMutable();
+        choices_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string choices = 2;</code>
+       *
+       * <pre>
+       *&#47; One or more choices from the vote
+       * </pre>
+       */
+      public Builder addAllChoices(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureChoicesIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, choices_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string choices = 2;</code>
+       *
+       * <pre>
+       *&#47; One or more choices from the vote
+       * </pre>
+       */
+      public Builder clearChoices() {
+        choices_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string choices = 2;</code>
+       *
+       * <pre>
+       *&#47; One or more choices from the vote
+       * </pre>
+       */
+      public Builder addChoicesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureChoicesIsMutable();
+        choices_.add(value);
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:blunote.MultiAnswer)
+    }
+
+    static {
+      defaultInstance = new MultiAnswer(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:blunote.MultiAnswer)
+  }
+
+  public interface RecommendationOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:blunote.Recommendation)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -1366,55 +2725,66 @@ public final class BlunoteMessages {
         getUsernameBytes();
 
     /**
-     * <code>required string songKey = 2;</code>
+     * <code>required .blunote.Recommendation.Type type = 2;</code>
+     */
+    boolean hasType();
+    /**
+     * <code>required .blunote.Recommendation.Type type = 2;</code>
+     */
+    com.drexelsp.blunote.BlunoteMessages.Recommendation.Type getType();
+
+    /**
+     * <code>required string mediaId = 3;</code>
      *
      * <pre>
-     * The hosts songkey
+     * Host data reference key
      * </pre>
      */
-    boolean hasSongKey();
+    boolean hasMediaId();
     /**
-     * <code>required string songKey = 2;</code>
+     * <code>required string mediaId = 3;</code>
      *
      * <pre>
-     * The hosts songkey
+     * Host data reference key
      * </pre>
      */
-    java.lang.String getSongKey();
+    java.lang.String getMediaId();
     /**
-     * <code>required string songKey = 2;</code>
+     * <code>required string mediaId = 3;</code>
      *
      * <pre>
-     * The hosts songkey
+     * Host data reference key
      * </pre>
      */
     com.google.protobuf.ByteString
-        getSongKeyBytes();
+        getMediaIdBytes();
   }
   /**
-   * Protobuf type {@code blunote.SongRequest}
+   * Protobuf type {@code blunote.Recommendation}
    *
    * <pre>
-   * User requests a song to be played
+   **
+   * Recommendation message
+   * This message is used to recommend an artist, album, song, or genre to be played in the future
    * </pre>
    */
-  public static final class SongRequest extends
+  public static final class Recommendation extends
       com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:blunote.SongRequest)
-      SongRequestOrBuilder {
-    // Use SongRequest.newBuilder() to construct.
-    private SongRequest(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:blunote.Recommendation)
+      RecommendationOrBuilder {
+    // Use Recommendation.newBuilder() to construct.
+    private Recommendation(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private SongRequest(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private Recommendation(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final SongRequest defaultInstance;
-    public static SongRequest getDefaultInstance() {
+    private static final Recommendation defaultInstance;
+    public static Recommendation getDefaultInstance() {
       return defaultInstance;
     }
 
-    public SongRequest getDefaultInstanceForType() {
+    public Recommendation getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -1424,7 +2794,7 @@ public final class BlunoteMessages {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private SongRequest(
+    private Recommendation(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1453,10 +2823,21 @@ public final class BlunoteMessages {
               username_ = bs;
               break;
             }
-            case 18: {
+            case 16: {
+              int rawValue = input.readEnum();
+              com.drexelsp.blunote.BlunoteMessages.Recommendation.Type value = com.drexelsp.blunote.BlunoteMessages.Recommendation.Type.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                type_ = value;
+              }
+              break;
+            }
+            case 26: {
               com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000002;
-              songKey_ = bs;
+              bitField0_ |= 0x00000004;
+              mediaId_ = bs;
               break;
             }
           }
@@ -1473,29 +2854,129 @@ public final class BlunoteMessages {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SongRequest_descriptor;
+      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_Recommendation_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SongRequest_fieldAccessorTable
+      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_Recommendation_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.drexelsp.blunote.BlunoteMessages.SongRequest.class, com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder.class);
+              com.drexelsp.blunote.BlunoteMessages.Recommendation.class, com.drexelsp.blunote.BlunoteMessages.Recommendation.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<SongRequest> PARSER =
-        new com.google.protobuf.AbstractParser<SongRequest>() {
-      public SongRequest parsePartialFrom(
+    public static com.google.protobuf.Parser<Recommendation> PARSER =
+        new com.google.protobuf.AbstractParser<Recommendation>() {
+      public Recommendation parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new SongRequest(input, extensionRegistry);
+        return new Recommendation(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<SongRequest> getParserForType() {
+    public com.google.protobuf.Parser<Recommendation> getParserForType() {
       return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code blunote.Recommendation.Type}
+     */
+    public enum Type
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>ARTIST = 1;</code>
+       */
+      ARTIST(0, 1),
+      /**
+       * <code>ALBUM = 2;</code>
+       */
+      ALBUM(1, 2),
+      /**
+       * <code>SONG = 3;</code>
+       */
+      SONG(2, 3),
+      /**
+       * <code>GENRE = 4;</code>
+       */
+      GENRE(3, 4),
+      ;
+
+      /**
+       * <code>ARTIST = 1;</code>
+       */
+      public static final int ARTIST_VALUE = 1;
+      /**
+       * <code>ALBUM = 2;</code>
+       */
+      public static final int ALBUM_VALUE = 2;
+      /**
+       * <code>SONG = 3;</code>
+       */
+      public static final int SONG_VALUE = 3;
+      /**
+       * <code>GENRE = 4;</code>
+       */
+      public static final int GENRE_VALUE = 4;
+
+
+      public final int getNumber() { return value; }
+
+      public static Type valueOf(int value) {
+        switch (value) {
+          case 1: return ARTIST;
+          case 2: return ALBUM;
+          case 3: return SONG;
+          case 4: return GENRE;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<Type>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<Type>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Type>() {
+              public Type findValueByNumber(int number) {
+                return Type.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.drexelsp.blunote.BlunoteMessages.Recommendation.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final Type[] VALUES = values();
+
+      public static Type valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private Type(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:blunote.Recommendation.Type)
     }
 
     private int bitField0_;
@@ -1541,27 +3022,42 @@ public final class BlunoteMessages {
       }
     }
 
-    public static final int SONGKEY_FIELD_NUMBER = 2;
-    private java.lang.Object songKey_;
+    public static final int TYPE_FIELD_NUMBER = 2;
+    private com.drexelsp.blunote.BlunoteMessages.Recommendation.Type type_;
     /**
-     * <code>required string songKey = 2;</code>
-     *
-     * <pre>
-     * The hosts songkey
-     * </pre>
+     * <code>required .blunote.Recommendation.Type type = 2;</code>
      */
-    public boolean hasSongKey() {
+    public boolean hasType() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required string songKey = 2;</code>
+     * <code>required .blunote.Recommendation.Type type = 2;</code>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.Recommendation.Type getType() {
+      return type_;
+    }
+
+    public static final int MEDIAID_FIELD_NUMBER = 3;
+    private java.lang.Object mediaId_;
+    /**
+     * <code>required string mediaId = 3;</code>
      *
      * <pre>
-     * The hosts songkey
+     * Host data reference key
      * </pre>
      */
-    public java.lang.String getSongKey() {
-      java.lang.Object ref = songKey_;
+    public boolean hasMediaId() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required string mediaId = 3;</code>
+     *
+     * <pre>
+     * Host data reference key
+     * </pre>
+     */
+    public java.lang.String getMediaId() {
+      java.lang.Object ref = mediaId_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
@@ -1569,26 +3065,26 @@ public final class BlunoteMessages {
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
-          songKey_ = s;
+          mediaId_ = s;
         }
         return s;
       }
     }
     /**
-     * <code>required string songKey = 2;</code>
+     * <code>required string mediaId = 3;</code>
      *
      * <pre>
-     * The hosts songkey
+     * Host data reference key
      * </pre>
      */
     public com.google.protobuf.ByteString
-        getSongKeyBytes() {
-      java.lang.Object ref = songKey_;
+        getMediaIdBytes() {
+      java.lang.Object ref = mediaId_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        songKey_ = b;
+        mediaId_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -1597,7 +3093,8 @@ public final class BlunoteMessages {
 
     private void initFields() {
       username_ = "";
-      songKey_ = "";
+      type_ = com.drexelsp.blunote.BlunoteMessages.Recommendation.Type.ARTIST;
+      mediaId_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1609,7 +3106,11 @@ public final class BlunoteMessages {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasSongKey()) {
+      if (!hasType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasMediaId()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -1624,7 +3125,10 @@ public final class BlunoteMessages {
         output.writeBytes(1, getUsernameBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getSongKeyBytes());
+        output.writeEnum(2, type_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getMediaIdBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -1641,7 +3145,11 @@ public final class BlunoteMessages {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getSongKeyBytes());
+          .computeEnumSize(2, type_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getMediaIdBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1655,53 +3163,53 @@ public final class BlunoteMessages {
       return super.writeReplace();
     }
 
-    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.Recommendation parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.Recommendation parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(byte[] data)
+    public static com.drexelsp.blunote.BlunoteMessages.Recommendation parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.Recommendation parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(java.io.InputStream input)
+    public static com.drexelsp.blunote.BlunoteMessages.Recommendation parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.Recommendation parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseDelimitedFrom(java.io.InputStream input)
+    public static com.drexelsp.blunote.BlunoteMessages.Recommendation parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseDelimitedFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.Recommendation parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.Recommendation parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(
+    public static com.drexelsp.blunote.BlunoteMessages.Recommendation parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1710,7 +3218,7 @@ public final class BlunoteMessages {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.drexelsp.blunote.BlunoteMessages.SongRequest prototype) {
+    public static Builder newBuilder(com.drexelsp.blunote.BlunoteMessages.Recommendation prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -1722,29 +3230,31 @@ public final class BlunoteMessages {
       return builder;
     }
     /**
-     * Protobuf type {@code blunote.SongRequest}
+     * Protobuf type {@code blunote.Recommendation}
      *
      * <pre>
-     * User requests a song to be played
+     **
+     * Recommendation message
+     * This message is used to recommend an artist, album, song, or genre to be played in the future
      * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:blunote.SongRequest)
-        com.drexelsp.blunote.BlunoteMessages.SongRequestOrBuilder {
+        // @@protoc_insertion_point(builder_implements:blunote.Recommendation)
+        com.drexelsp.blunote.BlunoteMessages.RecommendationOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SongRequest_descriptor;
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_Recommendation_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SongRequest_fieldAccessorTable
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_Recommendation_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.drexelsp.blunote.BlunoteMessages.SongRequest.class, com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder.class);
+                com.drexelsp.blunote.BlunoteMessages.Recommendation.class, com.drexelsp.blunote.BlunoteMessages.Recommendation.Builder.class);
       }
 
-      // Construct using com.drexelsp.blunote.BlunoteMessages.SongRequest.newBuilder()
+      // Construct using com.drexelsp.blunote.BlunoteMessages.Recommendation.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1766,8 +3276,10 @@ public final class BlunoteMessages {
         super.clear();
         username_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        songKey_ = "";
+        type_ = com.drexelsp.blunote.BlunoteMessages.Recommendation.Type.ARTIST;
         bitField0_ = (bitField0_ & ~0x00000002);
+        mediaId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -1777,23 +3289,23 @@ public final class BlunoteMessages {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SongRequest_descriptor;
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_Recommendation_descriptor;
       }
 
-      public com.drexelsp.blunote.BlunoteMessages.SongRequest getDefaultInstanceForType() {
-        return com.drexelsp.blunote.BlunoteMessages.SongRequest.getDefaultInstance();
+      public com.drexelsp.blunote.BlunoteMessages.Recommendation getDefaultInstanceForType() {
+        return com.drexelsp.blunote.BlunoteMessages.Recommendation.getDefaultInstance();
       }
 
-      public com.drexelsp.blunote.BlunoteMessages.SongRequest build() {
-        com.drexelsp.blunote.BlunoteMessages.SongRequest result = buildPartial();
+      public com.drexelsp.blunote.BlunoteMessages.Recommendation build() {
+        com.drexelsp.blunote.BlunoteMessages.Recommendation result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public com.drexelsp.blunote.BlunoteMessages.SongRequest buildPartial() {
-        com.drexelsp.blunote.BlunoteMessages.SongRequest result = new com.drexelsp.blunote.BlunoteMessages.SongRequest(this);
+      public com.drexelsp.blunote.BlunoteMessages.Recommendation buildPartial() {
+        com.drexelsp.blunote.BlunoteMessages.Recommendation result = new com.drexelsp.blunote.BlunoteMessages.Recommendation(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -1803,31 +3315,38 @@ public final class BlunoteMessages {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.songKey_ = songKey_;
+        result.type_ = type_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.mediaId_ = mediaId_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.drexelsp.blunote.BlunoteMessages.SongRequest) {
-          return mergeFrom((com.drexelsp.blunote.BlunoteMessages.SongRequest)other);
+        if (other instanceof com.drexelsp.blunote.BlunoteMessages.Recommendation) {
+          return mergeFrom((com.drexelsp.blunote.BlunoteMessages.Recommendation)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.drexelsp.blunote.BlunoteMessages.SongRequest other) {
-        if (other == com.drexelsp.blunote.BlunoteMessages.SongRequest.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.drexelsp.blunote.BlunoteMessages.Recommendation other) {
+        if (other == com.drexelsp.blunote.BlunoteMessages.Recommendation.getDefaultInstance()) return this;
         if (other.hasUsername()) {
           bitField0_ |= 0x00000001;
           username_ = other.username_;
           onChanged();
         }
-        if (other.hasSongKey()) {
-          bitField0_ |= 0x00000002;
-          songKey_ = other.songKey_;
+        if (other.hasType()) {
+          setType(other.getType());
+        }
+        if (other.hasMediaId()) {
+          bitField0_ |= 0x00000004;
+          mediaId_ = other.mediaId_;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -1839,7 +3358,11 @@ public final class BlunoteMessages {
           
           return false;
         }
-        if (!hasSongKey()) {
+        if (!hasType()) {
+          
+          return false;
+        }
+        if (!hasMediaId()) {
           
           return false;
         }
@@ -1850,11 +3373,11 @@ public final class BlunoteMessages {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.drexelsp.blunote.BlunoteMessages.SongRequest parsedMessage = null;
+        com.drexelsp.blunote.BlunoteMessages.Recommendation parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.drexelsp.blunote.BlunoteMessages.SongRequest) e.getUnfinishedMessage();
+          parsedMessage = (com.drexelsp.blunote.BlunoteMessages.Recommendation) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -1941,32 +3464,67 @@ public final class BlunoteMessages {
         return this;
       }
 
-      private java.lang.Object songKey_ = "";
+      private com.drexelsp.blunote.BlunoteMessages.Recommendation.Type type_ = com.drexelsp.blunote.BlunoteMessages.Recommendation.Type.ARTIST;
       /**
-       * <code>required string songKey = 2;</code>
-       *
-       * <pre>
-       * The hosts songkey
-       * </pre>
+       * <code>required .blunote.Recommendation.Type type = 2;</code>
        */
-      public boolean hasSongKey() {
+      public boolean hasType() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required string songKey = 2;</code>
+       * <code>required .blunote.Recommendation.Type type = 2;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.Recommendation.Type getType() {
+        return type_;
+      }
+      /**
+       * <code>required .blunote.Recommendation.Type type = 2;</code>
+       */
+      public Builder setType(com.drexelsp.blunote.BlunoteMessages.Recommendation.Type value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .blunote.Recommendation.Type type = 2;</code>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        type_ = com.drexelsp.blunote.BlunoteMessages.Recommendation.Type.ARTIST;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object mediaId_ = "";
+      /**
+       * <code>required string mediaId = 3;</code>
        *
        * <pre>
-       * The hosts songkey
+       * Host data reference key
        * </pre>
        */
-      public java.lang.String getSongKey() {
-        java.lang.Object ref = songKey_;
+      public boolean hasMediaId() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required string mediaId = 3;</code>
+       *
+       * <pre>
+       * Host data reference key
+       * </pre>
+       */
+      public java.lang.String getMediaId() {
+        java.lang.Object ref = mediaId_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           if (bs.isValidUtf8()) {
-            songKey_ = s;
+            mediaId_ = s;
           }
           return s;
         } else {
@@ -1974,69 +3532,824 @@ public final class BlunoteMessages {
         }
       }
       /**
-       * <code>required string songKey = 2;</code>
+       * <code>required string mediaId = 3;</code>
        *
        * <pre>
-       * The hosts songkey
+       * Host data reference key
        * </pre>
        */
       public com.google.protobuf.ByteString
-          getSongKeyBytes() {
-        java.lang.Object ref = songKey_;
+          getMediaIdBytes() {
+        java.lang.Object ref = mediaId_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          songKey_ = b;
+          mediaId_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>required string songKey = 2;</code>
+       * <code>required string mediaId = 3;</code>
        *
        * <pre>
-       * The hosts songkey
+       * Host data reference key
        * </pre>
        */
-      public Builder setSongKey(
+      public Builder setMediaId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        mediaId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string mediaId = 3;</code>
+       *
+       * <pre>
+       * Host data reference key
+       * </pre>
+       */
+      public Builder clearMediaId() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        mediaId_ = getDefaultInstance().getMediaId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string mediaId = 3;</code>
+       *
+       * <pre>
+       * Host data reference key
+       * </pre>
+       */
+      public Builder setMediaIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        mediaId_ = value;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:blunote.Recommendation)
+    }
+
+    static {
+      defaultInstance = new Recommendation(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:blunote.Recommendation)
+  }
+
+  public interface SongRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:blunote.SongRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>required string username = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique user name of the song holder
+     * </pre>
+     */
+    boolean hasUsername();
+    /**
+     * <code>required string username = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique user name of the song holder
+     * </pre>
+     */
+    java.lang.String getUsername();
+    /**
+     * <code>required string username = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique user name of the song holder
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getUsernameBytes();
+
+    /**
+     * <code>required string songId = 2;</code>
+     *
+     * <pre>
+     *&#47; Song ID defined in the host database
+     * </pre>
+     */
+    boolean hasSongId();
+    /**
+     * <code>required string songId = 2;</code>
+     *
+     * <pre>
+     *&#47; Song ID defined in the host database
+     * </pre>
+     */
+    java.lang.String getSongId();
+    /**
+     * <code>required string songId = 2;</code>
+     *
+     * <pre>
+     *&#47; Song ID defined in the host database
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getSongIdBytes();
+  }
+  /**
+   * Protobuf type {@code blunote.SongRequest}
+   *
+   * <pre>
+   **
+   * Request for song data to be sent from a user defined by username field
+   * </pre>
+   */
+  public static final class SongRequest extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:blunote.SongRequest)
+      SongRequestOrBuilder {
+    // Use SongRequest.newBuilder() to construct.
+    private SongRequest(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private SongRequest(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final SongRequest defaultInstance;
+    public static SongRequest getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public SongRequest getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SongRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000001;
+              username_ = bs;
+              break;
+            }
+            case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000002;
+              songId_ = bs;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SongRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SongRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.drexelsp.blunote.BlunoteMessages.SongRequest.class, com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<SongRequest> PARSER =
+        new com.google.protobuf.AbstractParser<SongRequest>() {
+      public SongRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new SongRequest(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SongRequest> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int USERNAME_FIELD_NUMBER = 1;
+    private java.lang.Object username_;
+    /**
+     * <code>required string username = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique user name of the song holder
+     * </pre>
+     */
+    public boolean hasUsername() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required string username = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique user name of the song holder
+     * </pre>
+     */
+    public java.lang.String getUsername() {
+      java.lang.Object ref = username_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          username_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string username = 1;</code>
+     *
+     * <pre>
+     *&#47; Unique user name of the song holder
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getUsernameBytes() {
+      java.lang.Object ref = username_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        username_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int SONGID_FIELD_NUMBER = 2;
+    private java.lang.Object songId_;
+    /**
+     * <code>required string songId = 2;</code>
+     *
+     * <pre>
+     *&#47; Song ID defined in the host database
+     * </pre>
+     */
+    public boolean hasSongId() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required string songId = 2;</code>
+     *
+     * <pre>
+     *&#47; Song ID defined in the host database
+     * </pre>
+     */
+    public java.lang.String getSongId() {
+      java.lang.Object ref = songId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          songId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string songId = 2;</code>
+     *
+     * <pre>
+     *&#47; Song ID defined in the host database
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getSongIdBytes() {
+      java.lang.Object ref = songId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        songId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private void initFields() {
+      username_ = "";
+      songId_ = "";
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasUsername()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasSongId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getUsernameBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getSongIdBytes());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getUsernameBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getSongIdBytes());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.SongRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.drexelsp.blunote.BlunoteMessages.SongRequest prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code blunote.SongRequest}
+     *
+     * <pre>
+     **
+     * Request for song data to be sent from a user defined by username field
+     * </pre>
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:blunote.SongRequest)
+        com.drexelsp.blunote.BlunoteMessages.SongRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SongRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SongRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.drexelsp.blunote.BlunoteMessages.SongRequest.class, com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder.class);
+      }
+
+      // Construct using com.drexelsp.blunote.BlunoteMessages.SongRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        username_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        songId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_SongRequest_descriptor;
+      }
+
+      public com.drexelsp.blunote.BlunoteMessages.SongRequest getDefaultInstanceForType() {
+        return com.drexelsp.blunote.BlunoteMessages.SongRequest.getDefaultInstance();
+      }
+
+      public com.drexelsp.blunote.BlunoteMessages.SongRequest build() {
+        com.drexelsp.blunote.BlunoteMessages.SongRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.drexelsp.blunote.BlunoteMessages.SongRequest buildPartial() {
+        com.drexelsp.blunote.BlunoteMessages.SongRequest result = new com.drexelsp.blunote.BlunoteMessages.SongRequest(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.username_ = username_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.songId_ = songId_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.drexelsp.blunote.BlunoteMessages.SongRequest) {
+          return mergeFrom((com.drexelsp.blunote.BlunoteMessages.SongRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.drexelsp.blunote.BlunoteMessages.SongRequest other) {
+        if (other == com.drexelsp.blunote.BlunoteMessages.SongRequest.getDefaultInstance()) return this;
+        if (other.hasUsername()) {
+          bitField0_ |= 0x00000001;
+          username_ = other.username_;
+          onChanged();
+        }
+        if (other.hasSongId()) {
+          bitField0_ |= 0x00000002;
+          songId_ = other.songId_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasUsername()) {
+          
+          return false;
+        }
+        if (!hasSongId()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.drexelsp.blunote.BlunoteMessages.SongRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.drexelsp.blunote.BlunoteMessages.SongRequest) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.lang.Object username_ = "";
+      /**
+       * <code>required string username = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique user name of the song holder
+       * </pre>
+       */
+      public boolean hasUsername() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string username = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique user name of the song holder
+       * </pre>
+       */
+      public java.lang.String getUsername() {
+        java.lang.Object ref = username_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            username_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string username = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique user name of the song holder
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getUsernameBytes() {
+        java.lang.Object ref = username_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          username_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string username = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique user name of the song holder
+       * </pre>
+       */
+      public Builder setUsername(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        username_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string username = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique user name of the song holder
+       * </pre>
+       */
+      public Builder clearUsername() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        username_ = getDefaultInstance().getUsername();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string username = 1;</code>
+       *
+       * <pre>
+       *&#47; Unique user name of the song holder
+       * </pre>
+       */
+      public Builder setUsernameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        username_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object songId_ = "";
+      /**
+       * <code>required string songId = 2;</code>
+       *
+       * <pre>
+       *&#47; Song ID defined in the host database
+       * </pre>
+       */
+      public boolean hasSongId() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string songId = 2;</code>
+       *
+       * <pre>
+       *&#47; Song ID defined in the host database
+       * </pre>
+       */
+      public java.lang.String getSongId() {
+        java.lang.Object ref = songId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            songId_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string songId = 2;</code>
+       *
+       * <pre>
+       *&#47; Song ID defined in the host database
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getSongIdBytes() {
+        java.lang.Object ref = songId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          songId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string songId = 2;</code>
+       *
+       * <pre>
+       *&#47; Song ID defined in the host database
+       * </pre>
+       */
+      public Builder setSongId(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000002;
-        songKey_ = value;
+        songId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string songKey = 2;</code>
+       * <code>required string songId = 2;</code>
        *
        * <pre>
-       * The hosts songkey
+       *&#47; Song ID defined in the host database
        * </pre>
        */
-      public Builder clearSongKey() {
+      public Builder clearSongId() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        songKey_ = getDefaultInstance().getSongKey();
+        songId_ = getDefaultInstance().getSongId();
         onChanged();
         return this;
       }
       /**
-       * <code>required string songKey = 2;</code>
+       * <code>required string songId = 2;</code>
        *
        * <pre>
-       * The hosts songkey
+       *&#47; Song ID defined in the host database
        * </pre>
        */
-      public Builder setSongKeyBytes(
+      public Builder setSongIdBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000002;
-        songKey_ = value;
+        songId_ = value;
         onChanged();
         return this;
       }
@@ -2058,51 +4371,80 @@ public final class BlunoteMessages {
 
     /**
      * <code>required int64 songId = 1;</code>
+     *
+     * <pre>
+     *&#47; Song ID defined in the host database
+     * </pre>
      */
     boolean hasSongId();
     /**
      * <code>required int64 songId = 1;</code>
+     *
+     * <pre>
+     *&#47; Song ID defined in the host database
+     * </pre>
      */
     long getSongId();
 
     /**
-     * <code>optional int64 songKey = 2;</code>
-     */
-    boolean hasSongKey();
-    /**
-     * <code>optional int64 songKey = 2;</code>
-     */
-    long getSongKey();
-
-    /**
      * <code>required bytes fragment = 3;</code>
+     *
+     * <pre>
+     *&#47; Bytes of the song
+     * </pre>
      */
     boolean hasFragment();
     /**
      * <code>required bytes fragment = 3;</code>
+     *
+     * <pre>
+     *&#47; Bytes of the song
+     * </pre>
      */
     com.google.protobuf.ByteString getFragment();
 
     /**
      * <code>required int64 fragmentId = 4;</code>
+     *
+     * <pre>
+     *&#47; Number of the fragment in the sequence, between 1 and totalFragments
+     * </pre>
      */
     boolean hasFragmentId();
     /**
      * <code>required int64 fragmentId = 4;</code>
+     *
+     * <pre>
+     *&#47; Number of the fragment in the sequence, between 1 and totalFragments
+     * </pre>
      */
     long getFragmentId();
 
     /**
      * <code>required int32 totalFragments = 5;</code>
+     *
+     * <pre>
+     *&#47; Total number of fragments to be expected
+     * </pre>
      */
     boolean hasTotalFragments();
     /**
      * <code>required int32 totalFragments = 5;</code>
+     *
+     * <pre>
+     *&#47; Total number of fragments to be expected
+     * </pre>
      */
     int getTotalFragments();
   }
   /**
    * Protobuf type {@code blunote.SongFragment}
+   *
+   * <pre>
+   **
+   * Slice of a song that is being sent from a user to the host.
+   * These are sent after a SongRequest message has been received
+   * </pre>
    */
   public static final class SongFragment extends
       com.google.protobuf.GeneratedMessage implements
@@ -2158,23 +4500,18 @@ public final class BlunoteMessages {
               songId_ = input.readInt64();
               break;
             }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              songKey_ = input.readInt64();
-              break;
-            }
             case 26: {
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000002;
               fragment_ = input.readBytes();
               break;
             }
             case 32: {
-              bitField0_ |= 0x00000008;
+              bitField0_ |= 0x00000004;
               fragmentId_ = input.readInt64();
               break;
             }
             case 40: {
-              bitField0_ |= 0x00000010;
+              bitField0_ |= 0x00000008;
               totalFragments_ = input.readInt32();
               break;
             }
@@ -2222,42 +4559,43 @@ public final class BlunoteMessages {
     private long songId_;
     /**
      * <code>required int64 songId = 1;</code>
+     *
+     * <pre>
+     *&#47; Song ID defined in the host database
+     * </pre>
      */
     public boolean hasSongId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required int64 songId = 1;</code>
+     *
+     * <pre>
+     *&#47; Song ID defined in the host database
+     * </pre>
      */
     public long getSongId() {
       return songId_;
-    }
-
-    public static final int SONGKEY_FIELD_NUMBER = 2;
-    private long songKey_;
-    /**
-     * <code>optional int64 songKey = 2;</code>
-     */
-    public boolean hasSongKey() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int64 songKey = 2;</code>
-     */
-    public long getSongKey() {
-      return songKey_;
     }
 
     public static final int FRAGMENT_FIELD_NUMBER = 3;
     private com.google.protobuf.ByteString fragment_;
     /**
      * <code>required bytes fragment = 3;</code>
+     *
+     * <pre>
+     *&#47; Bytes of the song
+     * </pre>
      */
     public boolean hasFragment() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>required bytes fragment = 3;</code>
+     *
+     * <pre>
+     *&#47; Bytes of the song
+     * </pre>
      */
     public com.google.protobuf.ByteString getFragment() {
       return fragment_;
@@ -2267,12 +4605,20 @@ public final class BlunoteMessages {
     private long fragmentId_;
     /**
      * <code>required int64 fragmentId = 4;</code>
+     *
+     * <pre>
+     *&#47; Number of the fragment in the sequence, between 1 and totalFragments
+     * </pre>
      */
     public boolean hasFragmentId() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>required int64 fragmentId = 4;</code>
+     *
+     * <pre>
+     *&#47; Number of the fragment in the sequence, between 1 and totalFragments
+     * </pre>
      */
     public long getFragmentId() {
       return fragmentId_;
@@ -2282,12 +4628,20 @@ public final class BlunoteMessages {
     private int totalFragments_;
     /**
      * <code>required int32 totalFragments = 5;</code>
+     *
+     * <pre>
+     *&#47; Total number of fragments to be expected
+     * </pre>
      */
     public boolean hasTotalFragments() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
      * <code>required int32 totalFragments = 5;</code>
+     *
+     * <pre>
+     *&#47; Total number of fragments to be expected
+     * </pre>
      */
     public int getTotalFragments() {
       return totalFragments_;
@@ -2295,7 +4649,6 @@ public final class BlunoteMessages {
 
     private void initFields() {
       songId_ = 0L;
-      songKey_ = 0L;
       fragment_ = com.google.protobuf.ByteString.EMPTY;
       fragmentId_ = 0L;
       totalFragments_ = 0;
@@ -2333,15 +4686,12 @@ public final class BlunoteMessages {
         output.writeInt64(1, songId_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt64(2, songKey_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(3, fragment_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt64(4, fragmentId_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeInt32(5, totalFragments_);
       }
       getUnknownFields().writeTo(output);
@@ -2359,17 +4709,13 @@ public final class BlunoteMessages {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(2, songKey_);
+          .computeBytesSize(3, fragment_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, fragment_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(4, fragmentId_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(5, totalFragments_);
       }
@@ -2453,6 +4799,12 @@ public final class BlunoteMessages {
     }
     /**
      * Protobuf type {@code blunote.SongFragment}
+     *
+     * <pre>
+     **
+     * Slice of a song that is being sent from a user to the host.
+     * These are sent after a SongRequest message has been received
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> implements
@@ -2492,14 +4844,12 @@ public final class BlunoteMessages {
         super.clear();
         songId_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000001);
-        songKey_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000002);
         fragment_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000002);
         fragmentId_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000004);
         totalFragments_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -2535,17 +4885,13 @@ public final class BlunoteMessages {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.songKey_ = songKey_;
+        result.fragment_ = fragment_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.fragment_ = fragment_;
+        result.fragmentId_ = fragmentId_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
-        }
-        result.fragmentId_ = fragmentId_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
         }
         result.totalFragments_ = totalFragments_;
         result.bitField0_ = to_bitField0_;
@@ -2566,9 +4912,6 @@ public final class BlunoteMessages {
         if (other == com.drexelsp.blunote.BlunoteMessages.SongFragment.getDefaultInstance()) return this;
         if (other.hasSongId()) {
           setSongId(other.getSongId());
-        }
-        if (other.hasSongKey()) {
-          setSongKey(other.getSongKey());
         }
         if (other.hasFragment()) {
           setFragment(other.getFragment());
@@ -2625,18 +4968,30 @@ public final class BlunoteMessages {
       private long songId_ ;
       /**
        * <code>required int64 songId = 1;</code>
+       *
+       * <pre>
+       *&#47; Song ID defined in the host database
+       * </pre>
        */
       public boolean hasSongId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required int64 songId = 1;</code>
+       *
+       * <pre>
+       *&#47; Song ID defined in the host database
+       * </pre>
        */
       public long getSongId() {
         return songId_;
       }
       /**
        * <code>required int64 songId = 1;</code>
+       *
+       * <pre>
+       *&#47; Song ID defined in the host database
+       * </pre>
        */
       public Builder setSongId(long value) {
         bitField0_ |= 0x00000001;
@@ -2646,6 +5001,10 @@ public final class BlunoteMessages {
       }
       /**
        * <code>required int64 songId = 1;</code>
+       *
+       * <pre>
+       *&#47; Song ID defined in the host database
+       * </pre>
        */
       public Builder clearSongId() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -2654,68 +5013,52 @@ public final class BlunoteMessages {
         return this;
       }
 
-      private long songKey_ ;
-      /**
-       * <code>optional int64 songKey = 2;</code>
-       */
-      public boolean hasSongKey() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional int64 songKey = 2;</code>
-       */
-      public long getSongKey() {
-        return songKey_;
-      }
-      /**
-       * <code>optional int64 songKey = 2;</code>
-       */
-      public Builder setSongKey(long value) {
-        bitField0_ |= 0x00000002;
-        songKey_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int64 songKey = 2;</code>
-       */
-      public Builder clearSongKey() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        songKey_ = 0L;
-        onChanged();
-        return this;
-      }
-
       private com.google.protobuf.ByteString fragment_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>required bytes fragment = 3;</code>
+       *
+       * <pre>
+       *&#47; Bytes of the song
+       * </pre>
        */
       public boolean hasFragment() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>required bytes fragment = 3;</code>
+       *
+       * <pre>
+       *&#47; Bytes of the song
+       * </pre>
        */
       public com.google.protobuf.ByteString getFragment() {
         return fragment_;
       }
       /**
        * <code>required bytes fragment = 3;</code>
+       *
+       * <pre>
+       *&#47; Bytes of the song
+       * </pre>
        */
       public Builder setFragment(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000002;
         fragment_ = value;
         onChanged();
         return this;
       }
       /**
        * <code>required bytes fragment = 3;</code>
+       *
+       * <pre>
+       *&#47; Bytes of the song
+       * </pre>
        */
       public Builder clearFragment() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000002);
         fragment_ = getDefaultInstance().getFragment();
         onChanged();
         return this;
@@ -2724,30 +5067,46 @@ public final class BlunoteMessages {
       private long fragmentId_ ;
       /**
        * <code>required int64 fragmentId = 4;</code>
+       *
+       * <pre>
+       *&#47; Number of the fragment in the sequence, between 1 and totalFragments
+       * </pre>
        */
       public boolean hasFragmentId() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
        * <code>required int64 fragmentId = 4;</code>
+       *
+       * <pre>
+       *&#47; Number of the fragment in the sequence, between 1 and totalFragments
+       * </pre>
        */
       public long getFragmentId() {
         return fragmentId_;
       }
       /**
        * <code>required int64 fragmentId = 4;</code>
+       *
+       * <pre>
+       *&#47; Number of the fragment in the sequence, between 1 and totalFragments
+       * </pre>
        */
       public Builder setFragmentId(long value) {
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000004;
         fragmentId_ = value;
         onChanged();
         return this;
       }
       /**
        * <code>required int64 fragmentId = 4;</code>
+       *
+       * <pre>
+       *&#47; Number of the fragment in the sequence, between 1 and totalFragments
+       * </pre>
        */
       public Builder clearFragmentId() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000004);
         fragmentId_ = 0L;
         onChanged();
         return this;
@@ -2756,30 +5115,46 @@ public final class BlunoteMessages {
       private int totalFragments_ ;
       /**
        * <code>required int32 totalFragments = 5;</code>
+       *
+       * <pre>
+       *&#47; Total number of fragments to be expected
+       * </pre>
        */
       public boolean hasTotalFragments() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
        * <code>required int32 totalFragments = 5;</code>
+       *
+       * <pre>
+       *&#47; Total number of fragments to be expected
+       * </pre>
        */
       public int getTotalFragments() {
         return totalFragments_;
       }
       /**
        * <code>required int32 totalFragments = 5;</code>
+       *
+       * <pre>
+       *&#47; Total number of fragments to be expected
+       * </pre>
        */
       public Builder setTotalFragments(int value) {
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000008;
         totalFragments_ = value;
         onChanged();
         return this;
       }
       /**
        * <code>required int32 totalFragments = 5;</code>
+       *
+       * <pre>
+       *&#47; Total number of fragments to be expected
+       * </pre>
        */
       public Builder clearTotalFragments() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000008);
         totalFragments_ = 0;
         onChanged();
         return this;
@@ -2794,6 +5169,1754 @@ public final class BlunoteMessages {
     }
 
     // @@protoc_insertion_point(class_scope:blunote.SongFragment)
+  }
+
+  public interface WrapperMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:blunote.WrapperMessage)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>required .blunote.WrapperMessage.Type type = 1;</code>
+     */
+    boolean hasType();
+    /**
+     * <code>required .blunote.WrapperMessage.Type type = 1;</code>
+     */
+    com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type getType();
+
+    /**
+     * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+     */
+    boolean hasMultiResponse();
+    /**
+     * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+     */
+    com.drexelsp.blunote.BlunoteMessages.MultiAnswer getMultiResponse();
+    /**
+     * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+     */
+    com.drexelsp.blunote.BlunoteMessages.MultiAnswerOrBuilder getMultiResponseOrBuilder();
+
+    /**
+     * <code>optional .blunote.Recommendation recommendation = 3;</code>
+     */
+    boolean hasRecommendation();
+    /**
+     * <code>optional .blunote.Recommendation recommendation = 3;</code>
+     */
+    com.drexelsp.blunote.BlunoteMessages.Recommendation getRecommendation();
+    /**
+     * <code>optional .blunote.Recommendation recommendation = 3;</code>
+     */
+    com.drexelsp.blunote.BlunoteMessages.RecommendationOrBuilder getRecommendationOrBuilder();
+
+    /**
+     * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+     */
+    boolean hasSingleResponse();
+    /**
+     * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+     */
+    com.drexelsp.blunote.BlunoteMessages.SingleAnswer getSingleResponse();
+    /**
+     * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+     */
+    com.drexelsp.blunote.BlunoteMessages.SingleAnswerOrBuilder getSingleResponseOrBuilder();
+
+    /**
+     * <code>optional .blunote.SongFragment songFragment = 5;</code>
+     */
+    boolean hasSongFragment();
+    /**
+     * <code>optional .blunote.SongFragment songFragment = 5;</code>
+     */
+    com.drexelsp.blunote.BlunoteMessages.SongFragment getSongFragment();
+    /**
+     * <code>optional .blunote.SongFragment songFragment = 5;</code>
+     */
+    com.drexelsp.blunote.BlunoteMessages.SongFragmentOrBuilder getSongFragmentOrBuilder();
+
+    /**
+     * <code>optional .blunote.SongRequest songRequest = 6;</code>
+     */
+    boolean hasSongRequest();
+    /**
+     * <code>optional .blunote.SongRequest songRequest = 6;</code>
+     */
+    com.drexelsp.blunote.BlunoteMessages.SongRequest getSongRequest();
+    /**
+     * <code>optional .blunote.SongRequest songRequest = 6;</code>
+     */
+    com.drexelsp.blunote.BlunoteMessages.SongRequestOrBuilder getSongRequestOrBuilder();
+
+    /**
+     * <code>optional .blunote.Vote vote = 7;</code>
+     */
+    boolean hasVote();
+    /**
+     * <code>optional .blunote.Vote vote = 7;</code>
+     */
+    com.drexelsp.blunote.BlunoteMessages.Vote getVote();
+    /**
+     * <code>optional .blunote.Vote vote = 7;</code>
+     */
+    com.drexelsp.blunote.BlunoteMessages.VoteOrBuilder getVoteOrBuilder();
+  }
+  /**
+   * Protobuf type {@code blunote.WrapperMessage}
+   *
+   * <pre>
+   **
+   * Used to send any BluNote message
+   * </pre>
+   */
+  public static final class WrapperMessage extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:blunote.WrapperMessage)
+      WrapperMessageOrBuilder {
+    // Use WrapperMessage.newBuilder() to construct.
+    private WrapperMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private WrapperMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final WrapperMessage defaultInstance;
+    public static WrapperMessage getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public WrapperMessage getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private WrapperMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+              com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type value = com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                type_ = value;
+              }
+              break;
+            }
+            case 18: {
+              com.drexelsp.blunote.BlunoteMessages.MultiAnswer.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = multiResponse_.toBuilder();
+              }
+              multiResponse_ = input.readMessage(com.drexelsp.blunote.BlunoteMessages.MultiAnswer.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(multiResponse_);
+                multiResponse_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
+              break;
+            }
+            case 26: {
+              com.drexelsp.blunote.BlunoteMessages.Recommendation.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = recommendation_.toBuilder();
+              }
+              recommendation_ = input.readMessage(com.drexelsp.blunote.BlunoteMessages.Recommendation.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(recommendation_);
+                recommendation_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
+              break;
+            }
+            case 34: {
+              com.drexelsp.blunote.BlunoteMessages.SingleAnswer.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                subBuilder = singleResponse_.toBuilder();
+              }
+              singleResponse_ = input.readMessage(com.drexelsp.blunote.BlunoteMessages.SingleAnswer.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(singleResponse_);
+                singleResponse_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000008;
+              break;
+            }
+            case 42: {
+              com.drexelsp.blunote.BlunoteMessages.SongFragment.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000010) == 0x00000010)) {
+                subBuilder = songFragment_.toBuilder();
+              }
+              songFragment_ = input.readMessage(com.drexelsp.blunote.BlunoteMessages.SongFragment.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(songFragment_);
+                songFragment_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000010;
+              break;
+            }
+            case 50: {
+              com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000020) == 0x00000020)) {
+                subBuilder = songRequest_.toBuilder();
+              }
+              songRequest_ = input.readMessage(com.drexelsp.blunote.BlunoteMessages.SongRequest.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(songRequest_);
+                songRequest_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000020;
+              break;
+            }
+            case 58: {
+              com.drexelsp.blunote.BlunoteMessages.Vote.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000040) == 0x00000040)) {
+                subBuilder = vote_.toBuilder();
+              }
+              vote_ = input.readMessage(com.drexelsp.blunote.BlunoteMessages.Vote.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(vote_);
+                vote_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000040;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_WrapperMessage_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_WrapperMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.drexelsp.blunote.BlunoteMessages.WrapperMessage.class, com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<WrapperMessage> PARSER =
+        new com.google.protobuf.AbstractParser<WrapperMessage>() {
+      public WrapperMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new WrapperMessage(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<WrapperMessage> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code blunote.WrapperMessage.Type}
+     */
+    public enum Type
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>MULTI_ANSWER = 1;</code>
+       */
+      MULTI_ANSWER(0, 1),
+      /**
+       * <code>RECOMMEND = 2;</code>
+       */
+      RECOMMEND(1, 2),
+      /**
+       * <code>SINGLE_ANSWER = 3;</code>
+       */
+      SINGLE_ANSWER(2, 3),
+      /**
+       * <code>SONG_FRAGMENT = 4;</code>
+       */
+      SONG_FRAGMENT(3, 4),
+      /**
+       * <code>SONG_REQUEST = 5;</code>
+       */
+      SONG_REQUEST(4, 5),
+      /**
+       * <code>VOTE = 6;</code>
+       */
+      VOTE(5, 6),
+      ;
+
+      /**
+       * <code>MULTI_ANSWER = 1;</code>
+       */
+      public static final int MULTI_ANSWER_VALUE = 1;
+      /**
+       * <code>RECOMMEND = 2;</code>
+       */
+      public static final int RECOMMEND_VALUE = 2;
+      /**
+       * <code>SINGLE_ANSWER = 3;</code>
+       */
+      public static final int SINGLE_ANSWER_VALUE = 3;
+      /**
+       * <code>SONG_FRAGMENT = 4;</code>
+       */
+      public static final int SONG_FRAGMENT_VALUE = 4;
+      /**
+       * <code>SONG_REQUEST = 5;</code>
+       */
+      public static final int SONG_REQUEST_VALUE = 5;
+      /**
+       * <code>VOTE = 6;</code>
+       */
+      public static final int VOTE_VALUE = 6;
+
+
+      public final int getNumber() { return value; }
+
+      public static Type valueOf(int value) {
+        switch (value) {
+          case 1: return MULTI_ANSWER;
+          case 2: return RECOMMEND;
+          case 3: return SINGLE_ANSWER;
+          case 4: return SONG_FRAGMENT;
+          case 5: return SONG_REQUEST;
+          case 6: return VOTE;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<Type>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<Type>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Type>() {
+              public Type findValueByNumber(int number) {
+                return Type.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.drexelsp.blunote.BlunoteMessages.WrapperMessage.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final Type[] VALUES = values();
+
+      public static Type valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private Type(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:blunote.WrapperMessage.Type)
+    }
+
+    private int bitField0_;
+    public static final int TYPE_FIELD_NUMBER = 1;
+    private com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type type_;
+    /**
+     * <code>required .blunote.WrapperMessage.Type type = 1;</code>
+     */
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required .blunote.WrapperMessage.Type type = 1;</code>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type getType() {
+      return type_;
+    }
+
+    public static final int MULTIRESPONSE_FIELD_NUMBER = 2;
+    private com.drexelsp.blunote.BlunoteMessages.MultiAnswer multiResponse_;
+    /**
+     * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+     */
+    public boolean hasMultiResponse() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.MultiAnswer getMultiResponse() {
+      return multiResponse_;
+    }
+    /**
+     * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.MultiAnswerOrBuilder getMultiResponseOrBuilder() {
+      return multiResponse_;
+    }
+
+    public static final int RECOMMENDATION_FIELD_NUMBER = 3;
+    private com.drexelsp.blunote.BlunoteMessages.Recommendation recommendation_;
+    /**
+     * <code>optional .blunote.Recommendation recommendation = 3;</code>
+     */
+    public boolean hasRecommendation() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .blunote.Recommendation recommendation = 3;</code>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.Recommendation getRecommendation() {
+      return recommendation_;
+    }
+    /**
+     * <code>optional .blunote.Recommendation recommendation = 3;</code>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.RecommendationOrBuilder getRecommendationOrBuilder() {
+      return recommendation_;
+    }
+
+    public static final int SINGLERESPONSE_FIELD_NUMBER = 4;
+    private com.drexelsp.blunote.BlunoteMessages.SingleAnswer singleResponse_;
+    /**
+     * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+     */
+    public boolean hasSingleResponse() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.SingleAnswer getSingleResponse() {
+      return singleResponse_;
+    }
+    /**
+     * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.SingleAnswerOrBuilder getSingleResponseOrBuilder() {
+      return singleResponse_;
+    }
+
+    public static final int SONGFRAGMENT_FIELD_NUMBER = 5;
+    private com.drexelsp.blunote.BlunoteMessages.SongFragment songFragment_;
+    /**
+     * <code>optional .blunote.SongFragment songFragment = 5;</code>
+     */
+    public boolean hasSongFragment() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional .blunote.SongFragment songFragment = 5;</code>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.SongFragment getSongFragment() {
+      return songFragment_;
+    }
+    /**
+     * <code>optional .blunote.SongFragment songFragment = 5;</code>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.SongFragmentOrBuilder getSongFragmentOrBuilder() {
+      return songFragment_;
+    }
+
+    public static final int SONGREQUEST_FIELD_NUMBER = 6;
+    private com.drexelsp.blunote.BlunoteMessages.SongRequest songRequest_;
+    /**
+     * <code>optional .blunote.SongRequest songRequest = 6;</code>
+     */
+    public boolean hasSongRequest() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional .blunote.SongRequest songRequest = 6;</code>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.SongRequest getSongRequest() {
+      return songRequest_;
+    }
+    /**
+     * <code>optional .blunote.SongRequest songRequest = 6;</code>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.SongRequestOrBuilder getSongRequestOrBuilder() {
+      return songRequest_;
+    }
+
+    public static final int VOTE_FIELD_NUMBER = 7;
+    private com.drexelsp.blunote.BlunoteMessages.Vote vote_;
+    /**
+     * <code>optional .blunote.Vote vote = 7;</code>
+     */
+    public boolean hasVote() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional .blunote.Vote vote = 7;</code>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.Vote getVote() {
+      return vote_;
+    }
+    /**
+     * <code>optional .blunote.Vote vote = 7;</code>
+     */
+    public com.drexelsp.blunote.BlunoteMessages.VoteOrBuilder getVoteOrBuilder() {
+      return vote_;
+    }
+
+    private void initFields() {
+      type_ = com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type.MULTI_ANSWER;
+      multiResponse_ = com.drexelsp.blunote.BlunoteMessages.MultiAnswer.getDefaultInstance();
+      recommendation_ = com.drexelsp.blunote.BlunoteMessages.Recommendation.getDefaultInstance();
+      singleResponse_ = com.drexelsp.blunote.BlunoteMessages.SingleAnswer.getDefaultInstance();
+      songFragment_ = com.drexelsp.blunote.BlunoteMessages.SongFragment.getDefaultInstance();
+      songRequest_ = com.drexelsp.blunote.BlunoteMessages.SongRequest.getDefaultInstance();
+      vote_ = com.drexelsp.blunote.BlunoteMessages.Vote.getDefaultInstance();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (hasMultiResponse()) {
+        if (!getMultiResponse().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasRecommendation()) {
+        if (!getRecommendation().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasSingleResponse()) {
+        if (!getSingleResponse().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasSongFragment()) {
+        if (!getSongFragment().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasSongRequest()) {
+        if (!getSongRequest().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasVote()) {
+        if (!getVote().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeEnum(1, type_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeMessage(2, multiResponse_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, recommendation_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeMessage(4, singleResponse_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeMessage(5, songFragment_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeMessage(6, songRequest_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeMessage(7, vote_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, type_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, multiResponse_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, recommendation_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, singleResponse_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, songFragment_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(6, songRequest_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(7, vote_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.drexelsp.blunote.BlunoteMessages.WrapperMessage prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code blunote.WrapperMessage}
+     *
+     * <pre>
+     **
+     * Used to send any BluNote message
+     * </pre>
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:blunote.WrapperMessage)
+        com.drexelsp.blunote.BlunoteMessages.WrapperMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_WrapperMessage_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_WrapperMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.drexelsp.blunote.BlunoteMessages.WrapperMessage.class, com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Builder.class);
+      }
+
+      // Construct using com.drexelsp.blunote.BlunoteMessages.WrapperMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getMultiResponseFieldBuilder();
+          getRecommendationFieldBuilder();
+          getSingleResponseFieldBuilder();
+          getSongFragmentFieldBuilder();
+          getSongRequestFieldBuilder();
+          getVoteFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        type_ = com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type.MULTI_ANSWER;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        if (multiResponseBuilder_ == null) {
+          multiResponse_ = com.drexelsp.blunote.BlunoteMessages.MultiAnswer.getDefaultInstance();
+        } else {
+          multiResponseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (recommendationBuilder_ == null) {
+          recommendation_ = com.drexelsp.blunote.BlunoteMessages.Recommendation.getDefaultInstance();
+        } else {
+          recommendationBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        if (singleResponseBuilder_ == null) {
+          singleResponse_ = com.drexelsp.blunote.BlunoteMessages.SingleAnswer.getDefaultInstance();
+        } else {
+          singleResponseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        if (songFragmentBuilder_ == null) {
+          songFragment_ = com.drexelsp.blunote.BlunoteMessages.SongFragment.getDefaultInstance();
+        } else {
+          songFragmentBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        if (songRequestBuilder_ == null) {
+          songRequest_ = com.drexelsp.blunote.BlunoteMessages.SongRequest.getDefaultInstance();
+        } else {
+          songRequestBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
+        if (voteBuilder_ == null) {
+          vote_ = com.drexelsp.blunote.BlunoteMessages.Vote.getDefaultInstance();
+        } else {
+          voteBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000040);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_WrapperMessage_descriptor;
+      }
+
+      public com.drexelsp.blunote.BlunoteMessages.WrapperMessage getDefaultInstanceForType() {
+        return com.drexelsp.blunote.BlunoteMessages.WrapperMessage.getDefaultInstance();
+      }
+
+      public com.drexelsp.blunote.BlunoteMessages.WrapperMessage build() {
+        com.drexelsp.blunote.BlunoteMessages.WrapperMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.drexelsp.blunote.BlunoteMessages.WrapperMessage buildPartial() {
+        com.drexelsp.blunote.BlunoteMessages.WrapperMessage result = new com.drexelsp.blunote.BlunoteMessages.WrapperMessage(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.type_ = type_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        if (multiResponseBuilder_ == null) {
+          result.multiResponse_ = multiResponse_;
+        } else {
+          result.multiResponse_ = multiResponseBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (recommendationBuilder_ == null) {
+          result.recommendation_ = recommendation_;
+        } else {
+          result.recommendation_ = recommendationBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        if (singleResponseBuilder_ == null) {
+          result.singleResponse_ = singleResponse_;
+        } else {
+          result.singleResponse_ = singleResponseBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        if (songFragmentBuilder_ == null) {
+          result.songFragment_ = songFragment_;
+        } else {
+          result.songFragment_ = songFragmentBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        if (songRequestBuilder_ == null) {
+          result.songRequest_ = songRequest_;
+        } else {
+          result.songRequest_ = songRequestBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        if (voteBuilder_ == null) {
+          result.vote_ = vote_;
+        } else {
+          result.vote_ = voteBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.drexelsp.blunote.BlunoteMessages.WrapperMessage) {
+          return mergeFrom((com.drexelsp.blunote.BlunoteMessages.WrapperMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.drexelsp.blunote.BlunoteMessages.WrapperMessage other) {
+        if (other == com.drexelsp.blunote.BlunoteMessages.WrapperMessage.getDefaultInstance()) return this;
+        if (other.hasType()) {
+          setType(other.getType());
+        }
+        if (other.hasMultiResponse()) {
+          mergeMultiResponse(other.getMultiResponse());
+        }
+        if (other.hasRecommendation()) {
+          mergeRecommendation(other.getRecommendation());
+        }
+        if (other.hasSingleResponse()) {
+          mergeSingleResponse(other.getSingleResponse());
+        }
+        if (other.hasSongFragment()) {
+          mergeSongFragment(other.getSongFragment());
+        }
+        if (other.hasSongRequest()) {
+          mergeSongRequest(other.getSongRequest());
+        }
+        if (other.hasVote()) {
+          mergeVote(other.getVote());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasType()) {
+          
+          return false;
+        }
+        if (hasMultiResponse()) {
+          if (!getMultiResponse().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasRecommendation()) {
+          if (!getRecommendation().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasSingleResponse()) {
+          if (!getSingleResponse().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasSongFragment()) {
+          if (!getSongFragment().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasSongRequest()) {
+          if (!getSongRequest().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasVote()) {
+          if (!getVote().isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.drexelsp.blunote.BlunoteMessages.WrapperMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.drexelsp.blunote.BlunoteMessages.WrapperMessage) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type type_ = com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type.MULTI_ANSWER;
+      /**
+       * <code>required .blunote.WrapperMessage.Type type = 1;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .blunote.WrapperMessage.Type type = 1;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type getType() {
+        return type_;
+      }
+      /**
+       * <code>required .blunote.WrapperMessage.Type type = 1;</code>
+       */
+      public Builder setType(com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000001;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .blunote.WrapperMessage.Type type = 1;</code>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        type_ = com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type.MULTI_ANSWER;
+        onChanged();
+        return this;
+      }
+
+      private com.drexelsp.blunote.BlunoteMessages.MultiAnswer multiResponse_ = com.drexelsp.blunote.BlunoteMessages.MultiAnswer.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.BlunoteMessages.MultiAnswer, com.drexelsp.blunote.BlunoteMessages.MultiAnswer.Builder, com.drexelsp.blunote.BlunoteMessages.MultiAnswerOrBuilder> multiResponseBuilder_;
+      /**
+       * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+       */
+      public boolean hasMultiResponse() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.MultiAnswer getMultiResponse() {
+        if (multiResponseBuilder_ == null) {
+          return multiResponse_;
+        } else {
+          return multiResponseBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+       */
+      public Builder setMultiResponse(com.drexelsp.blunote.BlunoteMessages.MultiAnswer value) {
+        if (multiResponseBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          multiResponse_ = value;
+          onChanged();
+        } else {
+          multiResponseBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+       */
+      public Builder setMultiResponse(
+          com.drexelsp.blunote.BlunoteMessages.MultiAnswer.Builder builderForValue) {
+        if (multiResponseBuilder_ == null) {
+          multiResponse_ = builderForValue.build();
+          onChanged();
+        } else {
+          multiResponseBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+       */
+      public Builder mergeMultiResponse(com.drexelsp.blunote.BlunoteMessages.MultiAnswer value) {
+        if (multiResponseBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002) &&
+              multiResponse_ != com.drexelsp.blunote.BlunoteMessages.MultiAnswer.getDefaultInstance()) {
+            multiResponse_ =
+              com.drexelsp.blunote.BlunoteMessages.MultiAnswer.newBuilder(multiResponse_).mergeFrom(value).buildPartial();
+          } else {
+            multiResponse_ = value;
+          }
+          onChanged();
+        } else {
+          multiResponseBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+       */
+      public Builder clearMultiResponse() {
+        if (multiResponseBuilder_ == null) {
+          multiResponse_ = com.drexelsp.blunote.BlunoteMessages.MultiAnswer.getDefaultInstance();
+          onChanged();
+        } else {
+          multiResponseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+      /**
+       * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.MultiAnswer.Builder getMultiResponseBuilder() {
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return getMultiResponseFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.MultiAnswerOrBuilder getMultiResponseOrBuilder() {
+        if (multiResponseBuilder_ != null) {
+          return multiResponseBuilder_.getMessageOrBuilder();
+        } else {
+          return multiResponse_;
+        }
+      }
+      /**
+       * <code>optional .blunote.MultiAnswer multiResponse = 2;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.BlunoteMessages.MultiAnswer, com.drexelsp.blunote.BlunoteMessages.MultiAnswer.Builder, com.drexelsp.blunote.BlunoteMessages.MultiAnswerOrBuilder> 
+          getMultiResponseFieldBuilder() {
+        if (multiResponseBuilder_ == null) {
+          multiResponseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.drexelsp.blunote.BlunoteMessages.MultiAnswer, com.drexelsp.blunote.BlunoteMessages.MultiAnswer.Builder, com.drexelsp.blunote.BlunoteMessages.MultiAnswerOrBuilder>(
+                  getMultiResponse(),
+                  getParentForChildren(),
+                  isClean());
+          multiResponse_ = null;
+        }
+        return multiResponseBuilder_;
+      }
+
+      private com.drexelsp.blunote.BlunoteMessages.Recommendation recommendation_ = com.drexelsp.blunote.BlunoteMessages.Recommendation.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.BlunoteMessages.Recommendation, com.drexelsp.blunote.BlunoteMessages.Recommendation.Builder, com.drexelsp.blunote.BlunoteMessages.RecommendationOrBuilder> recommendationBuilder_;
+      /**
+       * <code>optional .blunote.Recommendation recommendation = 3;</code>
+       */
+      public boolean hasRecommendation() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .blunote.Recommendation recommendation = 3;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.Recommendation getRecommendation() {
+        if (recommendationBuilder_ == null) {
+          return recommendation_;
+        } else {
+          return recommendationBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .blunote.Recommendation recommendation = 3;</code>
+       */
+      public Builder setRecommendation(com.drexelsp.blunote.BlunoteMessages.Recommendation value) {
+        if (recommendationBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          recommendation_ = value;
+          onChanged();
+        } else {
+          recommendationBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.Recommendation recommendation = 3;</code>
+       */
+      public Builder setRecommendation(
+          com.drexelsp.blunote.BlunoteMessages.Recommendation.Builder builderForValue) {
+        if (recommendationBuilder_ == null) {
+          recommendation_ = builderForValue.build();
+          onChanged();
+        } else {
+          recommendationBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.Recommendation recommendation = 3;</code>
+       */
+      public Builder mergeRecommendation(com.drexelsp.blunote.BlunoteMessages.Recommendation value) {
+        if (recommendationBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              recommendation_ != com.drexelsp.blunote.BlunoteMessages.Recommendation.getDefaultInstance()) {
+            recommendation_ =
+              com.drexelsp.blunote.BlunoteMessages.Recommendation.newBuilder(recommendation_).mergeFrom(value).buildPartial();
+          } else {
+            recommendation_ = value;
+          }
+          onChanged();
+        } else {
+          recommendationBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.Recommendation recommendation = 3;</code>
+       */
+      public Builder clearRecommendation() {
+        if (recommendationBuilder_ == null) {
+          recommendation_ = com.drexelsp.blunote.BlunoteMessages.Recommendation.getDefaultInstance();
+          onChanged();
+        } else {
+          recommendationBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      /**
+       * <code>optional .blunote.Recommendation recommendation = 3;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.Recommendation.Builder getRecommendationBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getRecommendationFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .blunote.Recommendation recommendation = 3;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.RecommendationOrBuilder getRecommendationOrBuilder() {
+        if (recommendationBuilder_ != null) {
+          return recommendationBuilder_.getMessageOrBuilder();
+        } else {
+          return recommendation_;
+        }
+      }
+      /**
+       * <code>optional .blunote.Recommendation recommendation = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.BlunoteMessages.Recommendation, com.drexelsp.blunote.BlunoteMessages.Recommendation.Builder, com.drexelsp.blunote.BlunoteMessages.RecommendationOrBuilder> 
+          getRecommendationFieldBuilder() {
+        if (recommendationBuilder_ == null) {
+          recommendationBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.drexelsp.blunote.BlunoteMessages.Recommendation, com.drexelsp.blunote.BlunoteMessages.Recommendation.Builder, com.drexelsp.blunote.BlunoteMessages.RecommendationOrBuilder>(
+                  getRecommendation(),
+                  getParentForChildren(),
+                  isClean());
+          recommendation_ = null;
+        }
+        return recommendationBuilder_;
+      }
+
+      private com.drexelsp.blunote.BlunoteMessages.SingleAnswer singleResponse_ = com.drexelsp.blunote.BlunoteMessages.SingleAnswer.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.BlunoteMessages.SingleAnswer, com.drexelsp.blunote.BlunoteMessages.SingleAnswer.Builder, com.drexelsp.blunote.BlunoteMessages.SingleAnswerOrBuilder> singleResponseBuilder_;
+      /**
+       * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+       */
+      public boolean hasSingleResponse() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.SingleAnswer getSingleResponse() {
+        if (singleResponseBuilder_ == null) {
+          return singleResponse_;
+        } else {
+          return singleResponseBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+       */
+      public Builder setSingleResponse(com.drexelsp.blunote.BlunoteMessages.SingleAnswer value) {
+        if (singleResponseBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          singleResponse_ = value;
+          onChanged();
+        } else {
+          singleResponseBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+       */
+      public Builder setSingleResponse(
+          com.drexelsp.blunote.BlunoteMessages.SingleAnswer.Builder builderForValue) {
+        if (singleResponseBuilder_ == null) {
+          singleResponse_ = builderForValue.build();
+          onChanged();
+        } else {
+          singleResponseBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+       */
+      public Builder mergeSingleResponse(com.drexelsp.blunote.BlunoteMessages.SingleAnswer value) {
+        if (singleResponseBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              singleResponse_ != com.drexelsp.blunote.BlunoteMessages.SingleAnswer.getDefaultInstance()) {
+            singleResponse_ =
+              com.drexelsp.blunote.BlunoteMessages.SingleAnswer.newBuilder(singleResponse_).mergeFrom(value).buildPartial();
+          } else {
+            singleResponse_ = value;
+          }
+          onChanged();
+        } else {
+          singleResponseBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+       */
+      public Builder clearSingleResponse() {
+        if (singleResponseBuilder_ == null) {
+          singleResponse_ = com.drexelsp.blunote.BlunoteMessages.SingleAnswer.getDefaultInstance();
+          onChanged();
+        } else {
+          singleResponseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+      /**
+       * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.SingleAnswer.Builder getSingleResponseBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getSingleResponseFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.SingleAnswerOrBuilder getSingleResponseOrBuilder() {
+        if (singleResponseBuilder_ != null) {
+          return singleResponseBuilder_.getMessageOrBuilder();
+        } else {
+          return singleResponse_;
+        }
+      }
+      /**
+       * <code>optional .blunote.SingleAnswer singleResponse = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.BlunoteMessages.SingleAnswer, com.drexelsp.blunote.BlunoteMessages.SingleAnswer.Builder, com.drexelsp.blunote.BlunoteMessages.SingleAnswerOrBuilder> 
+          getSingleResponseFieldBuilder() {
+        if (singleResponseBuilder_ == null) {
+          singleResponseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.drexelsp.blunote.BlunoteMessages.SingleAnswer, com.drexelsp.blunote.BlunoteMessages.SingleAnswer.Builder, com.drexelsp.blunote.BlunoteMessages.SingleAnswerOrBuilder>(
+                  getSingleResponse(),
+                  getParentForChildren(),
+                  isClean());
+          singleResponse_ = null;
+        }
+        return singleResponseBuilder_;
+      }
+
+      private com.drexelsp.blunote.BlunoteMessages.SongFragment songFragment_ = com.drexelsp.blunote.BlunoteMessages.SongFragment.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.BlunoteMessages.SongFragment, com.drexelsp.blunote.BlunoteMessages.SongFragment.Builder, com.drexelsp.blunote.BlunoteMessages.SongFragmentOrBuilder> songFragmentBuilder_;
+      /**
+       * <code>optional .blunote.SongFragment songFragment = 5;</code>
+       */
+      public boolean hasSongFragment() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional .blunote.SongFragment songFragment = 5;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.SongFragment getSongFragment() {
+        if (songFragmentBuilder_ == null) {
+          return songFragment_;
+        } else {
+          return songFragmentBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .blunote.SongFragment songFragment = 5;</code>
+       */
+      public Builder setSongFragment(com.drexelsp.blunote.BlunoteMessages.SongFragment value) {
+        if (songFragmentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          songFragment_ = value;
+          onChanged();
+        } else {
+          songFragmentBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.SongFragment songFragment = 5;</code>
+       */
+      public Builder setSongFragment(
+          com.drexelsp.blunote.BlunoteMessages.SongFragment.Builder builderForValue) {
+        if (songFragmentBuilder_ == null) {
+          songFragment_ = builderForValue.build();
+          onChanged();
+        } else {
+          songFragmentBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.SongFragment songFragment = 5;</code>
+       */
+      public Builder mergeSongFragment(com.drexelsp.blunote.BlunoteMessages.SongFragment value) {
+        if (songFragmentBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010) &&
+              songFragment_ != com.drexelsp.blunote.BlunoteMessages.SongFragment.getDefaultInstance()) {
+            songFragment_ =
+              com.drexelsp.blunote.BlunoteMessages.SongFragment.newBuilder(songFragment_).mergeFrom(value).buildPartial();
+          } else {
+            songFragment_ = value;
+          }
+          onChanged();
+        } else {
+          songFragmentBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.SongFragment songFragment = 5;</code>
+       */
+      public Builder clearSongFragment() {
+        if (songFragmentBuilder_ == null) {
+          songFragment_ = com.drexelsp.blunote.BlunoteMessages.SongFragment.getDefaultInstance();
+          onChanged();
+        } else {
+          songFragmentBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+      /**
+       * <code>optional .blunote.SongFragment songFragment = 5;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.SongFragment.Builder getSongFragmentBuilder() {
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return getSongFragmentFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .blunote.SongFragment songFragment = 5;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.SongFragmentOrBuilder getSongFragmentOrBuilder() {
+        if (songFragmentBuilder_ != null) {
+          return songFragmentBuilder_.getMessageOrBuilder();
+        } else {
+          return songFragment_;
+        }
+      }
+      /**
+       * <code>optional .blunote.SongFragment songFragment = 5;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.BlunoteMessages.SongFragment, com.drexelsp.blunote.BlunoteMessages.SongFragment.Builder, com.drexelsp.blunote.BlunoteMessages.SongFragmentOrBuilder> 
+          getSongFragmentFieldBuilder() {
+        if (songFragmentBuilder_ == null) {
+          songFragmentBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.drexelsp.blunote.BlunoteMessages.SongFragment, com.drexelsp.blunote.BlunoteMessages.SongFragment.Builder, com.drexelsp.blunote.BlunoteMessages.SongFragmentOrBuilder>(
+                  getSongFragment(),
+                  getParentForChildren(),
+                  isClean());
+          songFragment_ = null;
+        }
+        return songFragmentBuilder_;
+      }
+
+      private com.drexelsp.blunote.BlunoteMessages.SongRequest songRequest_ = com.drexelsp.blunote.BlunoteMessages.SongRequest.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.BlunoteMessages.SongRequest, com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder, com.drexelsp.blunote.BlunoteMessages.SongRequestOrBuilder> songRequestBuilder_;
+      /**
+       * <code>optional .blunote.SongRequest songRequest = 6;</code>
+       */
+      public boolean hasSongRequest() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional .blunote.SongRequest songRequest = 6;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.SongRequest getSongRequest() {
+        if (songRequestBuilder_ == null) {
+          return songRequest_;
+        } else {
+          return songRequestBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .blunote.SongRequest songRequest = 6;</code>
+       */
+      public Builder setSongRequest(com.drexelsp.blunote.BlunoteMessages.SongRequest value) {
+        if (songRequestBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          songRequest_ = value;
+          onChanged();
+        } else {
+          songRequestBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.SongRequest songRequest = 6;</code>
+       */
+      public Builder setSongRequest(
+          com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder builderForValue) {
+        if (songRequestBuilder_ == null) {
+          songRequest_ = builderForValue.build();
+          onChanged();
+        } else {
+          songRequestBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.SongRequest songRequest = 6;</code>
+       */
+      public Builder mergeSongRequest(com.drexelsp.blunote.BlunoteMessages.SongRequest value) {
+        if (songRequestBuilder_ == null) {
+          if (((bitField0_ & 0x00000020) == 0x00000020) &&
+              songRequest_ != com.drexelsp.blunote.BlunoteMessages.SongRequest.getDefaultInstance()) {
+            songRequest_ =
+              com.drexelsp.blunote.BlunoteMessages.SongRequest.newBuilder(songRequest_).mergeFrom(value).buildPartial();
+          } else {
+            songRequest_ = value;
+          }
+          onChanged();
+        } else {
+          songRequestBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.SongRequest songRequest = 6;</code>
+       */
+      public Builder clearSongRequest() {
+        if (songRequestBuilder_ == null) {
+          songRequest_ = com.drexelsp.blunote.BlunoteMessages.SongRequest.getDefaultInstance();
+          onChanged();
+        } else {
+          songRequestBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
+        return this;
+      }
+      /**
+       * <code>optional .blunote.SongRequest songRequest = 6;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder getSongRequestBuilder() {
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return getSongRequestFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .blunote.SongRequest songRequest = 6;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.SongRequestOrBuilder getSongRequestOrBuilder() {
+        if (songRequestBuilder_ != null) {
+          return songRequestBuilder_.getMessageOrBuilder();
+        } else {
+          return songRequest_;
+        }
+      }
+      /**
+       * <code>optional .blunote.SongRequest songRequest = 6;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.BlunoteMessages.SongRequest, com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder, com.drexelsp.blunote.BlunoteMessages.SongRequestOrBuilder> 
+          getSongRequestFieldBuilder() {
+        if (songRequestBuilder_ == null) {
+          songRequestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.drexelsp.blunote.BlunoteMessages.SongRequest, com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder, com.drexelsp.blunote.BlunoteMessages.SongRequestOrBuilder>(
+                  getSongRequest(),
+                  getParentForChildren(),
+                  isClean());
+          songRequest_ = null;
+        }
+        return songRequestBuilder_;
+      }
+
+      private com.drexelsp.blunote.BlunoteMessages.Vote vote_ = com.drexelsp.blunote.BlunoteMessages.Vote.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.BlunoteMessages.Vote, com.drexelsp.blunote.BlunoteMessages.Vote.Builder, com.drexelsp.blunote.BlunoteMessages.VoteOrBuilder> voteBuilder_;
+      /**
+       * <code>optional .blunote.Vote vote = 7;</code>
+       */
+      public boolean hasVote() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional .blunote.Vote vote = 7;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.Vote getVote() {
+        if (voteBuilder_ == null) {
+          return vote_;
+        } else {
+          return voteBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .blunote.Vote vote = 7;</code>
+       */
+      public Builder setVote(com.drexelsp.blunote.BlunoteMessages.Vote value) {
+        if (voteBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          vote_ = value;
+          onChanged();
+        } else {
+          voteBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.Vote vote = 7;</code>
+       */
+      public Builder setVote(
+          com.drexelsp.blunote.BlunoteMessages.Vote.Builder builderForValue) {
+        if (voteBuilder_ == null) {
+          vote_ = builderForValue.build();
+          onChanged();
+        } else {
+          voteBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.Vote vote = 7;</code>
+       */
+      public Builder mergeVote(com.drexelsp.blunote.BlunoteMessages.Vote value) {
+        if (voteBuilder_ == null) {
+          if (((bitField0_ & 0x00000040) == 0x00000040) &&
+              vote_ != com.drexelsp.blunote.BlunoteMessages.Vote.getDefaultInstance()) {
+            vote_ =
+              com.drexelsp.blunote.BlunoteMessages.Vote.newBuilder(vote_).mergeFrom(value).buildPartial();
+          } else {
+            vote_ = value;
+          }
+          onChanged();
+        } else {
+          voteBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.Vote vote = 7;</code>
+       */
+      public Builder clearVote() {
+        if (voteBuilder_ == null) {
+          vote_ = com.drexelsp.blunote.BlunoteMessages.Vote.getDefaultInstance();
+          onChanged();
+        } else {
+          voteBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000040);
+        return this;
+      }
+      /**
+       * <code>optional .blunote.Vote vote = 7;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.Vote.Builder getVoteBuilder() {
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return getVoteFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .blunote.Vote vote = 7;</code>
+       */
+      public com.drexelsp.blunote.BlunoteMessages.VoteOrBuilder getVoteOrBuilder() {
+        if (voteBuilder_ != null) {
+          return voteBuilder_.getMessageOrBuilder();
+        } else {
+          return vote_;
+        }
+      }
+      /**
+       * <code>optional .blunote.Vote vote = 7;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.BlunoteMessages.Vote, com.drexelsp.blunote.BlunoteMessages.Vote.Builder, com.drexelsp.blunote.BlunoteMessages.VoteOrBuilder> 
+          getVoteFieldBuilder() {
+        if (voteBuilder_ == null) {
+          voteBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.drexelsp.blunote.BlunoteMessages.Vote, com.drexelsp.blunote.BlunoteMessages.Vote.Builder, com.drexelsp.blunote.BlunoteMessages.VoteOrBuilder>(
+                  getVote(),
+                  getParentForChildren(),
+                  isClean());
+          vote_ = null;
+        }
+        return voteBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:blunote.WrapperMessage)
+    }
+
+    static {
+      defaultInstance = new WrapperMessage(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:blunote.WrapperMessage)
   }
 
   public interface DeliveryInfoOrBuilder extends
@@ -2834,6 +6957,11 @@ public final class BlunoteMessages {
   }
   /**
    * Protobuf type {@code blunote.DeliveryInfo}
+   *
+   * <pre>
+   **
+   * Stores metadata about the message being sent
+   * </pre>
    */
   public static final class DeliveryInfo extends
       com.google.protobuf.GeneratedMessage implements
@@ -3144,6 +7272,11 @@ public final class BlunoteMessages {
     }
     /**
      * Protobuf type {@code blunote.DeliveryInfo}
+     *
+     * <pre>
+     **
+     * Stores metadata about the message being sent
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> implements
@@ -3436,1324 +7569,6 @@ public final class BlunoteMessages {
     // @@protoc_insertion_point(class_scope:blunote.DeliveryInfo)
   }
 
-  public interface WrapperMessageOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:blunote.WrapperMessage)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>required .blunote.WrapperMessage.Type type = 1;</code>
-     */
-    boolean hasType();
-    /**
-     * <code>required .blunote.WrapperMessage.Type type = 1;</code>
-     */
-    com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type getType();
-
-    /**
-     * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-     */
-    boolean hasPollRequest();
-    /**
-     * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-     */
-    com.drexelsp.blunote.BlunoteMessages.PollRequest getPollRequest();
-    /**
-     * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-     */
-    com.drexelsp.blunote.BlunoteMessages.PollRequestOrBuilder getPollRequestOrBuilder();
-
-    /**
-     * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-     */
-    boolean hasPollResponse();
-    /**
-     * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-     */
-    com.drexelsp.blunote.BlunoteMessages.PollResponse getPollResponse();
-    /**
-     * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-     */
-    com.drexelsp.blunote.BlunoteMessages.PollResponseOrBuilder getPollResponseOrBuilder();
-
-    /**
-     * <code>optional .blunote.SongRequest songRequest = 4;</code>
-     */
-    boolean hasSongRequest();
-    /**
-     * <code>optional .blunote.SongRequest songRequest = 4;</code>
-     */
-    com.drexelsp.blunote.BlunoteMessages.SongRequest getSongRequest();
-    /**
-     * <code>optional .blunote.SongRequest songRequest = 4;</code>
-     */
-    com.drexelsp.blunote.BlunoteMessages.SongRequestOrBuilder getSongRequestOrBuilder();
-
-    /**
-     * <code>optional .blunote.SongFragment songFragment = 5;</code>
-     */
-    boolean hasSongFragment();
-    /**
-     * <code>optional .blunote.SongFragment songFragment = 5;</code>
-     */
-    com.drexelsp.blunote.BlunoteMessages.SongFragment getSongFragment();
-    /**
-     * <code>optional .blunote.SongFragment songFragment = 5;</code>
-     */
-    com.drexelsp.blunote.BlunoteMessages.SongFragmentOrBuilder getSongFragmentOrBuilder();
-  }
-  /**
-   * Protobuf type {@code blunote.WrapperMessage}
-   */
-  public static final class WrapperMessage extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:blunote.WrapperMessage)
-      WrapperMessageOrBuilder {
-    // Use WrapperMessage.newBuilder() to construct.
-    private WrapperMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private WrapperMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final WrapperMessage defaultInstance;
-    public static WrapperMessage getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public WrapperMessage getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private WrapperMessage(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              int rawValue = input.readEnum();
-              com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type value = com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                type_ = value;
-              }
-              break;
-            }
-            case 18: {
-              com.drexelsp.blunote.BlunoteMessages.PollRequest.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000002) == 0x00000002)) {
-                subBuilder = pollRequest_.toBuilder();
-              }
-              pollRequest_ = input.readMessage(com.drexelsp.blunote.BlunoteMessages.PollRequest.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(pollRequest_);
-                pollRequest_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000002;
-              break;
-            }
-            case 26: {
-              com.drexelsp.blunote.BlunoteMessages.PollResponse.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000004) == 0x00000004)) {
-                subBuilder = pollResponse_.toBuilder();
-              }
-              pollResponse_ = input.readMessage(com.drexelsp.blunote.BlunoteMessages.PollResponse.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(pollResponse_);
-                pollResponse_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000004;
-              break;
-            }
-            case 34: {
-              com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000008) == 0x00000008)) {
-                subBuilder = songRequest_.toBuilder();
-              }
-              songRequest_ = input.readMessage(com.drexelsp.blunote.BlunoteMessages.SongRequest.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(songRequest_);
-                songRequest_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000008;
-              break;
-            }
-            case 42: {
-              com.drexelsp.blunote.BlunoteMessages.SongFragment.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000010) == 0x00000010)) {
-                subBuilder = songFragment_.toBuilder();
-              }
-              songFragment_ = input.readMessage(com.drexelsp.blunote.BlunoteMessages.SongFragment.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(songFragment_);
-                songFragment_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000010;
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_WrapperMessage_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_WrapperMessage_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.drexelsp.blunote.BlunoteMessages.WrapperMessage.class, com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<WrapperMessage> PARSER =
-        new com.google.protobuf.AbstractParser<WrapperMessage>() {
-      public WrapperMessage parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new WrapperMessage(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<WrapperMessage> getParserForType() {
-      return PARSER;
-    }
-
-    /**
-     * Protobuf enum {@code blunote.WrapperMessage.Type}
-     */
-    public enum Type
-        implements com.google.protobuf.ProtocolMessageEnum {
-      /**
-       * <code>POLLREQ = 1;</code>
-       */
-      POLLREQ(0, 1),
-      /**
-       * <code>POLLRESP = 2;</code>
-       */
-      POLLRESP(1, 2),
-      /**
-       * <code>SONGREQ = 3;</code>
-       */
-      SONGREQ(2, 3),
-      /**
-       * <code>SONGFRAG = 4;</code>
-       */
-      SONGFRAG(3, 4),
-      ;
-
-      /**
-       * <code>POLLREQ = 1;</code>
-       */
-      public static final int POLLREQ_VALUE = 1;
-      /**
-       * <code>POLLRESP = 2;</code>
-       */
-      public static final int POLLRESP_VALUE = 2;
-      /**
-       * <code>SONGREQ = 3;</code>
-       */
-      public static final int SONGREQ_VALUE = 3;
-      /**
-       * <code>SONGFRAG = 4;</code>
-       */
-      public static final int SONGFRAG_VALUE = 4;
-
-
-      public final int getNumber() { return value; }
-
-      public static Type valueOf(int value) {
-        switch (value) {
-          case 1: return POLLREQ;
-          case 2: return POLLRESP;
-          case 3: return SONGREQ;
-          case 4: return SONGFRAG;
-          default: return null;
-        }
-      }
-
-      public static com.google.protobuf.Internal.EnumLiteMap<Type>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static com.google.protobuf.Internal.EnumLiteMap<Type>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<Type>() {
-              public Type findValueByNumber(int number) {
-                return Type.valueOf(number);
-              }
-            };
-
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.drexelsp.blunote.BlunoteMessages.WrapperMessage.getDescriptor().getEnumTypes().get(0);
-      }
-
-      private static final Type[] VALUES = values();
-
-      public static Type valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-
-      private final int index;
-      private final int value;
-
-      private Type(int index, int value) {
-        this.index = index;
-        this.value = value;
-      }
-
-      // @@protoc_insertion_point(enum_scope:blunote.WrapperMessage.Type)
-    }
-
-    private int bitField0_;
-    public static final int TYPE_FIELD_NUMBER = 1;
-    private com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type type_;
-    /**
-     * <code>required .blunote.WrapperMessage.Type type = 1;</code>
-     */
-    public boolean hasType() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required .blunote.WrapperMessage.Type type = 1;</code>
-     */
-    public com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type getType() {
-      return type_;
-    }
-
-    public static final int POLLREQUEST_FIELD_NUMBER = 2;
-    private com.drexelsp.blunote.BlunoteMessages.PollRequest pollRequest_;
-    /**
-     * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-     */
-    public boolean hasPollRequest() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-     */
-    public com.drexelsp.blunote.BlunoteMessages.PollRequest getPollRequest() {
-      return pollRequest_;
-    }
-    /**
-     * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-     */
-    public com.drexelsp.blunote.BlunoteMessages.PollRequestOrBuilder getPollRequestOrBuilder() {
-      return pollRequest_;
-    }
-
-    public static final int POLLRESPONSE_FIELD_NUMBER = 3;
-    private com.drexelsp.blunote.BlunoteMessages.PollResponse pollResponse_;
-    /**
-     * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-     */
-    public boolean hasPollResponse() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-     */
-    public com.drexelsp.blunote.BlunoteMessages.PollResponse getPollResponse() {
-      return pollResponse_;
-    }
-    /**
-     * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-     */
-    public com.drexelsp.blunote.BlunoteMessages.PollResponseOrBuilder getPollResponseOrBuilder() {
-      return pollResponse_;
-    }
-
-    public static final int SONGREQUEST_FIELD_NUMBER = 4;
-    private com.drexelsp.blunote.BlunoteMessages.SongRequest songRequest_;
-    /**
-     * <code>optional .blunote.SongRequest songRequest = 4;</code>
-     */
-    public boolean hasSongRequest() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional .blunote.SongRequest songRequest = 4;</code>
-     */
-    public com.drexelsp.blunote.BlunoteMessages.SongRequest getSongRequest() {
-      return songRequest_;
-    }
-    /**
-     * <code>optional .blunote.SongRequest songRequest = 4;</code>
-     */
-    public com.drexelsp.blunote.BlunoteMessages.SongRequestOrBuilder getSongRequestOrBuilder() {
-      return songRequest_;
-    }
-
-    public static final int SONGFRAGMENT_FIELD_NUMBER = 5;
-    private com.drexelsp.blunote.BlunoteMessages.SongFragment songFragment_;
-    /**
-     * <code>optional .blunote.SongFragment songFragment = 5;</code>
-     */
-    public boolean hasSongFragment() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional .blunote.SongFragment songFragment = 5;</code>
-     */
-    public com.drexelsp.blunote.BlunoteMessages.SongFragment getSongFragment() {
-      return songFragment_;
-    }
-    /**
-     * <code>optional .blunote.SongFragment songFragment = 5;</code>
-     */
-    public com.drexelsp.blunote.BlunoteMessages.SongFragmentOrBuilder getSongFragmentOrBuilder() {
-      return songFragment_;
-    }
-
-    private void initFields() {
-      type_ = com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type.POLLREQ;
-      pollRequest_ = com.drexelsp.blunote.BlunoteMessages.PollRequest.getDefaultInstance();
-      pollResponse_ = com.drexelsp.blunote.BlunoteMessages.PollResponse.getDefaultInstance();
-      songRequest_ = com.drexelsp.blunote.BlunoteMessages.SongRequest.getDefaultInstance();
-      songFragment_ = com.drexelsp.blunote.BlunoteMessages.SongFragment.getDefaultInstance();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      if (!hasType()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (hasPollRequest()) {
-        if (!getPollRequest().isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-      }
-      if (hasPollResponse()) {
-        if (!getPollResponse().isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-      }
-      if (hasSongRequest()) {
-        if (!getSongRequest().isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-      }
-      if (hasSongFragment()) {
-        if (!getSongFragment().isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeEnum(1, type_.getNumber());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(2, pollRequest_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeMessage(3, pollResponse_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeMessage(4, songRequest_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeMessage(5, songFragment_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(1, type_.getNumber());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, pollRequest_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, pollResponse_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, songRequest_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, songFragment_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.drexelsp.blunote.BlunoteMessages.WrapperMessage parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.drexelsp.blunote.BlunoteMessages.WrapperMessage prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code blunote.WrapperMessage}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:blunote.WrapperMessage)
-        com.drexelsp.blunote.BlunoteMessages.WrapperMessageOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_WrapperMessage_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_WrapperMessage_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.drexelsp.blunote.BlunoteMessages.WrapperMessage.class, com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Builder.class);
-      }
-
-      // Construct using com.drexelsp.blunote.BlunoteMessages.WrapperMessage.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getPollRequestFieldBuilder();
-          getPollResponseFieldBuilder();
-          getSongRequestFieldBuilder();
-          getSongFragmentFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        type_ = com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type.POLLREQ;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        if (pollRequestBuilder_ == null) {
-          pollRequest_ = com.drexelsp.blunote.BlunoteMessages.PollRequest.getDefaultInstance();
-        } else {
-          pollRequestBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000002);
-        if (pollResponseBuilder_ == null) {
-          pollResponse_ = com.drexelsp.blunote.BlunoteMessages.PollResponse.getDefaultInstance();
-        } else {
-          pollResponseBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000004);
-        if (songRequestBuilder_ == null) {
-          songRequest_ = com.drexelsp.blunote.BlunoteMessages.SongRequest.getDefaultInstance();
-        } else {
-          songRequestBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000008);
-        if (songFragmentBuilder_ == null) {
-          songFragment_ = com.drexelsp.blunote.BlunoteMessages.SongFragment.getDefaultInstance();
-        } else {
-          songFragmentBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000010);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.drexelsp.blunote.BlunoteMessages.internal_static_blunote_WrapperMessage_descriptor;
-      }
-
-      public com.drexelsp.blunote.BlunoteMessages.WrapperMessage getDefaultInstanceForType() {
-        return com.drexelsp.blunote.BlunoteMessages.WrapperMessage.getDefaultInstance();
-      }
-
-      public com.drexelsp.blunote.BlunoteMessages.WrapperMessage build() {
-        com.drexelsp.blunote.BlunoteMessages.WrapperMessage result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public com.drexelsp.blunote.BlunoteMessages.WrapperMessage buildPartial() {
-        com.drexelsp.blunote.BlunoteMessages.WrapperMessage result = new com.drexelsp.blunote.BlunoteMessages.WrapperMessage(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.type_ = type_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        if (pollRequestBuilder_ == null) {
-          result.pollRequest_ = pollRequest_;
-        } else {
-          result.pollRequest_ = pollRequestBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        if (pollResponseBuilder_ == null) {
-          result.pollResponse_ = pollResponse_;
-        } else {
-          result.pollResponse_ = pollResponseBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        if (songRequestBuilder_ == null) {
-          result.songRequest_ = songRequest_;
-        } else {
-          result.songRequest_ = songRequestBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        if (songFragmentBuilder_ == null) {
-          result.songFragment_ = songFragment_;
-        } else {
-          result.songFragment_ = songFragmentBuilder_.build();
-        }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.drexelsp.blunote.BlunoteMessages.WrapperMessage) {
-          return mergeFrom((com.drexelsp.blunote.BlunoteMessages.WrapperMessage)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.drexelsp.blunote.BlunoteMessages.WrapperMessage other) {
-        if (other == com.drexelsp.blunote.BlunoteMessages.WrapperMessage.getDefaultInstance()) return this;
-        if (other.hasType()) {
-          setType(other.getType());
-        }
-        if (other.hasPollRequest()) {
-          mergePollRequest(other.getPollRequest());
-        }
-        if (other.hasPollResponse()) {
-          mergePollResponse(other.getPollResponse());
-        }
-        if (other.hasSongRequest()) {
-          mergeSongRequest(other.getSongRequest());
-        }
-        if (other.hasSongFragment()) {
-          mergeSongFragment(other.getSongFragment());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasType()) {
-          
-          return false;
-        }
-        if (hasPollRequest()) {
-          if (!getPollRequest().isInitialized()) {
-            
-            return false;
-          }
-        }
-        if (hasPollResponse()) {
-          if (!getPollResponse().isInitialized()) {
-            
-            return false;
-          }
-        }
-        if (hasSongRequest()) {
-          if (!getSongRequest().isInitialized()) {
-            
-            return false;
-          }
-        }
-        if (hasSongFragment()) {
-          if (!getSongFragment().isInitialized()) {
-            
-            return false;
-          }
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.drexelsp.blunote.BlunoteMessages.WrapperMessage parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.drexelsp.blunote.BlunoteMessages.WrapperMessage) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      private com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type type_ = com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type.POLLREQ;
-      /**
-       * <code>required .blunote.WrapperMessage.Type type = 1;</code>
-       */
-      public boolean hasType() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required .blunote.WrapperMessage.Type type = 1;</code>
-       */
-      public com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type getType() {
-        return type_;
-      }
-      /**
-       * <code>required .blunote.WrapperMessage.Type type = 1;</code>
-       */
-      public Builder setType(com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000001;
-        type_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required .blunote.WrapperMessage.Type type = 1;</code>
-       */
-      public Builder clearType() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        type_ = com.drexelsp.blunote.BlunoteMessages.WrapperMessage.Type.POLLREQ;
-        onChanged();
-        return this;
-      }
-
-      private com.drexelsp.blunote.BlunoteMessages.PollRequest pollRequest_ = com.drexelsp.blunote.BlunoteMessages.PollRequest.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          com.drexelsp.blunote.BlunoteMessages.PollRequest, com.drexelsp.blunote.BlunoteMessages.PollRequest.Builder, com.drexelsp.blunote.BlunoteMessages.PollRequestOrBuilder> pollRequestBuilder_;
-      /**
-       * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-       */
-      public boolean hasPollRequest() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-       */
-      public com.drexelsp.blunote.BlunoteMessages.PollRequest getPollRequest() {
-        if (pollRequestBuilder_ == null) {
-          return pollRequest_;
-        } else {
-          return pollRequestBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-       */
-      public Builder setPollRequest(com.drexelsp.blunote.BlunoteMessages.PollRequest value) {
-        if (pollRequestBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          pollRequest_ = value;
-          onChanged();
-        } else {
-          pollRequestBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000002;
-        return this;
-      }
-      /**
-       * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-       */
-      public Builder setPollRequest(
-          com.drexelsp.blunote.BlunoteMessages.PollRequest.Builder builderForValue) {
-        if (pollRequestBuilder_ == null) {
-          pollRequest_ = builderForValue.build();
-          onChanged();
-        } else {
-          pollRequestBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000002;
-        return this;
-      }
-      /**
-       * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-       */
-      public Builder mergePollRequest(com.drexelsp.blunote.BlunoteMessages.PollRequest value) {
-        if (pollRequestBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002) &&
-              pollRequest_ != com.drexelsp.blunote.BlunoteMessages.PollRequest.getDefaultInstance()) {
-            pollRequest_ =
-              com.drexelsp.blunote.BlunoteMessages.PollRequest.newBuilder(pollRequest_).mergeFrom(value).buildPartial();
-          } else {
-            pollRequest_ = value;
-          }
-          onChanged();
-        } else {
-          pollRequestBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000002;
-        return this;
-      }
-      /**
-       * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-       */
-      public Builder clearPollRequest() {
-        if (pollRequestBuilder_ == null) {
-          pollRequest_ = com.drexelsp.blunote.BlunoteMessages.PollRequest.getDefaultInstance();
-          onChanged();
-        } else {
-          pollRequestBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000002);
-        return this;
-      }
-      /**
-       * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-       */
-      public com.drexelsp.blunote.BlunoteMessages.PollRequest.Builder getPollRequestBuilder() {
-        bitField0_ |= 0x00000002;
-        onChanged();
-        return getPollRequestFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-       */
-      public com.drexelsp.blunote.BlunoteMessages.PollRequestOrBuilder getPollRequestOrBuilder() {
-        if (pollRequestBuilder_ != null) {
-          return pollRequestBuilder_.getMessageOrBuilder();
-        } else {
-          return pollRequest_;
-        }
-      }
-      /**
-       * <code>optional .blunote.PollRequest pollRequest = 2;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          com.drexelsp.blunote.BlunoteMessages.PollRequest, com.drexelsp.blunote.BlunoteMessages.PollRequest.Builder, com.drexelsp.blunote.BlunoteMessages.PollRequestOrBuilder> 
-          getPollRequestFieldBuilder() {
-        if (pollRequestBuilder_ == null) {
-          pollRequestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              com.drexelsp.blunote.BlunoteMessages.PollRequest, com.drexelsp.blunote.BlunoteMessages.PollRequest.Builder, com.drexelsp.blunote.BlunoteMessages.PollRequestOrBuilder>(
-                  getPollRequest(),
-                  getParentForChildren(),
-                  isClean());
-          pollRequest_ = null;
-        }
-        return pollRequestBuilder_;
-      }
-
-      private com.drexelsp.blunote.BlunoteMessages.PollResponse pollResponse_ = com.drexelsp.blunote.BlunoteMessages.PollResponse.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          com.drexelsp.blunote.BlunoteMessages.PollResponse, com.drexelsp.blunote.BlunoteMessages.PollResponse.Builder, com.drexelsp.blunote.BlunoteMessages.PollResponseOrBuilder> pollResponseBuilder_;
-      /**
-       * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-       */
-      public boolean hasPollResponse() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-       */
-      public com.drexelsp.blunote.BlunoteMessages.PollResponse getPollResponse() {
-        if (pollResponseBuilder_ == null) {
-          return pollResponse_;
-        } else {
-          return pollResponseBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-       */
-      public Builder setPollResponse(com.drexelsp.blunote.BlunoteMessages.PollResponse value) {
-        if (pollResponseBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          pollResponse_ = value;
-          onChanged();
-        } else {
-          pollResponseBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000004;
-        return this;
-      }
-      /**
-       * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-       */
-      public Builder setPollResponse(
-          com.drexelsp.blunote.BlunoteMessages.PollResponse.Builder builderForValue) {
-        if (pollResponseBuilder_ == null) {
-          pollResponse_ = builderForValue.build();
-          onChanged();
-        } else {
-          pollResponseBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000004;
-        return this;
-      }
-      /**
-       * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-       */
-      public Builder mergePollResponse(com.drexelsp.blunote.BlunoteMessages.PollResponse value) {
-        if (pollResponseBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) == 0x00000004) &&
-              pollResponse_ != com.drexelsp.blunote.BlunoteMessages.PollResponse.getDefaultInstance()) {
-            pollResponse_ =
-              com.drexelsp.blunote.BlunoteMessages.PollResponse.newBuilder(pollResponse_).mergeFrom(value).buildPartial();
-          } else {
-            pollResponse_ = value;
-          }
-          onChanged();
-        } else {
-          pollResponseBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000004;
-        return this;
-      }
-      /**
-       * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-       */
-      public Builder clearPollResponse() {
-        if (pollResponseBuilder_ == null) {
-          pollResponse_ = com.drexelsp.blunote.BlunoteMessages.PollResponse.getDefaultInstance();
-          onChanged();
-        } else {
-          pollResponseBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000004);
-        return this;
-      }
-      /**
-       * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-       */
-      public com.drexelsp.blunote.BlunoteMessages.PollResponse.Builder getPollResponseBuilder() {
-        bitField0_ |= 0x00000004;
-        onChanged();
-        return getPollResponseFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-       */
-      public com.drexelsp.blunote.BlunoteMessages.PollResponseOrBuilder getPollResponseOrBuilder() {
-        if (pollResponseBuilder_ != null) {
-          return pollResponseBuilder_.getMessageOrBuilder();
-        } else {
-          return pollResponse_;
-        }
-      }
-      /**
-       * <code>optional .blunote.PollResponse pollResponse = 3;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          com.drexelsp.blunote.BlunoteMessages.PollResponse, com.drexelsp.blunote.BlunoteMessages.PollResponse.Builder, com.drexelsp.blunote.BlunoteMessages.PollResponseOrBuilder> 
-          getPollResponseFieldBuilder() {
-        if (pollResponseBuilder_ == null) {
-          pollResponseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              com.drexelsp.blunote.BlunoteMessages.PollResponse, com.drexelsp.blunote.BlunoteMessages.PollResponse.Builder, com.drexelsp.blunote.BlunoteMessages.PollResponseOrBuilder>(
-                  getPollResponse(),
-                  getParentForChildren(),
-                  isClean());
-          pollResponse_ = null;
-        }
-        return pollResponseBuilder_;
-      }
-
-      private com.drexelsp.blunote.BlunoteMessages.SongRequest songRequest_ = com.drexelsp.blunote.BlunoteMessages.SongRequest.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          com.drexelsp.blunote.BlunoteMessages.SongRequest, com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder, com.drexelsp.blunote.BlunoteMessages.SongRequestOrBuilder> songRequestBuilder_;
-      /**
-       * <code>optional .blunote.SongRequest songRequest = 4;</code>
-       */
-      public boolean hasSongRequest() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional .blunote.SongRequest songRequest = 4;</code>
-       */
-      public com.drexelsp.blunote.BlunoteMessages.SongRequest getSongRequest() {
-        if (songRequestBuilder_ == null) {
-          return songRequest_;
-        } else {
-          return songRequestBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .blunote.SongRequest songRequest = 4;</code>
-       */
-      public Builder setSongRequest(com.drexelsp.blunote.BlunoteMessages.SongRequest value) {
-        if (songRequestBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          songRequest_ = value;
-          onChanged();
-        } else {
-          songRequestBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000008;
-        return this;
-      }
-      /**
-       * <code>optional .blunote.SongRequest songRequest = 4;</code>
-       */
-      public Builder setSongRequest(
-          com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder builderForValue) {
-        if (songRequestBuilder_ == null) {
-          songRequest_ = builderForValue.build();
-          onChanged();
-        } else {
-          songRequestBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000008;
-        return this;
-      }
-      /**
-       * <code>optional .blunote.SongRequest songRequest = 4;</code>
-       */
-      public Builder mergeSongRequest(com.drexelsp.blunote.BlunoteMessages.SongRequest value) {
-        if (songRequestBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) == 0x00000008) &&
-              songRequest_ != com.drexelsp.blunote.BlunoteMessages.SongRequest.getDefaultInstance()) {
-            songRequest_ =
-              com.drexelsp.blunote.BlunoteMessages.SongRequest.newBuilder(songRequest_).mergeFrom(value).buildPartial();
-          } else {
-            songRequest_ = value;
-          }
-          onChanged();
-        } else {
-          songRequestBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000008;
-        return this;
-      }
-      /**
-       * <code>optional .blunote.SongRequest songRequest = 4;</code>
-       */
-      public Builder clearSongRequest() {
-        if (songRequestBuilder_ == null) {
-          songRequest_ = com.drexelsp.blunote.BlunoteMessages.SongRequest.getDefaultInstance();
-          onChanged();
-        } else {
-          songRequestBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000008);
-        return this;
-      }
-      /**
-       * <code>optional .blunote.SongRequest songRequest = 4;</code>
-       */
-      public com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder getSongRequestBuilder() {
-        bitField0_ |= 0x00000008;
-        onChanged();
-        return getSongRequestFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .blunote.SongRequest songRequest = 4;</code>
-       */
-      public com.drexelsp.blunote.BlunoteMessages.SongRequestOrBuilder getSongRequestOrBuilder() {
-        if (songRequestBuilder_ != null) {
-          return songRequestBuilder_.getMessageOrBuilder();
-        } else {
-          return songRequest_;
-        }
-      }
-      /**
-       * <code>optional .blunote.SongRequest songRequest = 4;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          com.drexelsp.blunote.BlunoteMessages.SongRequest, com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder, com.drexelsp.blunote.BlunoteMessages.SongRequestOrBuilder> 
-          getSongRequestFieldBuilder() {
-        if (songRequestBuilder_ == null) {
-          songRequestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              com.drexelsp.blunote.BlunoteMessages.SongRequest, com.drexelsp.blunote.BlunoteMessages.SongRequest.Builder, com.drexelsp.blunote.BlunoteMessages.SongRequestOrBuilder>(
-                  getSongRequest(),
-                  getParentForChildren(),
-                  isClean());
-          songRequest_ = null;
-        }
-        return songRequestBuilder_;
-      }
-
-      private com.drexelsp.blunote.BlunoteMessages.SongFragment songFragment_ = com.drexelsp.blunote.BlunoteMessages.SongFragment.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          com.drexelsp.blunote.BlunoteMessages.SongFragment, com.drexelsp.blunote.BlunoteMessages.SongFragment.Builder, com.drexelsp.blunote.BlunoteMessages.SongFragmentOrBuilder> songFragmentBuilder_;
-      /**
-       * <code>optional .blunote.SongFragment songFragment = 5;</code>
-       */
-      public boolean hasSongFragment() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional .blunote.SongFragment songFragment = 5;</code>
-       */
-      public com.drexelsp.blunote.BlunoteMessages.SongFragment getSongFragment() {
-        if (songFragmentBuilder_ == null) {
-          return songFragment_;
-        } else {
-          return songFragmentBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .blunote.SongFragment songFragment = 5;</code>
-       */
-      public Builder setSongFragment(com.drexelsp.blunote.BlunoteMessages.SongFragment value) {
-        if (songFragmentBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          songFragment_ = value;
-          onChanged();
-        } else {
-          songFragmentBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000010;
-        return this;
-      }
-      /**
-       * <code>optional .blunote.SongFragment songFragment = 5;</code>
-       */
-      public Builder setSongFragment(
-          com.drexelsp.blunote.BlunoteMessages.SongFragment.Builder builderForValue) {
-        if (songFragmentBuilder_ == null) {
-          songFragment_ = builderForValue.build();
-          onChanged();
-        } else {
-          songFragmentBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000010;
-        return this;
-      }
-      /**
-       * <code>optional .blunote.SongFragment songFragment = 5;</code>
-       */
-      public Builder mergeSongFragment(com.drexelsp.blunote.BlunoteMessages.SongFragment value) {
-        if (songFragmentBuilder_ == null) {
-          if (((bitField0_ & 0x00000010) == 0x00000010) &&
-              songFragment_ != com.drexelsp.blunote.BlunoteMessages.SongFragment.getDefaultInstance()) {
-            songFragment_ =
-              com.drexelsp.blunote.BlunoteMessages.SongFragment.newBuilder(songFragment_).mergeFrom(value).buildPartial();
-          } else {
-            songFragment_ = value;
-          }
-          onChanged();
-        } else {
-          songFragmentBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000010;
-        return this;
-      }
-      /**
-       * <code>optional .blunote.SongFragment songFragment = 5;</code>
-       */
-      public Builder clearSongFragment() {
-        if (songFragmentBuilder_ == null) {
-          songFragment_ = com.drexelsp.blunote.BlunoteMessages.SongFragment.getDefaultInstance();
-          onChanged();
-        } else {
-          songFragmentBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000010);
-        return this;
-      }
-      /**
-       * <code>optional .blunote.SongFragment songFragment = 5;</code>
-       */
-      public com.drexelsp.blunote.BlunoteMessages.SongFragment.Builder getSongFragmentBuilder() {
-        bitField0_ |= 0x00000010;
-        onChanged();
-        return getSongFragmentFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .blunote.SongFragment songFragment = 5;</code>
-       */
-      public com.drexelsp.blunote.BlunoteMessages.SongFragmentOrBuilder getSongFragmentOrBuilder() {
-        if (songFragmentBuilder_ != null) {
-          return songFragmentBuilder_.getMessageOrBuilder();
-        } else {
-          return songFragment_;
-        }
-      }
-      /**
-       * <code>optional .blunote.SongFragment songFragment = 5;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          com.drexelsp.blunote.BlunoteMessages.SongFragment, com.drexelsp.blunote.BlunoteMessages.SongFragment.Builder, com.drexelsp.blunote.BlunoteMessages.SongFragmentOrBuilder> 
-          getSongFragmentFieldBuilder() {
-        if (songFragmentBuilder_ == null) {
-          songFragmentBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              com.drexelsp.blunote.BlunoteMessages.SongFragment, com.drexelsp.blunote.BlunoteMessages.SongFragment.Builder, com.drexelsp.blunote.BlunoteMessages.SongFragmentOrBuilder>(
-                  getSongFragment(),
-                  getParentForChildren(),
-                  isClean());
-          songFragment_ = null;
-        }
-        return songFragmentBuilder_;
-      }
-
-      // @@protoc_insertion_point(builder_scope:blunote.WrapperMessage)
-    }
-
-    static {
-      defaultInstance = new WrapperMessage(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:blunote.WrapperMessage)
-  }
-
   public interface PduOrBuilder extends
       // @@protoc_insertion_point(interface_extends:blunote.Pdu)
       com.google.protobuf.MessageOrBuilder {
@@ -4786,6 +7601,11 @@ public final class BlunoteMessages {
   }
   /**
    * Protobuf type {@code blunote.Pdu}
+   *
+   * <pre>
+   **
+   * Used to couple the WrapperMessage and DeliveryInfo
+   * </pre>
    */
   public static final class Pdu extends
       com.google.protobuf.GeneratedMessage implements
@@ -5080,6 +7900,11 @@ public final class BlunoteMessages {
     }
     /**
      * Protobuf type {@code blunote.Pdu}
+     *
+     * <pre>
+     **
+     * Used to couple the WrapperMessage and DeliveryInfo
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> implements
@@ -5484,15 +8309,25 @@ public final class BlunoteMessages {
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_blunote_PollRequest_descriptor;
+    internal_static_blunote_Vote_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_blunote_PollRequest_fieldAccessorTable;
+      internal_static_blunote_Vote_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_blunote_PollResponse_descriptor;
+    internal_static_blunote_SingleAnswer_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_blunote_PollResponse_fieldAccessorTable;
+      internal_static_blunote_SingleAnswer_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_blunote_MultiAnswer_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_blunote_MultiAnswer_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_blunote_Recommendation_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_blunote_Recommendation_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_blunote_SongRequest_descriptor;
   private static
@@ -5504,15 +8339,15 @@ public final class BlunoteMessages {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_blunote_SongFragment_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_blunote_DeliveryInfo_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_blunote_DeliveryInfo_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_blunote_WrapperMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_blunote_WrapperMessage_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_blunote_DeliveryInfo_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_blunote_DeliveryInfo_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_blunote_Pdu_descriptor;
   private static
@@ -5527,27 +8362,39 @@ public final class BlunoteMessages {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\026blunote_messages.proto\022\007blunote\"C\n\013Pol" +
-      "lRequest\022\021\n\trequestId\030\001 \002(\005\022\020\n\010question\030" +
-      "\002 \002(\t\022\017\n\007options\030\003 \003(\t\"1\n\014PollResponse\022\016" +
-      "\n\006choice\030\001 \002(\t\022\021\n\trequestId\030\002 \002(\005\"0\n\013Son" +
-      "gRequest\022\020\n\010username\030\001 \002(\t\022\017\n\007songKey\030\002 " +
-      "\002(\t\"m\n\014SongFragment\022\016\n\006songId\030\001 \002(\003\022\017\n\007s" +
-      "ongKey\030\002 \001(\003\022\020\n\010fragment\030\003 \002(\014\022\022\n\nfragme" +
-      "ntId\030\004 \002(\003\022\026\n\016totalFragments\030\005 \002(\005\"?\n\014De" +
-      "liveryInfo\022\021\n\ttimestamp\030\001 \002(\003\022\020\n\010usernam" +
-      "e\030\002 \001(\t\022\n\n\002id\030\003 \001(\005\"\252\002\n\016WrapperMessage\022*",
-      "\n\004type\030\001 \002(\0162\034.blunote.WrapperMessage.Ty" +
-      "pe\022)\n\013pollRequest\030\002 \001(\0132\024.blunote.PollRe" +
-      "quest\022+\n\014pollResponse\030\003 \001(\0132\025.blunote.Po" +
-      "llResponse\022)\n\013songRequest\030\004 \001(\0132\024.blunot" +
-      "e.SongRequest\022+\n\014songFragment\030\005 \001(\0132\025.bl" +
-      "unote.SongFragment\"<\n\004Type\022\013\n\007POLLREQ\020\001\022" +
-      "\014\n\010POLLRESP\020\002\022\013\n\007SONGREQ\020\003\022\014\n\010SONGFRAG\020\004" +
-      "\"\\\n\003Pdu\022+\n\014deliveryInfo\030\001 \002(\0132\025.blunote." +
-      "DeliveryInfo\022(\n\007message\030\002 \002(\0132\027.blunote." +
-      "WrapperMessageB\'\n\024com.drexelsp.blunoteB\017",
-      "BlunoteMessages"
+      "\n\026blunote_messages.proto\022\007blunote\"\365\001\n\004Vo" +
+      "te\022\016\n\006voteId\030\001 \002(\005\022/\n\rresponse_type\030\002 \002(" +
+      "\0162\030.blunote.Vote.AnswerType\022\020\n\010question\030" +
+      "\003 \002(\t\022\017\n\007options\030\004 \003(\t\022/\n\014display_type\030\005" +
+      " \002(\0162\031.blunote.Vote.DisplayType\"/\n\nAnswe" +
+      "rType\022\n\n\006SINGLE\020\001\022\t\n\005MULTI\020\002\022\n\n\006RANKED\020\003" +
+      "\"\'\n\013DisplayType\022\t\n\005ALPHA\020\001\022\r\n\tNUMERICAL\020" +
+      "\002\".\n\014SingleAnswer\022\016\n\006voteId\030\001 \002(\005\022\016\n\006cho" +
+      "ice\030\002 \002(\t\".\n\013MultiAnswer\022\016\n\006voteId\030\001 \002(\005" +
+      "\022\017\n\007choices\030\002 \003(\t\"\223\001\n\016Recommendation\022\020\n\010",
+      "username\030\001 \002(\t\022*\n\004type\030\002 \002(\0162\034.blunote.R" +
+      "ecommendation.Type\022\017\n\007mediaId\030\003 \002(\t\"2\n\004T" +
+      "ype\022\n\n\006ARTIST\020\001\022\t\n\005ALBUM\020\002\022\010\n\004SONG\020\003\022\t\n\005" +
+      "GENRE\020\004\"/\n\013SongRequest\022\020\n\010username\030\001 \002(\t" +
+      "\022\016\n\006songId\030\002 \002(\t\"\\\n\014SongFragment\022\016\n\006song" +
+      "Id\030\001 \002(\003\022\020\n\010fragment\030\003 \002(\014\022\022\n\nfragmentId" +
+      "\030\004 \002(\003\022\026\n\016totalFragments\030\005 \002(\005\"\251\003\n\016Wrapp" +
+      "erMessage\022*\n\004type\030\001 \002(\0162\034.blunote.Wrappe" +
+      "rMessage.Type\022+\n\rmultiResponse\030\002 \001(\0132\024.b" +
+      "lunote.MultiAnswer\022/\n\016recommendation\030\003 \001",
+      "(\0132\027.blunote.Recommendation\022-\n\016singleRes" +
+      "ponse\030\004 \001(\0132\025.blunote.SingleAnswer\022+\n\014so" +
+      "ngFragment\030\005 \001(\0132\025.blunote.SongFragment\022" +
+      ")\n\013songRequest\030\006 \001(\0132\024.blunote.SongReque" +
+      "st\022\033\n\004vote\030\007 \001(\0132\r.blunote.Vote\"i\n\004Type\022" +
+      "\020\n\014MULTI_ANSWER\020\001\022\r\n\tRECOMMEND\020\002\022\021\n\rSING" +
+      "LE_ANSWER\020\003\022\021\n\rSONG_FRAGMENT\020\004\022\020\n\014SONG_R" +
+      "EQUEST\020\005\022\010\n\004VOTE\020\006\"?\n\014DeliveryInfo\022\021\n\tti" +
+      "mestamp\030\001 \002(\003\022\020\n\010username\030\002 \001(\t\022\n\n\002id\030\003 " +
+      "\001(\005\"\\\n\003Pdu\022+\n\014deliveryInfo\030\001 \002(\0132\025.bluno",
+      "te.DeliveryInfo\022(\n\007message\030\002 \002(\0132\027.bluno" +
+      "te.WrapperMessageB\'\n\024com.drexelsp.blunot" +
+      "eB\017BlunoteMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -5561,44 +8408,56 @@ public final class BlunoteMessages {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
-    internal_static_blunote_PollRequest_descriptor =
+    internal_static_blunote_Vote_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_blunote_PollRequest_fieldAccessorTable = new
+    internal_static_blunote_Vote_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_blunote_PollRequest_descriptor,
-        new java.lang.String[] { "RequestId", "Question", "Options", });
-    internal_static_blunote_PollResponse_descriptor =
+        internal_static_blunote_Vote_descriptor,
+        new java.lang.String[] { "VoteId", "ResponseType", "Question", "Options", "DisplayType", });
+    internal_static_blunote_SingleAnswer_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_blunote_PollResponse_fieldAccessorTable = new
+    internal_static_blunote_SingleAnswer_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_blunote_PollResponse_descriptor,
-        new java.lang.String[] { "Choice", "RequestId", });
-    internal_static_blunote_SongRequest_descriptor =
+        internal_static_blunote_SingleAnswer_descriptor,
+        new java.lang.String[] { "VoteId", "Choice", });
+    internal_static_blunote_MultiAnswer_descriptor =
       getDescriptor().getMessageTypes().get(2);
+    internal_static_blunote_MultiAnswer_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_blunote_MultiAnswer_descriptor,
+        new java.lang.String[] { "VoteId", "Choices", });
+    internal_static_blunote_Recommendation_descriptor =
+      getDescriptor().getMessageTypes().get(3);
+    internal_static_blunote_Recommendation_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_blunote_Recommendation_descriptor,
+        new java.lang.String[] { "Username", "Type", "MediaId", });
+    internal_static_blunote_SongRequest_descriptor =
+      getDescriptor().getMessageTypes().get(4);
     internal_static_blunote_SongRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_blunote_SongRequest_descriptor,
-        new java.lang.String[] { "Username", "SongKey", });
+        new java.lang.String[] { "Username", "SongId", });
     internal_static_blunote_SongFragment_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_blunote_SongFragment_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_blunote_SongFragment_descriptor,
-        new java.lang.String[] { "SongId", "SongKey", "Fragment", "FragmentId", "TotalFragments", });
+        new java.lang.String[] { "SongId", "Fragment", "FragmentId", "TotalFragments", });
+    internal_static_blunote_WrapperMessage_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_blunote_WrapperMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_blunote_WrapperMessage_descriptor,
+        new java.lang.String[] { "Type", "MultiResponse", "Recommendation", "SingleResponse", "SongFragment", "SongRequest", "Vote", });
     internal_static_blunote_DeliveryInfo_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_blunote_DeliveryInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_blunote_DeliveryInfo_descriptor,
         new java.lang.String[] { "Timestamp", "Username", "Id", });
-    internal_static_blunote_WrapperMessage_descriptor =
-      getDescriptor().getMessageTypes().get(5);
-    internal_static_blunote_WrapperMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_blunote_WrapperMessage_descriptor,
-        new java.lang.String[] { "Type", "PollRequest", "PollResponse", "SongRequest", "SongFragment", });
     internal_static_blunote_Pdu_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_blunote_Pdu_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_blunote_Pdu_descriptor,

@@ -44,10 +44,10 @@ message MultiAnswer {
 * This message is used to recommend an artist, album, song, or genre to be played in the future
 */
 message Recommendation {
-	enum ResponseType {  ARTIST = 1; ALBUM = 2; SONG = 3; GENRE = 4;}
+	enum Type {  ARTIST = 1; ALBUM = 2; SONG = 3; GENRE = 4;}
 	required string username = 1;
-	required Type type;
-	required string mediaKey = 2; // Host data reference key
+	required Type type = 2;
+	required string mediaId = 3; // Host data reference key
 }
 
 /**
@@ -74,12 +74,12 @@ message SongFragment {
 */
 message WrapperMessage {
 
-	enum Type { MULTI_RESPONSE = 1; RECOMMEND = 2; SINGLE_RESPONSE= 3; SONG_FRAGMENT = 4; SONG_REQUEST = 5; VOTE = 6;}
+	enum Type { MULTI_ANSWER = 1; RECOMMEND = 2; SINGLE_ANSWER= 3; SONG_FRAGMENT = 4; SONG_REQUEST = 5; VOTE = 6;}
 
 	required Type type = 1;
-	optional MultiResponse multiResponse = 2;
+	optional MultiAnswer multiResponse = 2;
 	optional Recommendation recommendation = 3;
-	optional SingleResponse singleResponse = 4;
+	optional SingleAnswer singleResponse = 4;
 	optional SongFragment songFragment = 5;
 	optional SongRequest songRequest = 6;
 	optional Vote vote = 7;
