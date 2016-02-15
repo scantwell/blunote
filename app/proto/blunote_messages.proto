@@ -1,56 +1,103 @@
+/**
+* BluNote Application Messages
+* This file describes all communication messages being sent to and from devices on a BluNote server.
+*/
 package blunote;
 
 option java_package = "com.drexelsp.blunote";
 option java_outer_classname = "BlunoteMessages";
 
-// Initiated by the Host when enough songs have been requested etc
-message PollRequest {
-	required int32 requestId = 1;
-	required string question = 2;
-	repeated string options = 3;
+/**
+*
+*/
+message Vote {
+	enum AnswerType {  SINGLE = 1; MULTI = 2; RANKED = 3;} /// Single allows only one answer, Multi allows an unlimited amount, Ranked allows the user to rank each option
+	enum DisplayType { ALPHA = 1; NUMERICAL = 2; } /// Whether to display the options enumerated by numbers or alphabetically
+
+	required int32 voteId = 1;               /// Unique vote ID
+	required AnswerType response_type = 2;   /// Type of vote and expected response type
+	required string question = 3;            /// The question to be displayed
+	repeated string options = 4;             /// Options to be displayed
+	required DisplayType display_type = 5;   /// Determines how to display the options to the user
 }
 
-// Response sent back by the user
-message PollResponse {
-	required string choice = 1;
-	required int32 requestId = 2;
+/**
+* Answer to a vote type of SINGLE
+* This vote type only allows for one answer
+*/
+message SingleAnswer {
+	required int32 voteId = 1;  /// Unique vote ID of the vote message from the sender
+	required string choice = 2; /// single selection choice
 }
 
-// User requests a song to be played
-message SongRequest {
+/**
+* Answer to a vote type of MULTI or RANKED
+* This vote type allows for at most n choices where n is the total number of choices in the vote.
+*/
+message MultiAnswer {
+	required int32 voteId = 1;    /// Unique vote ID of the vote message from the sender
+	repeated string choices = 2;  /// One or more choices from the vote
+}
+
+/**
+* Recommendation message
+* This message is used to recommend an artist, album, song, or genre to be played in the future
+*/
+message Recommendation {
+	enum ResponseType {  ARTIST = 1; ALBUM = 2; SONG = 3; GENRE = 4;}
 	required string username = 1;
-	required string songKey = 2; // The hosts songkey
+	required Type type;
+	required string mediaKey = 2; // Host data reference key
 }
 
+/**
+* Request for song data to be sent from a user defined by username field
+*/
+message SongRequest {
+	required string username = 1; /// Unique user name of the song holder
+	required string songId = 2;   /// Song ID defined in the host database
+}
+
+/**
+* Slice of a song that is being sent from a user to the host.
+* These are sent after a SongRequest message has been received
+*/
 message SongFragment {
-	required int64 songId = 1;
-	optional int64	songKey = 2;
-	required bytes fragment = 3;
-	required int64 fragmentId = 4;
-	required int32 totalFragments = 5;
+	required int64 songId = 1;     /// Song ID defined in the host database
+	required bytes fragment = 3;   /// Bytes of the song
+	required int64 fragmentId = 4; /// Number of the fragment in the sequence, between 1 and totalFragments
+	required int32 totalFragments = 5;  /// Total number of fragments to be expected
 }
 
+/**
+* Used to send any BluNote message
+*/
+message WrapperMessage {
+
+	enum Type { MULTI_RESPONSE = 1; RECOMMEND = 2; SINGLE_RESPONSE= 3; SONG_FRAGMENT = 4; SONG_REQUEST = 5; VOTE = 6;}
+
+	required Type type = 1;
+	optional MultiResponse multiResponse = 2;
+	optional Recommendation recommendation = 3;
+	optional SingleResponse singleResponse = 4;
+	optional SongFragment songFragment = 5;
+	optional SongRequest songRequest = 6;
+	optional Vote vote = 7;
+}
+
+/**
+* Stores metadata about the message being sent
+*/
 message DeliveryInfo {
 	required int64 timestamp = 1;
 	optional string username = 2;
 	optional int32 id = 3;
 }
 
-message WrapperMessage {
-
-	enum Type { POLLREQ = 1; POLLRESP = 2; SONGREQ = 3; SONGFRAG = 4;}
-
-	required Type type = 1;
-	optional PollRequest pollRequest = 2;
-	optional PollResponse pollResponse = 3;
-	optional SongRequest songRequest = 4;
-	optional SongFragment songFragment = 5;
-}
-
-
+/**
+* Used to couple the WrapperMessage and DeliveryInfo
+*/
 message Pdu {
 	required DeliveryInfo deliveryInfo = 1;
 	required WrapperMessage message = 2;
 }
-
-
