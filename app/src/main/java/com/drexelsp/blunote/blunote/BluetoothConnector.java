@@ -1,5 +1,6 @@
 package com.drexelsp.blunote.blunote;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
@@ -16,9 +17,11 @@ import java.util.UUID;
 public class BluetoothConnector {
     private static final String TAG = "Bluetooth Manager";
     private static final UUID MY_UUID = UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a");
+    private BluetoothAdapter mBluetoothAdapter;
     private BlunoteRouter mRouter;
 
     public BluetoothConnector(BlunoteRouter router) {
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mRouter = router;
     }
 
@@ -26,8 +29,9 @@ public class BluetoothConnector {
      * Connect To Device
      * Initiates a connection to a new Host Bluetooth Device
      */
-    public void connectToDevice(BluetoothDevice device) {
-        ClientThread clientThread = new ClientThread(device);
+    public void connectToDevice(String device) {
+        BluetoothDevice bluetoothDevice = mBluetoothAdapter.getRemoteDevice(device);
+        ClientThread clientThread = new ClientThread(bluetoothDevice);
         clientThread.start();
     }
 

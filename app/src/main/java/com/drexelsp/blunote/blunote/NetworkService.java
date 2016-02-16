@@ -13,6 +13,8 @@ import android.support.v4.app.NotificationCompat;
 import android.app.NotificationManager;
 import android.content.Context;
 
+import java.util.UUID;
+
 /**
  * Created by scantwell on 1/12/2016.
  * <p/>
@@ -38,13 +40,20 @@ public class NetworkService extends Service {
         this.onReceived("Hello World!");
     }
 
-    public void connectToNetwork(BluetoothDevice device) {
+    public void connectToNetwork(String device) {
         BlunoteRouter router = new BlunoteRouter();
 
         BluetoothConnector bluetoothConnector = new BluetoothConnector(router);
         bluetoothConnector.connectToDevice(device);
 
         // Add Server Listener
+        BluetoothServerListener bluetoothServerListener = new BluetoothServerListener(router, UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a"));
+    }
+
+    public void startNetwork() {
+        BlunoteRouter router = new BlunoteRouter();
+
+        BluetoothServerListener bluetoothServerListener = new BluetoothServerListener(router, UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a"));
     }
 
     public void getAvailableNetworks() {

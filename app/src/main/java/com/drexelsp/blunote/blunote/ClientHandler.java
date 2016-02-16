@@ -1,5 +1,6 @@
 package com.drexelsp.blunote.blunote;
 
+import android.bluetooth.BluetoothDevice;
 import android.os.Message;
 import android.util.Log;
 import android.os.Handler;
@@ -16,6 +17,8 @@ public class ClientHandler extends Handler {
     static public final int SEND = 1;
     static public final int SONG_RECOMMENDATION = 2;
     static public final int GET_AVAILABLE_NETWORKS = 3;
+    static public final int CONNECT_TO_NETWORK = 4;
+    static public final int START_NEW_NETWORK = 5;
     private final WeakReference<NetworkService> mService;
     private String TAG = "NetworkServiceClientHandler";
 
@@ -35,6 +38,12 @@ public class ClientHandler extends Handler {
                 break;
             case GET_AVAILABLE_NETWORKS:
                 mService.get().getAvailableNetworks();
+                break;
+            case CONNECT_TO_NETWORK:
+                mService.get().connectToNetwork("Some Device!");
+                break;
+            case START_NEW_NETWORK:
+                mService.get().startNetwork();
                 break;
             default:
                 Log.v(TAG, "Unknown message type, sending to parent handleMessage().");
