@@ -5,8 +5,8 @@ package com.drexelsp.blunote.beans;
  */
 public class ConnectionListItem {
     private String connectionName;
-    private String totalConnections;
-    private String totalSongs;
+    private int totalConnections;
+    private int totalSongs;
 
     public String getConnectionName()
     {
@@ -18,23 +18,19 @@ public class ConnectionListItem {
         this.connectionName = connectionName;
     }
 
-    public String getTotalConnections()
-    {
+    public int getTotalConnections() {
         return totalConnections;
     }
 
-    public void setTotalConnections(String totalConnections)
-    {
+    public void setTotalConnections(int totalConnections) {
         this.totalConnections = totalConnections;
     }
 
-    public String getTotalSongs()
-    {
+    public int getTotalSongs() {
         return totalSongs;
     }
 
-    public void setTotalSongs(String totalSongs)
-    {
+    public void setTotalSongs(int totalSongs) {
         this.totalSongs = totalSongs;
     }
 }

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class LoginActivity extends BaseBluNoteActivity {
 
     Button joinNetworkButton;
-	final String TAG = "LoginActivity";
+    final String TAG = "LoginActivity";
     private ClientServiceConnection connection = new ClientServiceConnection();
 
     @Override
@@ -35,6 +35,7 @@ public class LoginActivity extends BaseBluNoteActivity {
                 startActivity(intent);
             }
         });
+
         Intent intent = new Intent(this, ClientService.class);
         startService(intent);
 
@@ -93,18 +94,18 @@ public class LoginActivity extends BaseBluNoteActivity {
     private ArrayList<ConnectionListItem> getCurrentAvailableNetworks() {
         ConnectionListItem item1 = new ConnectionListItem();
         item1.setConnectionName("Network 1");
-        item1.setTotalConnections("22");
-        item1.setTotalSongs("12415");
+        item1.setTotalConnections(22);
+        item1.setTotalSongs(12415);
 
         ConnectionListItem item2 = new ConnectionListItem();
         item2.setConnectionName("Network 2");
-        item2.setTotalConnections("15");
-        item2.setTotalSongs("121435");
+        item2.setTotalConnections(15);
+        item2.setTotalSongs(121435);
 
         ConnectionListItem item3 = new ConnectionListItem();
         item3.setConnectionName("Network 3");
-        item3.setTotalConnections("123");
-        item3.setTotalSongs("92");
+        item3.setTotalConnections(123);
+        item3.setTotalSongs(92);
 
         ArrayList<ConnectionListItem> itemList = new ArrayList<>();
         itemList.add(item1);

@@ -3,7 +3,10 @@ package com.drexelsp.blunote.blunote;
 /**
  * A class to hold all constants necessary for the java code.
  */
-public class Constants {
+public final class Constants {
+
+    private Constants() {}
+
     public static final int ACTIVITY_LOGIN = 0;
     public static final int ACTIVITY_NETWORK_SETTINGS = 1;
     public static final int ACTIVITY_PREFERENCES = 2;

@@ -2,7 +2,6 @@ package com.drexelsp.blunote.blunote;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -18,9 +17,6 @@ public class AlbumViewActivity extends BaseBluNoteActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         List<String> list = new ArrayList<>();
         for(int i = 1; i < 20; ++i)
