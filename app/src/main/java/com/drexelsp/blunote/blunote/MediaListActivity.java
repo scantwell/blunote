@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by U6020377 on 1/25/2016.
  */
-public class MediaListActivity extends BaseBluNoteActivity {
+public class MediaListActivity extends BaseBluNoteActivity implements CompoundButton.OnCheckedChangeListener {
 
     ListView mediaList;
     ToggleButton songsToggle;
@@ -43,46 +43,6 @@ public class MediaListActivity extends BaseBluNoteActivity {
         albumsToggle = (ToggleButton) findViewById(R.id.albums_toggle);
         artistsToggle = (ToggleButton) findViewById(R.id.artists_toggle);
 
-        songsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    albumsToggle.setChecked(false);
-                    artistsToggle.setChecked(false);
-                    songsToggle.setChecked(true);
-                    setSongList();
-                }
-            }
-        });
-
-        albumsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    albumsToggle.setChecked(true);
-                    artistsToggle.setChecked(false);
-                    songsToggle.setChecked(false);
-                    setAlbumList();
-                }
-            }
-        });
-
-        artistsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    albumsToggle.setChecked(false);
-                    artistsToggle.setChecked(true);
-                    songsToggle.setChecked(false);
-                    setArtistList();
-                }
-            }
-        });
-
-
     }
 
     @Override
@@ -103,6 +63,28 @@ public class MediaListActivity extends BaseBluNoteActivity {
     @Override
     public boolean showSearchMenuItem() {
         return true;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (buttonView == songsToggle && isChecked) {
+            albumsToggle.setChecked(false);
+            artistsToggle.setChecked(false);
+            songsToggle.setChecked(true);
+            setSongList();
+
+        } else if (buttonView == albumsToggle && isChecked) {
+            albumsToggle.setChecked(true);
+            artistsToggle.setChecked(false);
+            songsToggle.setChecked(false);
+            setAlbumList();
+
+        } else if (buttonView == artistsToggle && isChecked) {
+            albumsToggle.setChecked(false);
+            artistsToggle.setChecked(true);
+            songsToggle.setChecked(false);
+            setArtistList();
+        }
     }
 
     /**
@@ -159,8 +141,7 @@ public class MediaListActivity extends BaseBluNoteActivity {
         });
     }
 
-    private void startActivity(Class activityClass)
-    {
+    private void startActivity(Class activityClass) {
         Intent intent = new Intent(MediaListActivity.this, activityClass);
         startActivity(intent);
     }

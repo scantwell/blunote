@@ -13,9 +13,11 @@ import com.drexelsp.blunote.beans.ConnectionListItem;
 
 import java.util.ArrayList;
 
-public class LoginActivity extends BaseBluNoteActivity {
+public class LoginActivity extends BaseBluNoteActivity implements View.OnClickListener{
 
     Button joinNetworkButton;
+    Button createNetworkButton;
+
     final String TAG = "LoginActivity";
     private ClientServiceConnection connection = new ClientServiceConnection();
 
@@ -27,14 +29,7 @@ public class LoginActivity extends BaseBluNoteActivity {
         setSupportActionBar(toolbar);
 
         joinNetworkButton = (Button) findViewById(R.id.join_network_button);
-
-        joinNetworkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
-                startActivity(intent);
-            }
-        });
+        createNetworkButton = (Button) findViewById(R.id.create_network_button);
 
         Intent intent = new Intent(this, ClientService.class);
         startService(intent);
@@ -84,6 +79,18 @@ public class LoginActivity extends BaseBluNoteActivity {
     protected void onStop() {
         super.onStop();
         unbindService(connection);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == joinNetworkButton) {
+            Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
+            startActivity(intent);
+        }
+        else if (v == createNetworkButton){
+            Intent intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);
+            startActivity(intent);
+        }
     }
 
     /**
