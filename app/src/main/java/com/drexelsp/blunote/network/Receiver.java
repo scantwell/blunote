@@ -15,8 +15,8 @@ public class Receiver extends android.content.BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Extract data included in the Intent
-        String message = intent.getStringExtra("data");
-        Log.v("receiver", "Got message: " + message);
-        cService.onReceived(message);
+        byte[] data = intent.getByteArrayExtra("data");
+        Log.v("receiver", "Got message: " + data);
+        cService.onReceived(data);
     }
 }

@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.drexelsp.blunote.BlunoteMessages.Recommendation;
+
 public class LoginActivity extends AppCompatActivity implements ServiceConnection {
 
     final String TAG = "LoginActivity";
@@ -47,7 +49,7 @@ public class LoginActivity extends AppCompatActivity implements ServiceConnectio
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mService.send("Hello");
+                mService.sendRequest("mediaId", Recommendation.Type.ALBUM);
             }
         });
         Intent intent = new Intent(this, Service.class);

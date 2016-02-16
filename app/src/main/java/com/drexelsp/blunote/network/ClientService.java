@@ -17,10 +17,10 @@ abstract public class ClientService extends Service {
     protected Receiver receiver = new Receiver(this);;
     protected IBinder mBinder = null;
 
-    abstract public void onReceived(String data);
+    abstract public void onReceived(byte[] data);
 
     // Sends to another application via bluetooth/etc
-    protected void send(String data) {
+    protected void send(byte[] data) {
         Log.v(TAG, "Sending message.");
         Message msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
         try {
