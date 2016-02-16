@@ -13,6 +13,7 @@ import java.util.UUID;
  * Created by omnia on 2/12/16.
  *
  * Creates and Advertises a Bluetooth Beacon
+ * TODO: Add NetworkName, UserCount, SongCount, Latency, and ListeningServerUUID to AdvertiseData
  */
 public class BluetoothBeacon {
     private static final String TAG = "Bluetooth Beacon";
@@ -33,6 +34,14 @@ public class BluetoothBeacon {
     }
 
     public void advertiseBeacon() {
+        mBluetoothLeAdvertiser.startAdvertising(mAdvertiseSettings, mAdvertiseData, mAdvertiseCallback);
+    }
+
+    public void updateAdvertiseData(String networkName, int userCount, int songCount, int latency) {
+        mBluetoothLeAdvertiser.stopAdvertising(mAdvertiseCallback);
+
+        // Update Advertise Data
+
         mBluetoothLeAdvertiser.startAdvertising(mAdvertiseSettings, mAdvertiseData, mAdvertiseCallback);
     }
 

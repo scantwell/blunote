@@ -15,6 +15,7 @@ public class ClientHandler extends Handler {
 
     static public final int SEND = 1;
     static public final int SONG_RECOMMENDATION = 2;
+    static public final int GET_AVAILABLE_NETWORKS = 3;
     private final WeakReference<NetworkService> mService;
     private String TAG = "NetworkServiceClientHandler";
 
@@ -31,6 +32,9 @@ public class ClientHandler extends Handler {
             case SEND:
                 Log.v(TAG, "Sending message.");
                 mService.get().send(msg);
+                break;
+            case GET_AVAILABLE_NETWORKS:
+                mService.get().getAvailableNetworks();
                 break;
             default:
                 Log.v(TAG, "Unknown message type, sending to parent handleMessage().");

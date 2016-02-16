@@ -13,25 +13,31 @@ import java.util.UUID;
  *
  * Starts a Bluetooth Server listener thread to allow incoming connections
  * Also creates a BluetoothBeacon and begins advertising
- * TODO: Callback to NetworkService with new BlunoteBluetoothSocket
  */
 public class BluetoothServerListener {
-    private static final UUID MY_UUID = UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a");
     private static final String NAME = "BluNote";
     private static final String TAG = "Bluetooth Server Listener";
+    private final UUID MY_UUID;
 
     private BluetoothAdapter mBluetoothAdapter;
     private ServerThread mServerThread;
     private BluetoothBeacon mBluetoothBeacon;
+    private BlunoteRouter mBlunoteRouter;
 
-    public BluetoothServerListener() {
+    public BluetoothServerListener(BlunoteRouter router, UUID uuid) {
+        MY_UUID = uuid;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mBlunoteRouter = router;
 
         mServerThread = new ServerThread();
         mServerThread.start();
 
         mBluetoothBeacon = new BluetoothBeacon();
         mBluetoothBeacon.advertiseBeacon();
+    }
+
+    public void updateAdvertiseData(String networkName, int userCount, int songCount, int latency) {
+        mBluetoothBeacon.updateAdvertiseData(networkName, userCount, songCount, latency);
     }
 
     private class ServerThread extends Thread {
@@ -54,9 +60,9 @@ public class BluetoothServerListener {
                 try {
                     socket = mmServerSocket.accept();
                     if (socket != null) {
-                        BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(socket);
+                        BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(socket, mBlunoteRouter);
 
-                        // Return blunoteBluetoothSocket to Network Service
+                        mBlunoteRouter.addDownStream(blunoteBluetoothSocket);
 
                         Log.v(TAG, "New Client Connected: " + socket.getRemoteDevice());
                     }

@@ -29,10 +29,12 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
     private BluetoothSocket mSocket;
     private DataTransferThread dataTransferThread;
     private ArrayList<Message> mailbox;
+    private BlunoteRouter mRouter;
 
-    public BlunoteBluetoothSocket(BluetoothSocket socket) {
+    public BlunoteBluetoothSocket(BluetoothSocket socket, BlunoteRouter router) {
         mSocket = socket;
         mailbox = new ArrayList<>();
+        mRouter = router;
         dataTransferThread = new DataTransferThread(mSocket);
         dataTransferThread.start();
     }
@@ -109,6 +111,7 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
                         in = new ObjectInputStream(bis);
                         Message msg = (Message) in.readObject();
                         mailbox.add(msg);
+                        mRouter.wakeUp();
                     } catch (ClassNotFoundException e) {
                         Log.e(TAG, "Error Class Not Found: " + e.getMessage());
                     }
@@ -128,7 +131,7 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
 
                 d.writeInt(bytes.length);
 
-                int bufferSize = 1024 * 10;
+                int bufferSize = 1024;
                 for (int i = 0; i < bytes.length; i+=bufferSize) {
                     int b = ((i + bufferSize) < bytes.length) ? bufferSize : bytes.length - i;
                     d.write(bytes, i, b);

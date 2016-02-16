@@ -2,6 +2,7 @@ package com.drexelsp.blunote.blunote;
 
 import android.app.Notification;
 import android.app.Service;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.Message;
@@ -35,6 +36,24 @@ public class NetworkService extends Service {
     public void send(Message msg) {
         Log.v(TAG, "Sending message.");
         this.onReceived("Hello World!");
+    }
+
+    public void connectToNetwork(BluetoothDevice device) {
+        BlunoteRouter router = new BlunoteRouter();
+
+        BluetoothConnector bluetoothConnector = new BluetoothConnector(router);
+        bluetoothConnector.connectToDevice(device);
+
+        // Add Server Listener
+    }
+
+    public void getAvailableNetworks() {
+        BluetoothBeaconScanner bluetoothBeaconScanner = new BluetoothBeaconScanner();
+
+        Intent intent = new Intent();
+        intent.setAction("networkservice.onrecieved");
+        // Needed to reference NetworkService to access sendBroadcast
+        bluetoothBeaconScanner.detectBeacons(intent, this);
     }
 
     @Nullable

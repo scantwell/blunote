@@ -1,15 +1,18 @@
 package com.drexelsp.blunote.blunote;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
-import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
+import android.content.Intent;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -30,24 +33,34 @@ public class BluetoothBeaconScanner {
     public BluetoothBeaconScanner() {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
-
+        setScanSettings();
+        setScanFilter();
     }
 
-    public void detectBeacons() {
+    public void detectBeacons(final Intent intent, final NetworkService ns) {
+        final ArrayList<BluetoothDevice> devices = new ArrayList<>();
+        ScanCallback mScanCallback = new ScanCallback() {
+            @Override
+            public void onScanResult(int callbackType, ScanResult result) {
+                devices.add(result.getDevice());
+                // Wrap up device in message?
+                intent.putExtra("data", devices);
+                ns.sendBroadcast(intent);
+            }
+
+            @Override
+            public void onBatchScanResults(List<ScanResult> results) {
+                for(ScanResult result : results) {
+                    devices.add(result.getDevice());
+                }
+                // Wrap up list of devices in message?
+                intent.putExtra("data", devices);
+                ns.sendBroadcast(intent);
+            }
+        };
+
         mBluetoothLeScanner.startScan(Arrays.asList(mScanFilter), mScanSettings, mScanCallback);
     }
-
-    protected ScanCallback mScanCallback = new ScanCallback() {
-        @Override
-        public void onScanResult(int callbackType, ScanResult result) {
-            ScanRecord scanRecord = result.getScanRecord();
-            if (scanRecord != null) {
-                byte[] manufacturerData = scanRecord.getManufacturerSpecificData(224);
-            }
-            int rssi = result.getRssi();
-            // use rssi to calculate signal strength
-        }
-    };
 
     private void setScanSettings() {
         ScanSettings.Builder mBuilder = new ScanSettings.Builder();

@@ -16,8 +16,10 @@ import java.util.UUID;
 public class BluetoothConnector {
     private static final String TAG = "Bluetooth Manager";
     private static final UUID MY_UUID = UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a");
+    private BlunoteRouter mRouter;
 
-    public BluetoothConnector() {
+    public BluetoothConnector(BlunoteRouter router) {
+        mRouter = router;
     }
 
     /**
@@ -50,9 +52,10 @@ public class BluetoothConnector {
         public void run() {
             try {
                 mmSocket.connect();
-                BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(mmSocket);
+                BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(mmSocket, mRouter);
 
                 // Use Callback Here with blunoteBluetoothSocket
+                mRouter.setUpStream(blunoteBluetoothSocket);
 
                 Log.v(TAG, "Connection to a host Accepted");
             } catch (IOException connectException) {
