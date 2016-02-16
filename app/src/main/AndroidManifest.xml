@@ -12,12 +12,12 @@
         android:theme="@style/AppTheme" >
         <service
             android:exported="false"
-            android:name=".NetworkService"
+            android:name="com.drexelsp.blunote.network.NetworkService"
             android:process=":network_process"
             />
         <service
             android:exported="false"
-            android:name=".ClientService"
+            android:name=".Service"
             />
         <activity
             android:name=".LoginActivity"
@@ -30,5 +30,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

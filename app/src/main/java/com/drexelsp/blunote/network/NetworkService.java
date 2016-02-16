@@ -1,4 +1,4 @@
-package com.drexelsp.blunote.blunote;
+package com.drexelsp.blunote.network;
 
 import android.app.Notification;
 import android.app.Service;
@@ -11,6 +11,8 @@ import android.util.Log;
 import android.support.v4.app.NotificationCompat;
 import android.app.NotificationManager;
 import android.content.Context;
+
+import com.drexelsp.blunote.blunote.R;
 
 /**
  * Created by scantwell on 1/12/2016.

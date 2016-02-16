@@ -1,8 +1,11 @@
 package com.drexelsp.blunote.blunote;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,10 +13,28 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements ServiceConnection {
 
     final String TAG = "LoginActivity";
-    private ClientServiceConnection connection = new ClientServiceConnection();
+    private Service mService = null;
+    boolean mBound;
+
+    public void onServiceConnected(ComponentName className, IBinder service) {
+        // This is called when the connection with the service has been
+        // established, giving us the object we can use to
+        // interact with the service.  We are communicating with the
+        // service using a Messenger, so here we get a client-side
+        // representation of that from the raw IBinder object.
+        mService = ((Service.LocalBinder) service).getService();
+        mBound = true;
+    }
+
+    public void onServiceDisconnected(ComponentName className) {
+        // This is called when the connection with the service has been
+        // unexpectedly disconnected -- that is, its process crashed.
+        mService = null;
+        mBound = false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +47,10 @@ public class LoginActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                connection.send("Hello");
+                mService.send("Hello");
             }
         });
-        Intent intent = new Intent(this, ClientService.class);
+        Intent intent = new Intent(this, Service.class);
         startService(intent);
     }
 
@@ -58,12 +79,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         // Bind to the service
-        bindService(new Intent(this, ClientService.class), connection, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(this, Service.class), this, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        unbindService(connection);
+        unbindService(this);
     }
 }
