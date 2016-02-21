@@ -9,9 +9,9 @@ import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.drexelsp.blunote.BlunoteMessages.Recommendation;
 
@@ -49,7 +49,12 @@ public class LoginActivity extends AppCompatActivity implements ServiceConnectio
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mService.sendRequest("mediaId", Recommendation.Type.ALBUM);
+                Recommendation recommend = Recommendation.newBuilder()
+                        .setType(Recommendation.Type.ALBUM)
+                        .setUsername("FakeUser")
+                        .setMediaId("FakeAlbumName")
+                        .build();
+                mService.send(recommend);
             }
         });
         Intent intent = new Intent(this, Service.class);
