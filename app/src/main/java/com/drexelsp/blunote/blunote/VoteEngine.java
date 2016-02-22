@@ -2,12 +2,12 @@ package com.drexelsp.blunote.blunote;
 
 import android.util.Log;
 
-import com.drexelsp.blunote.BlunoteMessages.DeliveryInfo;
-import com.drexelsp.blunote.BlunoteMessages.MultiAnswer;
-import com.drexelsp.blunote.BlunoteMessages.Recommendation;
-import com.drexelsp.blunote.BlunoteMessages.SingleAnswer;
-import com.drexelsp.blunote.BlunoteMessages.Vote;
-import com.drexelsp.blunote.BlunoteMessages.WrapperMessage;
+import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
+import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
+import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Vote;
+import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
 
 /**
  * Created by scantwell on 2/16/2016.

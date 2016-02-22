@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.drexelsp.blunote.BlunoteMessages.Recommendation;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
 
 public class LoginActivity extends AppCompatActivity implements ServiceConnection {
 

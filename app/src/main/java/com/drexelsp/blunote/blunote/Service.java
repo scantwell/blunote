@@ -4,13 +4,13 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.drexelsp.blunote.BlunoteMessages.DeliveryInfo;
-import com.drexelsp.blunote.BlunoteMessages.MultiAnswer;
-import com.drexelsp.blunote.BlunoteMessages.Pdu;
-import com.drexelsp.blunote.BlunoteMessages.Recommendation;
-import com.drexelsp.blunote.BlunoteMessages.SingleAnswer;
-import com.drexelsp.blunote.BlunoteMessages.SongFragment;
-import com.drexelsp.blunote.BlunoteMessages.WrapperMessage;
+import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
+import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Pdu;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
+import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;
+import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
+import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
 import com.drexelsp.blunote.network.ClientService;
 import com.google.protobuf.InvalidProtocolBufferException;
 
