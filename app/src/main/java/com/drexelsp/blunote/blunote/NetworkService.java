@@ -62,12 +62,8 @@ public class NetworkService extends Service {
     }
 
     public void getAvailableNetworks() {
-        //BluetoothBeaconScanner bluetoothBeaconScanner = new BluetoothBeaconScanner();
-
-        Intent intent = new Intent();
-        intent.setAction("networkservice.onrecieved");
-        // Needed to reference NetworkService to access sendBroadcast
-        //bluetoothBeaconScanner.detectBeacons(intent, this);
+        BluetoothScanner bluetoothScanner = new BluetoothScanner(this);
+        bluetoothScanner.startDiscovery();
     }
 
     private void makeDiscoverable() {

@@ -41,6 +41,10 @@ public class ClientService extends Service {
         Message msg;
         if (data == "StartNewNetwork") {
             msg = Message.obtain(null, ClientHandler.START_NEW_NETWORK, 0, 0);
+        } else if (data == "DiscoverNetworks") {
+            msg = Message.obtain(null, ClientHandler.GET_AVAILABLE_NETWORKS, 0, 0);
+        } else if (data == "ConnectToNetwork") {
+            msg = Message.obtain(null, ClientHandler.CONNECT_TO_NETWORK, 0, 0);
         } else {
             msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
         }

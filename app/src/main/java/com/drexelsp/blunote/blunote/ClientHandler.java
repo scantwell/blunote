@@ -37,9 +37,11 @@ public class ClientHandler extends Handler {
                 mService.get().send(msg);
                 break;
             case GET_AVAILABLE_NETWORKS:
+                Log.v(TAG, "Get Available Networks");
                 mService.get().getAvailableNetworks();
                 break;
             case CONNECT_TO_NETWORK:
+                Log.v(TAG, "Connect To Network");
                 mService.get().connectToNetwork("Some Device!");
                 break;
             case START_NEW_NETWORK:
