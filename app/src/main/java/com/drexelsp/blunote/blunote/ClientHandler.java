@@ -43,6 +43,7 @@ public class ClientHandler extends Handler {
                 mService.get().connectToNetwork("Some Device!");
                 break;
             case START_NEW_NETWORK:
+                Log.v(TAG, "Starting New Network");
                 mService.get().startNetwork();
                 break;
             default:

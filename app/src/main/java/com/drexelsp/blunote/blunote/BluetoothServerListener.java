@@ -21,7 +21,7 @@ public class BluetoothServerListener {
 
     private BluetoothAdapter mBluetoothAdapter;
     private ServerThread mServerThread;
-    private BluetoothBeacon mBluetoothBeacon;
+    //private BluetoothBeacon mBluetoothBeacon;
     private BlunoteRouter mBlunoteRouter;
 
     public BluetoothServerListener(BlunoteRouter router, UUID uuid) {
@@ -32,13 +32,13 @@ public class BluetoothServerListener {
         mServerThread = new ServerThread();
         mServerThread.start();
 
-        mBluetoothBeacon = new BluetoothBeacon();
-        mBluetoothBeacon.advertiseBeacon();
+        //mBluetoothBeacon = new BluetoothBeacon();
+        //mBluetoothBeacon.advertiseBeacon();
     }
 
-    public void updateAdvertiseData(String networkName, int userCount, int songCount, int latency) {
-        mBluetoothBeacon.updateAdvertiseData(networkName, userCount, songCount, latency);
-    }
+    //public void updateAdvertiseData(String networkName, int userCount, int songCount, int latency) {
+    //    mBluetoothBeacon.updateAdvertiseData(networkName, userCount, songCount, latency);
+    //}
 
     private class ServerThread extends Thread {
         private static final String TAG = "Bluetooth Server Thread";

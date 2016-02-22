@@ -2,6 +2,7 @@ package com.drexelsp.blunote.blunote;
 
 import android.app.Notification;
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.IBinder;
@@ -48,21 +49,41 @@ public class NetworkService extends Service {
 
         // Add Server Listener
         BluetoothServerListener bluetoothServerListener = new BluetoothServerListener(router, UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a"));
+
+        makeDiscoverable();
     }
 
     public void startNetwork() {
         BlunoteRouter router = new BlunoteRouter();
 
         BluetoothServerListener bluetoothServerListener = new BluetoothServerListener(router, UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a"));
+
+        makeDiscoverable();
     }
 
     public void getAvailableNetworks() {
-        BluetoothBeaconScanner bluetoothBeaconScanner = new BluetoothBeaconScanner();
+        //BluetoothBeaconScanner bluetoothBeaconScanner = new BluetoothBeaconScanner();
 
         Intent intent = new Intent();
         intent.setAction("networkservice.onrecieved");
         // Needed to reference NetworkService to access sendBroadcast
-        bluetoothBeaconScanner.detectBeacons(intent, this);
+        //bluetoothBeaconScanner.detectBeacons(intent, this);
+    }
+
+    private void makeDiscoverable() {
+        Log.v(TAG, "Make Discoverable");
+        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
+        discoverableIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(discoverableIntent);
+    }
+
+    private void cancelDiscoverable() {
+        Log.v(TAG, "Cancel Discoverable");
+        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 1);
+        discoverableIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(discoverableIntent);
     }
 
     @Nullable
@@ -79,6 +100,7 @@ public class NetworkService extends Service {
 
     @Override
     public void onDestroy() {
+        cancelDiscoverable();
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // notificationId allows you to update the notification later on.

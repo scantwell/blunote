@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                connection.send("Hello");
+                connection.send("StartNewNetwork");
             }
         });
         Intent intent = new Intent(this, ClientService.class);

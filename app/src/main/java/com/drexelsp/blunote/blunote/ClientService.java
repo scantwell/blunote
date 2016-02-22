@@ -38,7 +38,12 @@ public class ClientService extends Service {
     // Sends to another application via bluetooth/etc
     public void send(String data) {
         Log.v(TAG, "Sending message.");
-        Message msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
+        Message msg;
+        if (data == "StartNewNetwork") {
+            msg = Message.obtain(null, ClientHandler.START_NEW_NETWORK, 0, 0);
+        } else {
+            msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
+        }
         try {
             mConnection.send(msg);
         } catch (RemoteException e) {
