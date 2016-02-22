@@ -58,9 +58,6 @@ public class ClientService extends Service {
         IntentFilter intentFilter = new IntentFilter("networkservice.onrecieved");
         registerReceiver(receiver, intentFilter);
 
-        Intent intent = new Intent(this, NetworkService.class);
-        startService(intent);
-
         bindService(new Intent(this, NetworkService.class), mConnection,
                 Context.BIND_AUTO_CREATE);
     }

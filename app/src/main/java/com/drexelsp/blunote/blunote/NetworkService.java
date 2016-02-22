@@ -90,6 +90,7 @@ public class NetworkService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.v(TAG, "Binding user.");
+        this.createNotification();
         return messenger.getBinder();
     }
 
@@ -100,11 +101,6 @@ public class NetworkService extends Service {
 
     @Override
     public void onDestroy() {
-        cancelDiscoverable();
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        // notificationId allows you to update the notification later on.
-        mNotificationManager.cancel(NOTIFICATION_ID);
         Log.v(TAG, "Destroyed service.");
     }
 
@@ -112,7 +108,6 @@ public class NetworkService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Increases the priority of this running process
         // Must be created in onStartCommand else NotificationManager will be null.
-        this.createNotification();
 
         // If the service is stopped it will be started again with original intent
         // Needed for determining the type of mesh network
@@ -122,6 +117,10 @@ public class NetworkService extends Service {
     @Override
     public boolean onUnbind(Intent intent) {
         Log.v(TAG, "Unbinding user.");
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        // notificationId allows you to update the notification later on.
+        mNotificationManager.cancel(NOTIFICATION_ID);
         return true;
     }
 
