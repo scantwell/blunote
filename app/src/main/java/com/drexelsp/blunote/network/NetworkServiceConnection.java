@@ -1,4 +1,4 @@
-package com.drexelsp.blunote.blunote;
+package com.drexelsp.blunote.network;
 
 import android.content.ComponentName;
 import android.content.ServiceConnection;

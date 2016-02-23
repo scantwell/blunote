@@ -1,18 +1,21 @@
-package com.drexelsp.blunote.blunote;
-
-import android.content.Context;
-import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+package com.drexelsp.blunote.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.drexelsp.blunote.blunote.Constants;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.widget.ListView;
 
 /**
  * Created by U6020377 on 1/25/2016.
  */
 public class AlbumViewActivity extends BaseBluNoteActivity
 {
+    ListView trackList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -22,10 +25,7 @@ public class AlbumViewActivity extends BaseBluNoteActivity
         for(int i = 1; i < 20; ++i)
             list.add("Track " + i);
 
-        ListView view = (ListView) findViewById(R.id.album_track_list);
-        final ArrayAdapter adapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list);
-        view.setAdapter(adapter);
+        setSimpleList(trackList, list);
     }
 
     @Override
@@ -46,5 +46,10 @@ public class AlbumViewActivity extends BaseBluNoteActivity
     @Override
     public boolean showSearchMenuItem() {
         return false;
+    }
+
+    public void populateAlbumTrackList()
+    {
+
     }
 }

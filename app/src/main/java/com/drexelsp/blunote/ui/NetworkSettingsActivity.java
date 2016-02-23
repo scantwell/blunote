@@ -1,14 +1,20 @@
-package com.drexelsp.blunote.blunote;
+package com.drexelsp.blunote.ui;
+
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.Button;
 
 /**
  * Activity for the Network Settings page
  */
 public class NetworkSettingsActivity extends BaseBluNoteActivity
 {
+    Button launchNetworkButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -16,6 +22,8 @@ public class NetworkSettingsActivity extends BaseBluNoteActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        launchNetworkButton = (Button) findViewById(R.id.launch_network_button);
 
     }
 

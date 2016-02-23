@@ -1,4 +1,4 @@
-package com.drexelsp.blunote.blunote;
+package com.drexelsp.blunote.network;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +15,8 @@ public class Receiver extends android.content.BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Extract data included in the Intent
-        String message = intent.getStringExtra("data");
-        Log.v("receiver", "Got message: " + message);
+        byte[] data = intent.getByteArrayExtra("data");
+        Log.v("receiver", "Got message: " + data);
+        cService.onReceived(data);
     }
 }

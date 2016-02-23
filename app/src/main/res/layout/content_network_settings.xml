@@ -93,7 +93,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/launch_network"
-            android:id="@+id/launch_network"
+            android:id="@+id/launch_network_button"
             android:layout_gravity="bottom|center_horizontal" />
 
         <TextView

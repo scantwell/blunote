@@ -1,42 +1,25 @@
-package com.drexelsp.blunote.blunote;
+package com.drexelsp.blunote.network;
 
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Binder;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-
-public class ClientService extends Service {
-
-    public class LocalBinder extends Binder {
-        ClientService getService() {
-            return ClientService.this;
-        }
-    }
-
-    private final IBinder mBinder = new LocalBinder();
-    private final NetworkServiceConnection mConnection = new NetworkServiceConnection();
-    private final Receiver receiver = new Receiver(this);
+abstract public class ClientService extends Service {
     private String TAG = "ClientService";
+    protected final NetworkServiceConnection mConnection = new NetworkServiceConnection();
+    protected Receiver receiver = new Receiver(this);
+    protected IBinder mBinder = null;
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
-
-    public void onReceived(String data) {
-        Log.v(TAG, "Received a message.");
-    }
+    abstract public void onReceived(byte[] data);
 
     // Sends to another application via bluetooth/etc
-    public void send(String data) {
+    protected void send(byte[] data) {
         Log.v(TAG, "Sending message.");
         Message msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
         try {
@@ -44,6 +27,16 @@ public class ClientService extends Service {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    protected void setBinder(IBinder mBinder) {
+        this.mBinder = mBinder;
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
     }
 
     @Override

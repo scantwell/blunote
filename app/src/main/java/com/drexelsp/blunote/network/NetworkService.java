@@ -1,16 +1,18 @@
-package com.drexelsp.blunote.blunote;
+package com.drexelsp.blunote.network;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.os.Messenger;
-import android.util.Log;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.app.NotificationManager;
-import android.content.Context;
+import android.util.Log;
+
+import com.drexelsp.blunote.blunote.R;
 
 /**
  * Created by scantwell on 1/12/2016.

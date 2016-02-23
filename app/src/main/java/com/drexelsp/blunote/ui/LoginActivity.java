@@ -1,37 +1,60 @@
-package com.drexelsp.blunote.blunote;
+package com.drexelsp.blunote.ui;
 
+import java.util.ArrayList;
+
+import com.drexelsp.blunote.BlunoteMessages;
+import com.drexelsp.blunote.adapters.NetworkArrayAdapter;
+import com.drexelsp.blunote.beans.ConnectionListItem;
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.blunote.Service;
+
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.os.IBinder;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.drexelsp.blunote.adapters.NetworkArrayAdapter;
-import com.drexelsp.blunote.beans.ConnectionListItem;
-
-import java.util.ArrayList;
-
-public class LoginActivity extends BaseBluNoteActivity implements View.OnClickListener{
+public class LoginActivity extends BaseBluNoteActivity implements View.OnClickListener, ServiceConnection
+{
 
     Button joinNetworkButton;
     Button createNetworkButton;
+    ListView networkListView;
 
     final String TAG = "LoginActivity";
-    private ClientServiceConnection connection = new ClientServiceConnection();
+    private Service mService = null;
+    boolean mBound;
+
+    public void onServiceConnected(ComponentName className, IBinder service) {
+        // This is called when the connection with the service has been
+        // established, giving us the object we can use to
+        // interact with the service.  We are communicating with the
+        // service using a Messenger, so here we get a client-side
+        // representation of that from the raw IBinder object.
+        mService = ((Service.LocalBinder) service).getService();
+        mBound = true;
+    }
+
+    public void onServiceDisconnected(ComponentName className) {
+        // This is called when the connection with the service has been
+        // unexpectedly disconnected -- that is, its process crashed.
+        mService = null;
+        mBound = false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         joinNetworkButton = (Button) findViewById(R.id.join_network_button);
         createNetworkButton = (Button) findViewById(R.id.create_network_button);
 
-        Intent intent = new Intent(this, ClientService.class);
+        Intent intent = new Intent(this, Service.class);
         startService(intent);
 
         /*ProgressDialog dialog = new ProgressDialog(this);
@@ -41,7 +64,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         dialog.show();*/
 
         //Make Call to load networks
-        ListView networkListView = (ListView) findViewById(R.id.connection_list);
+        networkListView = (ListView) findViewById(R.id.connection_list);
         NetworkArrayAdapter adapter = new NetworkArrayAdapter(this, getCurrentAvailableNetworks());
         networkListView.setAdapter(adapter);
 
@@ -72,20 +95,21 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     protected void onStart() {
         super.onStart();
         // Bind to the service
-        bindService(new Intent(this, ClientService.class), connection, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(this, Service.class), this, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        unbindService(connection);
+        unbindService(this);
     }
 
     @Override
     public void onClick(View v) {
         if(v == joinNetworkButton) {
-            Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
-            startActivity(intent);
+            mService.sendRequest("mediaId", BlunoteMessages.Recommendation.Type.ALBUM);
+            /*Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
+            startActivity(intent);*/
         }
         else if (v == createNetworkButton){
             Intent intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);

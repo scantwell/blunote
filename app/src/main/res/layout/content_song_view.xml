@@ -74,6 +74,7 @@
             </LinearLayout>
 
             <Button
+                android:id="@+id/song_view_add_to_queue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"

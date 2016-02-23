@@ -1,4 +1,9 @@
-package com.drexelsp.blunote.blunote;
+package com.drexelsp.blunote.ui;
+
+import java.util.List;
+
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +15,6 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ViewFlipper;
-
-import java.util.List;
 
 /**
  * Created by Brisbin on 2/10/2016.
