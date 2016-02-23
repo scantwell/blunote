@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Binder;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
@@ -14,7 +13,7 @@ import android.util.Log;
 abstract public class ClientService extends Service {
     private String TAG = "ClientService";
     protected final NetworkServiceConnection mConnection = new NetworkServiceConnection();
-    protected Receiver receiver = new Receiver(this);;
+    protected Receiver receiver = new Receiver(this);
     protected IBinder mBinder = null;
 
     abstract public void onReceived(byte[] data);
@@ -30,8 +29,7 @@ abstract public class ClientService extends Service {
         }
     }
 
-    protected void setBinder(IBinder mBinder)
-    {
+    protected void setBinder(IBinder mBinder) {
         this.mBinder = mBinder;
     }
 
