@@ -1,10 +1,13 @@
-package com.drexelsp.blunote.blunote;
+package com.drexelsp.blunote.ui;
 
 import java.util.ArrayList;
 
 import com.drexelsp.blunote.BlunoteMessages;
 import com.drexelsp.blunote.adapters.NetworkArrayAdapter;
 import com.drexelsp.blunote.beans.ConnectionListItem;
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.blunote.Service;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,10 +19,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class LoginActivity extends BaseBluNoteActivity implements View.OnClickListener, ServiceConnection{
+public class LoginActivity extends BaseBluNoteActivity implements View.OnClickListener, ServiceConnection
+{
 
     Button joinNetworkButton;
     Button createNetworkButton;
+    ListView networkListView;
 
     final String TAG = "LoginActivity";
     private Service mService = null;
@@ -59,7 +64,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         dialog.show();*/
 
         //Make Call to load networks
-        ListView networkListView = (ListView) findViewById(R.id.connection_list);
+        networkListView = (ListView) findViewById(R.id.connection_list);
         NetworkArrayAdapter adapter = new NetworkArrayAdapter(this, getCurrentAvailableNetworks());
         networkListView.setAdapter(adapter);
 

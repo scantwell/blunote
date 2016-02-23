@@ -20,7 +20,7 @@
             android:name=".Service"
             />
         <activity
-            android:name=".LoginActivity"
+            android:name="com.drexelsp.blunote.ui.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
@@ -29,42 +29,42 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PreferencesActivity"
+            android:name="com.drexelsp.blunote.ui.PreferencesActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".NetworkSettingsActivity"
+            android:name="com.drexelsp.blunote.ui.NetworkSettingsActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".AlbumViewActivity"
+            android:name="com.drexelsp.blunote.ui.AlbumViewActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".ArtistViewActivity"
+            android:name="com.drexelsp.blunote.ui.ArtistViewActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".MediaListActivity"
+            android:name="com.drexelsp.blunote.ui.MediaListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".SongViewActivity"
+            android:name="com.drexelsp.blunote.ui.SongViewActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".MediaPlayerActivity"
+            android:name="com.drexelsp.blunote.ui.MediaPlayerActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".PlaylistActivity"
+            android:name="com.drexelsp.blunote.ui.PlaylistActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>

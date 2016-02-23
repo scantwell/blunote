@@ -1,4 +1,7 @@
-package com.drexelsp.blunote.blunote;
+package com.drexelsp.blunote.ui;
+
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.widget.ListView;
 public class PlaylistActivity extends BaseBluNoteActivity
 {
     protected String[] list;
+    ListView playlistList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -29,11 +33,11 @@ public class PlaylistActivity extends BaseBluNoteActivity
         for(int i = 0; i < 20; ++i)
             list[i] = ("Song " + (i + 1));
 
-        ListView view = (ListView) findViewById(R.id.playlist_list);
+        playlistList = (ListView) findViewById(R.id.playlist_list);
         final ArrayAdapter adapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, list);
-        view.setAdapter(adapter);
-        registerForContextMenu(view);
+        playlistList.setAdapter(adapter);
+        registerForContextMenu(playlistList);
 
     }
 

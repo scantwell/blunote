@@ -1,4 +1,7 @@
-package com.drexelsp.blunote.blunote;
+package com.drexelsp.blunote.ui;
+
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
 
 import android.content.Context;
 import android.content.Intent;
@@ -50,4 +53,5 @@ public class PreferencesActivity extends BaseBluNoteActivity
     public boolean showSearchMenuItem() {
         return false;
     }
+
 }
