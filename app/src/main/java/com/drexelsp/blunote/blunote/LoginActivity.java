@@ -1,5 +1,7 @@
 package com.drexelsp.blunote.blunote;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,10 +13,15 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 public class LoginActivity extends AppCompatActivity {
 
     final String TAG = "LoginActivity";
     private ClientServiceConnection connection = new ClientServiceConnection();
+    private ArrayList<BluetoothDevice> mDevices = new ArrayList<>();
+    private BluetoothScanner mBluetoothScanner = new BluetoothScanner(this, mDevices);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +53,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.v(TAG, "Fab2 Clicked");
-                connection.send("ConnectToNetwork");
+                mBluetoothScanner.startDiscovery();
+                //connection.send("ConnectToNetwork");
             }
         });
         Intent intent = new Intent(this, ClientService.class);

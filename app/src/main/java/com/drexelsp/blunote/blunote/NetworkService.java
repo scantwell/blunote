@@ -26,6 +26,7 @@ public class NetworkService extends Service {
     private Messenger messenger = new Messenger(new ClientHandler(this));
     private String TAG = "NetworkService";
     private int NOTIFICATION_ID = 1234;
+    private UUID uuid = UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a");
 
     public void onReceived(String data) {
         Log.v(TAG, "Received a message.");
@@ -48,7 +49,7 @@ public class NetworkService extends Service {
         bluetoothConnector.connectToDevice(device);
 
         // Add Server Listener
-        BluetoothServerListener bluetoothServerListener = new BluetoothServerListener(router, UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a"));
+        BluetoothServerListener bluetoothServerListener = new BluetoothServerListener(router, uuid);
 
         makeDiscoverable();
     }
@@ -56,14 +57,13 @@ public class NetworkService extends Service {
     public void startNetwork() {
         BlunoteRouter router = new BlunoteRouter();
 
-        BluetoothServerListener bluetoothServerListener = new BluetoothServerListener(router, UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a"));
+        BluetoothServerListener bluetoothServerListener = new BluetoothServerListener(router, uuid);
 
         makeDiscoverable();
     }
 
     public void getAvailableNetworks() {
-        BluetoothScanner bluetoothScanner = new BluetoothScanner(this);
-        bluetoothScanner.startDiscovery();
+
     }
 
     private void makeDiscoverable() {

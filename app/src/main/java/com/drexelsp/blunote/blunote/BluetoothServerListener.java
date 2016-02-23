@@ -15,30 +15,24 @@ import java.util.UUID;
  * Also creates a BluetoothBeacon and begins advertising
  */
 public class BluetoothServerListener {
+    private static final String TAG = "BluetoothServerListener";
     private static final String NAME = "BluNote";
-    private static final String TAG = "Bluetooth Server Listener";
     private final UUID MY_UUID;
 
     private BluetoothAdapter mBluetoothAdapter;
     private ServerThread mServerThread;
-    //private BluetoothBeacon mBluetoothBeacon;
     private BlunoteRouter mBlunoteRouter;
 
     public BluetoothServerListener(BlunoteRouter router, UUID uuid) {
+        Log.v(TAG, "Created");
         MY_UUID = uuid;
+
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mBlunoteRouter = router;
 
         mServerThread = new ServerThread();
         mServerThread.start();
-
-        //mBluetoothBeacon = new BluetoothBeacon();
-        //mBluetoothBeacon.advertiseBeacon();
     }
-
-    //public void updateAdvertiseData(String networkName, int userCount, int songCount, int latency) {
-    //    mBluetoothBeacon.updateAdvertiseData(networkName, userCount, songCount, latency);
-    //}
 
     private class ServerThread extends Thread {
         private static final String TAG = "Bluetooth Server Thread";

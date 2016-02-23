@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 /**
  * Created by omnia on 2/15/16.
+ *
+ * Router for Reading and Writing BlunoteSockets
  */
 public class BlunoteRouter extends Thread {
     private BlunoteSocket upStream;
@@ -26,6 +28,7 @@ public class BlunoteRouter extends Thread {
 
     public void run() {
         awake = true;
+        //noinspection InfiniteLoopStatement
         while(true) {
             // Read Message from UpStream
             if (upStream.numMessages() > 0) {
