@@ -21,16 +21,7 @@ abstract public class ClientService extends Service {
     // Sends to another application via bluetooth/etc
     protected void send(byte[] data) {
         Log.v(TAG, "Sending message.");
-        Message msg;
-        if (data == "StartNewNetwork") {
-            msg = Message.obtain(null, ClientHandler.START_NEW_NETWORK, 0, 0);
-        } else if (data == "DiscoverNetworks") {
-            msg = Message.obtain(null, ClientHandler.GET_AVAILABLE_NETWORKS, 0, 0);
-        } else if (data == "ConnectToNetwork") {
-            msg = Message.obtain(null, ClientHandler.CONNECT_TO_NETWORK, 0, 0);
-        } else {
-            msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
-        }
+        Message msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
         try {
             mConnection.send(msg);
         } catch (RemoteException e) {

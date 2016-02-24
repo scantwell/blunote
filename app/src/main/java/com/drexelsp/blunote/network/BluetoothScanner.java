@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import android.os.ParcelUuid;
 import android.util.Log;
 
+import com.drexelsp.blunote.ui.LoginActivity;
+
 import java.util.ArrayList;
 
 /**

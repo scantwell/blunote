@@ -12,7 +12,6 @@ import java.util.UUID;
  * Created by omnia on 1/13/16.
  *
  * Initializes a connection to a host device
- * TODO: Use a callback to send BlunoteBluetoothSocket back to network service
  */
 public class BluetoothConnector {
     private static final String TAG = "Bluetooth Manager";
