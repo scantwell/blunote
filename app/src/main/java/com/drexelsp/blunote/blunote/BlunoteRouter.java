@@ -1,6 +1,7 @@
 package com.drexelsp.blunote.blunote;
 
 import android.os.Message;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -10,12 +11,14 @@ import java.util.ArrayList;
  * Router for Reading and Writing BlunoteSockets
  */
 public class BlunoteRouter extends Thread {
+    private static final String TAG = "Blunote Router";
     private BlunoteSocket upStream;
     private ArrayList<BlunoteSocket> downStream;
     private boolean awake;
 
     public BlunoteRouter() {
-
+        Log.v(TAG, "Created");
+        downStream = new ArrayList<>();
     }
 
     public void setUpStream(BlunoteSocket socket) {
@@ -27,6 +30,7 @@ public class BlunoteRouter extends Thread {
     }
 
     public void run() {
+        Log.v(TAG, "Thread Started");
         awake = true;
         //noinspection InfiniteLoopStatement
         while(true) {
@@ -50,7 +54,9 @@ public class BlunoteRouter extends Thread {
                 }
             }
 
+            Log.v(TAG, "Going to sleep now");
             napTime();
+            Log.v(TAG, "Waking up to do work");
         }
     }
 
