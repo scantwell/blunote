@@ -2,7 +2,6 @@ package com.drexelsp.blunote.ui;
 
 import java.util.ArrayList;
 
-import com.drexelsp.blunote.BlunoteMessages;
 import com.drexelsp.blunote.adapters.NetworkArrayAdapter;
 import com.drexelsp.blunote.beans.ConnectionListItem;
 import com.drexelsp.blunote.blunote.Constants;
@@ -15,6 +14,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -53,6 +53,9 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
 
         joinNetworkButton = (Button) findViewById(R.id.join_network_button);
         createNetworkButton = (Button) findViewById(R.id.create_network_button);
+
+        joinNetworkButton.setOnClickListener(this);
+        createNetworkButton.setOnClickListener(this);
 
         Intent intent = new Intent(this, Service.class);
         startService(intent);
@@ -107,9 +110,8 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if(v == joinNetworkButton) {
-            mService.sendRequest("mediaId", BlunoteMessages.Recommendation.Type.ALBUM);
-            /*Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
-            startActivity(intent);*/
+            Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
+            startActivity(intent);
         }
         else if (v == createNetworkButton){
             Intent intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);

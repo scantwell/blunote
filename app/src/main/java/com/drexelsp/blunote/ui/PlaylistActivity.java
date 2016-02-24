@@ -25,9 +25,6 @@ public class PlaylistActivity extends BaseBluNoteActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         list = new String[20];
         for(int i = 0; i < 20; ++i)

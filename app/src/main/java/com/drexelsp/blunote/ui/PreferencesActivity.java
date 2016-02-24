@@ -20,9 +20,6 @@ public class PreferencesActivity extends BaseBluNoteActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         leaveNetworkButton = (Button) findViewById(R.id.leave_network_button);
         leaveNetworkButton.setOnClickListener(new View.OnClickListener() {

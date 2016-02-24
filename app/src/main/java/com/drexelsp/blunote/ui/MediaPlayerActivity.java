@@ -35,9 +35,6 @@ public class MediaPlayerActivity extends BaseBluNoteActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         playlistFAB = (FloatingActionButton) findViewById(R.id.playlist_FAB);
         playlistFAB.setOnClickListener(new View.OnClickListener() {
