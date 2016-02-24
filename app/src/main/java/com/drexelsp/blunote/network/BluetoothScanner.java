@@ -17,47 +17,45 @@ import java.util.ArrayList;
  * Created by omnia on 2/21/16.
  *
  */
-public class BluetoothScanner {
+public class BluetoothScanner extends BroadcastReceiver {
     private static final String TAG = "Bluetooth Scanner";
     private BluetoothAdapter mBluetoothAdapter;
-    private LoginActivity mLoginActivity;
+    private Context context;
     private ArrayList<BluetoothDevice> mDevices;
 
-    public BluetoothScanner(LoginActivity loginActivity, ArrayList<BluetoothDevice> devices) {
+    public BluetoothScanner(Context context, ArrayList<BluetoothDevice> devices) {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mLoginActivity = loginActivity;
         mDevices = devices;
+        this.context = context;
     }
 
     public boolean startDiscovery() {
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        mLoginActivity.registerReceiver(mReceiver, filter);
+        context.registerReceiver(this, filter);
         return mBluetoothAdapter.startDiscovery();
     }
 
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                Log.v(TAG, "Found Device: " + device.getName());
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            Log.v(TAG, "Found Device: " + device.getName());
 
-                if (device.getUuids() != null) {
-                    for (ParcelUuid uuid : device.getUuids()) {
-                        if (uuid.toString().equals("d0153a8f-b137-4fb2-a5be-6788ece4834a")) {
-                            Log.v(TAG, "Blunote UUID Found");
+            if (device.getUuids() != null) {
+                for (ParcelUuid uuid : device.getUuids()) {
+                    if (uuid.toString().equals("d0153a8f-b137-4fb2-a5be-6788ece4834a")) {
+                        Log.v(TAG, "Blunote UUID Found");
 
-                            // Initiate Connection for Welcome Packet
-                            // DO THIS PART
+                        // Initiate Connection for Welcome Packet
+                        // DO THIS PART
 
-                            // Add Device, To be replaced with some sort of Network Object class
-                            mDevices.add(device);
-                            break;
-                        }
+                        // Add Device, To be replaced with some sort of Network Object class
+                        mDevices.add(device);
+                        break;
                     }
                 }
             }
         }
-    };
+    }
 }
