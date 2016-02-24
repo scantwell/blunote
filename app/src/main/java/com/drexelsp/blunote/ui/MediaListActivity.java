@@ -43,6 +43,9 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
         albumsToggle = (ToggleButton) findViewById(R.id.albums_toggle);
         artistsToggle = (ToggleButton) findViewById(R.id.artists_toggle);
 
+        songsToggle.setOnCheckedChangeListener(this);
+        albumsToggle.setOnCheckedChangeListener(this);
+        artistsToggle.setOnCheckedChangeListener(this);
     }
 
     @Override
