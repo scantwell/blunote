@@ -57,25 +57,24 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         Intent intent;
-        if (vf.getDisplayedChild() != getViewConstant()) {
-            //noinspection SimplifiableIfStatement
-            if (id == R.id.action_network) {
-                intent = new Intent(getCurrentContext(), NetworkSettingsActivity.class);
-                startActivity(intent);
-                return true;
-            } else if (id == R.id.action_preferences) {
-                intent = new Intent(getCurrentContext(), PreferencesActivity.class);
-                startActivity(intent);
-                return true;
-            } else if (id == R.id.action_songList) {
-                intent = new Intent(getCurrentContext(), MediaListActivity.class);
-                startActivity(intent);
-                return true;
-            } else if (id == R.id.action_mediaControl) {
-                intent = new Intent(getCurrentContext(), MediaPlayerActivity.class);
-                startActivity(intent);
-                return true;
-            }
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_network) {
+            intent = new Intent(getCurrentContext(), NetworkSettingsActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.action_preferences) {
+            intent = new Intent(getCurrentContext(), PreferencesActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.action_songList) {
+            intent = new Intent(getCurrentContext(), MediaListActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.action_mediaControl) {
+            intent = new Intent(getCurrentContext(), MediaPlayerActivity.class);
+            startActivity(intent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

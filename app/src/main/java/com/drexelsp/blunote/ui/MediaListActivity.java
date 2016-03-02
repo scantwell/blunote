@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -99,10 +100,9 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
         for (int i = 1; i < 20; ++i)
             list.add("Song " + i);
         setSimpleList(mediaList, list);
-        mediaList.setOnClickListener(new View.OnClickListener() {
+        mediaList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                //This is where the drilling down occurs, for now it simply shows a default song view
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 startActivity(SongViewActivity.class);
             }
         });
@@ -117,10 +117,9 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
         for (int i = 1; i < 20; ++i)
             list.add("Album " + i);
         setSimpleList(mediaList, list);
-        mediaList.setOnClickListener(new View.OnClickListener() {
+        mediaList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                //This is where the drilling down occurs, for now it simply shows a default album view
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 startActivity(AlbumViewActivity.class);
             }
         });
@@ -135,10 +134,9 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
         for (int i = 1; i < 20; ++i)
             list.add("Artist " + i);
         setSimpleList(mediaList, list);
-        mediaList.setOnClickListener(new View.OnClickListener() {
+        mediaList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                //This is where the drilling down occurs, for now it simply shows a default artist view
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 startActivity(ArtistViewActivity.class);
             }
         });
