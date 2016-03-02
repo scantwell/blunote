@@ -33,47 +33,12 @@
         <ListView
             android:id="@+id/playlist_list"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="400dp"
             android:layout_gravity="center_horizontal" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="25dp" />
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <ToggleButton
-                android:id="@+id/artists_toggle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:checked="false"
-                android:textOn="@string/artists"
-                android:textOff="@string/artists"/>
-
-            <ToggleButton
-                android:id="@+id/albums_toggle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.34"
-                android:checked="false"
-                android:textOn="@string/albums"
-                android:textOff="@string/albums"/>
-
-            <ToggleButton
-                android:id="@+id/songs_toggle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:checked="true"
-                android:textOn="@string/songs"
-                android:textOff="@string/songs"/>
-
-        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
