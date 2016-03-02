@@ -5,10 +5,12 @@ import java.util.List;
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +32,8 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        handleIntent(getIntent());
+
         vf = ((ViewFlipper) findViewById(R.id.view_flipper));
         vf.setDisplayedChild(getViewConstant());
     }
@@ -45,8 +49,20 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity
         menu.getItem(Constants.MENU_ITEM_MEDIA_PLAYER)
                 .setVisible(showMusicMenuItems());
 
-        menu.getItem(Constants.MENU_ITEM_SEARCH)
-                .setVisible(showSearchMenuItem());
+        if(showSearchMenuItem()) {
+            menu.getItem(Constants.MENU_ITEM_SEARCH)
+                    .setVisible(true);
+
+            // Associate searchable configuration with the SearchView
+            SearchManager searchManager =
+                    (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            SearchView searchView =
+                    (SearchView) menu.findItem(R.id.action_search).getActionView();
+            searchView.setSearchableInfo(
+                    searchManager.getSearchableInfo(getComponentName()));
+        }
+        menu.getItem(Constants.MENU_ITEM_SETTINGS)
+                .setVisible(showSettingsCog());
         return true;
     }
 
@@ -85,6 +101,16 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity
         ArrayAdapter adapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, list);
         listView.setAdapter(adapter);
+    }
+
+    public boolean showSettingsCog()
+    {
+        return true;
+    }
+
+    public void handleIntent(Intent intent)
+    {
+
     }
 
     public abstract Context getCurrentContext();
