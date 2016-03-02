@@ -24,6 +24,7 @@ import android.widget.ViewFlipper;
 public abstract class BaseBluNoteActivity extends AppCompatActivity
 {
     ViewFlipper vf;
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +51,17 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity
                 .setVisible(showMusicMenuItems());
 
         if(showSearchMenuItem()) {
-            menu.getItem(Constants.MENU_ITEM_SEARCH)
-                    .setVisible(true);
+            menu.getItem(Constants.MENU_ITEM_SEARCH).setVisible(true);
 
             // Associate searchable configuration with the SearchView
-            SearchManager searchManager =
-                    (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-            SearchView searchView =
-                    (SearchView) menu.findItem(R.id.action_search).getActionView();
-            searchView.setSearchableInfo(
-                    searchManager.getSearchableInfo(getComponentName()));
+            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         }
+
         menu.getItem(Constants.MENU_ITEM_SETTINGS)
                 .setVisible(showSettingsCog());
+
         return true;
     }
 
@@ -94,6 +93,11 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
     }
 
     protected void setSimpleList(ListView listView, List<String> list)

@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +25,6 @@ import android.widget.ListView;
 
 public class LoginActivity extends BaseBluNoteActivity implements View.OnClickListener, ServiceConnection
 {
-
     Button joinNetworkButton;
     Button createNetworkButton;
     ListView networkListView;
@@ -105,6 +105,15 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
 
             adapter = new NetworkArrayAdapter(this, connectionList);
             networkListView.setAdapter(adapter);
+            SearchView.OnCloseListener closeListener = new SearchView.OnCloseListener(){
+                @Override
+                public boolean onClose() {
+                    adapter = new NetworkArrayAdapter(adapter.getContext(), getCurrentAvailableNetworks());
+                    networkListView.setAdapter(adapter);
+                    return false;
+                }
+            };
+            searchView.setOnCloseListener(closeListener);
         }
     }
 
