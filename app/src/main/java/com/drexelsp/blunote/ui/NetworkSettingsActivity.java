@@ -48,7 +48,7 @@ public class NetworkSettingsActivity extends BaseBluNoteActivity implements View
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(NetworkSettingsActivity.this, LoginActivity.class);
+        Intent intent = new Intent(NetworkSettingsActivity.this, MediaPlayerActivity.class);
         startActivity(intent);
     }
 }
