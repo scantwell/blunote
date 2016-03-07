@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 
 import android.os.Parcelable;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import com.drexelsp.blunote.adapters.NetworkArrayAdapter;
 import com.drexelsp.blunote.beans.ConnectionListItem;
@@ -29,17 +30,16 @@ public class BluetoothScanner extends BroadcastReceiver {
     private static final String TAG = "Bluetooth Scanner";
     private BluetoothAdapter mBluetoothAdapter;
     private Context mContext;
-    private NetworkArrayAdapter mAdapter;
+    private ArrayAdapter<ConnectionListItem> mAdapter;
     private ArrayList<BluetoothDevice> mDevices;
     private Set<Integer> whiteList;
 
-    public BluetoothScanner(Context context, NetworkArrayAdapter adapter) {
+    public BluetoothScanner(Context context, ArrayAdapter<ConnectionListItem> adapter) {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mAdapter = adapter;
         mContext = context;
 
         mDevices = new ArrayList<>();
-
         whiteList = new HashSet<>();
         // Add Other Devices?
         whiteList.add(BluetoothClass.Device.PHONE_SMART);
@@ -67,10 +67,8 @@ public class BluetoothScanner extends BroadcastReceiver {
 
             // Valid Device
             if (name != null && address != null) {
-
                 // Device Class White List
                 if (whiteList.contains(bluetoothClass)) {
-                    
                     if (!mDevices.contains(device)) {
                         mDevices.add(device);
                     }
@@ -101,8 +99,6 @@ public class BluetoothScanner extends BroadcastReceiver {
                         item.setMacAddress(device.getAddress());
                         item.setTotalConnections(1);
                         item.setTotalSongs(1);
-                        mAdapter.add(item);
-                        // Double Add for Debugging
                         mAdapter.add(item);
                         break;
                     }
