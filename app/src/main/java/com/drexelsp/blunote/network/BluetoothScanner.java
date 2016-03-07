@@ -47,12 +47,18 @@ public class BluetoothScanner extends BroadcastReceiver {
     }
 
     public boolean startDiscovery() {
-        Log.v(TAG, "Discovery Initiated");
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        filter.addAction(BluetoothDevice.ACTION_UUID);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        mContext.registerReceiver(this, filter);
-        return mBluetoothAdapter.startDiscovery();
+        if (mBluetoothAdapter.isDiscovering()) {
+            Log.v(TAG, "Discovery Already Running, ignoring request");
+            return false;
+        } else {
+            Log.v(TAG, "Discovery Initiated");
+            IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+            filter.addAction(BluetoothDevice.ACTION_UUID);
+            filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+            mContext.registerReceiver(this, filter);
+            return mBluetoothAdapter.startDiscovery();
+        }
+
     }
 
     @Override
