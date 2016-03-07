@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -32,9 +34,11 @@
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="325dp"
+            android:layout_height="300dp"
             android:id="@+id/connection_list"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:choiceMode="singleChoice"
+            android:listSelector="@drawable/list_selector"/>
 
         <Button
             android:layout_width="fill_parent"
@@ -50,6 +54,13 @@
             android:id="@+id/create_network_button"
             android:layout_gravity="center_horizontal" />
 
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Refresh"
+            android:id="@+id/refresh_button"
+            android:layout_gravity="center_horizontal" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,3 +71,5 @@
     </LinearLayout>
 
 </RelativeLayout>
+
+

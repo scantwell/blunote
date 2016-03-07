@@ -56,6 +56,14 @@ public class Service extends ClientService {
         }
     }
 
+    public void startNetwork() {
+        super.startNetwork();
+    }
+
+    public void connectToNetwork(String macAddress) {
+        super.connectToNetwork(macAddress);
+    }
+
     public void send(SingleAnswer message) {
         Pdu pdu = createMessage()
                 .setMessage(WrapperMessage.newBuilder()

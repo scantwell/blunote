@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
@@ -22,6 +23,29 @@ abstract public class ClientService extends Service {
     protected void send(byte[] data) {
         Log.v(TAG, "Sending message.");
         Message msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
+        try {
+            mConnection.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void startNetwork() {
+        Log.v(TAG, "Starting Network.");
+        Message msg = Message.obtain(null, ClientHandler.START_NEW_NETWORK, 0, 0);
+        try {
+            mConnection.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void connectToNetwork(String macAddress) {
+        Log.v(TAG, String.format("Connecting To Network %s", macAddress));
+        Message msg = Message.obtain(null, ClientHandler.CONNECT_TO_NETWORK, 0, 0);
+        Bundle bundle = new Bundle(1);
+        bundle.putString("MacAddress", macAddress);
+        msg.setData(bundle);
         try {
             mConnection.send(msg);
         } catch (RemoteException e) {

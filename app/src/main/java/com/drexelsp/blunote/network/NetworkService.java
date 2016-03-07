@@ -28,6 +28,7 @@ public class NetworkService extends Service {
     private String TAG = "NetworkService";
     private int NOTIFICATION_ID = 1234;
     private UUID uuid = UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a");
+    private BluetoothServerListener mBluetoothServerListener;
 
     public void onReceived(String data) {
         Log.v(TAG, "Received a message.");
@@ -58,7 +59,7 @@ public class NetworkService extends Service {
     public void startNetwork() {
         BlunoteRouter router = new BlunoteRouter();
 
-        BluetoothServerListener bluetoothServerListener = new BluetoothServerListener(router, uuid);
+        mBluetoothServerListener = new BluetoothServerListener(router, uuid);
 
         makeDiscoverable();
     }
@@ -98,6 +99,9 @@ public class NetworkService extends Service {
 
     @Override
     public void onDestroy() {
+        if (mBluetoothServerListener != null) {
+            mBluetoothServerListener.shutdown();
+        }
         Log.v(TAG, "Destroyed service.");
     }
 

@@ -1,5 +1,6 @@
 package com.drexelsp.blunote.network;
 
+import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import android.os.Handler;
@@ -41,7 +42,9 @@ public class ClientHandler extends Handler {
                 break;
             case CONNECT_TO_NETWORK:
                 Log.v(TAG, "Connect To Network");
-                mService.get().connectToNetwork("Some Device!");
+                Bundle data = msg.getData();
+                String macAddress = data.getString("MacAddress");
+                mService.get().connectToNetwork(macAddress);
                 break;
             case START_NEW_NETWORK:
                 Log.v(TAG, "Starting New Network");

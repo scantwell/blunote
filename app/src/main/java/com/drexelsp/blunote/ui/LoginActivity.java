@@ -7,6 +7,7 @@ import com.drexelsp.blunote.beans.ConnectionListItem;
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.blunote.Service;
+import com.drexelsp.blunote.network.BluetoothScanner;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -24,11 +25,14 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
 
     Button joinNetworkButton;
     Button createNetworkButton;
+    Button refreshButton;
     ListView networkListView;
 
     final String TAG = "LoginActivity";
     private Service mService = null;
     boolean mBound;
+    private BluetoothScanner mScanner;
+    private NetworkArrayAdapter mAdapter;
 
     public void onServiceConnected(ComponentName className, IBinder service) {
         // This is called when the connection with the service has been
@@ -53,9 +57,11 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
 
         joinNetworkButton = (Button) findViewById(R.id.join_network_button);
         createNetworkButton = (Button) findViewById(R.id.create_network_button);
+        refreshButton = (Button) findViewById(R.id.refresh_button);
 
         joinNetworkButton.setOnClickListener(this);
         createNetworkButton.setOnClickListener(this);
+        refreshButton.setOnClickListener(this);
 
         Intent intent = new Intent(this, Service.class);
         startService(intent);
@@ -68,8 +74,13 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
 
         //Make Call to load networks
         networkListView = (ListView) findViewById(R.id.connection_list);
-        NetworkArrayAdapter adapter = new NetworkArrayAdapter(this, getCurrentAvailableNetworks());
-        networkListView.setAdapter(adapter);
+        ArrayList<ConnectionListItem> mNetworks = new ArrayList<>();
+        mAdapter = new NetworkArrayAdapter(this, mNetworks);
+        networkListView.setAdapter(mAdapter);
+
+        // Launch Scanner
+        mScanner = new BluetoothScanner(getCurrentContext(), mAdapter);
+        mScanner.startDiscovery();
 
         //dialog.hide();
 
@@ -110,12 +121,35 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if(v == joinNetworkButton) {
+            if (mBound && mService != null) {
+                // Get Selected Network
+                ConnectionListItem network = mAdapter.getItem(networkListView.getCheckedItemPosition());
+                // Extract Mac Address
+                String macAddress = network.getMacAddress();
+                // Call Connect To Network
+                mService.connectToNetwork(macAddress);
+            }
             Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
             startActivity(intent);
         }
         else if (v == createNetworkButton){
-            Intent intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);
-            startActivity(intent);
+            if (mBound && mService != null) {
+                // Call Start Network
+                mService.startNetwork();
+                // Wait for success callback?
+                // Start Media Player Activity
+                Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
+                startActivity(intent);
+            } else {
+                Log.v(TAG, "Failed to start network, service not bound.");
+            }
+            // Temp commented out
+            //Intent intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);
+            //startActivity(intent);
+        }
+        else if (v == refreshButton) {
+            mAdapter.clear();
+            mScanner.startDiscovery();
         }
     }
 
