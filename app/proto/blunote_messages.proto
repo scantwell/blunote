@@ -4,7 +4,7 @@
 */
 package blunote;
 
-option java_package = "com.drexelsp.blunote";
+option java_package = "com.drexelsp.blunote.blunote";
 option java_outer_classname = "BlunoteMessages";
 
 
@@ -20,7 +20,7 @@ message Song {
 /**
 * Message that represents an album of an artist
 */
-message Albums {
+message Album {
 	repeated Song songs = 1; /// A list of songs on the album
 	optional string release_date = 2; /// Release date of the album
 	optional bytes image = 3; /// Album cover
@@ -30,8 +30,8 @@ message Albums {
 /**
 * Message that represents an artist
 */
-message Artists {
-	repeated Albums albums = 1; /// A list of albums from the artist
+message Artist {
+	repeated Album albums = 1; /// A list of albums from the artist
 	required string name = 2; /// Name of the artist
 	required int64 artist_id = 3; /// Owners database ID
 }
@@ -41,7 +41,7 @@ message Artists {
 */
 message MetadataUpdate {
 	enum Action { ADD = 1; REMOVE = 2;} ///Whether the metadata should be added or removed from a list
-	repeated Artists artists = 1; /// A list of artists to update
+	repeated Artist artists = 1; /// A list of artists to update
 	required string owner = 2; /// The user that can supply the song data
 	required Action action = 3; /// To add or remove the songs from the database
 }
@@ -96,7 +96,7 @@ message Recommendation {
 */
 message SongRequest {
 	required string username = 1; /// Unique user name of the song holder
-	required in64 songId = 2;   /// ID of the song that is in the username (owners) database
+	required int64 songId = 2;   /// ID of the song that is in the username (owners) database
 }
 
 /**
