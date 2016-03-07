@@ -7,6 +7,45 @@ package blunote;
 option java_package = "com.drexelsp.blunote";
 option java_outer_classname = "BlunoteMessages";
 
+
+/**
+* Message that represents a song that can be played
+*/
+message Song {
+	required string title = 1; /// Song title
+	required string length = 2; /// Length of the song
+	required int64 song_id = 3; /// Owners database ID
+}
+
+/**
+* Message that represents an album of an artist
+*/
+message Albums {
+	repeated Song songs = 1; /// A list of songs on the album
+	optional string release_date = 2; /// Release date of the album
+	optional bytes image = 3; /// Album cover
+	required int64 album_id = 4; /// Owners database ID
+}
+
+/**
+* Message that represents an artist
+*/
+message Artists {
+	repeated Albums albums = 1; /// A list of albums from the artist
+	required string name = 2; /// Name of the artist
+	required int64 artist_id = 3; /// Owners database ID
+}
+
+/**
+* Message used to add or remove artists, albums, and songs from the available song list
+*/
+message MetadataUpdate {
+	enum Action { ADD = 1; REMOVE = 2;} ///Whether the metadata should be added or removed from a list
+	repeated Artists artists = 1; /// A list of artists to update
+	required string owner = 2; /// The user that can supply the song data
+	required Action action = 3; /// To add or remove the songs from the database
+}
+
 /**
 *
 */
@@ -44,10 +83,12 @@ message MultiAnswer {
 * This message is used to recommend an artist, album, song, or genre to be played in the future
 */
 message Recommendation {
-	enum Type {  ARTIST = 1; ALBUM = 2; SONG = 3; GENRE = 4;}
+	enum Type {  ARTIST = 1; ALBUM = 2; SONG = 3;}
 	required string username = 1;
 	required Type type = 2;
-	required string mediaId = 3; // Host data reference key
+	optional Artist artist = 3;
+	optional Album album = 4;
+	optional Song song = 5;
 }
 
 /**
@@ -55,7 +96,7 @@ message Recommendation {
 */
 message SongRequest {
 	required string username = 1; /// Unique user name of the song holder
-	required string songId = 2;   /// Song ID defined in the host database
+	required in64 songId = 2;   /// ID of the song that is in the username (owners) database
 }
 
 /**
