@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ public class AlbumViewActivity extends BaseBluNoteActivity
         for(int i = 1; i < 20; ++i)
             list.add("Track " + i);
 
+        trackList = (ListView) findViewById(R.id.album_track_list);
         setSimpleList(trackList, list);
     }
 

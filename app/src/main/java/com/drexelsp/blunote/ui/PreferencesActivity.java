@@ -13,7 +13,7 @@ import android.widget.Button;
 /**
  * Activity for the Settings/Preferences page
  */
-public class PreferencesActivity extends BaseBluNoteActivity
+public class PreferencesActivity extends BaseBluNoteActivity implements View.OnClickListener
 {
     Button leaveNetworkButton;
 
@@ -22,13 +22,7 @@ public class PreferencesActivity extends BaseBluNoteActivity
         super.onCreate(savedInstanceState);
 
         leaveNetworkButton = (Button) findViewById(R.id.leave_network_button);
-        leaveNetworkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PreferencesActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
+        leaveNetworkButton.setOnClickListener(this);
     }
 
     @Override
@@ -51,4 +45,9 @@ public class PreferencesActivity extends BaseBluNoteActivity
         return false;
     }
 
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(PreferencesActivity.this, LoginActivity.class);
+        startActivity(intent);
+    }
 }
