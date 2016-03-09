@@ -22,10 +22,12 @@ public class BlunoteRouter extends Thread {
     }
 
     public void setUpStream(BlunoteSocket socket) {
+        Log.v(TAG, "New Up Stream Set");
         upStream = socket;
     }
 
     public void addDownStream(BlunoteSocket socket) {
+        Log.v(TAG, "New Down Stream Added");
         downStream.add(socket);
     }
 

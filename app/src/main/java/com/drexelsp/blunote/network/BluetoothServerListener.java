@@ -34,6 +34,12 @@ public class BluetoothServerListener {
         mServerThread.start();
     }
 
+    public void shutdown() {
+        Log.v(TAG, "Shutting Down");
+        mServerThread.interrupt();
+        mServerThread.cancel();
+    }
+
     private class ServerThread extends Thread {
         private static final String TAG = "Bluetooth Server Thread";
         private final BluetoothServerSocket mmServerSocket;
@@ -52,6 +58,7 @@ public class BluetoothServerListener {
             BluetoothSocket socket;
             while(true) {
                 try {
+                    Log.v(TAG, "Listening for new connection");
                     socket = mmServerSocket.accept();
                     if (socket != null) {
                         BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(socket, mBlunoteRouter);

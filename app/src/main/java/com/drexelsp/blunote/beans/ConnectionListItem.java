@@ -7,6 +7,9 @@ public class ConnectionListItem {
     private String connectionName;
     private int totalConnections;
     private int totalSongs;
+    // Temp
+    private String macAddress;
+
 
     public String getConnectionName()
     {
@@ -32,5 +35,13 @@ public class ConnectionListItem {
 
     public void setTotalSongs(int totalSongs) {
         this.totalSongs = totalSongs;
+    }
+
+    public String getMacAddress() {
+        return this.macAddress;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
     }
 }
