@@ -1,6 +1,8 @@
 package com.drexelsp.blunote.ui;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import com.drexelsp.blunote.adapters.NetworkArrayAdapter;
 import com.drexelsp.blunote.beans.ConnectionListItem;
@@ -9,12 +11,14 @@ import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.blunote.Service;
 import com.drexelsp.blunote.network.BluetoothScanner;
 
+import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +31,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     Button createNetworkButton;
     Button refreshButton;
     ListView networkListView;
+    NetworkArrayAdapter adapter;
 
     final String TAG = "LoginActivity";
     private Service mService = null;
@@ -84,6 +89,42 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
 
         //dialog.hide();
 
+    }
+
+    @Override
+    public boolean showSettingsCog() {
+        return false;
+    }
+
+    @Override
+    public void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            networkListView = (ListView) findViewById(R.id.connection_list);
+            //use the query to search your data somehow
+            ArrayList<ConnectionListItem> connectionList = getCurrentAvailableNetworks();
+            Iterator<ConnectionListItem> i = connectionList.iterator();
+            while(i.hasNext())
+            {
+                ConnectionListItem item = i.next();
+                if(!item.getConnectionName().contains(query))
+                {
+                    i.remove();
+                }
+            }
+
+            adapter = new NetworkArrayAdapter(this, connectionList);
+            networkListView.setAdapter(adapter);
+            SearchView.OnCloseListener closeListener = new SearchView.OnCloseListener(){
+                @Override
+                public boolean onClose() {
+                    adapter = new NetworkArrayAdapter(adapter.getContext(), getCurrentAvailableNetworks());
+                    networkListView.setAdapter(adapter);
+                    return false;
+                }
+            };
+            searchView.setOnCloseListener(closeListener);
+        }
     }
 
     @Override
