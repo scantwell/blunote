@@ -40,7 +40,7 @@ message Album {
 message Artist {
 	required string artist = 1; /// Name of the artist
 	required int32 number_of_albums = 2; /// The number of albums in the database for this artist
-	required int32 numb_of_tracks = 3; /// The number of albums in the database for this artist
+	required int32 number_of_tracks = 3; /// The number of albums in the database for this artist
 	required int64 artist_id = 4; /// Owners database ID
 }
 
@@ -51,7 +51,7 @@ message MetadataUpdate {
 	enum Action { ADD = 1; REMOVE = 2;} ///Whether the metadata should be added or removed from a list
 
 	required Action action = 1; /// To add or remove the songs from the database
-	repeated Albums albums = 2; /// A list of albums to update
+	repeated Album albums = 2; /// A list of albums to update
 	repeated Artist artists = 3; /// A list of artists to update
 	required string owner = 4; /// The user that can supply the song data
 	repeated Song songs = 5; /// A list of songs to update
