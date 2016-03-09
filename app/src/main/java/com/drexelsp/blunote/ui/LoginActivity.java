@@ -83,10 +83,11 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             ArrayList<ConnectionListItem> mNetworks = new ArrayList<>();
             mAdapter = new NetworkArrayAdapter(this, mNetworks);
             networkListView.setAdapter(mAdapter);
+
+            // Launch Scanner
+            mScanner = new BluetoothScanner(getCurrentContext(), mAdapter);
+            mScanner.startDiscovery();
         }
-        // Launch Scanner
-        mScanner = new BluetoothScanner(getCurrentContext(), mAdapter);
-        mScanner.startDiscovery();
 
         //dialog.hide();
 
