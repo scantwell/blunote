@@ -57,7 +57,7 @@ public class MediaPlayer implements MessageHandler {
             albumsBuilder.setAlbum(cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM)));
             albumsBuilder.setAlbumArt(cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART)));
             albumsBuilder.setAlbumId(Integer.parseInt(cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ID))));
-            albumsBuilder.setArtist(cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ARTIST));
+            albumsBuilder.setArtist(cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ARTIST)));
             albumsBuilder.setFirstYear(cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.FIRST_YEAR)));
             albumsBuilder.setLastYear(cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.LAST_YEAR)));
             albumsBuilder.setNumberOfSongs(cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS)));
