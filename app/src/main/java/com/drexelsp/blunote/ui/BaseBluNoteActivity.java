@@ -32,8 +32,9 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (!Intent.ACTION_SEARCH.equals(getIntent().getAction()))
+        if (!Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             handleIntent(getIntent());
+        }
 
         vf = ((ViewFlipper) findViewById(R.id.view_flipper));
         vf.setDisplayedChild(getViewConstant());
