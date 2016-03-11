@@ -21,14 +21,6 @@
             android:exported="false"
             android:name=".Service"
             />
-        <provider
-            android:name="com.drexelsp.blunote.provider.MetaStore"
-            android:authorities="com.drexelsp.blunote.blunote.metastore"
-            android:exported="false"
-            android:grantUriPermissions="true"
-            android:label="MetaStore"
-            android:readPermission="com.drexelsp.blunote.blunote.metastore.READ"
-            android:writePermission="com.drexelsp.blunote.blunote.metastore.WRITE" />
         <activity
             android:name="com.drexelsp.blunote.ui.LoginActivity"
             android:label="@string/login_activity"

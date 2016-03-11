@@ -30,6 +30,12 @@ public class MediaPlayer implements MessageHandler {
     public MediaPlayer(ContentResolver cResolver)
     {
         this.mContentResolver = cResolver;
+        /* Debugging Code
+        MetadataUpdate metadataUpdate = this.getMetadata();
+        Log.v(TAG, metadataUpdate.toString());
+        Log.v(TAG, String.format("Metadata Bytes %d", metadataUpdate.toByteArray().length));
+        Log.v(TAG, String.format("Number of songs %d", metadataUpdate.getSongsCount()));
+        */
     }
 
     private Cursor getAlbumcursor()
@@ -37,7 +43,7 @@ public class MediaPlayer implements MessageHandler {
         final Uri uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
         final String album = MediaStore.Audio.Albums.ALBUM;
         final String album_art = MediaStore.Audio.Albums.ALBUM_ART;
-        final String album_id = MediaStore.Audio.Albums.ALBUM_ID;
+        final String album_id = MediaStore.Audio.Albums._ID;
         final String artist = MediaStore.Audio.Albums.ARTIST;
         final String first_year = MediaStore.Audio.Albums.FIRST_YEAR;
         final String last_year = MediaStore.Audio.Albums.LAST_YEAR;
@@ -57,19 +63,19 @@ public class MediaPlayer implements MessageHandler {
         {
             album = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
             album_art = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
-            album_id = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ID));
+            album_id = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums._ID));
             artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ARTIST));
             first_year = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.FIRST_YEAR));
             last_year = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.LAST_YEAR));
             num_of_songs = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS));
 
-            album = album.equals(null) ? "" : album;
-            album_art = album_art.equals(null) ? "" : album_art;
-            album_id = album_id.equals(null) ? "-1" : album_id;
-            artist = artist.equals(null) ? "" : artist;
-            first_year = first_year.equals(null) ? "" : first_year;
-            last_year = last_year.equals(null) ? "" : last_year;
-            num_of_songs = num_of_songs.equals(null) ? "" : num_of_songs;
+            album = album == null ? "" : album;
+            album_art = album_art == null ? "" : album_art;
+            album_id = album_id == null ? "-1" : album_id;
+            artist = artist == null ? "" : artist;
+            first_year = first_year == null ? "" : first_year;
+            last_year = last_year == null ? "" : last_year;
+            num_of_songs = num_of_songs == null ? "" : num_of_songs;
 
             albumsBuilder.setAlbum(album);
             albumsBuilder.setAlbumArt(album_art);
@@ -104,14 +110,14 @@ public class MediaPlayer implements MessageHandler {
         while(cur.moveToNext())
         {
             artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-            artist_id = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
+            artist_id = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media._ID));
             number_of_albums = cur.getString(cur.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS));
             number_of_track = cur.getString(cur.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_TRACKS));
 
-            artist = artist.equals(null) ? "" : artist;
-            artist_id = artist_id.equals(null) ? "-1" : artist_id;
-            number_of_albums = number_of_albums.equals(null) ? "" : number_of_albums;
-            number_of_track = number_of_track.equals(null) ? "" : number_of_track;
+            artist = artist == null ? "" : artist;
+            artist_id = artist_id == null ? "-1" : artist_id;
+            number_of_albums = number_of_albums == null ? "" : number_of_albums;
+            number_of_track = number_of_track == null ? "" : number_of_track;
 
             artistsBuilder.setArtist(artist);
             artistsBuilder.setArtistId(Integer.parseInt(artist_id));
@@ -154,13 +160,13 @@ public class MediaPlayer implements MessageHandler {
             track = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TRACK));
             year = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.YEAR));
 
-            album_id = album_id.equals(null) ? "-1" : album_id;
-            artist_id = artist_id.equals(null) ? "-1" : artist_id;
-            duration = duration.equals(null) ? "" : duration;
-            song_id = song_id.equals(null) ? "-1" : song_id;
-            title = title.equals(null) ? "" : title;
-            track = track.equals(null) ? "" : track;
-            year = year.equals(null) ? "" : year;
+            album_id = album_id == null ? "-1" : album_id;
+            artist_id = artist_id == null ? "-1" : artist_id;
+            duration = duration == null ? "" : duration;
+            song_id = song_id == null ? "-1" : song_id;
+            title = title == null ? "" : title;
+            track = track == null ? "" : track;
+            year = year == null ? "" : year;
 
             songBuilder.setAlbumId(Integer.parseInt(album_id));
             songBuilder.setArtistId(Integer.parseInt(artist_id));
