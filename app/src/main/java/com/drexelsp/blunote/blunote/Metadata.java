@@ -23,13 +23,13 @@ public class Metadata implements MessageHandler {
     @Override
     public boolean processMessage(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.WrapperMessage message) {
         if (BlunoteMessages.WrapperMessage.Type.METADATA_UPDATE.equals(message.getType())) {
-            if (message.metadataUpdate.action == BlunoteMessages.MetadataUpdate.Action.ADD)
+            if (message.getMetadataUpdate().getAction() == BlunoteMessages.MetadataUpdate.Action.ADD)
             {
-                addMetadata(message.metadataUpdate);
+                addMetadata(message.getMetadataUpdate());
             }
             else
             {
-                deleteMetadata(message.metadataUpdate);
+                deleteMetadata(message.getMetadataUpdate());
             }
             return true;
         } else {
