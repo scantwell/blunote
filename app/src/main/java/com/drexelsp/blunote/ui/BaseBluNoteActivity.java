@@ -33,7 +33,8 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        handleIntent(getIntent());
+        if(!Intent.ACTION_SEARCH.equals(getIntent().getAction()))
+            handleIntent(getIntent());
 
         vf = ((ViewFlipper) findViewById(R.id.view_flipper));
         vf.setDisplayedChild(getViewConstant());
@@ -53,7 +54,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity
         if(showSearchMenuItem()) {
             menu.getItem(Constants.MENU_ITEM_SEARCH).setVisible(true);
 
-            // Associate searchable configuration with the SearchView
+            // Associate loginActivitySeachable configuration with the SearchView
             SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
             searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -112,10 +113,13 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity
         return true;
     }
 
-    public void handleIntent(Intent intent)
-    {
-
-    }
+	/**
+     * Method to override for subclasses that use search functionality, can't be abstract since not all classes
+     * use it.
+     *
+     * @param intent - the search intent passed in on search
+     */
+    public void handleIntent(Intent intent){}
 
     public abstract Context getCurrentContext();
 

@@ -37,4 +37,6 @@
     </array>
     <string name="login_activity">BluNote</string>
     <string name="login_search_hint">Search By Network Name</string>
+    <string name="playlist_search_hint">Search by Song Name</string>
+    <string name="media_search_hint">Search by Album, Artist or Song</string>
 </resources>
