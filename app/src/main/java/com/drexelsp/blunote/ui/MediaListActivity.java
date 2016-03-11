@@ -55,9 +55,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     }
 
     @Override
-    public int getViewConstant() {
-        return Constants.ACTIVITY_MEDIA_LIST;
-    }
+    public int getViewConstant() { return Constants.ACTIVITY_MEDIA_LIST; }
 
     @Override
     public boolean showMusicMenuItems() {
