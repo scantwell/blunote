@@ -1,9 +1,9 @@
 package com.drexelsp.blunote.network;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.os.Handler;
 
 import java.lang.ref.WeakReference;
 

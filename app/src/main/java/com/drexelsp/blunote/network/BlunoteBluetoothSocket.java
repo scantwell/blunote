@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 /**
  * Created by omnia on 2/12/16.
- *
+ * <p/>
  * BluetoothSocket that implements BlunoteSocket interface
  * Allows Reading Messages from mailbox, and writing messages out to the data thread
  */
@@ -95,8 +95,8 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
             int messageSize, bytes, bufferSize = 1024 * 10;
             byte[] buffer;
 
-            while(true) {
-                try{
+            while (true) {
+                try {
                     messageSize = inStream.readInt();
                     bytes = 0;
                     buffer = new byte[messageSize];
@@ -132,7 +132,7 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
                 d.writeInt(bytes.length);
 
                 int bufferSize = 1024;
-                for (int i = 0; i < bytes.length; i+=bufferSize) {
+                for (int i = 0; i < bytes.length; i += bufferSize) {
                     int b = ((i + bufferSize) < bytes.length) ? bufferSize : bytes.length - i;
                     d.write(bytes, i, b);
                     d.flush();

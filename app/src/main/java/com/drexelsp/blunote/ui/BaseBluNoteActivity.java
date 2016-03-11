@@ -1,10 +1,5 @@
 package com.drexelsp.blunote.ui;
 
-import java.util.List;
-
-import com.drexelsp.blunote.blunote.Constants;
-import com.drexelsp.blunote.blunote.R;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -18,11 +13,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ViewFlipper;
 
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
+
+import java.util.List;
+
 /**
  * Created by Brisbin on 2/10/2016.
  */
-public abstract class BaseBluNoteActivity extends AppCompatActivity
-{
+public abstract class BaseBluNoteActivity extends AppCompatActivity {
     ViewFlipper vf;
     SearchView searchView;
 
@@ -33,7 +32,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if(!Intent.ACTION_SEARCH.equals(getIntent().getAction()))
+        if (!Intent.ACTION_SEARCH.equals(getIntent().getAction()))
             handleIntent(getIntent());
 
         vf = ((ViewFlipper) findViewById(R.id.view_flipper));
@@ -51,7 +50,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity
         menu.getItem(Constants.MENU_ITEM_MEDIA_PLAYER)
                 .setVisible(showMusicMenuItems());
 
-        if(showSearchMenuItem()) {
+        if (showSearchMenuItem()) {
             menu.getItem(Constants.MENU_ITEM_SEARCH).setVisible(true);
 
             // Associate login_activity_seachable configuration with the SearchView
@@ -101,25 +100,24 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity
         handleIntent(intent);
     }
 
-    protected void setSimpleList(ListView listView, List<String> list)
-    {
+    protected void setSimpleList(ListView listView, List<String> list) {
         ArrayAdapter adapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, list);
         listView.setAdapter(adapter);
     }
 
-    public boolean showSettingsCog()
-    {
+    public boolean showSettingsCog() {
         return true;
     }
 
-	/**
+    /**
      * Method to override for subclasses that use search functionality, can't be abstract since not all classes
      * use it.
      *
      * @param intent - the search intent passed in on search
      */
-    public void handleIntent(Intent intent){}
+    public void handleIntent(Intent intent) {
+    }
 
     public abstract Context getCurrentContext();
 

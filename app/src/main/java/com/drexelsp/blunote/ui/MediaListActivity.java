@@ -1,12 +1,5 @@
 package com.drexelsp.blunote.ui;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import com.drexelsp.blunote.blunote.Constants;
-import com.drexelsp.blunote.blunote.R;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +13,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
+
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by U6020377 on 1/25/2016.
@@ -44,8 +44,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
         title = (TextView) findViewById(R.id.media_list_title);
         mediaListView = (ListView) findViewById(R.id.media_list);
 
-        if(!Intent.ACTION_SEARCH.equals(getIntent().getAction()))
-        {
+        if (!Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             setSongList();
         }
 
@@ -79,8 +78,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     }
 
     @Override
-    public void handleIntent(Intent intent)
-    {
+    public void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             mediaListView = (ListView) findViewById(R.id.media_list);
@@ -89,11 +87,9 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
             setMediaList();
 
             Iterator<String> i = mediaList.iterator();
-            while(i.hasNext())
-            {
+            while (i.hasNext()) {
                 String item = i.next();
-                if(!item.contains(query))
-                {
+                if (!item.contains(query)) {
                     i.remove();
                 }
             }
@@ -101,7 +97,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
             mediaListAdapter = new ArrayAdapter(this,
                     android.R.layout.simple_list_item_1, mediaList);
             mediaListView.setAdapter(mediaListAdapter);
-            SearchView.OnCloseListener closeListener = new SearchView.OnCloseListener(){
+            SearchView.OnCloseListener closeListener = new SearchView.OnCloseListener() {
                 @Override
                 public boolean onClose() {
                     setMediaList();
@@ -137,18 +133,12 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
         }
     }
 
-    private void setMediaList()
-    {
-        if (albumsToggle.isChecked())
-        {
+    private void setMediaList() {
+        if (albumsToggle.isChecked()) {
             setAlbumList();
-        }
-        else if (artistsToggle.isChecked())
-        {
+        } else if (artistsToggle.isChecked()) {
             setArtistList();
-        }
-        else
-        {
+        } else {
             setSongList();
         }
     }

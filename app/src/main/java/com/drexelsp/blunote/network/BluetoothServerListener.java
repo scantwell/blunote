@@ -10,7 +10,7 @@ import java.util.UUID;
 
 /**
  * Created by omnia on 2/12/16.
- *
+ * <p/>
  * Starts a Bluetooth Server listener thread to allow incoming connections
  * Also creates a BluetoothBeacon and begins advertising
  */
@@ -56,7 +56,7 @@ public class BluetoothServerListener {
 
         public void run() {
             BluetoothSocket socket;
-            while(true) {
+            while (true) {
                 try {
                     Log.v(TAG, "Listening for new connection");
                     socket = mmServerSocket.accept();

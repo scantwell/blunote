@@ -1,25 +1,23 @@
 package com.drexelsp.blunote.ui;
 
-import com.drexelsp.blunote.blunote.Constants;
-import com.drexelsp.blunote.blunote.R;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
+
 /**
  * Created by Brisbin on 1/29/2016.
  */
 public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnClickListener,
-        CompoundButton.OnCheckedChangeListener
-{
+        CompoundButton.OnCheckedChangeListener {
     FloatingActionButton playlistFAB;
     TextView songName;
     TextView artistName;
@@ -34,8 +32,7 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
     ImageButton upVote;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         playlistFAB = (FloatingActionButton) findViewById(R.id.playlist_FAB);
@@ -93,26 +90,18 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
     @Override
     public void onClick(View v) {
         //Handles all of the other onclicks for the media player screen
-        if(v == downVote)
-        {
+        if (v == downVote) {
             //handle downvote click
-        }
-        else if(v == previous)
-        {
+        } else if (v == previous) {
             //handle previous click
-        }
-        else if(v == upVote)
-        {
+        } else if (v == upVote) {
             //handle upvote click
-        }
-        else if(v == next)
-        {
+        } else if (v == next) {
             //handle next click
         }
     }
 
-    public void updateTrackInformation()
-    {
+    public void updateTrackInformation() {
 
     }
 }

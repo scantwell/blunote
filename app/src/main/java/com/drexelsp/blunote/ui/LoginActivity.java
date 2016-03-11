@@ -1,16 +1,5 @@
 package com.drexelsp.blunote.ui;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import com.drexelsp.blunote.adapters.NetworkArrayAdapter;
-import com.drexelsp.blunote.beans.ConnectionListItem;
-import com.drexelsp.blunote.blunote.Constants;
-import com.drexelsp.blunote.blunote.R;
-import com.drexelsp.blunote.blunote.Service;
-import com.drexelsp.blunote.network.BluetoothScanner;
-
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -24,8 +13,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class LoginActivity extends BaseBluNoteActivity implements View.OnClickListener, ServiceConnection
-{
+import com.drexelsp.blunote.adapters.NetworkArrayAdapter;
+import com.drexelsp.blunote.beans.ConnectionListItem;
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.blunote.Service;
+import com.drexelsp.blunote.network.BluetoothScanner;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class LoginActivity extends BaseBluNoteActivity implements View.OnClickListener, ServiceConnection {
 
     Button joinNetworkButton;
     Button createNetworkButton;
@@ -78,7 +76,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         dialog.show();*/
 
         //Make Call to load networks
-        if(!Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
+        if (!Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             networkListView = (ListView) findViewById(R.id.connection_list);
             ArrayList<ConnectionListItem> mNetworks = new ArrayList<>();
             mAdapter = new NetworkArrayAdapter(this, mNetworks);
@@ -106,18 +104,16 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             //use the query to search your data somehow
             ArrayList<ConnectionListItem> connectionList = getCurrentAvailableNetworks();
             Iterator<ConnectionListItem> i = connectionList.iterator();
-            while(i.hasNext())
-            {
+            while (i.hasNext()) {
                 ConnectionListItem item = i.next();
-                if(!item.getConnectionName().contains(query))
-                {
+                if (!item.getConnectionName().contains(query)) {
                     i.remove();
                 }
             }
 
             adapter = new NetworkArrayAdapter(this, connectionList);
             networkListView.setAdapter(adapter);
-            SearchView.OnCloseListener closeListener = new SearchView.OnCloseListener(){
+            SearchView.OnCloseListener closeListener = new SearchView.OnCloseListener() {
                 @Override
                 public boolean onClose() {
                     adapter = new NetworkArrayAdapter(adapter.getContext(), getCurrentAvailableNetworks());
@@ -143,6 +139,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     public Context getCurrentContext() {
         return LoginActivity.this;
     }
+
     @Override
     public boolean showSearchMenuItem() {
         return true;
@@ -163,7 +160,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if(v == joinNetworkButton) {
+        if (v == joinNetworkButton) {
             if (mBound && mService != null) {
                 // Get Selected Network
                 ConnectionListItem network = mAdapter.getItem(networkListView.getCheckedItemPosition());
@@ -174,8 +171,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             }
             Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
             startActivity(intent);
-        }
-        else if (v == createNetworkButton){
+        } else if (v == createNetworkButton) {
             if (mBound && mService != null) {
                 // Call Start Network
                 mService.startNetwork();
@@ -189,8 +185,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             // Temp commented out
             //Intent intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);
             //startActivity(intent);
-        }
-        else if (v == refreshButton) {
+        } else if (v == refreshButton) {
             mAdapter.clear();
             mScanner.startDiscovery();
         }

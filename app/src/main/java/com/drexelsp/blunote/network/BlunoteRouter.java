@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 /**
  * Created by omnia on 2/15/16.
- *
+ * <p/>
  * Router for Reading and Writing BlunoteSockets
  */
 public class BlunoteRouter extends Thread {
@@ -35,7 +35,7 @@ public class BlunoteRouter extends Thread {
         Log.v(TAG, "Thread Started");
         awake = true;
         //noinspection InfiniteLoopStatement
-        while(true) {
+        while (true) {
             // Read Message from UpStream
             if (upStream.numMessages() > 0) {
                 Message msg = upStream.readMessage();
@@ -69,7 +69,7 @@ public class BlunoteRouter extends Thread {
     }
 
     private synchronized void napTime() {
-        try{
+        try {
             awake = false;
             wait();
         } catch (InterruptedException e) {
