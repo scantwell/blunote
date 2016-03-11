@@ -54,7 +54,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity
         if(showSearchMenuItem()) {
             menu.getItem(Constants.MENU_ITEM_SEARCH).setVisible(true);
 
-            // Associate loginActivitySeachable configuration with the SearchView
+            // Associate login_activity_seachable configuration with the SearchView
             SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
             searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));

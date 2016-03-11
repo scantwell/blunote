@@ -104,7 +104,7 @@ public class PlaylistActivity extends BaseBluNoteActivity implements ListView.On
                 @Override
                 public boolean onClose() {
                     playlistAdapter = new ArrayAdapter(playlistAdapter.getContext(),
-                            android.R.layout.simple_list_item_1, playlist);
+                            android.R.layout.simple_list_item_1, getCurrentPlaylist());
                     playlistView.setAdapter(playlistAdapter);
                     return false;
                 }
