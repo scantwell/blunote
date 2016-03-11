@@ -83,7 +83,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            mediaListView = (ListView) findViewById(R.id.playlist_list);
+            mediaListView = (ListView) findViewById(R.id.media_list);
             //use the query to search your data somehow
 
             setMediaList();
