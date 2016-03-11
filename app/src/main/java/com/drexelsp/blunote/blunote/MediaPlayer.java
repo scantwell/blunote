@@ -16,6 +16,8 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.Artist;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Album;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Song;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -77,6 +79,8 @@ public class MediaPlayer implements MessageHandler {
             last_year = last_year == null ? "" : last_year;
             num_of_songs = num_of_songs == null ? "" : num_of_songs;
 
+            album_art = getAlbumArt(album_art);
+
             albumsBuilder.setAlbum(album);
             albumsBuilder.setAlbumArt(album_art);
             albumsBuilder.setAlbumId(Integer.parseInt(album_id));
@@ -87,6 +91,19 @@ public class MediaPlayer implements MessageHandler {
             albums.add(albumsBuilder.build());
         }
         return albums;
+    }
+
+    private String getAlbumArt(String uri)
+    {
+        try {
+            return MediaStore.Images.Media.getBitmap(mContentResolver, Uri.parse(uri)).toString();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return "";
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 
