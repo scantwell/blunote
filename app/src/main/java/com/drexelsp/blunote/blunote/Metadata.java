@@ -2,7 +2,9 @@ package com.drexelsp.blunote.blunote;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Artist;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Album;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Song;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -53,31 +55,34 @@ public class Metadata implements MessageHandler {
 
     private ArrayList<ContentValues> getSongValues(ArrayList<BlunoteMessages.Song> songs)
     {
-        ArrayList<ContentValues> values = new ArrayList<>();
+        ArrayList<ContentValues> valuesList = new ArrayList<>();
+        ContentValues values;
         for (BlunoteMessages.Song song : songs)
         {
-
+            values = new ContentValues();
         }
-        return values;
+        return valuesList;
     }
 
     private ArrayList<ContentValues> getArtistValues(ArrayList<BlunoteMessages.Artist> artists)
     {
-        ArrayList<ContentValues> values = new ArrayList<>();
+        ArrayList<ContentValues> valuesList = new ArrayList<>();
+        ContentValues values;
         for (BlunoteMessages.Artist artist : artists)
         {
-
+            values = new ContentValues();
         }
-        return values;
+        return valuesList;
     }
 
     private ArrayList<ContentValues> getAlbumValues(ArrayList<BlunoteMessages.Album> albums)
     {
-        ArrayList<ContentValues> values = new ArrayList<>();
+        ArrayList<ContentValues> valuesList = new ArrayList<>();
+        ContentValues values;
         for (BlunoteMessages.Album album : albums)
         {
-
+            values = new ContentValues();
         }
-        return values;
+        return valuesList;
     }
 }
