@@ -16,8 +16,13 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.Artist;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Album;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Song;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
@@ -96,7 +101,15 @@ public class MediaPlayer implements MessageHandler {
     private String getAlbumArt(String uri)
     {
         try {
-            return MediaStore.Images.Media.getBitmap(mContentResolver, Uri.parse(uri)).toString();
+            FileInputStream fis = new FileInputStream(new File(uri));
+            InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            return sb.toString();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return "";
