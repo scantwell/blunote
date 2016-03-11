@@ -11,13 +11,11 @@ public class ConnectionListItem {
     private String macAddress;
 
 
-    public String getConnectionName()
-    {
+    public String getConnectionName() {
         return connectionName;
     }
 
-    public void setConnectionName(String connectionName)
-    {
+    public void setConnectionName(String connectionName) {
         this.connectionName = connectionName;
     }
 

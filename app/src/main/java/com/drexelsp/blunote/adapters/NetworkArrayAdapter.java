@@ -15,13 +15,11 @@ import java.util.ArrayList;
 /**
  * Custom Array Adapter to view the available networks on startup.
  */
-public class NetworkArrayAdapter extends ArrayAdapter<ConnectionListItem>
-{
+public class NetworkArrayAdapter extends ArrayAdapter<ConnectionListItem> {
     private final Context context;
     private final ArrayList<ConnectionListItem> connectionsList;
 
-    public NetworkArrayAdapter(Context context, ArrayList<ConnectionListItem> connectionsList)
-    {
+    public NetworkArrayAdapter(Context context, ArrayList<ConnectionListItem> connectionsList) {
         super(context, R.layout.network_row, connectionsList);
 
         this.context = context;
@@ -29,8 +27,7 @@ public class NetworkArrayAdapter extends ArrayAdapter<ConnectionListItem>
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
+    public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 

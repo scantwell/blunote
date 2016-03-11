@@ -12,8 +12,8 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.drexelsp.blunote.provider.MetaStoreContract.Artist;
 import com.drexelsp.blunote.provider.MetaStoreContract.Album;
+import com.drexelsp.blunote.provider.MetaStoreContract.Artist;
 import com.drexelsp.blunote.provider.MetaStoreContract.Track;
 
 /**
@@ -53,8 +53,7 @@ public final class MetaStore extends ContentProvider {
         SQLiteDatabase db = mHelper.getReadableDatabase();
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         boolean useAuthorityUri = false;
-        switch (URI_MATCHER.match(uri))
-        {
+        switch (URI_MATCHER.match(uri)) {
             case ALBUM_LIST:
                 builder.setTables(DbSchema.TBL_ALBUM);
                 if (TextUtils.isEmpty(sortOrder)) {
@@ -109,8 +108,7 @@ public final class MetaStore extends ContentProvider {
             cursor.setNotificationUri(
                     getContext().getContentResolver(),
                     MetaStoreContract.CONTENT_URI);
-        }
-        else {
+        } else {
             cursor.setNotificationUri(
                     getContext().getContentResolver(),
                     uri);
@@ -121,8 +119,7 @@ public final class MetaStore extends ContentProvider {
     @Nullable
     @Override
     public String getType(Uri uri) {
-        switch (URI_MATCHER.match(uri))
-        {
+        switch (URI_MATCHER.match(uri)) {
             case ALBUM_LIST:
                 return MetaStoreContract.Album.CONTENT_TYPE;
             case ALBUM_ID:
@@ -144,35 +141,28 @@ public final class MetaStore extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         SQLiteDatabase db = mHelper.getWritableDatabase();
-        if (URI_MATCHER.match(uri) == ALBUM_LIST)
-        {
+        if (URI_MATCHER.match(uri) == ALBUM_LIST) {
             long id =
                     db.insert(
                             DbSchema.TBL_ALBUM,
                             null,
                             values);
             return getUriForId(id, uri);
-        }
-        else if (URI_MATCHER.match(uri) == ARTIST_LIST)
-        {
+        } else if (URI_MATCHER.match(uri) == ARTIST_LIST) {
             long id =
                     db.insert(
                             DbSchema.TBL_ARTIST,
                             null,
                             values);
             return getUriForId(id, uri);
-        }
-        else if (URI_MATCHER.match(uri) == TRACK_LIST)
-        {
+        } else if (URI_MATCHER.match(uri) == TRACK_LIST) {
             long id =
                     db.insert(
                             DbSchema.TBL_TRACK,
                             null,
                             values);
             return getUriForId(id, uri);
-        }
-        else
-        {
+        } else {
             throw new IllegalArgumentException("Unsupported URI for insertion: " + uri);
         }
     }

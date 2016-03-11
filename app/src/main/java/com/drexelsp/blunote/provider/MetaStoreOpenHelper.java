@@ -11,8 +11,7 @@ class MetaStoreOpenHelper extends SQLiteOpenHelper {
     private static final String NAME = DbSchema.DB_NAME;
     private static final int VERSION = 1;
 
-    public MetaStoreOpenHelper(Context context)
-    {
+    public MetaStoreOpenHelper(Context context) {
         super(context, NAME, null, VERSION);
     }
 
