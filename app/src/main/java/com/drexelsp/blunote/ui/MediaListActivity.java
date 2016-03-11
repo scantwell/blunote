@@ -1,15 +1,8 @@
 package com.drexelsp.blunote.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.drexelsp.blunote.blunote.Constants;
-import com.drexelsp.blunote.blunote.R;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
@@ -17,6 +10,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
+
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by U6020377 on 1/25/2016.
@@ -55,7 +54,9 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     }
 
     @Override
-    public int getViewConstant() { return Constants.ACTIVITY_MEDIA_LIST; }
+    public int getViewConstant() {
+        return Constants.ACTIVITY_MEDIA_LIST;
+    }
 
     @Override
     public boolean showMusicMenuItems() {

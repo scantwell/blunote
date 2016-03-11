@@ -7,21 +7,20 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.drexelsp.blunote.blunote.BlunoteMessages.Album;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Artist;
 import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
+import com.drexelsp.blunote.blunote.BlunoteMessages.MetadataUpdate;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Song;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
-import com.drexelsp.blunote.blunote.BlunoteMessages.MetadataUpdate;
-import com.drexelsp.blunote.blunote.BlunoteMessages.Artist;
-import com.drexelsp.blunote.blunote.BlunoteMessages.Album;
-import com.drexelsp.blunote.blunote.BlunoteMessages.Song;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -34,8 +33,8 @@ import java.util.ArrayList;
 public class MediaPlayer implements MessageHandler {
     private final String TAG = "MediaPlayer";
     private ContentResolver mContentResolver;
-    public MediaPlayer(ContentResolver cResolver)
-    {
+
+    public MediaPlayer(ContentResolver cResolver) {
         this.mContentResolver = cResolver;
         /* Debugging Code
         MetadataUpdate metadataUpdate = this.getMetadata();
@@ -45,8 +44,7 @@ public class MediaPlayer implements MessageHandler {
         */
     }
 
-    private Cursor getAlbumcursor()
-    {
+    private Cursor getAlbumcursor() {
         final Uri uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
         final String album = MediaStore.Audio.Albums.ALBUM;
         final String album_art = MediaStore.Audio.Albums.ALBUM_ART;
@@ -55,7 +53,7 @@ public class MediaPlayer implements MessageHandler {
         final String first_year = MediaStore.Audio.Albums.FIRST_YEAR;
         final String last_year = MediaStore.Audio.Albums.LAST_YEAR;
         final String num_of_songs = MediaStore.Audio.Albums.NUMBER_OF_SONGS;
-        final String[]columns={ album, album_art, album_id, artist, first_year, last_year, num_of_songs};
+        final String[] columns = {album, album_art, album_id, artist, first_year, last_year, num_of_songs};
         return mContentResolver.query(uri, columns, null, null, null);
     }
 
@@ -66,8 +64,7 @@ public class MediaPlayer implements MessageHandler {
 
         String album, album_art, album_id, artist, first_year, last_year, num_of_songs;
 
-        while(cur.moveToNext())
-        {
+        while (cur.moveToNext()) {
             album = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
             album_art = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
             album_id = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums._ID));
@@ -98,8 +95,7 @@ public class MediaPlayer implements MessageHandler {
         return albums;
     }
 
-    private String getAlbumArt(String uri)
-    {
+    private String getAlbumArt(String uri) {
         try {
             FileInputStream fis = new FileInputStream(new File(uri));
             InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
@@ -120,14 +116,13 @@ public class MediaPlayer implements MessageHandler {
     }
 
 
-    private Cursor getArtistcursor()
-    {
+    private Cursor getArtistcursor() {
         final Uri uri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
         final String artist = MediaStore.Audio.Artists.ARTIST;
         final String artist_id = MediaStore.Audio.Artists._ID;
         final String num_of_albums = MediaStore.Audio.Artists.NUMBER_OF_ALBUMS;
         final String num_of_tracks = MediaStore.Audio.Artists.NUMBER_OF_TRACKS;
-        final String[]columns={artist_id, artist, num_of_albums, num_of_tracks};
+        final String[] columns = {artist_id, artist, num_of_albums, num_of_tracks};
         return mContentResolver.query(uri, columns, null, null, null);
     }
 
@@ -137,8 +132,7 @@ public class MediaPlayer implements MessageHandler {
         Artist.Builder artistsBuilder = Artist.newBuilder();
 
         String artist, number_of_albums, number_of_track, artist_id;
-        while(cur.moveToNext())
-        {
+        while (cur.moveToNext()) {
             artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST));
             artist_id = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media._ID));
             number_of_albums = cur.getString(cur.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS));
@@ -158,8 +152,7 @@ public class MediaPlayer implements MessageHandler {
         return artists;
     }
 
-    private Cursor getTrackcursor()
-    {
+    private Cursor getTrackcursor() {
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         final String where = MediaStore.Audio.Media.IS_MUSIC + " != 0";
         final String album_id = MediaStore.Audio.Media.ALBUM_ID;
@@ -169,7 +162,7 @@ public class MediaPlayer implements MessageHandler {
         final String title = MediaStore.Audio.Media.TITLE;
         final String track = MediaStore.Audio.Media.TRACK;
         final String year = MediaStore.Audio.Media.YEAR;
-        final String[]columns={album_id, artist_id, duration, song_id, title, track, year};
+        final String[] columns = {album_id, artist_id, duration, song_id, title, track, year};
         return mContentResolver.query(uri, columns, where, null, null);
     }
 
@@ -180,8 +173,7 @@ public class MediaPlayer implements MessageHandler {
 
         String album_id, artist_id, duration, song_id, title, track, year;
 
-        while(cur.moveToNext())
-        {
+        while (cur.moveToNext()) {
             album_id = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
             artist_id = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
             duration = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DURATION));
@@ -210,8 +202,7 @@ public class MediaPlayer implements MessageHandler {
         return songs;
     }
 
-    public MetadataUpdate getMetadata()
-    {
+    public MetadataUpdate getMetadata() {
         MetadataUpdate.Builder mdBuilder = MetadataUpdate.newBuilder();
         mdBuilder.setAction(MetadataUpdate.Action.ADD);
         mdBuilder.addAllAlbums(getAlbumMeta());

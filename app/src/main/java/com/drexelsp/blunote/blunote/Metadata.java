@@ -2,9 +2,6 @@ package com.drexelsp.blunote.blunote;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import com.drexelsp.blunote.blunote.BlunoteMessages.Artist;
-import com.drexelsp.blunote.blunote.BlunoteMessages.Album;
-import com.drexelsp.blunote.blunote.BlunoteMessages.Song;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -17,20 +14,16 @@ public class Metadata implements MessageHandler {
     private String TAG = "Metadata";
     private ContentResolver mResolver;
 
-    public Metadata(ContentResolver cResolver)
-    {
+    public Metadata(ContentResolver cResolver) {
         mResolver = cResolver;
     }
 
     @Override
     public boolean processMessage(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.WrapperMessage message) {
         if (BlunoteMessages.WrapperMessage.Type.METADATA_UPDATE.equals(message.getType())) {
-            if (message.getMetadataUpdate().getAction() == BlunoteMessages.MetadataUpdate.Action.ADD)
-            {
+            if (message.getMetadataUpdate().getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
                 addMetadata(message.getMetadataUpdate());
-            }
-            else
-            {
+            } else {
                 deleteMetadata(message.getMetadataUpdate());
             }
             return true;
@@ -40,47 +33,39 @@ public class Metadata implements MessageHandler {
         return false;
     }
 
-    private void addMetadata(BlunoteMessages.MetadataUpdate message)
-    {
-        ArrayList<ContentValues> songs = getSongValues((ArrayList)message.getSongsList());
-        ArrayList<ContentValues> artists = getArtistValues((ArrayList)message.getArtistsList());
-        ArrayList<ContentValues> albums = getAlbumValues((ArrayList)message.getAlbumsList());
+    private void addMetadata(BlunoteMessages.MetadataUpdate message) {
+        ArrayList<ContentValues> songs = getSongValues((ArrayList) message.getSongsList());
+        ArrayList<ContentValues> artists = getArtistValues((ArrayList) message.getArtistsList());
+        ArrayList<ContentValues> albums = getAlbumValues((ArrayList) message.getAlbumsList());
         //mResolver.bulkInsert();
     }
 
-    private void deleteMetadata(BlunoteMessages.MetadataUpdate message)
-    {
+    private void deleteMetadata(BlunoteMessages.MetadataUpdate message) {
         //mResolver.
     }
 
-    private ArrayList<ContentValues> getSongValues(ArrayList<BlunoteMessages.Song> songs)
-    {
+    private ArrayList<ContentValues> getSongValues(ArrayList<BlunoteMessages.Song> songs) {
         ArrayList<ContentValues> valuesList = new ArrayList<>();
         ContentValues values;
-        for (BlunoteMessages.Song song : songs)
-        {
+        for (BlunoteMessages.Song song : songs) {
             values = new ContentValues();
         }
         return valuesList;
     }
 
-    private ArrayList<ContentValues> getArtistValues(ArrayList<BlunoteMessages.Artist> artists)
-    {
+    private ArrayList<ContentValues> getArtistValues(ArrayList<BlunoteMessages.Artist> artists) {
         ArrayList<ContentValues> valuesList = new ArrayList<>();
         ContentValues values;
-        for (BlunoteMessages.Artist artist : artists)
-        {
+        for (BlunoteMessages.Artist artist : artists) {
             values = new ContentValues();
         }
         return valuesList;
     }
 
-    private ArrayList<ContentValues> getAlbumValues(ArrayList<BlunoteMessages.Album> albums)
-    {
+    private ArrayList<ContentValues> getAlbumValues(ArrayList<BlunoteMessages.Album> albums) {
         ArrayList<ContentValues> valuesList = new ArrayList<>();
         ContentValues values;
-        for (BlunoteMessages.Album album : albums)
-        {
+        for (BlunoteMessages.Album album : albums) {
             values = new ContentValues();
         }
         return valuesList;

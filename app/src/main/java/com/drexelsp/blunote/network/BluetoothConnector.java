@@ -10,7 +10,7 @@ import java.util.UUID;
 
 /**
  * Created by omnia on 1/13/16.
- *
+ * <p/>
  * Initializes a connection to a host device
  */
 public class BluetoothConnector {
@@ -65,7 +65,7 @@ public class BluetoothConnector {
                 Log.e(TAG, "Connection to a host Refused: " + connectException.getMessage());
                 try {
                     mmSocket.close();
-                } catch(IOException closeException) {
+                } catch (IOException closeException) {
                     Log.e(TAG, "Error closing socket: " + closeException.getMessage());
                 }
             }

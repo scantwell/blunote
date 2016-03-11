@@ -1,11 +1,7 @@
 package com.drexelsp.blunote.ui;
 
-import com.drexelsp.blunote.blunote.Constants;
-import com.drexelsp.blunote.blunote.R;
-
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.View;
@@ -13,21 +9,22 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
+
 /**
  * Need to handle a long press for options menu
  */
-public class PlaylistActivity extends BaseBluNoteActivity
-{
+public class PlaylistActivity extends BaseBluNoteActivity {
     protected String[] list;
     ListView playlistList;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         list = new String[20];
-        for(int i = 0; i < 20; ++i)
+        for (int i = 0; i < 20; ++i)
             list[i] = ("Song " + (i + 1));
 
         playlistList = (ListView) findViewById(R.id.playlist_list);
@@ -39,15 +36,12 @@ public class PlaylistActivity extends BaseBluNoteActivity
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,ContextMenu.ContextMenuInfo menuInfo)
-    {
-        if (v.getId()==R.id.playlist_list)
-        {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.playlist_list) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             menu.setHeaderTitle(list[info.position]);
             String[] menuItems = getResources().getStringArray(R.array.playlist_context_array);
-            for (int i = 0; i < menuItems.length; i++)
-            {
+            for (int i = 0; i < menuItems.length; i++) {
                 menu.add(Menu.NONE, i, i, menuItems[i]);
             }
         }

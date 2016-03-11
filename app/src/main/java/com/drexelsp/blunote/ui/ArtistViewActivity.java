@@ -1,14 +1,14 @@
 package com.drexelsp.blunote.ui;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.os.Bundle;
+import android.widget.ListView;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.widget.ListView;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by U6020377 on 1/25/2016.
@@ -48,8 +48,7 @@ public class ArtistViewActivity extends BaseBluNoteActivity {
         return false;
     }
 
-    public void populateArtistAlbums()
-    {
+    public void populateArtistAlbums() {
 
     }
 }

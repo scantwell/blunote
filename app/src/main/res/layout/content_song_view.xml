@@ -44,7 +44,7 @@
                     android:layout_height="0dp"
                     android:layout_weight=".25"
                     android:text="Title"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/song_view_artist"
@@ -52,7 +52,7 @@
                     android:layout_height="0dp"
                     android:layout_weight=".25"
                     android:text="Artist"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/song_view_album"
@@ -60,7 +60,7 @@
                     android:layout_height="0dp"
                     android:layout_weight=".25"
                     android:text="Album"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/song_view_owner"
@@ -68,7 +68,7 @@
                     android:layout_height="0dp"
                     android:layout_weight=".25"
                     android:text="Owner"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
