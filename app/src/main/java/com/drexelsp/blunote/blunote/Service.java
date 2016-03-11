@@ -56,6 +56,13 @@ public class Service extends ClientService {
         }
     }
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        this.handlers.add(new MediaPlayer(getApplicationContext().getContentResolver()));
+        this.handlers.add(new VoteEngine());
+    }
+
     public void startNetwork() {
         super.startNetwork();
     }
