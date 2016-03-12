@@ -31,7 +31,7 @@ public final class Constants {
     public static final int MENU_ITEM_PREFERENCES = 5;
 
     //MediaStore Constants
-    public static final String META_STORE_URL = "content://com.drexelsp.blunote.blunote.metastore";
+    public static final String META_STORE_URL = "content://com.drexelsp.blunote.blunote.metastore/";
 
     //Albums
     public static final Uri ALBUM_URI = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
@@ -54,7 +54,6 @@ public final class Constants {
 
     //Tracks
     public static final Uri TRACK_URI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-    public static final String WHERE = MediaStore.Audio.Media.IS_MUSIC + " != 0";
     public static final String TRACK_ALBUM_ID = MediaStore.Audio.Media.ALBUM_ID;
     public static final String TRACK_ARTIST_ID = MediaStore.Audio.Media.ARTIST_ID;
     public static final String DURATION = MediaStore.Audio.Media.DURATION;

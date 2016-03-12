@@ -196,7 +196,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
 
     private Cursor getTrackListCursor() {
         final String[] columns = {Constants.TITLE, Constants.SONG_ID};
-        return getMetaStore().query(Uri.parse(Constants.META_STORE_URL + Constants.TRACK), columns, Constants.WHERE, null, Constants.SORT_TRACK);
+        return getMetaStore().query(Uri.parse(Constants.META_STORE_URL + Constants.TRACK), columns, null, null, Constants.SORT_TRACK);
     }
 
     public ContentResolver getMetaStore()
