@@ -1,5 +1,11 @@
 package com.drexelsp.blunote.ui;
 
+import java.util.Iterator;
+import java.util.List;
+
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
+
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -13,13 +19,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
-
-import com.drexelsp.blunote.blunote.Constants;
-import com.drexelsp.blunote.blunote.R;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by U6020377 on 1/25/2016.
@@ -148,9 +147,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
      */
     private void setSongList() {
         title.setText(getResources().getString(R.string.all_songs));
-        mediaList = new ArrayList<>();
-        for (int i = 1; i < 20; ++i)
-            mediaList.add("Song " + i);
+        mediaList = getSongList();
         setSimpleList(mediaListView, mediaList);
         mediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -165,9 +162,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
      */
     private void setAlbumList() {
         title.setText(getResources().getString(R.string.all_albums));
-        mediaList = new ArrayList<>();
-        for (int i = 1; i < 20; ++i)
-            mediaList.add("Album " + i);
+        mediaList = getAlbumList();
         setSimpleList(mediaListView, mediaList);
         mediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -182,9 +177,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
      */
     private void setArtistList() {
         title.setText(getResources().getString(R.string.all_artists));
-        mediaList = new ArrayList<>();
-        for (int i = 1; i < 20; ++i)
-            mediaList.add("Artist " + i);
+        mediaList = getArtistList();
         setSimpleList(mediaListView, mediaList);
         mediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

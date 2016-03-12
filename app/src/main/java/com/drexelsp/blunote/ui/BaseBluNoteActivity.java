@@ -1,8 +1,16 @@
 package com.drexelsp.blunote.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.provider.MetaStore;
+
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -13,17 +21,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ViewFlipper;
 
-import com.drexelsp.blunote.blunote.Constants;
-import com.drexelsp.blunote.blunote.R;
-
-import java.util.List;
-
 /**
  * Created by Brisbin on 2/10/2016.
  */
 public abstract class BaseBluNoteActivity extends AppCompatActivity {
     ViewFlipper vf;
     SearchView searchView;
+    static MetaStore metaStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,4 +131,78 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     public abstract boolean showMusicMenuItems();
 
     public abstract boolean showSearchMenuItem();
+
+    protected List<String> getAlbumList()
+    {
+        List<String> albumList = new ArrayList<>();
+        Cursor cur = getAlbumListCursor();
+        String album;
+
+        while(cur.moveToNext())
+        {
+            album = cur.getString(cur.getColumnIndex(Constants.ALBUM));
+            if(album != null){
+                albumList.add(album);
+            }
+        }
+
+        return albumList;
+    }
+
+    protected List<String> getArtistList()
+    {
+        List<String> artistList = new ArrayList<>();
+        Cursor cur = getArtistListCursor();
+        String artist;
+
+        while(cur.moveToNext())
+        {
+            artist = cur.getString(cur.getColumnIndex(Constants.ARTIST));
+            if(artist != null){
+                artistList.add(artist);
+            }
+        }
+
+        return artistList;
+    }
+
+    protected List<String> getSongList()
+    {
+        List<String> songList = new ArrayList<>();
+        Cursor cur = getTrackListCursor();
+        String song;
+
+        while(cur.moveToNext())
+        {
+            song = cur.getString(cur.getColumnIndex(Constants.TRACK));
+            if(song != null){
+                songList.add(song);
+            }
+        }
+
+        return songList;
+    }
+
+    private Cursor getAlbumListCursor() {
+        final String[] columns = {Constants.ALBUM, Constants.ALBUM_ID};
+        return getMetaStore().query(Constants.ALBUM_URI, columns, null, null, Constants.SORT_ALBUMS);
+    }
+
+    private Cursor getArtistListCursor() {
+        final String[] columns = {Constants.ARTIST, Constants.ARTIST_ID};
+        return getMetaStore().query(Constants.ARTIST_URI, columns, null, null, Constants.SORT_ARTISTS);
+    }
+
+    private Cursor getTrackListCursor() {
+        final String[] columns = {Constants.TRACK, Constants.SONG_ID};
+        return getMetaStore().query(Constants.TRACK_URI, columns, Constants.WHERE, null, Constants.SORT_TRACK);
+    }
+
+    public MetaStore getMetaStore()
+    {
+        if(metaStore == null)
+            metaStore = new MetaStore();
+
+        return metaStore;
+    }
 }
