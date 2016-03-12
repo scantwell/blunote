@@ -8,6 +8,7 @@ import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.provider.MetaStore;
 
 import android.app.SearchManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,7 +28,7 @@ import android.widget.ViewFlipper;
 public abstract class BaseBluNoteActivity extends AppCompatActivity {
     ViewFlipper vf;
     SearchView searchView;
-    static MetaStore metaStore;
+    static ContentResolver metaStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,7 +175,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
 
         while(cur.moveToNext())
         {
-            song = cur.getString(cur.getColumnIndex(Constants.TRACK));
+            song = cur.getString(cur.getColumnIndex(Constants.TITLE));
             if(song != null){
                 songList.add(song);
             }
@@ -194,14 +195,14 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     }
 
     private Cursor getTrackListCursor() {
-        final String[] columns = {Constants.TRACK, Constants.SONG_ID};
+        final String[] columns = {Constants.TITLE, Constants.SONG_ID};
         return getMetaStore().query(Constants.TRACK_URI, columns, Constants.WHERE, null, Constants.SORT_TRACK);
     }
 
-    public MetaStore getMetaStore()
+    public ContentResolver getMetaStore()
     {
         if(metaStore == null)
-            metaStore = new MetaStore();
+            metaStore = getCurrentContext().getContentResolver();
 
         return metaStore;
     }

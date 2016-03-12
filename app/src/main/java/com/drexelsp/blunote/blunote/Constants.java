@@ -40,7 +40,7 @@ public final class Constants {
     public static final String FIRST_YEAR = MediaStore.Audio.Albums.FIRST_YEAR;
     public static final String LAST_YEAR = MediaStore.Audio.Albums.LAST_YEAR;
     public static final String NUM_OF_SONGS = MediaStore.Audio.Albums.NUMBER_OF_SONGS;
-    public static final String SORT_ALBUMS = ALBUM + "ASC";
+    public static final String SORT_ALBUMS = ALBUM + " ASC";
 
     //Artists
     public static final Uri ARTIST_URI = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
@@ -48,7 +48,7 @@ public final class Constants {
     public static final String ARTIST_ID = MediaStore.Audio.Artists._ID;
     public static final String NUM_OF_ALBUMS = MediaStore.Audio.Artists.NUMBER_OF_ALBUMS;
     public static final String NUM_OF_TRACKS = MediaStore.Audio.Artists.NUMBER_OF_TRACKS;
-    public static final String SORT_ARTISTS = ARTIST + "ASC";
+    public static final String SORT_ARTISTS = ARTIST + " ASC";
 
     //Tracks
     public static final Uri TRACK_URI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -60,6 +60,6 @@ public final class Constants {
     public static final String TITLE = MediaStore.Audio.Media.TITLE;
     public static final String TRACK = MediaStore.Audio.Media.TRACK;
     public static final String YEAR = MediaStore.Audio.Media.YEAR;
-    public static final String SORT_TRACK = TRACK + "ASC";
+    public static final String SORT_TRACK = TITLE + " ASC";
 
 }
