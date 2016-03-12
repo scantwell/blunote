@@ -5,7 +5,8 @@ package com.drexelsp.blunote.blunote;
  */
 public final class Constants {
 
-    private Constants() {}
+    private Constants() {
+    }
 
     public static final int ACTIVITY_LOGIN = 0;
     public static final int ACTIVITY_NETWORK_SETTINGS = 1;

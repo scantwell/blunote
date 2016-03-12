@@ -7,24 +7,19 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-
 import android.os.Parcelable;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import com.drexelsp.blunote.adapters.NetworkArrayAdapter;
 import com.drexelsp.blunote.beans.ConnectionListItem;
 
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 
 /**
  * Created by omnia on 2/21/16.
- *
  */
 public class BluetoothScanner extends BroadcastReceiver {
     private static final String TAG = "Bluetooth Scanner";

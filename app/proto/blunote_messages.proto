@@ -15,9 +15,10 @@ message Song {
 	optional int64 album_id = 1; /// The id for the album
 	optional int64 artist_id = 2; /// The id for the artist
 	optional string duration = 3; /// The duration of the audio file, in ms
-	required string title = 4; /// Song title
-	required int32 track = 5; /// The track number of this song on the album, if any.
-	optional string year = 6; /// The year the audio file was recorded, if any
+	required int64 song_id = 4; /// The id for the song
+	required string title = 5; /// Song title
+	required int32 track = 6; /// The track number of this song on the album, if any.
+	optional string year = 7; /// The year the audio file was recorded, if any
 }
 
 /**
@@ -27,7 +28,7 @@ message Album {
 	required string album = 1; /// The album on which the audio file appears, if any
 	optional string album_art = 2; /// Cached album art.
 	required int64 album_id = 3; /// The id for the album
-	optional int64 artist_id = 4; /// The id for the artist
+	optional string artist = 4; /// Name of the artist
 	optional string first_year = 5; /// The year in which the earliest songs on this album were released.
 	optional string last_year = 6; /// The year in which the latest songs on this album were released.
 	optional string number_of_songs = 7; /// The number of songs on this album

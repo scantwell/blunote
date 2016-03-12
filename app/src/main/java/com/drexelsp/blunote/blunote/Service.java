@@ -34,7 +34,13 @@ public class Service extends ClientService {
     public Service() {
         IBinder mBinder = new LocalBinder();
         super.setBinder(mBinder);
-        this.handlers.add(new MediaPlayer());
+
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        this.handlers.add(new MediaPlayer(getApplicationContext().getContentResolver()));
         this.handlers.add(new VoteEngine());
     }
 
