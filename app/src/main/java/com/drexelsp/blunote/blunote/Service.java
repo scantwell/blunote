@@ -34,6 +34,14 @@ public class Service extends ClientService {
     public Service() {
         IBinder mBinder = new LocalBinder();
         super.setBinder(mBinder);
+
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        this.handlers.add(new MediaPlayer(getApplicationContext().getContentResolver()));
+        this.handlers.add(new VoteEngine());
     }
 
     @Override
@@ -52,13 +60,6 @@ public class Service extends ClientService {
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        this.handlers.add(new MediaPlayer(getApplicationContext().getContentResolver()));
-        this.handlers.add(new VoteEngine());
     }
 
     public void startNetwork() {

@@ -15,6 +15,10 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.Song;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
+import com.drexelsp.blunote.blunote.BlunoteMessages.MetadataUpdate;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Artist;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Album;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Song;
 
 import java.io.BufferedReader;
 import java.io.File;
