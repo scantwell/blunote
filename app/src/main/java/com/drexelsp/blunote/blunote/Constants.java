@@ -30,7 +30,9 @@ public final class Constants {
     public static final int MENU_ITEM_NETWORK_SETTINGS = 4;
     public static final int MENU_ITEM_PREFERENCES = 5;
 
-    //MediaStore String Constants
+    //MediaStore Constants
+    public static final String META_STORE_URL = "content://com.drexelsp.blunote.blunote.metastore";
+
     //Albums
     public static final Uri ALBUM_URI = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
     public static final String ALBUM = MediaStore.Audio.Albums.ALBUM;

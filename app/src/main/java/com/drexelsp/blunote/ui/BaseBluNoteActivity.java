@@ -5,13 +5,13 @@ import java.util.List;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
-import com.drexelsp.blunote.provider.MetaStore;
 
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -186,17 +186,17 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
 
     private Cursor getAlbumListCursor() {
         final String[] columns = {Constants.ALBUM, Constants.ALBUM_ID};
-        return getMetaStore().query(Constants.ALBUM_URI, columns, null, null, Constants.SORT_ALBUMS);
+        return getMetaStore().query(Uri.parse(Constants.META_STORE_URL + Constants.ALBUM), columns, null, null, Constants.SORT_ALBUMS);
     }
 
     private Cursor getArtistListCursor() {
         final String[] columns = {Constants.ARTIST, Constants.ARTIST_ID};
-        return getMetaStore().query(Constants.ARTIST_URI, columns, null, null, Constants.SORT_ARTISTS);
+        return getMetaStore().query(Uri.parse(Constants.META_STORE_URL + Constants.ARTIST), columns, null, null, Constants.SORT_ARTISTS);
     }
 
     private Cursor getTrackListCursor() {
         final String[] columns = {Constants.TITLE, Constants.SONG_ID};
-        return getMetaStore().query(Constants.TRACK_URI, columns, Constants.WHERE, null, Constants.SORT_TRACK);
+        return getMetaStore().query(Uri.parse(Constants.META_STORE_URL + Constants.TRACK), columns, Constants.WHERE, null, Constants.SORT_TRACK);
     }
 
     public ContentResolver getMetaStore()
