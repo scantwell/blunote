@@ -10,8 +10,10 @@ import android.os.IBinder;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.drexelsp.blunote.adapters.NetworkArrayAdapter;
 import com.drexelsp.blunote.beans.ConnectionListItem;
@@ -161,16 +163,17 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (v == joinNetworkButton) {
-            if (mBound && mService != null) {
-                // Get Selected Network
-                ConnectionListItem network = mAdapter.getItem(networkListView.getCheckedItemPosition());
-                // Extract Mac Address
+            int position = networkListView.getCheckedItemPosition();
+            if (position == AdapterView.INVALID_POSITION) {
+                Toast toast = Toast.makeText(getCurrentContext(), "No Network Selected", Toast.LENGTH_SHORT);
+                toast.show();
+            } else if (mBound && mService != null){
+                ConnectionListItem network = mAdapter.getItem(position);
                 String macAddress = network.getMacAddress();
-                // Call Connect To Network
                 mService.connectToNetwork(macAddress);
+                Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
+                startActivity(intent);
             }
-            Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
-            startActivity(intent);
         } else if (v == createNetworkButton) {
             if (mBound && mService != null) {
                 // Call Start Network
