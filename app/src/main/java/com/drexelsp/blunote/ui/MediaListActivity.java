@@ -1,13 +1,5 @@
 package com.drexelsp.blunote.ui;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import com.drexelsp.blunote.blunote.Constants;
-import com.drexelsp.blunote.blunote.R;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +14,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
+
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by U6020377 on 1/25/2016.
@@ -115,8 +115,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     }
 
     @Override
-    public void handleOnMetaStoreChange()
-    {
+    public void handleOnMetaStoreChange() {
         String method;
         if (albumsToggle.isChecked()) {
             method = "album";
@@ -219,35 +218,26 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
         startActivity(intent);
     }
 
-    private void setMediaLists(Map<String, String> mediaMap)
-    {
+    private void setMediaLists(Map<String, String> mediaMap) {
         mediaList = new ArrayList<>();
         idList = new ArrayList<>();
 
-        for (Map.Entry<String, String> entry : mediaMap.entrySet())
-        {
+        for (Map.Entry<String, String> entry : mediaMap.entrySet()) {
             mediaList.add(entry.getKey());
             idList.add(entry.getValue());
         }
     }
 
-    private class UpdateMediaListTask extends AsyncTask<String, Void, Map<String, String>>
-    {
+    private class UpdateMediaListTask extends AsyncTask<String, Void, Map<String, String>> {
         @Override
-        protected Map<String, String> doInBackground(String... param)
-        {
+        protected Map<String, String> doInBackground(String... param) {
             Map<String, String> newMediaMap;
 
-            if(param.equals("album"))
-            {
+            if (param.equals("album")) {
                 newMediaMap = getAlbumList();
-            }
-            else if(param.equals("artist"))
-            {
+            } else if (param.equals("artist")) {
                 newMediaMap = getArtistList();
-            }
-            else
-            {
+            } else {
                 newMediaMap = getSongList();
             }
 
@@ -255,8 +245,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
         }
 
         @Override
-        protected void onPostExecute(Map<String, String> map)
-        {
+        protected void onPostExecute(Map<String, String> map) {
             setMediaLists(map);
             mediaListAdapter.notifyDataSetChanged();
         }

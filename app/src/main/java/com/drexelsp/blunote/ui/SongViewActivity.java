@@ -1,13 +1,13 @@
 package com.drexelsp.blunote.ui;
 
-import com.drexelsp.blunote.blunote.Constants;
-import com.drexelsp.blunote.blunote.R;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
 
 /**
  * Created by U6020377 on 1/25/2016.
