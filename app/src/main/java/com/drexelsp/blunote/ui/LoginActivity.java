@@ -172,7 +172,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             if (position == AdapterView.INVALID_POSITION) {
                 Toast toast = Toast.makeText(getCurrentContext(), "No Network Selected", Toast.LENGTH_SHORT);
                 toast.show();
-            } else if (mBound && mService != null){
+            } else if (mBound && mService != null) {
                 ConnectionListItem network = mAdapter.getItem(position);
                 String macAddress = network.getMacAddress();
                 mService.connectToNetwork(macAddress);

@@ -14,7 +14,7 @@ import java.util.UUID;
 
 /**
  * Created by omnia on 1/13/16.
- *
+ * <p/>
  * Initializes a connection to a host device
  */
 public class BluetoothConnector {

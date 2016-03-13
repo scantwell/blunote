@@ -21,7 +21,8 @@ public class BlunoteRouter extends Thread {
     private boolean isHost;
     private boolean awake;
 
-    private BlunoteRouter() { }
+    private BlunoteRouter() {
+    }
 
     public static BlunoteRouter getInstance() {
         return instance;
@@ -31,13 +32,13 @@ public class BlunoteRouter extends Thread {
         upStream.writeMessage(msg);
     }
 
-    public void setHostMode(Context context){
+    public void setHostMode(Context context) {
         applicationContext = context;
         isHost = true;
         this.start();
     }
 
-    public void setClientMode(Context context){
+    public void setClientMode(Context context) {
         applicationContext = context;
         isHost = false;
         this.start();
@@ -80,7 +81,7 @@ public class BlunoteRouter extends Thread {
                     }
                 }
 
-                for (BlunoteSocket socket: downStream) {
+                for (BlunoteSocket socket : downStream) {
                     if (socket.numMessages() > 0) {
                         Log.v(TAG, "Reading Message from DownStream");
                         Message msg = socket.readMessage();

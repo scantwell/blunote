@@ -20,6 +20,7 @@ abstract public class ClientService extends Service {
     protected IBinder mBinder = null;
 
     abstract public void onReceived(byte[] data);
+
     abstract public void onNetworkEvent(BluetoothEvent bluetoothEvent);
 
     // Sends to another application via bluetooth/etc

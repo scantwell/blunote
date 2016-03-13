@@ -66,8 +66,8 @@ public class Service extends ClientService {
             BlunoteMessages.MetadataUpdate metadataUpdate = mediaPlayer.getMetadata();
             Pdu pdu = createMessage()
                     .setMessage(WrapperMessage.newBuilder()
-                        .setType(WrapperMessage.Type.METADATA_UPDATE)
-                        .setMetadataUpdate(metadataUpdate)).build();
+                            .setType(WrapperMessage.Type.METADATA_UPDATE)
+                            .setMetadataUpdate(metadataUpdate)).build();
             super.send(pdu.toByteArray());
         }
     }
