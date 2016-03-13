@@ -10,9 +10,11 @@ import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +31,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     ViewFlipper vf;
     SearchView searchView;
     static ContentResolver metaStore;
+    static MetaStoreObserver metaStoreObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +40,45 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+		getCurrentContext().getContentResolver().registerContentObserver(
+				Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
+
         if (!Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             handleIntent(getIntent());
         }
 
         vf = ((ViewFlipper) findViewById(R.id.view_flipper));
         vf.setDisplayedChild(getViewConstant());
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+		getCurrentContext().getContentResolver().unregisterContentObserver(getMetaStoreObserver());
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+		getCurrentContext().getContentResolver().registerContentObserver(
+				Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+		getCurrentContext().getContentResolver().registerContentObserver(
+				Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+		getCurrentContext().getContentResolver().unregisterContentObserver(getMetaStoreObserver());
     }
 
     @Override
@@ -125,6 +161,13 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     public void handleIntent(Intent intent) {
     }
 
+	/**
+	 * Method to be overridden to if the MetaStore is changed while viewing an activity
+	 */
+	public void handleOnMetaStoreChange()
+	{
+	}
+
     public abstract Context getCurrentContext();
 
     public abstract int getViewConstant();
@@ -202,8 +245,40 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     public ContentResolver getMetaStore()
     {
         if(metaStore == null)
-            metaStore = getCurrentContext().getContentResolver();
+		{
+			metaStore = getCurrentContext().getContentResolver();
+		}
 
         return metaStore;
     }
+
+    public MetaStoreObserver getMetaStoreObserver()
+    {
+        if (metaStoreObserver == null)
+		{
+			metaStoreObserver = new MetaStoreObserver(new Handler());
+		}
+
+        return metaStoreObserver;
+    }
+
+	public class MetaStoreObserver extends ContentObserver
+	{
+		public MetaStoreObserver(Handler handler)
+		{
+			super(handler);
+		}
+
+		@Override
+		public void onChange(boolean selfChange)
+		{
+			this.onChange(selfChange, null);
+		}
+
+		@Override
+		public void onChange(boolean selfChange, Uri uri)
+		{
+			handleOnMetaStoreChange();
+		}
+	}
 }

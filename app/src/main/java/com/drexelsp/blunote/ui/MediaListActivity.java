@@ -1,5 +1,6 @@
 package com.drexelsp.blunote.ui;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import com.drexelsp.blunote.blunote.R;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.view.View;
@@ -111,6 +113,22 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     }
 
     @Override
+    public void handleOnMetaStoreChange()
+    {
+        String method;
+        if (albumsToggle.isChecked()) {
+            method = "album";
+        } else if (artistsToggle.isChecked()) {
+            method = "artist";
+        } else {
+            method = "song";
+        }
+
+        UpdateMediaListTask task = new UpdateMediaListTask();
+        task.execute(method);
+    }
+
+    @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (buttonView == songsToggle && isChecked) {
             albumsToggle.setChecked(false);
@@ -148,7 +166,9 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     private void setSongList() {
         title.setText(getResources().getString(R.string.all_songs));
         mediaList = getSongList();
-        setSimpleList(mediaListView, mediaList);
+        mediaListAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, mediaList);
+        mediaListView.setAdapter(mediaListAdapter);
         mediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -163,7 +183,9 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     private void setAlbumList() {
         title.setText(getResources().getString(R.string.all_albums));
         mediaList = getAlbumList();
-        setSimpleList(mediaListView, mediaList);
+        mediaListAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, mediaList);
+        mediaListView.setAdapter(mediaListAdapter);
         mediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -178,7 +200,9 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     private void setArtistList() {
         title.setText(getResources().getString(R.string.all_artists));
         mediaList = getArtistList();
-        setSimpleList(mediaListView, mediaList);
+        mediaListAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, mediaList);
+        mediaListView.setAdapter(mediaListAdapter);
         mediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -190,5 +214,36 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     private void startActivity(Class activityClass) {
         Intent intent = new Intent(MediaListActivity.this, activityClass);
         startActivity(intent);
+    }
+
+    private class UpdateMediaListTask extends AsyncTask<String, Void, List<String>>
+    {
+        @Override
+        protected List<String> doInBackground(String... param)
+        {
+            List<String> newMediaList = new ArrayList<>();
+
+            if(param.equals("album"))
+            {
+                newMediaList = getAlbumList();
+            }
+            else if(param.equals("artist"))
+            {
+                newMediaList = getArtistList();
+            }
+            else
+            {
+                newMediaList = getSongList();
+            }
+
+            return newMediaList;
+        }
+
+        @Override
+        protected void onPostExecute(List<String> strings)
+        {
+            mediaList = strings;
+            mediaListAdapter.notifyDataSetChanged();
+        }
     }
 }
