@@ -26,6 +26,9 @@ abstract public class ClientService extends Service {
     protected void send(byte[] data) {
         Log.v(TAG, "Sending message.");
         Message msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
+        Bundle bundle = new Bundle(1);
+        bundle.putByteArray("data", data);
+        msg.setData(bundle);
         try {
             mConnection.send(msg);
         } catch (RemoteException e) {

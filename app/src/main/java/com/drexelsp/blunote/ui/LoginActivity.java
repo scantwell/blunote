@@ -200,6 +200,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
 
     @Subscribe
     public void onMessageEvent(BluetoothEvent bluetoothEvent) {
+        Log.v(TAG, "BluetoothEvent Received");
         if (bluetoothEvent.event == BluetoothEvent.CONNECTOR) {
             if (bluetoothEvent.success) {
                 Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);

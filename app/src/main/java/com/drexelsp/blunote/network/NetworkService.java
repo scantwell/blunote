@@ -46,7 +46,8 @@ public class NetworkService extends Service {
     // Sends to another application via bluetooth/etc
     public void send(Message msg) {
         Log.v(TAG, "Sending message.");
-        this.onReceived("Hello World!");
+        BlunoteRouter blunoteRouter = BlunoteRouter.getInstance();
+        blunoteRouter.send(msg);
     }
 
     @Subscribe
@@ -61,22 +62,16 @@ public class NetworkService extends Service {
     }
 
     public void connectToNetwork(String device) {
-        BlunoteRouter router = new BlunoteRouter();
-
-        BluetoothConnector bluetoothConnector = new BluetoothConnector(router);
+        BlunoteRouter.getInstance().setClientMode(getApplicationContext());
+        BluetoothConnector bluetoothConnector = new BluetoothConnector(uuid);
         bluetoothConnector.connectToDevice(device);
-
-        // Add Server Listener
-        BluetoothServerListener bluetoothServerListener = new BluetoothServerListener(router, uuid);
-
+        mBluetoothServerListener = new BluetoothServerListener(uuid);
         makeDiscoverable();
     }
 
     public void startNetwork() {
-        BlunoteRouter router = new BlunoteRouter();
-
-        mBluetoothServerListener = new BluetoothServerListener(router, uuid);
-
+        BlunoteRouter.getInstance().setHostMode(getApplicationContext());
+        mBluetoothServerListener = new BluetoothServerListener(uuid);
         makeDiscoverable();
     }
 

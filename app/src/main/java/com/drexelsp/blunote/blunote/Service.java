@@ -60,6 +60,16 @@ public class Service extends ClientService {
     @Override
     public void onNetworkEvent(BluetoothEvent bluetoothEvent) {
         EventBus.getDefault().post(bluetoothEvent);
+        if (bluetoothEvent.event == BluetoothEvent.CONNECTOR && bluetoothEvent.success) {
+            // Gather Metadata and Send it
+            MediaPlayer mediaPlayer = new MediaPlayer(getApplicationContext().getContentResolver());
+            BlunoteMessages.MetadataUpdate metadataUpdate = mediaPlayer.getMetadata();
+            Pdu pdu = createMessage()
+                    .setMessage(WrapperMessage.newBuilder()
+                        .setType(WrapperMessage.Type.METADATA_UPDATE)
+                        .setMetadataUpdate(metadataUpdate)).build();
+            super.send(pdu.toByteArray());
+        }
     }
 
     @Override

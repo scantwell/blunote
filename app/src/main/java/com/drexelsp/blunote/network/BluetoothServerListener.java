@@ -28,11 +28,11 @@ public class BluetoothServerListener {
     private BlunoteRouter mBlunoteRouter;
     private EventBus mEventBus;
 
-    public BluetoothServerListener(BlunoteRouter router, UUID uuid) {
+    public BluetoothServerListener(UUID uuid) {
         Log.v(TAG, "Created");
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mEventBus = EventBus.getDefault();
-        mBlunoteRouter = router;
+        mBlunoteRouter = BlunoteRouter.getInstance();
         MY_UUID = uuid;
 
         mServerThread = new ServerThread();
@@ -67,7 +67,7 @@ public class BluetoothServerListener {
                     Log.v(TAG, "Listening for new connection");
                     socket = mmServerSocket.accept();
                     if (socket != null) {
-                        BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(socket, mBlunoteRouter);
+                        BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(socket);
                         mBlunoteRouter.addDownStream(blunoteBluetoothSocket);
 
                         bluetoothEvent = new BluetoothEvent(BluetoothEvent.SERVER_LISTENER, true, socket.getRemoteDevice().getAddress());

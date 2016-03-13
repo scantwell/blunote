@@ -19,15 +19,17 @@ import java.util.UUID;
  */
 public class BluetoothConnector {
     private static final String TAG = "Bluetooth Connector";
-    private static final UUID MY_UUID = UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a");
+    private final UUID MY_UUID;
+
     private BluetoothAdapter mBluetoothAdapter;
     private BlunoteRouter mRouter;
     private EventBus mEventBus;
 
-    public BluetoothConnector(BlunoteRouter router) {
+    public BluetoothConnector(UUID uuid) {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mEventBus = EventBus.getDefault();
-        mRouter = router;
+        mRouter = BlunoteRouter.getInstance();
+        MY_UUID = uuid;
     }
 
     /**
@@ -63,7 +65,7 @@ public class BluetoothConnector {
             BluetoothEvent bluetoothEvent;
             try {
                 mmSocket.connect();
-                BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(mmSocket, mRouter);
+                BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(mmSocket);
                 mRouter.setUpStream(blunoteBluetoothSocket);
 
                 bluetoothEvent = new BluetoothEvent(BluetoothEvent.CONNECTOR, true, mmDevice.getAddress());
