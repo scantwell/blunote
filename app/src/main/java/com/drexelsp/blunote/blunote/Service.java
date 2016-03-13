@@ -40,14 +40,6 @@ public class Service extends ClientService {
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        this.handlers.add(new MediaPlayer(getApplicationContext().getContentResolver()));
-        this.handlers.add(new VoteEngine());
-        this.handlers.add(new Metadata(getApplicationContext()));
-    }
-
-    @Override
     public void onReceived(byte[] data) {
         Log.v(TAG, "Received a message.");
         try {
@@ -70,14 +62,21 @@ public class Service extends ClientService {
         EventBus.getDefault().post(bluetoothEvent);
         if (bluetoothEvent.event == BluetoothEvent.CONNECTOR && bluetoothEvent.success) {
             // Gather Metadata and Send it
-            MediaPlayer mediaPlayer = new MediaPlayer(getApplicationContext().getContentResolver());
-            BlunoteMessages.MetadataUpdate metadataUpdate = mediaPlayer.getMetadata();
+            Metadata metadata = new Metadata(getApplicationContext());
+            BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata();
             Pdu pdu = createMessage()
                     .setMessage(WrapperMessage.newBuilder()
                             .setType(WrapperMessage.Type.METADATA_UPDATE)
                             .setMetadataUpdate(metadataUpdate)).build();
             super.send(pdu.toByteArray());
         }
+    }
+    
+    public void onCreate() {
+        super.onCreate();
+        this.handlers.add(new Metadata(getApplicationContext()));
+        this.handlers.add(new Media(getApplicationContext(), this));
+        this.handlers.add(new VoteEngine());
     }
 
     public void startNetwork() {
