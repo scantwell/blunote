@@ -1,9 +1,14 @@
 package com.drexelsp.blunote.ui;
 
 import android.app.SearchManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.ContentObserver;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -16,7 +21,9 @@ import android.widget.ViewFlipper;
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Brisbin on 2/10/2016.
@@ -24,6 +31,8 @@ import java.util.List;
 public abstract class BaseBluNoteActivity extends AppCompatActivity {
     ViewFlipper vf;
     SearchView searchView;
+    static ContentResolver metaStore;
+    static MetaStoreObserver metaStoreObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +41,47 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getCurrentContext().getContentResolver().registerContentObserver(
+                Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
+
         if (!Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             handleIntent(getIntent());
         }
 
         vf = ((ViewFlipper) findViewById(R.id.view_flipper));
         vf.setDisplayedChild(getViewConstant());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getCurrentContext().getContentResolver().unregisterContentObserver(getMetaStoreObserver());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getCurrentContext().getContentResolver().unregisterContentObserver(getMetaStoreObserver());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getCurrentContext().getContentResolver().registerContentObserver(
+                Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getCurrentContext().getContentResolver().registerContentObserver(
+                Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        getCurrentContext().getContentResolver().unregisterContentObserver(getMetaStoreObserver());
     }
 
     @Override
@@ -120,6 +164,12 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     public void handleIntent(Intent intent) {
     }
 
+    /**
+     * Method to be overridden to if the MetaStore is changed while viewing an activity
+     */
+    public void handleOnMetaStoreChange() {
+    }
+
     public abstract Context getCurrentContext();
 
     public abstract int getViewConstant();
@@ -127,4 +177,99 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     public abstract boolean showMusicMenuItems();
 
     public abstract boolean showSearchMenuItem();
+
+    protected Map<String, String> getAlbumList() {
+        Map<String, String> albumMap = new LinkedHashMap<>();
+        Cursor cur = getAlbumListCursor();
+        String album, albumID;
+
+        while (cur.moveToNext()) {
+            album = cur.getString(cur.getColumnIndex(Constants.ALBUM));
+            albumID = cur.getString(cur.getColumnIndex(Constants.ALBUM_ID));
+            if (album != null && albumID != null) {
+                albumMap.put(album, albumID);
+            }
+        }
+
+        return albumMap;
+    }
+
+    protected Map<String, String> getArtistList() {
+        Map<String, String> artistMap = new LinkedHashMap<>();
+        Cursor cur = getArtistListCursor();
+        String artist, artistID;
+
+        while (cur.moveToNext()) {
+            artist = cur.getString(cur.getColumnIndex(Constants.ARTIST));
+            artistID = cur.getString(cur.getColumnIndex(Constants.ARTIST_ID));
+            if (artist != null && artistID != null) {
+                artistMap.put(artist, artistID);
+            }
+        }
+
+        return artistMap;
+    }
+
+    protected Map<String, String> getSongList() {
+        Map<String, String> songList = new LinkedHashMap<>();
+        Cursor cur = getTrackListCursor();
+        String song, songID;
+
+        while (cur.moveToNext()) {
+            song = cur.getString(cur.getColumnIndex(Constants.TITLE));
+            songID = cur.getString(cur.getColumnIndex(Constants.SONG_ID));
+            if (song != null && songID != null) {
+                songList.put(song, songID);
+            }
+        }
+
+        return songList;
+    }
+
+    private Cursor getAlbumListCursor() {
+        final String[] columns = {Constants.ALBUM, Constants.ALBUM_ID};
+        return getMetaStore().query(Uri.parse(Constants.META_STORE_URL + Constants.ALBUM), columns, null, null, Constants.SORT_ALBUMS);
+    }
+
+    private Cursor getArtistListCursor() {
+        final String[] columns = {Constants.ARTIST, Constants.ARTIST_ID};
+        return getMetaStore().query(Uri.parse(Constants.META_STORE_URL + Constants.ARTIST), columns, null, null, Constants.SORT_ARTISTS);
+    }
+
+    private Cursor getTrackListCursor() {
+        final String[] columns = {Constants.TITLE, Constants.SONG_ID};
+        return getMetaStore().query(Uri.parse(Constants.META_STORE_URL + Constants.TRACK), columns, null, null, Constants.SORT_TRACK);
+    }
+
+    public ContentResolver getMetaStore() {
+        if (metaStore == null) {
+            metaStore = getCurrentContext().getContentResolver();
+        }
+
+        return metaStore;
+    }
+
+    public MetaStoreObserver getMetaStoreObserver() {
+        if (metaStoreObserver == null) {
+            metaStoreObserver = new MetaStoreObserver(new Handler());
+        }
+
+        return metaStoreObserver;
+    }
+
+    public class MetaStoreObserver extends ContentObserver {
+        public MetaStoreObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            this.onChange(selfChange, null);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            handleOnMetaStoreChange();
+        }
+    }
 }
