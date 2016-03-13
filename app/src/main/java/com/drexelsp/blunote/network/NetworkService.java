@@ -14,6 +14,10 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.events.BluetoothEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.UUID;
 
@@ -34,33 +38,40 @@ public class NetworkService extends Service {
         Log.v(TAG, "Received a message.");
         Intent intent = new Intent();
         intent.setAction("networkservice.onrecieved");
-        intent.putExtra("data", data);
+        intent.putExtra("Type", "MessageReceived");
+        intent.putExtra("Data", data);
         sendBroadcast(intent);
     }
 
     // Sends to another application via bluetooth/etc
     public void send(Message msg) {
         Log.v(TAG, "Sending message.");
-        this.onReceived("Hello World!");
+        BlunoteRouter blunoteRouter = BlunoteRouter.getInstance();
+        blunoteRouter.send(msg);
+    }
+
+    @Subscribe
+    public void onBluetoothEvent(BluetoothEvent bluetoothEvent) {
+        Intent intent = new Intent();
+        intent.setAction("networkservice.onrecieved");
+        intent.putExtra("Type", "BluetoothEvent");
+        intent.putExtra("Event", bluetoothEvent.event);
+        intent.putExtra("Success", bluetoothEvent.success);
+        intent.putExtra("MacAddress", bluetoothEvent.macAddress);
+        sendBroadcast(intent);
     }
 
     public void connectToNetwork(String device) {
-        BlunoteRouter router = new BlunoteRouter();
-
-        BluetoothConnector bluetoothConnector = new BluetoothConnector(router);
+        BlunoteRouter.getInstance().setClientMode(getApplicationContext());
+        BluetoothConnector bluetoothConnector = new BluetoothConnector(uuid);
         bluetoothConnector.connectToDevice(device);
-
-        // Add Server Listener
-        BluetoothServerListener bluetoothServerListener = new BluetoothServerListener(router, uuid);
-
+        mBluetoothServerListener = new BluetoothServerListener(uuid);
         makeDiscoverable();
     }
 
     public void startNetwork() {
-        BlunoteRouter router = new BlunoteRouter();
-
-        mBluetoothServerListener = new BluetoothServerListener(router, uuid);
-
+        BlunoteRouter.getInstance().setHostMode(getApplicationContext());
+        mBluetoothServerListener = new BluetoothServerListener(uuid);
         makeDiscoverable();
     }
 
@@ -88,6 +99,7 @@ public class NetworkService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.v(TAG, "Binding user.");
+        EventBus.getDefault().register(this);
         this.createNotification();
         return messenger.getBinder();
     }
@@ -118,6 +130,7 @@ public class NetworkService extends Service {
     @Override
     public boolean onUnbind(Intent intent) {
         Log.v(TAG, "Unbinding user.");
+        EventBus.getDefault().unregister(this);
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // notificationId allows you to update the notification later on.

@@ -11,6 +11,8 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.drexelsp.blunote.events.BluetoothEvent;
+
 abstract public class ClientService extends Service {
     private String TAG = "ClientService";
     protected final NetworkServiceConnection mConnection = new NetworkServiceConnection();
@@ -19,10 +21,15 @@ abstract public class ClientService extends Service {
 
     abstract public void onReceived(byte[] data);
 
+    abstract public void onNetworkEvent(BluetoothEvent bluetoothEvent);
+
     // Sends to another application via bluetooth/etc
     protected void send(byte[] data) {
         Log.v(TAG, "Sending message.");
         Message msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
+        Bundle bundle = new Bundle(1);
+        bundle.putByteArray("data", data);
+        msg.setData(bundle);
         try {
             mConnection.send(msg);
         } catch (RemoteException e) {

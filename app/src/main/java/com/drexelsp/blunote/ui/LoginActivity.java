@@ -10,15 +10,21 @@ import android.os.IBinder;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.drexelsp.blunote.adapters.NetworkArrayAdapter;
 import com.drexelsp.blunote.beans.ConnectionListItem;
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.blunote.Service;
+import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.network.BluetoothScanner;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -148,29 +154,30 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     @Override
     protected void onStart() {
         super.onStart();
-        // Bind to the service
         bindService(new Intent(this, Service.class), this, Context.BIND_AUTO_CREATE);
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onStop() {
-        super.onStop();
+        EventBus.getDefault().unregister(this);
         unbindService(this);
+        super.onStop();
     }
 
     @Override
     public void onClick(View v) {
         if (v == joinNetworkButton) {
-            if (mBound && mService != null) {
-                // Get Selected Network
-                ConnectionListItem network = mAdapter.getItem(networkListView.getCheckedItemPosition());
-                // Extract Mac Address
+            int position = networkListView.getCheckedItemPosition();
+            if (position == AdapterView.INVALID_POSITION) {
+                Toast toast = Toast.makeText(getCurrentContext(), "No Network Selected", Toast.LENGTH_SHORT);
+                toast.show();
+            } else if (mBound && mService != null) {
+                ConnectionListItem network = mAdapter.getItem(position);
                 String macAddress = network.getMacAddress();
-                // Call Connect To Network
                 mService.connectToNetwork(macAddress);
+
             }
-            Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
-            startActivity(intent);
         } else if (v == createNetworkButton) {
             if (mBound && mService != null) {
                 // Call Start Network
@@ -188,6 +195,19 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         } else if (v == refreshButton) {
             mAdapter.clear();
             mScanner.startDiscovery();
+        }
+    }
+
+    @Subscribe
+    public void onMessageEvent(BluetoothEvent bluetoothEvent) {
+        Log.v(TAG, "BluetoothEvent Received");
+        if (bluetoothEvent.event == BluetoothEvent.CONNECTOR) {
+            if (bluetoothEvent.success) {
+                Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getCurrentContext(), "Connection Error", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

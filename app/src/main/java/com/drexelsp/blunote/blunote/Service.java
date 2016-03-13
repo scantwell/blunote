@@ -11,8 +11,11 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
+import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.network.ClientService;
 import com.google.protobuf.InvalidProtocolBufferException;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -55,6 +58,20 @@ public class Service extends ClientService {
     }
 
     @Override
+    public void onNetworkEvent(BluetoothEvent bluetoothEvent) {
+        EventBus.getDefault().post(bluetoothEvent);
+        if (bluetoothEvent.event == BluetoothEvent.CONNECTOR && bluetoothEvent.success) {
+            // Gather Metadata and Send it
+            Metadata metadata = new Metadata(getApplicationContext());
+            BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata();
+            Pdu pdu = createMessage()
+                    .setMessage(WrapperMessage.newBuilder()
+                            .setType(WrapperMessage.Type.METADATA_UPDATE)
+                            .setMetadataUpdate(metadataUpdate)).build();
+            super.send(pdu.toByteArray());
+        }
+    }
+    
     public void onCreate() {
         super.onCreate();
         this.handlers.add(new Metadata(getApplicationContext()));

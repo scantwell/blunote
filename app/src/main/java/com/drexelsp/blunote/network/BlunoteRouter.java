@@ -1,5 +1,7 @@
 package com.drexelsp.blunote.network;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Message;
 import android.util.Log;
 
@@ -12,13 +14,34 @@ import java.util.ArrayList;
  */
 public class BlunoteRouter extends Thread {
     private static final String TAG = "Blunote Router";
+    private static BlunoteRouter instance = new BlunoteRouter();
     private BlunoteSocket upStream;
-    private ArrayList<BlunoteSocket> downStream;
+    private ArrayList<BlunoteSocket> downStream = new ArrayList<>();
+    private Context applicationContext;
+    private boolean isHost;
     private boolean awake;
 
-    public BlunoteRouter() {
-        Log.v(TAG, "Created");
-        downStream = new ArrayList<>();
+    private BlunoteRouter() {
+    }
+
+    public static BlunoteRouter getInstance() {
+        return instance;
+    }
+
+    public void send(Message msg) {
+        upStream.writeMessage(msg);
+    }
+
+    public void setHostMode(Context context) {
+        applicationContext = context;
+        isHost = true;
+        this.start();
+    }
+
+    public void setClientMode(Context context) {
+        applicationContext = context;
+        isHost = false;
+        this.start();
     }
 
     public void setUpStream(BlunoteSocket socket) {
@@ -32,27 +55,42 @@ public class BlunoteRouter extends Thread {
     }
 
     public void run() {
-        Log.v(TAG, "Thread Started");
         awake = true;
         //noinspection InfiniteLoopStatement
         while (true) {
-            // Read Message from UpStream
-            if (upStream.numMessages() > 0) {
-                Message msg = upStream.readMessage();
 
-                // Deliver message to application
-
-                // Echo in downstream
-                for (BlunoteSocket sock : downStream) {
-                    sock.writeMessage(msg);
+            if (isHost) {
+                // Host Mode
+                for (BlunoteSocket socket : downStream) {
+                    if (socket.numMessages() > 0) {
+                        Log.v(TAG, "Reading Message from DownStream");
+                        Message msg = socket.readMessage();
+                        sendMessageToApplication(msg);
+                    }
                 }
-            }
 
-            // Echo Messages from DownStream
-            for (BlunoteSocket sock : downStream) {
-                if (sock.numMessages() > 0) {
-                    Message msg = sock.readMessage();
-                    upStream.writeMessage(msg);
+            } else {
+                // Client Mode
+                if (upStream != null && upStream.numMessages() > 0) {
+                    Log.v(TAG, "Reading Message from UpStream");
+                    Message msg = upStream.readMessage();
+                    sendMessageToApplication(msg);
+
+                    for (BlunoteSocket socket : downStream) {
+                        socket.writeMessage(msg);
+                    }
+                }
+
+                for (BlunoteSocket socket : downStream) {
+                    if (socket.numMessages() > 0) {
+                        Log.v(TAG, "Reading Message from DownStream");
+                        Message msg = socket.readMessage();
+                        if (upStream != null) {
+                            upStream.writeMessage(msg);
+                        } else {
+                            Log.e(TAG, "Unable to echo message from DownStream. UpStream not set");
+                        }
+                    }
                 }
             }
 
@@ -75,5 +113,13 @@ public class BlunoteRouter extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendMessageToApplication(Message msg) {
+        Intent intent = new Intent();
+        intent.setAction("networkservice.onrecieved");
+        intent.putExtra("Type", "MessageReceived");
+        intent.putExtra("Data", msg.getData().getByteArray("data"));
+        applicationContext.sendBroadcast(intent);
     }
 }

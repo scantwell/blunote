@@ -47,6 +47,52 @@ public final class MetaStore extends ContentProvider {
         return true;
     }
 
+    @Override
+    public int bulkInsert(Uri uri, ContentValues values[]) {
+        SQLiteDatabase db = mHelper.getWritableDatabase();
+        switch (URI_MATCHER.match(uri)) {
+            case ALBUM_LIST:
+                db.beginTransaction();
+                for (int i = 0; i < values.length; ++i) {
+                    long id =
+                            db.insert(
+                                    DbSchema.TBL_ALBUM,
+                                    null,
+                                    values[i]);
+                }
+                db.setTransactionSuccessful();
+                db.endTransaction();
+                break;
+            case ARTIST_LIST:
+                db.beginTransaction();
+                for (int i = 0; i < values.length; ++i) {
+                    long id =
+                            db.insert(
+                                    DbSchema.TBL_ARTIST,
+                                    null,
+                                    values[i]);
+                }
+                db.setTransactionSuccessful();
+                db.endTransaction();
+                break;
+            case TRACK_LIST:
+                db.beginTransaction();
+                for (int i = 0; i < values.length; ++i) {
+                    long id =
+                            db.insert(
+                                    DbSchema.TBL_TRACK,
+                                    null,
+                                    values[i]);
+                }
+                db.setTransactionSuccessful();
+                db.endTransaction();
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+        return 0;
+    }
+
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
