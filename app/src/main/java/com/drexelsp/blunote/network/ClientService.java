@@ -11,6 +11,8 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.drexelsp.blunote.events.BluetoothEvent;
+
 abstract public class ClientService extends Service {
     private String TAG = "ClientService";
     protected final NetworkServiceConnection mConnection = new NetworkServiceConnection();
@@ -18,6 +20,7 @@ abstract public class ClientService extends Service {
     protected IBinder mBinder = null;
 
     abstract public void onReceived(byte[] data);
+    abstract public void onNetworkEvent(BluetoothEvent bluetoothEvent);
 
     // Sends to another application via bluetooth/etc
     protected void send(byte[] data) {

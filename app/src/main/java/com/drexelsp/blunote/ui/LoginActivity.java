@@ -20,7 +20,11 @@ import com.drexelsp.blunote.beans.ConnectionListItem;
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.blunote.Service;
+import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.network.BluetoothScanner;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -150,14 +154,15 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     @Override
     protected void onStart() {
         super.onStart();
-        // Bind to the service
         bindService(new Intent(this, Service.class), this, Context.BIND_AUTO_CREATE);
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onStop() {
-        super.onStop();
+        EventBus.getDefault().unregister(this);
         unbindService(this);
+        super.onStop();
     }
 
     @Override
@@ -171,8 +176,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
                 ConnectionListItem network = mAdapter.getItem(position);
                 String macAddress = network.getMacAddress();
                 mService.connectToNetwork(macAddress);
-                Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
-                startActivity(intent);
+
             }
         } else if (v == createNetworkButton) {
             if (mBound && mService != null) {
@@ -191,6 +195,18 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         } else if (v == refreshButton) {
             mAdapter.clear();
             mScanner.startDiscovery();
+        }
+    }
+
+    @Subscribe
+    public void onMessageEvent(BluetoothEvent bluetoothEvent) {
+        if (bluetoothEvent.event == BluetoothEvent.CONNECTOR) {
+            if (bluetoothEvent.success) {
+                Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getCurrentContext(), "Connection Error", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
