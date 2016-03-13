@@ -42,6 +42,7 @@ public class Service extends ClientService {
         super.onCreate();
         this.handlers.add(new MediaPlayer(getApplicationContext().getContentResolver()));
         this.handlers.add(new VoteEngine());
+        this.handlers.add(new Metadata(getApplicationContext()));
     }
 
     @Override

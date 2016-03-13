@@ -46,16 +46,14 @@ public final class MetaStore extends ContentProvider {
         mHelper = new MetaStoreOpenHelper(getContext());
         return true;
     }
+
     @Override
-    public int bulkInsert(Uri uri, ContentValues values[])
-    {
+    public int bulkInsert(Uri uri, ContentValues values[]) {
         SQLiteDatabase db = mHelper.getWritableDatabase();
-        switch(URI_MATCHER.match(uri))
-        {
+        switch (URI_MATCHER.match(uri)) {
             case ALBUM_LIST:
                 db.beginTransaction();
-                for( int i = 0; i < values.length; ++i)
-                {
+                for (int i = 0; i < values.length; ++i) {
                     long id =
                             db.insert(
                                     DbSchema.TBL_ALBUM,
@@ -67,8 +65,7 @@ public final class MetaStore extends ContentProvider {
                 break;
             case ARTIST_LIST:
                 db.beginTransaction();
-                for( int i = 0; i < values.length; ++i)
-                {
+                for (int i = 0; i < values.length; ++i) {
                     long id =
                             db.insert(
                                     DbSchema.TBL_ARTIST,
@@ -80,8 +77,7 @@ public final class MetaStore extends ContentProvider {
                 break;
             case TRACK_LIST:
                 db.beginTransaction();
-                for( int i = 0; i < values.length; ++i)
-                {
+                for (int i = 0; i < values.length; ++i) {
                     long id =
                             db.insert(
                                     DbSchema.TBL_TRACK,

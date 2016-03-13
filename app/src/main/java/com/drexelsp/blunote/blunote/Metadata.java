@@ -2,11 +2,12 @@ package com.drexelsp.blunote.blunote;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.util.Log;
 
 import com.drexelsp.blunote.provider.MetaStoreContract;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by scantwell on 3/10/2016.
@@ -14,10 +15,10 @@ import java.util.ArrayList;
 public class Metadata implements MessageHandler {
 
     private String TAG = "Metadata";
-    private ContentResolver mResolver;
+    private ContentResolver contentResolver;
 
-    public Metadata(ContentResolver cResolver) {
-        mResolver = cResolver;
+    public Metadata(Context context) {
+        contentResolver = context.getContentResolver();
     }
 
     @Override
@@ -36,22 +37,24 @@ public class Metadata implements MessageHandler {
     }
 
     private void addMetadata(BlunoteMessages.MetadataUpdate message) {
-        ArrayList<ContentValues> songs = getSongValues((ArrayList) message.getSongsList());
-        ArrayList<ContentValues> artists = getArtistValues((ArrayList) message.getArtistsList());
-        ArrayList<ContentValues> albums = getAlbumValues((ArrayList) message.getAlbumsList());
-        mResolver.bulkInsert(MetaStoreContract.Track.CONTENT_URI, (ContentValues[])songs.toArray());
-        mResolver.bulkInsert(MetaStoreContract.Artist.CONTENT_URI, (ContentValues[])artists.toArray());
-        mResolver.bulkInsert(MetaStoreContract.Album.CONTENT_URI, (ContentValues[]) albums.toArray());
+        ContentValues[] songs = getSongValues(message.getSongsList());
+        ContentValues[] artists = getArtistValues(message.getArtistsList());
+        ContentValues[] albums = getAlbumValues(message.getAlbumsList());
+        contentResolver.bulkInsert(MetaStoreContract.Track.CONTENT_URI, songs);
+        contentResolver.bulkInsert(MetaStoreContract.Artist.CONTENT_URI, artists);
+        contentResolver.bulkInsert(MetaStoreContract.Album.CONTENT_URI, albums);
     }
 
     private void deleteMetadata(BlunoteMessages.MetadataUpdate message) {
         //mResolver.
     }
 
-    private ArrayList<ContentValues> getSongValues(ArrayList<BlunoteMessages.Song> songs) {
-        ArrayList<ContentValues> valuesList = new ArrayList<>();
+    private ContentValues[] getSongValues(List<BlunoteMessages.Song> songs) {
+        ContentValues[] valuesList = new ContentValues[songs.size()];
         ContentValues values;
-        for (BlunoteMessages.Song song : songs) {
+        BlunoteMessages.Song song;
+        for (int i = 0; i < songs.size(); ++i) {
+            song = songs.get(i);
             values = new ContentValues();
             values.put(MetaStoreContract.Track.ALBUM_ID, song.getAlbumId());
             values.put(MetaStoreContract.Track.ARTIST_ID, song.getArtistId());
@@ -60,29 +63,33 @@ public class Metadata implements MessageHandler {
             values.put(MetaStoreContract.Track.TITLE, song.getTitle());
             values.put(MetaStoreContract.Track.TRACK_NO, song.getTrack());
             values.put(MetaStoreContract.Track.YEAR, song.getYear());
-            valuesList.add(values);
+            valuesList[i] = values;
         }
         return valuesList;
     }
 
-    private ArrayList<ContentValues> getArtistValues(ArrayList<BlunoteMessages.Artist> artists) {
-        ArrayList<ContentValues> valuesList = new ArrayList<>();
+    private ContentValues[] getArtistValues(List<BlunoteMessages.Artist> artists) {
+        ContentValues[] valuesList = new ContentValues[artists.size()];
         ContentValues values;
-        for (BlunoteMessages.Artist artist : artists) {
+        BlunoteMessages.Artist artist;
+        for (int i = 0; i < artists.size(); ++i) {
             values = new ContentValues();
+            artist = artists.get(i);
             values.put(MetaStoreContract.Artist.ARTIST, artist.getArtist());
             values.put(MetaStoreContract.Artist.NUMBER_OF_ALBUMS, artist.getNumberOfAlbums());
             values.put(MetaStoreContract.Artist.NUMBER_OF_TRACKS, artist.getNumberOfTracks());
             values.put(MetaStoreContract.Artist.ARTIST_ID, artist.getArtistId());
-            valuesList.add(values);
+            valuesList[i] = values;
         }
         return valuesList;
     }
 
-    private ArrayList<ContentValues> getAlbumValues(ArrayList<BlunoteMessages.Album> albums) {
-        ArrayList<ContentValues> valuesList = new ArrayList<>();
+    private ContentValues[] getAlbumValues(List<BlunoteMessages.Album> albums) {
+        ContentValues[] valuesList = new ContentValues[albums.size()];
         ContentValues values;
-        for (BlunoteMessages.Album album : albums) {
+        BlunoteMessages.Album album;
+        for (int i = 0; i < albums.size(); ++i) {
+            album = albums.get(i);
             values = new ContentValues();
             values.put(MetaStoreContract.Album.ALBUM, album.getAlbum());
             values.put(MetaStoreContract.Album.ALBUM_ART, album.getAlbumArt());
@@ -91,7 +98,7 @@ public class Metadata implements MessageHandler {
             values.put(MetaStoreContract.Album.FIRST_YEAR, album.getFirstYear());
             values.put(MetaStoreContract.Album.LAST_YEAR, album.getLastYear());
             values.put(MetaStoreContract.Album.NUMBER_OF_SONGS, album.getNumberOfSongs());
-            valuesList.add(values);
+            valuesList[i] = values;
         }
         return valuesList;
     }
