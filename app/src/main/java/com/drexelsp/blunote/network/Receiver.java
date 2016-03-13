@@ -17,6 +17,7 @@ public class Receiver extends android.content.BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.v(TAG, "Received");
         // Extract data included in the Intent
         String messageType = intent.getStringExtra("Type");
         if (messageType.equals("MessageReceived")) {

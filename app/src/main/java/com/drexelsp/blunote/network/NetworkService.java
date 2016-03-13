@@ -16,6 +16,7 @@ import android.util.Log;
 import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.events.BluetoothEvent;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.UUID;
@@ -49,7 +50,7 @@ public class NetworkService extends Service {
     }
 
     @Subscribe
-    public void onMessageEvent(BluetoothEvent bluetoothEvent) {
+    public void onBluetoothEvent(BluetoothEvent bluetoothEvent) {
         Intent intent = new Intent();
         intent.setAction("networkservice.onrecieved");
         intent.putExtra("Type", "BluetoothEvent");
@@ -103,6 +104,7 @@ public class NetworkService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.v(TAG, "Binding user.");
+        EventBus.getDefault().register(this);
         this.createNotification();
         return messenger.getBinder();
     }
@@ -133,6 +135,7 @@ public class NetworkService extends Service {
     @Override
     public boolean onUnbind(Intent intent) {
         Log.v(TAG, "Unbinding user.");
+        EventBus.getDefault().unregister(this);
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // notificationId allows you to update the notification later on.
