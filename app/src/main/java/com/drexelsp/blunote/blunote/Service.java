@@ -40,6 +40,14 @@ public class Service extends ClientService {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        this.handlers.add(new MediaPlayer(getApplicationContext().getContentResolver()));
+        this.handlers.add(new VoteEngine());
+        this.handlers.add(new Metadata(getApplicationContext()));
+    }
+
+    @Override
     public void onReceived(byte[] data) {
         Log.v(TAG, "Received a message.");
         try {
@@ -70,14 +78,6 @@ public class Service extends ClientService {
                             .setMetadataUpdate(metadataUpdate)).build();
             super.send(pdu.toByteArray());
         }
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        this.handlers.add(new MediaPlayer(getApplicationContext().getContentResolver()));
-        this.handlers.add(new Metadata(getApplicationContext().getContentResolver()));
-        this.handlers.add(new VoteEngine());
     }
 
     public void startNetwork() {
