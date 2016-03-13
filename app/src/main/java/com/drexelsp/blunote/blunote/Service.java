@@ -71,7 +71,7 @@ public class Service extends ClientService {
             super.send(pdu.toByteArray());
         }
     }
-    
+
     public void onCreate() {
         super.onCreate();
         this.handlers.add(new Metadata(getApplicationContext()));
