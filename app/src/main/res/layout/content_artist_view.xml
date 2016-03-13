@@ -19,6 +19,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/artist_title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -59,35 +60,28 @@
                 android:id="@+id/album_name"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".2"
+                android:layout_weight=".25"
                 android:text="@string/album_name" />
-
-            <TextView
-                android:id="@+id/album_artist_name"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".2"
-                android:text="@string/album_artist_name" />
 
             <TextView
                 android:id="@+id/album_length"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".2"
+                android:layout_weight=".25"
                 android:text="@string/album_length" />
 
             <TextView
                 android:id="@+id/album_number_tracks"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".2"
+                android:layout_weight=".25"
                 android:text="@string/album_number_tracks" />
 
             <TextView
                 android:id="@+id/album_year_released"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".2"
+                android:layout_weight=".25"
                 android:text="@string/album_year_released" />
 
         </LinearLayout>

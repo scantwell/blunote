@@ -23,6 +23,7 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         song_view_add_to_queue = (Button) findViewById(R.id.song_view_add_to_queue);
+
         songViewTitle = (TextView) findViewById(R.id.song_view_title);
         songViewArtist = (TextView) findViewById(R.id.song_view_artist);
         songViewAlbum = (TextView) findViewById(R.id.song_view_album);

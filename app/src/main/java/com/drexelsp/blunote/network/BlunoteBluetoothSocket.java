@@ -1,21 +1,16 @@
 package com.drexelsp.blunote.network;
 
 import android.bluetooth.BluetoothSocket;
+import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
@@ -31,10 +26,10 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
     private ArrayList<Message> mailbox;
     private BlunoteRouter mRouter;
 
-    public BlunoteBluetoothSocket(BluetoothSocket socket, BlunoteRouter router) {
+    public BlunoteBluetoothSocket(BluetoothSocket socket) {
         mSocket = socket;
         mailbox = new ArrayList<>();
-        mRouter = router;
+        mRouter = BlunoteRouter.getInstance();
         dataTransferThread = new DataTransferThread(mSocket);
         dataTransferThread.start();
     }
@@ -55,17 +50,9 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
 
     @Override
     public boolean writeMessage(Message msg) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutput out;
-        try {
-            out = new ObjectOutputStream(bos);
-            out.writeObject(msg);
-            dataTransferThread.write(bos.toByteArray());
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        Bundle bundle = msg.getData();
+        dataTransferThread.write(bundle.getByteArray("data"));
+        return true;
     }
 
     private class DataTransferThread extends Thread {
@@ -104,18 +91,12 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
                         int b = ((bytes + bufferSize) < messageSize) ? bufferSize : messageSize - bytes;
                         bytes += inStream.read(buffer, bytes, b);
                     }
-
-                    ByteArrayInputStream bis = new ByteArrayInputStream(buffer);
-                    ObjectInput in;
-                    try {
-                        in = new ObjectInputStream(bis);
-                        Message msg = (Message) in.readObject();
-                        mailbox.add(msg);
-                        mRouter.wakeUp();
-                    } catch (ClassNotFoundException e) {
-                        Log.e(TAG, "Error Class Not Found: " + e.getMessage());
-                    }
-
+                    Bundle bundle = new Bundle(1);
+                    bundle.putByteArray("data", buffer);
+                    Message msg = Message.obtain(null, 0);
+                    msg.setData(bundle);
+                    mailbox.add(msg);
+                    mRouter.wakeUp();
                 } catch (IOException e) {
                     Log.e(TAG, "Error Connection Lost: " + e.getMessage());
                     cancel();
@@ -127,6 +108,7 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
 
         public void write(byte[] bytes) {
             try {
+                Log.v(TAG, "Writing to BluetoothSocket");
                 DataOutputStream d = new DataOutputStream(new BufferedOutputStream(mmOutStream, bytes.length + 4));
 
                 d.writeInt(bytes.length);
