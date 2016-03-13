@@ -5,6 +5,10 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
+import com.drexelsp.blunote.events.BluetoothEvent;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.util.UUID;
 
@@ -22,13 +26,14 @@ public class BluetoothServerListener {
     private BluetoothAdapter mBluetoothAdapter;
     private ServerThread mServerThread;
     private BlunoteRouter mBlunoteRouter;
+    private EventBus mEventBus;
 
-    public BluetoothServerListener(BlunoteRouter router, UUID uuid) {
+    public BluetoothServerListener(UUID uuid) {
         Log.v(TAG, "Created");
-        MY_UUID = uuid;
-
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mBlunoteRouter = router;
+        mEventBus = EventBus.getDefault();
+        mBlunoteRouter = BlunoteRouter.getInstance();
+        MY_UUID = uuid;
 
         mServerThread = new ServerThread();
         mServerThread.start();
@@ -55,15 +60,18 @@ public class BluetoothServerListener {
         }
 
         public void run() {
+            BluetoothEvent bluetoothEvent;
             BluetoothSocket socket;
             while (true) {
                 try {
                     Log.v(TAG, "Listening for new connection");
                     socket = mmServerSocket.accept();
                     if (socket != null) {
-                        BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(socket, mBlunoteRouter);
-
+                        BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(socket);
                         mBlunoteRouter.addDownStream(blunoteBluetoothSocket);
+
+                        bluetoothEvent = new BluetoothEvent(BluetoothEvent.SERVER_LISTENER, true, socket.getRemoteDevice().getAddress());
+                        mEventBus.post(bluetoothEvent);
 
                         Log.v(TAG, "New Client Connected: " + socket.getRemoteDevice());
                     }
