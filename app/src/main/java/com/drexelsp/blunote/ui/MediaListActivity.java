@@ -3,6 +3,7 @@ package com.drexelsp.blunote.ui;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
@@ -29,6 +30,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
 
     ListView mediaListView;
     List<String> mediaList;
+    List<String> idList;
     ToggleButton songsToggle;
     ToggleButton albumsToggle;
     ToggleButton artistsToggle;
@@ -165,14 +167,14 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
      */
     private void setSongList() {
         title.setText(getResources().getString(R.string.all_songs));
-        mediaList = getSongList();
+        setMediaLists(getSongList());
         mediaListAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, mediaList);
         mediaListView.setAdapter(mediaListAdapter);
         mediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(SongViewActivity.class);
+                startActivity(SongViewActivity.class, position);
             }
         });
     }
@@ -182,14 +184,14 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
      */
     private void setAlbumList() {
         title.setText(getResources().getString(R.string.all_albums));
-        mediaList = getAlbumList();
+        setMediaLists(getAlbumList());
         mediaListAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, mediaList);
         mediaListView.setAdapter(mediaListAdapter);
         mediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(AlbumViewActivity.class);
+                startActivity(AlbumViewActivity.class, position);
             }
         });
     }
@@ -199,50 +201,63 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
      */
     private void setArtistList() {
         title.setText(getResources().getString(R.string.all_artists));
-        mediaList = getArtistList();
+        setMediaLists(getArtistList());
         mediaListAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, mediaList);
         mediaListView.setAdapter(mediaListAdapter);
         mediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(ArtistViewActivity.class);
+                startActivity(ArtistViewActivity.class, position);
             }
         });
     }
 
-    private void startActivity(Class activityClass) {
+    private void startActivity(Class activityClass, int position) {
         Intent intent = new Intent(MediaListActivity.this, activityClass);
+        intent.putExtra("_id", idList.get(position));
         startActivity(intent);
     }
 
-    private class UpdateMediaListTask extends AsyncTask<String, Void, List<String>>
+    private void setMediaLists(Map<String, String> mediaMap)
+    {
+        mediaList = new ArrayList<>();
+        idList = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : mediaMap.entrySet())
+        {
+            mediaList.add(entry.getKey());
+            idList.add(entry.getValue());
+        }
+    }
+
+    private class UpdateMediaListTask extends AsyncTask<String, Void, Map<String, String>>
     {
         @Override
-        protected List<String> doInBackground(String... param)
+        protected Map<String, String> doInBackground(String... param)
         {
-            List<String> newMediaList = new ArrayList<>();
+            Map<String, String> newMediaMap;
 
             if(param.equals("album"))
             {
-                newMediaList = getAlbumList();
+                newMediaMap = getAlbumList();
             }
             else if(param.equals("artist"))
             {
-                newMediaList = getArtistList();
+                newMediaMap = getArtistList();
             }
             else
             {
-                newMediaList = getSongList();
+                newMediaMap = getSongList();
             }
 
-            return newMediaList;
+            return newMediaMap;
         }
 
         @Override
-        protected void onPostExecute(List<String> strings)
+        protected void onPostExecute(Map<String, String> map)
         {
-            mediaList = strings;
+            setMediaLists(map);
             mediaListAdapter.notifyDataSetChanged();
         }
     }

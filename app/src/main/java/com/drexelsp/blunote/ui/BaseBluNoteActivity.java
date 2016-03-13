@@ -1,7 +1,8 @@
 package com.drexelsp.blunote.ui;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
@@ -40,8 +41,8 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-		getCurrentContext().getContentResolver().registerContentObserver(
-				Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
+        getCurrentContext().getContentResolver().registerContentObserver(
+                Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
 
         if (!Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             handleIntent(getIntent());
@@ -52,33 +53,40 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        getCurrentContext().getContentResolver().unregisterContentObserver(getMetaStoreObserver());
+    }
+
+    @Override
     protected void onPause()
     {
         super.onPause();
-		getCurrentContext().getContentResolver().unregisterContentObserver(getMetaStoreObserver());
+        getCurrentContext().getContentResolver().unregisterContentObserver(getMetaStoreObserver());
     }
 
     @Override
     protected void onResume()
     {
         super.onResume();
-		getCurrentContext().getContentResolver().registerContentObserver(
-				Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
+        getCurrentContext().getContentResolver().registerContentObserver(
+                Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
     }
 
     @Override
     protected void onStart()
     {
         super.onStart();
-		getCurrentContext().getContentResolver().registerContentObserver(
-				Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
+        getCurrentContext().getContentResolver().registerContentObserver(
+                Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
     }
 
     @Override
     protected void onStop()
     {
         super.onStop();
-		getCurrentContext().getContentResolver().unregisterContentObserver(getMetaStoreObserver());
+        getCurrentContext().getContentResolver().unregisterContentObserver(getMetaStoreObserver());
     }
 
     @Override
@@ -161,12 +169,12 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     public void handleIntent(Intent intent) {
     }
 
-	/**
-	 * Method to be overridden to if the MetaStore is changed while viewing an activity
-	 */
-	public void handleOnMetaStoreChange()
-	{
-	}
+    /**
+     * Method to be overridden to if the MetaStore is changed while viewing an activity
+     */
+    public void handleOnMetaStoreChange()
+    {
+    }
 
     public abstract Context getCurrentContext();
 
@@ -176,51 +184,54 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
 
     public abstract boolean showSearchMenuItem();
 
-    protected List<String> getAlbumList()
+    protected Map<String, String> getAlbumList()
     {
-        List<String> albumList = new ArrayList<>();
+        Map<String, String> albumMap = new LinkedHashMap<>();
         Cursor cur = getAlbumListCursor();
-        String album;
+        String album, albumID;
 
         while(cur.moveToNext())
         {
             album = cur.getString(cur.getColumnIndex(Constants.ALBUM));
-            if(album != null){
-                albumList.add(album);
+            albumID = cur.getString(cur.getColumnIndex(Constants.ALBUM_ID));
+            if(album != null && albumID != null){
+                albumMap.put(album, albumID);
             }
         }
 
-        return albumList;
+        return albumMap;
     }
 
-    protected List<String> getArtistList()
+    protected Map<String, String> getArtistList()
     {
-        List<String> artistList = new ArrayList<>();
+        Map<String, String> artistMap = new LinkedHashMap<>();
         Cursor cur = getArtistListCursor();
-        String artist;
+        String artist, artistID;
 
         while(cur.moveToNext())
         {
             artist = cur.getString(cur.getColumnIndex(Constants.ARTIST));
-            if(artist != null){
-                artistList.add(artist);
+            artistID = cur.getString(cur.getColumnIndex(Constants.ARTIST_ID));
+            if(artist != null && artistID != null){
+                artistMap.put(artist, artistID);
             }
         }
 
-        return artistList;
+        return artistMap;
     }
 
-    protected List<String> getSongList()
+    protected Map<String, String> getSongList()
     {
-        List<String> songList = new ArrayList<>();
+        Map<String, String> songList = new LinkedHashMap<>();
         Cursor cur = getTrackListCursor();
-        String song;
+        String song, songID;
 
         while(cur.moveToNext())
         {
             song = cur.getString(cur.getColumnIndex(Constants.TITLE));
-            if(song != null){
-                songList.add(song);
+            songID = cur.getString(cur.getColumnIndex(Constants.SONG_ID));
+            if(song != null && songID != null){
+                songList.put(song, songID);
             }
         }
 
@@ -245,9 +256,9 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     public ContentResolver getMetaStore()
     {
         if(metaStore == null)
-		{
-			metaStore = getCurrentContext().getContentResolver();
-		}
+        {
+            metaStore = getCurrentContext().getContentResolver();
+        }
 
         return metaStore;
     }
@@ -255,30 +266,30 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     public MetaStoreObserver getMetaStoreObserver()
     {
         if (metaStoreObserver == null)
-		{
-			metaStoreObserver = new MetaStoreObserver(new Handler());
-		}
+        {
+            metaStoreObserver = new MetaStoreObserver(new Handler());
+        }
 
         return metaStoreObserver;
     }
 
-	public class MetaStoreObserver extends ContentObserver
-	{
-		public MetaStoreObserver(Handler handler)
-		{
-			super(handler);
-		}
+    public class MetaStoreObserver extends ContentObserver
+    {
+        public MetaStoreObserver(Handler handler)
+        {
+            super(handler);
+        }
 
-		@Override
-		public void onChange(boolean selfChange)
-		{
-			this.onChange(selfChange, null);
-		}
+        @Override
+        public void onChange(boolean selfChange)
+        {
+            this.onChange(selfChange, null);
+        }
 
-		@Override
-		public void onChange(boolean selfChange, Uri uri)
-		{
-			handleOnMetaStoreChange();
-		}
-	}
+        @Override
+        public void onChange(boolean selfChange, Uri uri)
+        {
+            handleOnMetaStoreChange();
+        }
+    }
 }
