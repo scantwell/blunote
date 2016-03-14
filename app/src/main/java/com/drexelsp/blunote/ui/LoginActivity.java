@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.widget.SearchView;
@@ -22,6 +23,7 @@ import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.blunote.Service;
 import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.network.BluetoothScanner;
+import com.drexelsp.blunote.provider.MetaStoreContract;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -153,6 +155,9 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
 
     @Override
     protected void onStart() {
+        getApplicationContext().getContentResolver().delete(MetaStoreContract.Album.CONTENT_URI, null, null);
+        getApplicationContext().getContentResolver().delete(MetaStoreContract.Artist.CONTENT_URI, null, null);
+        getApplicationContext().getContentResolver().delete(MetaStoreContract.Track.CONTENT_URI, null, null);
         super.onStart();
         bindService(new Intent(this, Service.class), this, Context.BIND_AUTO_CREATE);
         EventBus.getDefault().register(this);
