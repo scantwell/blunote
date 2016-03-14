@@ -52,14 +52,8 @@ public class SongAssembler {
             return;
         }
         this.blackList.add(id);
+        frags.put(id, frag);
         total = frag.getTotalFragments();
-        if (id == target) {
-            writeFragment(frag.getFragment());
-            target++;
-        } else {
-            frags.put(id, frag);
-        }
-
         while (frags.containsKey(target)) {
             frag = frags.remove(target);
             writeFragment(frag.getFragment());
