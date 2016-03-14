@@ -108,28 +108,9 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
 
             if (cursor1 != null && cursor1.moveToNext()) {
                 Log.v(TAG, "Album Found");
-                String albumArt = cursor1.getString(cursor1.getColumnIndex("album_art"));
-
-                try {
-                    File file = new File("/storage/emulated/0/Android/data/com.android.providers.media/albumthumbs/1408551564765");
-                    FileInputStream fin = new FileInputStream(file);
-
-                    byte[] bImage = new byte[(int) file.length()];
-                    fin.read(bImage);
-                    fin.close();
-
-
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(bImage, 0, bImage.length);
-                    songViewAlbumArt.setImageBitmap(bitmap);
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-
+                byte[] albumArt = cursor1.getBlob(cursor1.getColumnIndex("album_art"));
+                Bitmap bitmap = BitmapFactory.decodeByteArray(albumArt, 0, albumArt.length);
+                songViewAlbumArt.setImageBitmap(bitmap);
             }
         }
 
