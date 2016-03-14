@@ -46,6 +46,8 @@ public class Media implements MessageHandler {
         this.cacheDir = context.getCacheDir();
         this.songsHash = new HashMap<>();
         this.player = new Player(context);
+        //Thread thread = new Thread(this.player);
+        //thread.start();
         EventBus.getDefault().register(this);
     }
 
@@ -108,8 +110,10 @@ public class Media implements MessageHandler {
         if (mediaCursor != null && mediaCursor.moveToNext()) {
             String rv = mediaCursor.getString(mediaCursor.getColumnIndex(MediaStore.Audio.Media.DATA));
             Log.v(TAG, String.format("Id to URI: %s", rv));
+            mediaCursor.close();
             return rv;
         } else {
+            mediaCursor.close();
             throw new RuntimeException("No URI matching ID");
         }
     }
@@ -143,7 +147,7 @@ public class Media implements MessageHandler {
             asm.addFragment(frag);
             if (asm.isCompleted())
             {
-                player.addSongUri(asm.getURI());
+                //player.addSongUri(asm.getURI());
             }
         } else {
             try {
