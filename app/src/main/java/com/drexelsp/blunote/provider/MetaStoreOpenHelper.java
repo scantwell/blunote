@@ -17,6 +17,9 @@ class MetaStoreOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(DbSchema.DDL_DROP_TBL_TRACK);
+        db.execSQL(DbSchema.DDL_DROP_TBL_ARTIST);
+        db.execSQL(DbSchema.DDL_DROP_TBL_ALBUMS);
         db.execSQL(DbSchema.DDL_CREATE_TBL_TRACK);
         db.execSQL(DbSchema.DDL_CREATE_TBL_ARTIST);
         db.execSQL(DbSchema.DDL_CREATE_TBL_ALBUM);
