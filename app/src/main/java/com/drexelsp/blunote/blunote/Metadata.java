@@ -117,6 +117,7 @@ public class Metadata implements MessageHandler {
             albumsBuilder.setNumberOfSongs(num_of_songs);
             albums.add(albumsBuilder.build());
         }
+        cur.close();
         return albums;
     }
 
@@ -189,6 +190,7 @@ public class Metadata implements MessageHandler {
             artistsBuilder.setNumberOfTracks(number_of_track);
             artists.add(artistsBuilder.build());
         }
+        cur.close();
         return artists;
     }
 
@@ -283,6 +285,7 @@ public class Metadata implements MessageHandler {
             songBuilder.setYear(year);
             songs.add(songBuilder.build());
         }
+        cur.close();
         return songs;
     }
 
