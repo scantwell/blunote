@@ -3,7 +3,6 @@ package com.drexelsp.blunote.blunote;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -14,7 +13,6 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
 import com.google.protobuf.ByteString;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -33,16 +31,16 @@ public class Media implements MessageHandler {
 
     private File cacheDir;
     private ContentResolver mContentResolver;
-    private MediaPlayer mediaPlayer;
     private Service mService;
     private HashMap<Long, SongAssembler> songsHash;
+    private Player player;
 
     public Media(Context context, Service service) {
         this.mService = service;
         this.mContentResolver = context.getContentResolver();
         this.cacheDir = context.getCacheDir();
-        this.mediaPlayer = new MediaPlayer();
         this.songsHash = new HashMap<>();
+        this.player = new Player(context);
     }
 
     private byte[] getSongData(String uri) {
@@ -50,8 +48,8 @@ public class Media implements MessageHandler {
         int filelength = (int) songFile.length();
         byte[] songByteArray = new byte[filelength];
         try {
-            BufferedInputStream bis1 = new BufferedInputStream(new FileInputStream(songFile));
-            bis1.read(songByteArray, 0, songByteArray.length);
+            FileInputStream fis = new FileInputStream(songFile);
+            fis.read(songByteArray);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -91,8 +89,10 @@ public class Media implements MessageHandler {
         String[] selectionArgs = new String[]{"" + id}; //This is the id you are looking for
 
         Cursor mediaCursor = mContentResolver.query(mediaContentUri, projection, selection, selectionArgs, null);
-
-        return mediaCursor.getString(mediaCursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+        mediaCursor.moveToFirst();
+        String uri = mediaCursor.getString(mediaCursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+        mediaCursor.close();
+        return uri;
     }
 
     @Override
@@ -110,7 +110,7 @@ public class Media implements MessageHandler {
     }
 
     private void processMessage(DeliveryInfo dinfo, SongRequest request) {
-        if (request.getUsername() == "myusername") {
+        if (request.getUsername() == "FakeUser") {
             SongFragment frags[] = getSongFragments(request.getSongId());
             for (int i = 0; i < frags.length; ++i) {
                 mService.send(frags[i]);
@@ -120,7 +120,12 @@ public class Media implements MessageHandler {
 
     private void processMessage(DeliveryInfo dinfo, SongFragment frag) {
         if (songsHash.containsKey(frag.getSongId())) {
-            songsHash.get(frag.getSongId()).addFragment(frag);
+            SongAssembler asm = songsHash.get(frag.getSongId());
+            asm.addFragment(frag);
+            if (asm.isCompleted())
+            {
+                player.addSongUri(asm.getURI());
+            }
         } else {
             try {
                 File file = File.createTempFile(Long.toString(frag.getSongId()), "mp3", this.cacheDir);

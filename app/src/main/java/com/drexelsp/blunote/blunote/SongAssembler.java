@@ -1,6 +1,8 @@
 package com.drexelsp.blunote.blunote;
 
 
+import android.net.Uri;
+
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.google.protobuf.ByteString;
 
@@ -9,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -20,6 +23,7 @@ public class SongAssembler {
     private FileOutputStream fos;
     private HashMap<Long, SongFragment> frags;
     private Set<Long> blackList;
+    private Uri uri;
 
     public SongAssembler(File file) {
         try {
@@ -29,9 +33,15 @@ public class SongAssembler {
             String s = ex.toString();
             ex.printStackTrace();
         }
+        this.uri = Uri.fromFile(file);
         this.target = 1;
         this.frags = new HashMap<>();
         this.blackList = new HashSet<>();
+    }
+
+    public Uri getURI()
+    {
+        return this.uri;
     }
 
     public void addFragment(SongFragment frag) {
