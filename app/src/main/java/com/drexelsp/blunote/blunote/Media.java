@@ -31,7 +31,7 @@ import java.util.HashMap;
  * from which SongRequests and SongFragments are acknowledged and generated respectively.
  */
 public class Media implements MessageHandler {
-    private final static int FRAGMENT_SIZE = 1024;
+    private final static int FRAGMENT_SIZE = 1024 * 10;
     private final String TAG = "Media";
 
     private File cacheDir;
