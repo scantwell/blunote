@@ -172,7 +172,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
                 albumMap.put(album, albumID);
             }
         }
-
+        cur.close();
         return albumMap;
     }
 
@@ -188,7 +188,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
                 artistMap.put(artist, artistID);
             }
         }
-
+        cur.close();
         return artistMap;
     }
 
@@ -204,7 +204,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
                 songList.put(song, songID);
             }
         }
-
+        cur.close();
         return songList;
     }
 
