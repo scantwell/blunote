@@ -20,6 +20,7 @@ import android.widget.ViewFlipper;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.provider.MetaStoreContract;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,7 +43,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getCurrentContext().getContentResolver().registerContentObserver(
-                Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
+                MetaStoreContract.CONTENT_URI, true, getMetaStoreObserver());
 
         if (!Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             handleIntent(getIntent());
@@ -50,12 +51,6 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
 
         vf = ((ViewFlipper) findViewById(R.id.view_flipper));
         vf.setDisplayedChild(getViewConstant());
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        getCurrentContext().getContentResolver().unregisterContentObserver(getMetaStoreObserver());
     }
 
     @Override
@@ -68,20 +63,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getCurrentContext().getContentResolver().registerContentObserver(
-                Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        getCurrentContext().getContentResolver().registerContentObserver(
-                Uri.parse(Constants.META_STORE_URL), true, getMetaStoreObserver());
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        getCurrentContext().getContentResolver().unregisterContentObserver(getMetaStoreObserver());
+                MetaStoreContract.CONTENT_URI, true, getMetaStoreObserver());
     }
 
     @Override
@@ -184,8 +166,8 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
         String album, albumID;
 
         while (cur.moveToNext()) {
-            album = cur.getString(cur.getColumnIndex(Constants.ALBUM));
-            albumID = cur.getString(cur.getColumnIndex(Constants.ALBUM_ID));
+            album = cur.getString(cur.getColumnIndex(MetaStoreContract.Album.ALBUM));
+            albumID = Integer.toString(cur.getInt(cur.getColumnIndex(MetaStoreContract.Album._ID)));
             if (album != null && albumID != null) {
                 albumMap.put(album, albumID);
             }
@@ -200,8 +182,8 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
         String artist, artistID;
 
         while (cur.moveToNext()) {
-            artist = cur.getString(cur.getColumnIndex(Constants.ARTIST));
-            artistID = cur.getString(cur.getColumnIndex(Constants.ARTIST_ID));
+            artist = cur.getString(cur.getColumnIndex(MetaStoreContract.Artist.ARTIST));
+            artistID = Integer.toString(cur.getInt(cur.getColumnIndex(MetaStoreContract.Artist._ID)));
             if (artist != null && artistID != null) {
                 artistMap.put(artist, artistID);
             }
@@ -216,8 +198,8 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
         String song, songID;
 
         while (cur.moveToNext()) {
-            song = cur.getString(cur.getColumnIndex(Constants.TITLE));
-            songID = cur.getString(cur.getColumnIndex(Constants.SONG_ID));
+            song = cur.getString(cur.getColumnIndex(MetaStoreContract.Track.TITLE));
+            songID = Integer.toString(cur.getInt(cur.getColumnIndex(MetaStoreContract.Track.SONG_ID)));
             if (song != null && songID != null) {
                 songList.put(song, songID);
             }
@@ -227,18 +209,18 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     }
 
     private Cursor getAlbumListCursor() {
-        final String[] columns = {Constants.ALBUM, Constants.ALBUM_ID};
-        return getMetaStore().query(Uri.parse(Constants.META_STORE_URL + Constants.ALBUM), columns, null, null, Constants.SORT_ALBUMS);
+        final String[] columns = {MetaStoreContract.Album.ALBUM, MetaStoreContract.Album._ID};
+        return getMetaStore().query(MetaStoreContract.Album.CONTENT_URI, columns, null, null, MetaStoreContract.Album.SORT_ORDER_DEFAULT);
     }
 
     private Cursor getArtistListCursor() {
-        final String[] columns = {Constants.ARTIST, Constants.ARTIST_ID};
-        return getMetaStore().query(Uri.parse(Constants.META_STORE_URL + Constants.ARTIST), columns, null, null, Constants.SORT_ARTISTS);
+        final String[] columns = {MetaStoreContract.Artist.ARTIST, MetaStoreContract.Artist._ID};
+        return getMetaStore().query(MetaStoreContract.Artist.CONTENT_URI, columns, null, null, MetaStoreContract.Artist.SORT_ORDER_DEFAULT);
     }
 
     private Cursor getTrackListCursor() {
-        final String[] columns = {Constants.TITLE, Constants.SONG_ID};
-        return getMetaStore().query(Uri.parse(Constants.META_STORE_URL + Constants.TRACK), columns, null, null, Constants.SORT_TRACK);
+        final String[] columns = {MetaStoreContract.Track.TITLE, MetaStoreContract.Track.SONG_ID};
+        return getMetaStore().query(MetaStoreContract.Track.CONTENT_URI, columns, null, null, MetaStoreContract.Track.SORT_ORDER_DEFAULT);
     }
 
     public ContentResolver getMetaStore() {

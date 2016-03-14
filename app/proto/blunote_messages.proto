@@ -26,7 +26,7 @@ message Song {
 */
 message Album {
 	required string album = 1; /// The album on which the audio file appears, if any
-	optional string album_art = 2; /// Cached album art.
+	optional bytes album_art = 2; /// Cached album art.
 	optional string artist = 3; /// Name of the artist
 	optional string first_year = 4; /// The year in which the earliest songs on this album were released.
 	optional string last_year = 5; /// The year in which the latest songs on this album were released.
