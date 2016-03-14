@@ -43,6 +43,11 @@ public class Player implements Runnable {
             while(mQueue.size() > 0)
             {
                 playSong();
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -58,11 +63,15 @@ public class Player implements Runnable {
 
     public void playSong()
     {
-        Uri uri = mQueue.remove();
         try {
-            mPlayer.setDataSource(mContext, uri);
-            mPlayer.prepare();
-            mPlayer.start();
+            if (!mPlayer.isPlaying())
+            {
+                Uri uri = mQueue.remove();
+                mPlayer.reset();
+                mPlayer.setDataSource(mContext, uri);
+                mPlayer.prepare();
+                mPlayer.start();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

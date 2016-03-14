@@ -149,6 +149,7 @@ public class Media implements MessageHandler {
             if (asm.isCompleted())
             {
                 player.addSongUri(asm.getURI());
+                songsHash.remove(frag.getSongId());
             }
         } else {
             try {
