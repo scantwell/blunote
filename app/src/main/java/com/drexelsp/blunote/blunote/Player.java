@@ -28,22 +28,26 @@ public class Player implements Runnable {
     public synchronized void addSongUri(Uri uri)
     {
         mQueue.add(uri);
-        notify();
+        this.notify();
     }
 
     @Override
     public void run() {
         while (true)
         {
-            try {
-                wait();
-                while(mQueue.size() > 0)
-                {
-                    playSong();
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while(mQueue.size() > 0)
+            {
+                playSong();
             }
+        }
+    }
+
+    private synchronized void sleep()
+    {
+        try {
+            this.wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

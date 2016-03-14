@@ -46,6 +46,8 @@ public class Media implements MessageHandler {
         this.cacheDir = context.getCacheDir();
         this.songsHash = new HashMap<>();
         this.player = new Player(context);
+        Thread thread = new Thread(this.player);
+        thread.start();
         EventBus.getDefault().register(this);
     }
 
