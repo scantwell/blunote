@@ -3,22 +3,33 @@ package com.drexelsp.blunote.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.provider.MetaStoreContract;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 /**
  * Created by U6020377 on 1/25/2016.
  */
 public class SongViewActivity extends BaseBluNoteActivity implements View.OnClickListener {
     private static final String TAG = "Song View Activity";
+    ImageView songViewAlbumArt;
     TextView songViewTitle;
     TextView songViewArtist;
     TextView songViewAlbum;
@@ -29,6 +40,8 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         song_view_add_to_queue = (Button) findViewById(R.id.song_view_add_to_queue);
+
+        songViewAlbumArt = (ImageView) findViewById(R.id.song_view_album_art);
 
         songViewTitle = (TextView) findViewById(R.id.song_view_title);
         songViewArtist = (TextView) findViewById(R.id.song_view_artist);
@@ -85,6 +98,39 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
             songViewOwner.setText(owner);
             Log.v(TAG, String.format("Title: %s, Artist: %s, Album: %s, Owner: %s", title, artist, album, owner));
             cursor.close();
+
+
+            Uri uri1 = MetaStoreContract.Album.CONTENT_URI;
+            String selection1[] = {"album_art"};
+            String where1 = "album = ?";
+            String[] args1 = { album };
+            Cursor cursor1 = getContentResolver().query(uri1, selection1, where1, args1, null);
+
+            if (cursor1 != null && cursor1.moveToNext()) {
+                Log.v(TAG, "Album Found");
+                String albumArt = cursor1.getString(cursor1.getColumnIndex("album_art"));
+
+                try {
+                    File file = new File("/storage/emulated/0/Android/data/com.android.providers.media/albumthumbs/1408551564765");
+                    FileInputStream fin = new FileInputStream(file);
+
+                    byte[] bImage = new byte[(int) file.length()];
+                    fin.read(bImage);
+                    fin.close();
+
+
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bImage, 0, bImage.length);
+                    songViewAlbumArt.setImageBitmap(bitmap);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+
+            }
         }
 
     }
