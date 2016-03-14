@@ -14,9 +14,7 @@ interface DbSchema {
 
     String COL_ID = BaseColumns._ID;
     String COL_ALBUM = "album";
-    String COL_ALBUM_ID = "album_id";
     String COL_ARTIST = "artist";
-    String COL_ARTIST_ID = "artist_id";
     String COL_DURATION = "duration";
     String COL_FIRST_YEAR = "first_year";
     String COL_LAST_YEAR = "last_year";
@@ -31,12 +29,12 @@ interface DbSchema {
     String DDL_CREATE_TBL_TRACK =
             "CREATE TABLE track (" +
                     "_id            INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
-                    "album_id       INTEGER,\n" +
-                    "artist_id      INTEGER, \n" +
+                    "album          TEXT,\n" +
+                    "artist         TEXT, \n" +
                     "duration       TEXT, \n" +
                     "song_id        INTEGER, \n" +
                     "title          TEXT, \n" +
-                    "track          INTEGER, \n" +
+                    "track          TEXT, \n" +
                     "year           TEXT \n" +
                     ")";
 
@@ -53,7 +51,6 @@ interface DbSchema {
                     "_id                            INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
                     "album                          TEXT, \n" +
                     "album_art                      TEXT, \n" +
-                    "album_id                       INTEGER, \n" +
                     "artist                         TEXT, \n" +
                     "first_year                     TEXT, \n" +
                     "last_year                      TEXT, \n" +
