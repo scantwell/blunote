@@ -12,10 +12,10 @@ option java_outer_classname = "BlunoteMessages";
 * Message that represents a song that can be played
 */
 message Song {
-	optional int64 album_id = 1; /// The id for the album
-	optional int64 artist_id = 2; /// The id for the artist
+	optional string album = 1; /// The id for the album
+	optional string artist = 2; /// The id for the artist
 	optional string duration = 3; /// The duration of the audio file, in ms
-	required int64 song_id = 4; /// The id for the song
+	required int64 song_id = 4; /// The id for the song in the owners MediaStore
 	required string title = 5; /// Song title
 	required string track = 6; /// The track number of this song on the album, if any.
 	optional string year = 7; /// The year the audio file was recorded, if any
@@ -27,11 +27,10 @@ message Song {
 message Album {
 	required string album = 1; /// The album on which the audio file appears, if any
 	optional string album_art = 2; /// Cached album art.
-	required int64 album_id = 3; /// The id for the album
-	optional string artist = 4; /// Name of the artist
-	optional string first_year = 5; /// The year in which the earliest songs on this album were released.
-	optional string last_year = 6; /// The year in which the latest songs on this album were released.
-	optional string number_of_songs = 7; /// The number of songs on this album
+	optional string artist = 3; /// Name of the artist
+	optional string first_year = 4; /// The year in which the earliest songs on this album were released.
+	optional string last_year = 5; /// The year in which the latest songs on this album were released.
+	optional string number_of_songs = 6; /// The number of songs on this album
 }
 
 /**
@@ -41,7 +40,6 @@ message Artist {
 	required string artist = 1; /// Name of the artist
 	required string number_of_albums = 2; /// The number of albums in the database for this artist
 	required string number_of_tracks = 3; /// The number of albums in the database for this artist
-	required int64 artist_id = 4; /// Owners database ID
 }
 
 /**
