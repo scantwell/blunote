@@ -184,7 +184,6 @@ public class Metadata implements MessageHandler {
             number_of_track = number_of_track == null ? "" : number_of_track;
 
             artistsBuilder.setArtist(artist);
-            artistsBuilder.setArtistId(Integer.parseInt(artist_id));
             artistsBuilder.setNumberOfAlbums(number_of_albums);
             artistsBuilder.setNumberOfTracks(number_of_track);
             artists.add(artistsBuilder.build());
