@@ -1,6 +1,8 @@
 package com.drexelsp.blunote.blunote;
 
 
+import android.util.Log;
+
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.google.protobuf.ByteString;
 
@@ -54,6 +56,7 @@ public class SongAssembler {
             target++;
         }
         if (isCompleted()) {
+            Log.i("Song Assembler", "Song Assembly Completed");
             try {
                 fos.close();
             } catch (IOException e) {

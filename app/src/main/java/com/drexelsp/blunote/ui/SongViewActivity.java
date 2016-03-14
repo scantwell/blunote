@@ -1,6 +1,7 @@
 package com.drexelsp.blunote.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,6 +9,9 @@ import android.widget.TextView;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.events.SongRecommendationEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by U6020377 on 1/25/2016.
@@ -54,6 +58,12 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        if (v == song_view_add_to_queue) {
+            Intent intent = getIntent();
+            String id = intent.getStringExtra("_id");
+            SongRecommendationEvent event = new SongRecommendationEvent(id, "FakeUser");
+            EventBus.getDefault().post(event);
+        }
 
     }
 

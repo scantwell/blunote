@@ -29,7 +29,13 @@ public class BlunoteRouter extends Thread {
     }
 
     public void send(Message msg) {
-        upStream.writeMessage(msg);
+        if (isHost) {
+            for (BlunoteSocket socket : downStream) {
+                socket.writeMessage(msg);
+            }
+        } else {
+            upStream.writeMessage(msg);
+        }
     }
 
     public void setHostMode(Context context) {
