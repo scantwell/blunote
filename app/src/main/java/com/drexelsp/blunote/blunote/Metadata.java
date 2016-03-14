@@ -30,7 +30,10 @@ public class Metadata implements MessageHandler {
     private ContentResolver mContentResolver;
 
     public Metadata(Context context) {
+
         mContentResolver = context.getContentResolver();
+        BlunoteMessages.MetadataUpdate metedata = getMetadata();
+        this.addMetadata(metedata);
     }
 
     private void addMetadata(BlunoteMessages.MetadataUpdate message) {
@@ -215,7 +218,7 @@ public class Metadata implements MessageHandler {
         mdBuilder.addAllAlbums(getAlbumMeta());
         mdBuilder.addAllArtists(getArtistMeta());
         mdBuilder.addAllSongs(getTrackMeta());
-        mdBuilder.setOwner("SomeClient");
+        mdBuilder.setOwner("FakeClient");
         return mdBuilder.build();
     }
 
