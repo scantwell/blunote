@@ -72,7 +72,7 @@ public class BlunoteRouter extends Thread {
             if (isHost) {
                 // Host Mode
                 for (BlunoteSocket socket : downStream) {
-                    if (socket.numMessages() > 0) {
+                    while (socket.numMessages() > 0) {
                         Log.v(TAG, "Reading Message from DownStream");
                         Message msg = socket.readMessage();
                         sendMessageToApplication(msg);
