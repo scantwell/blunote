@@ -6,21 +6,21 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 
 import java.io.IOException;
-import java.util.concurrent.SynchronousQueue;
+import java.util.LinkedList;
 
 /**
  * Created by scantwell on 3/14/2016.
  */
 public class Player implements Runnable {
 
-    private SynchronousQueue<Uri> mQueue;
+    private LinkedList<Uri> mQueue;
     private MediaPlayer mPlayer;
     private Context mContext;
 
     public Player(Context context)
     {
         this.mContext = context;
-        this.mQueue = new SynchronousQueue<>();
+        this.mQueue = new LinkedList<>();
         this.mPlayer = new MediaPlayer();
         this.mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
     }
