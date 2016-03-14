@@ -120,6 +120,7 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
                 byte[] albumArt = cursor1.getBlob(cursor1.getColumnIndex("album_art"));
                 Bitmap bitmap = BitmapFactory.decodeByteArray(albumArt, 0, albumArt.length);
                 songViewAlbumArt.setImageBitmap(bitmap);
+                cursor1.close();
             }
         }
 

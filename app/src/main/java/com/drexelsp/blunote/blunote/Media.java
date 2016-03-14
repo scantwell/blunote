@@ -110,8 +110,10 @@ public class Media implements MessageHandler {
         if (mediaCursor != null && mediaCursor.moveToNext()) {
             String rv = mediaCursor.getString(mediaCursor.getColumnIndex(MediaStore.Audio.Media.DATA));
             Log.v(TAG, String.format("Id to URI: %s", rv));
+            mediaCursor.close();
             return rv;
         } else {
+            mediaCursor.close();
             throw new RuntimeException("No URI matching ID");
         }
     }
