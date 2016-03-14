@@ -26,7 +26,7 @@ public final class MetaStoreContract {
                 ContentResolver.CURSOR_ITEM_BASE_TYPE +
                         "/vnd.com.drexelsp.blunote.blunote.metastore_track";
         public static final String[] PROJECTION_ALL =
-                {_ID, ALBUM_ID, ARTIST_ID, DURATION, SONG_ID, TITLE, TRACK_NO, YEAR};
+                {_ID, ALBUM, ARTIST, DURATION, SONG_ID, TITLE, TRACK_NO, YEAR};
         public static final String SORT_ORDER_DEFAULT = TITLE + "ASC";
     }
 
@@ -43,7 +43,7 @@ public final class MetaStoreContract {
                 ContentResolver.CURSOR_ITEM_BASE_TYPE +
                         "/vnd.com.drexelsp.blunote.blunote.metastore_artist";
         public static final String[] PROJECTION_ALL =
-                {_ID, ARTIST, ARTIST_ID, NUMBER_OF_ALBUMS, NUMBER_OF_TRACKS};
+                {_ID, ARTIST, NUMBER_OF_ALBUMS, NUMBER_OF_TRACKS};
         public static final String SORT_ORDER_DEFAULT = ARTIST + "ASC";
     }
 
@@ -63,15 +63,13 @@ public final class MetaStoreContract {
                 ContentResolver.CURSOR_ITEM_BASE_TYPE +
                         "/vnd.com.drexelsp.blunote.blunote.metastore_album";
         public static final String[] PROJECTION_ALL =
-                {_ID, ALBUM, ALBUM_ART, ALBUM_ID, ARTIST, FIRST_YEAR, LAST_YEAR, NUMBER_OF_SONGS, NUMBER_OF_SONGS_FOR_ARTIST};
+                {_ID, ALBUM, ALBUM_ART, ARTIST, FIRST_YEAR, LAST_YEAR, NUMBER_OF_SONGS, NUMBER_OF_SONGS_FOR_ARTIST};
         public static final String SORT_ORDER_DEFAULT = ALBUM + "ASC";
     }
 
     public interface CommonColumns extends BaseColumns {
         String ALBUM = "album";
-        String ALBUM_ID = "album_id";
         String ARTIST = "artist";
-        String ARTIST_ID = "artist_id";
         String SONG_ID = "song_id";
     }
 }

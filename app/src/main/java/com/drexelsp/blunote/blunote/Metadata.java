@@ -75,12 +75,11 @@ public class Metadata implements MessageHandler {
         final Uri uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
         final String album = MediaStore.Audio.Albums.ALBUM;
         final String album_art = MediaStore.Audio.Albums.ALBUM_ART;
-        final String album_id = MediaStore.Audio.Albums._ID;
         final String artist = MediaStore.Audio.Albums.ARTIST;
         final String first_year = MediaStore.Audio.Albums.FIRST_YEAR;
         final String last_year = MediaStore.Audio.Albums.LAST_YEAR;
         final String num_of_songs = MediaStore.Audio.Albums.NUMBER_OF_SONGS;
-        final String[] columns = {album, album_art, album_id, artist, first_year, last_year, num_of_songs};
+        final String[] columns = {album, album_art, artist, first_year, last_year, num_of_songs};
         return mContentResolver.query(uri, columns, null, null, null);
     }
 
@@ -89,12 +88,11 @@ public class Metadata implements MessageHandler {
         Cursor cur = getAlbumcursor();
         BlunoteMessages.Album.Builder albumsBuilder = BlunoteMessages.Album.newBuilder();
 
-        String album, album_art, album_id, artist, first_year, last_year, num_of_songs;
+        String album, album_art, artist, first_year, last_year, num_of_songs;
 
         while (cur.moveToNext()) {
             album = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
             album_art = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
-            album_id = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums._ID));
             artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ARTIST));
             first_year = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.FIRST_YEAR));
             last_year = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.LAST_YEAR));
@@ -102,7 +100,6 @@ public class Metadata implements MessageHandler {
 
             album = album == null ? "" : album;
             album_art = album_art == null ? "" : album_art;
-            album_id = album_id == null ? "-1" : album_id;
             artist = artist == null ? "" : artist;
             first_year = first_year == null ? "" : first_year;
             last_year = last_year == null ? "" : last_year;
@@ -112,7 +109,6 @@ public class Metadata implements MessageHandler {
 
             albumsBuilder.setAlbum(album);
             albumsBuilder.setAlbumArt(album_art);
-            albumsBuilder.setAlbumId(Integer.parseInt(album_id));
             albumsBuilder.setArtist(artist);
             albumsBuilder.setFirstYear(first_year);
             albumsBuilder.setLastYear(last_year);
@@ -151,7 +147,6 @@ public class Metadata implements MessageHandler {
             values = new ContentValues();
             values.put(MetaStoreContract.Album.ALBUM, album.getAlbum());
             values.put(MetaStoreContract.Album.ALBUM_ART, album.getAlbumArt());
-            values.put(MetaStoreContract.Album.ALBUM_ID, album.getAlbumId());
             values.put(MetaStoreContract.Album.ARTIST, album.getArtist());
             values.put(MetaStoreContract.Album.FIRST_YEAR, album.getFirstYear());
             values.put(MetaStoreContract.Album.LAST_YEAR, album.getLastYear());
@@ -207,7 +202,6 @@ public class Metadata implements MessageHandler {
             values.put(MetaStoreContract.Artist.ARTIST, artist.getArtist());
             values.put(MetaStoreContract.Artist.NUMBER_OF_ALBUMS, artist.getNumberOfAlbums());
             values.put(MetaStoreContract.Artist.NUMBER_OF_TRACKS, artist.getNumberOfTracks());
-            values.put(MetaStoreContract.Artist.ARTIST_ID, artist.getArtistId());
             valuesList[i] = values;
         }
         return valuesList;
@@ -230,8 +224,8 @@ public class Metadata implements MessageHandler {
         for (int i = 0; i < songs.size(); ++i) {
             song = songs.get(i);
             values = new ContentValues();
-            values.put(MetaStoreContract.Track.ALBUM_ID, song.getAlbumId());
-            values.put(MetaStoreContract.Track.ARTIST_ID, song.getArtistId());
+            values.put(MetaStoreContract.Track.ALBUM, song.getAlbum());
+            values.put(MetaStoreContract.Track.ARTIST, song.getArtist());
             values.put(MetaStoreContract.Track.DURATION, song.getDuration());
             values.put(MetaStoreContract.Track.SONG_ID, song.getSongId());
             values.put(MetaStoreContract.Track.TITLE, song.getTitle());
@@ -245,14 +239,14 @@ public class Metadata implements MessageHandler {
     private Cursor getTrackcursor() {
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         final String where = MediaStore.Audio.Media.IS_MUSIC + " != 0";
-        final String album_id = MediaStore.Audio.Media.ALBUM_ID;
-        final String artist_id = MediaStore.Audio.Media.ARTIST_ID;
+        final String album = MediaStore.Audio.Media.ALBUM;
+        final String artist = MediaStore.Audio.Media.ARTIST;
         final String duration = MediaStore.Audio.Media.DURATION;
         final String song_id = MediaStore.Audio.Media._ID;
         final String title = MediaStore.Audio.Media.TITLE;
         final String track = MediaStore.Audio.Media.TRACK;
         final String year = MediaStore.Audio.Media.YEAR;
-        final String[] columns = {album_id, artist_id, duration, song_id, title, track, year};
+        final String[] columns = {album, artist, duration, song_id, title, track, year};
         return mContentResolver.query(uri, columns, where, null, null);
     }
 
@@ -261,27 +255,27 @@ public class Metadata implements MessageHandler {
         Cursor cur = getTrackcursor();
         BlunoteMessages.Song.Builder songBuilder = BlunoteMessages.Song.newBuilder();
 
-        String album_id, artist_id, duration, song_id, title, track, year;
+        String album, artist, duration, song_id, title, track, year;
 
         while (cur.moveToNext()) {
-            album_id = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
-            artist_id = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
+            album = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+            artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST));
             duration = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DURATION));
             song_id = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media._ID));
             title = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE));
             track = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TRACK));
             year = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.YEAR));
 
-            album_id = album_id == null ? "-1" : album_id;
-            artist_id = artist_id == null ? "-1" : artist_id;
+            album = album == null ? "" : album;
+            artist = artist == null ? "" : artist;
             duration = duration == null ? "" : duration;
             song_id = song_id == null ? "-1" : song_id;
             title = title == null ? "" : title;
             track = track == null ? "" : track;
             year = year == null ? "" : year;
 
-            songBuilder.setAlbumId(Integer.parseInt(album_id));
-            songBuilder.setArtistId(Integer.parseInt(artist_id));
+            songBuilder.setAlbum(album);
+            songBuilder.setArtist(artist);
             songBuilder.setDuration(duration);
             songBuilder.setSongId(Integer.parseInt(song_id));
             songBuilder.setTitle(title);
