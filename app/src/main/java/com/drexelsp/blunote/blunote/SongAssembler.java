@@ -2,6 +2,7 @@ package com.drexelsp.blunote.blunote;
 
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.google.protobuf.ByteString;
@@ -43,8 +44,10 @@ public class SongAssembler {
         return this.uri;
     }
 
-    public void addFragment(SongFragment frag) {
+    public synchronized void addFragment(SongFragment frag) {
         long id = frag.getFragmentId();
+        Log.v("Song Assembler", String.format("Writing Fragment: %d", id));
+        Log.v("Song Assembler", String.format("Frag Size: %d", frag.toByteArray().length));
         if (this.blackList.contains(id)) {
             return;
         }
@@ -64,6 +67,7 @@ public class SongAssembler {
         }
         if (isCompleted()) {
             try {
+                Log.v("Song Assembler", String.format("%d", fos.getChannel().size()));
                 fos.close();
             } catch (IOException e) {
                 e.printStackTrace();

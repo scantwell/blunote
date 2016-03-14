@@ -42,7 +42,7 @@ public class Service extends ClientService {
 
     @Override
     public void onReceived(byte[] data) {
-        Log.v(TAG, "Received a message.");
+        //Log.v(TAG, "Received a message.");
         try {
             Pdu pdu = Pdu.parseFrom(data);
             DeliveryInfo dinfo = pdu.getDeliveryInfo();

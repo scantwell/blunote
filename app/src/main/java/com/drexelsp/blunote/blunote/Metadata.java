@@ -299,7 +299,7 @@ public class Metadata implements MessageHandler {
             }
             return true;
         } else {
-            Log.v(TAG, "Undefined message.");
+            //Log.v(TAG, "Undefined message.");
         }
         return false;
     }

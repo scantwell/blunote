@@ -85,19 +85,20 @@ public class Media implements MessageHandler {
             total_frags += 1;
         }
         int start = 0;
-        int end = 0;
+        int size = FRAGMENT_SIZE;
         SongFragment.Builder fragBuilder;
         for (int frag_no = 1; frag_no <= total_frags; ++frag_no) {
             fragBuilder = SongFragment.newBuilder();
-            end += FRAGMENT_SIZE;
-            if (end > songData.length) {
-                end = songData.length;
+            if (start + size > songData.length) {
+                size = songData.length - start;
             }
+            Log.v(TAG, String.format("Start: %d, End: %d, Frag#: %d", start, size, frag_no));
             fragBuilder.setFragmentId(frag_no);
             fragBuilder.setTotalFragments(total_frags);
             fragBuilder.setSongId(id);
-            fragBuilder.setFragment(ByteString.copyFrom(songData, start, end));
+            fragBuilder.setFragment(ByteString.copyFrom(songData, start, size));
             frags.add(fragBuilder.build());
+            start += size;
         }
         return frags;
     }
