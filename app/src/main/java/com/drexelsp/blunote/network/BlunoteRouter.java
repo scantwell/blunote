@@ -105,7 +105,13 @@ public class BlunoteRouter extends Thread {
             }
 
             Log.v(TAG, "Going to sleep now");
-            napTime();
+            try {
+                awake = false;
+                wait();
+                awake = true;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Log.v(TAG, "Waking up to do work");
         }
     }
@@ -113,15 +119,6 @@ public class BlunoteRouter extends Thread {
     public synchronized void wakeUp() {
         if (!awake) {
             notify();
-        }
-    }
-
-    private synchronized void napTime() {
-        try {
-            awake = false;
-            wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
