@@ -50,7 +50,7 @@ interface DbSchema {
             "CREATE TABLE album (" +
                     "_id                            INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
                     "album                          TEXT, \n" +
-                    "album_art                      TEXT, \n" +
+                    "album_art                      BLOB, \n" +
                     "artist                         TEXT, \n" +
                     "first_year                     TEXT, \n" +
                     "last_year                      TEXT, \n" +

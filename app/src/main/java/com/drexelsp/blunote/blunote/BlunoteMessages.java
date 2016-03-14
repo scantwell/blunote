@@ -1732,7 +1732,7 @@ public final class BlunoteMessages {
         getAlbumBytes();
 
     /**
-     * <code>optional string album_art = 2;</code>
+     * <code>optional bytes album_art = 2;</code>
      *
      * <pre>
      *&#47; Cached album art.
@@ -1740,22 +1740,13 @@ public final class BlunoteMessages {
      */
     boolean hasAlbumArt();
     /**
-     * <code>optional string album_art = 2;</code>
+     * <code>optional bytes album_art = 2;</code>
      *
      * <pre>
      *&#47; Cached album art.
      * </pre>
      */
-    java.lang.String getAlbumArt();
-    /**
-     * <code>optional string album_art = 2;</code>
-     *
-     * <pre>
-     *&#47; Cached album art.
-     * </pre>
-     */
-    com.google.protobuf.ByteString
-        getAlbumArtBytes();
+    com.google.protobuf.ByteString getAlbumArt();
 
     /**
      * <code>optional string artist = 3;</code>
@@ -1925,9 +1916,8 @@ public final class BlunoteMessages {
               break;
             }
             case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              albumArt_ = bs;
+              albumArt_ = input.readBytes();
               break;
             }
             case 26: {
@@ -2049,9 +2039,9 @@ public final class BlunoteMessages {
     }
 
     public static final int ALBUM_ART_FIELD_NUMBER = 2;
-    private java.lang.Object albumArt_;
+    private com.google.protobuf.ByteString albumArt_;
     /**
-     * <code>optional string album_art = 2;</code>
+     * <code>optional bytes album_art = 2;</code>
      *
      * <pre>
      *&#47; Cached album art.
@@ -2061,45 +2051,14 @@ public final class BlunoteMessages {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional string album_art = 2;</code>
+     * <code>optional bytes album_art = 2;</code>
      *
      * <pre>
      *&#47; Cached album art.
      * </pre>
      */
-    public java.lang.String getAlbumArt() {
-      java.lang.Object ref = albumArt_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          albumArt_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string album_art = 2;</code>
-     *
-     * <pre>
-     *&#47; Cached album art.
-     * </pre>
-     */
-    public com.google.protobuf.ByteString
-        getAlbumArtBytes() {
-      java.lang.Object ref = albumArt_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        albumArt_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public com.google.protobuf.ByteString getAlbumArt() {
+      return albumArt_;
     }
 
     public static final int ARTIST_FIELD_NUMBER = 3;
@@ -2320,7 +2279,7 @@ public final class BlunoteMessages {
 
     private void initFields() {
       album_ = "";
-      albumArt_ = "";
+      albumArt_ = com.google.protobuf.ByteString.EMPTY;
       artist_ = "";
       firstYear_ = "";
       lastYear_ = "";
@@ -2347,7 +2306,7 @@ public final class BlunoteMessages {
         output.writeBytes(1, getAlbumBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getAlbumArtBytes());
+        output.writeBytes(2, albumArt_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(3, getArtistBytes());
@@ -2376,7 +2335,7 @@ public final class BlunoteMessages {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getAlbumArtBytes());
+          .computeBytesSize(2, albumArt_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
@@ -2518,7 +2477,7 @@ public final class BlunoteMessages {
         super.clear();
         album_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        albumArt_ = "";
+        albumArt_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000002);
         artist_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -2602,9 +2561,7 @@ public final class BlunoteMessages {
           onChanged();
         }
         if (other.hasAlbumArt()) {
-          bitField0_ |= 0x00000002;
-          albumArt_ = other.albumArt_;
-          onChanged();
+          setAlbumArt(other.getAlbumArt());
         }
         if (other.hasArtist()) {
           bitField0_ |= 0x00000004;
@@ -2757,9 +2714,9 @@ public final class BlunoteMessages {
         return this;
       }
 
-      private java.lang.Object albumArt_ = "";
+      private com.google.protobuf.ByteString albumArt_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>optional string album_art = 2;</code>
+       * <code>optional bytes album_art = 2;</code>
        *
        * <pre>
        *&#47; Cached album art.
@@ -2769,55 +2726,23 @@ public final class BlunoteMessages {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional string album_art = 2;</code>
+       * <code>optional bytes album_art = 2;</code>
        *
        * <pre>
        *&#47; Cached album art.
        * </pre>
        */
-      public java.lang.String getAlbumArt() {
-        java.lang.Object ref = albumArt_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            albumArt_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public com.google.protobuf.ByteString getAlbumArt() {
+        return albumArt_;
       }
       /**
-       * <code>optional string album_art = 2;</code>
+       * <code>optional bytes album_art = 2;</code>
        *
        * <pre>
        *&#47; Cached album art.
        * </pre>
        */
-      public com.google.protobuf.ByteString
-          getAlbumArtBytes() {
-        java.lang.Object ref = albumArt_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          albumArt_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string album_art = 2;</code>
-       *
-       * <pre>
-       *&#47; Cached album art.
-       * </pre>
-       */
-      public Builder setAlbumArt(
-          java.lang.String value) {
+      public Builder setAlbumArt(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2827,7 +2752,7 @@ public final class BlunoteMessages {
         return this;
       }
       /**
-       * <code>optional string album_art = 2;</code>
+       * <code>optional bytes album_art = 2;</code>
        *
        * <pre>
        *&#47; Cached album art.
@@ -2836,23 +2761,6 @@ public final class BlunoteMessages {
       public Builder clearAlbumArt() {
         bitField0_ = (bitField0_ & ~0x00000002);
         albumArt_ = getDefaultInstance().getAlbumArt();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string album_art = 2;</code>
-       *
-       * <pre>
-       *&#47; Cached album art.
-       * </pre>
-       */
-      public Builder setAlbumArtBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        albumArt_ = value;
         onChanged();
         return this;
       }
@@ -15313,7 +15221,7 @@ public final class BlunoteMessages {
       "g\022\r\n\005album\030\001 \001(\t\022\016\n\006artist\030\002 \001(\t\022\020\n\010dura" +
       "tion\030\003 \001(\t\022\017\n\007song_id\030\004 \002(\003\022\r\n\005title\030\005 \002" +
       "(\t\022\r\n\005track\030\006 \002(\t\022\014\n\004year\030\007 \001(\t\"y\n\005Album" +
-      "\022\r\n\005album\030\001 \002(\t\022\021\n\talbum_art\030\002 \001(\t\022\016\n\006ar" +
+      "\022\r\n\005album\030\001 \002(\t\022\021\n\talbum_art\030\002 \001(\014\022\016\n\006ar" +
       "tist\030\003 \001(\t\022\022\n\nfirst_year\030\004 \001(\t\022\021\n\tlast_y" +
       "ear\030\005 \001(\t\022\027\n\017number_of_songs\030\006 \001(\t\"L\n\006Ar" +
       "tist\022\016\n\006artist\030\001 \002(\t\022\030\n\020number_of_albums" +

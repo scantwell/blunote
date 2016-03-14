@@ -3,6 +3,7 @@ package com.drexelsp.blunote.blunote;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -11,7 +12,11 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
+import com.drexelsp.blunote.events.SongRecommendationEvent;
 import com.google.protobuf.ByteString;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,6 +46,19 @@ public class Media implements MessageHandler {
         this.cacheDir = context.getCacheDir();
         this.songsHash = new HashMap<>();
         this.player = new Player(context);
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onSongRecommendation(SongRecommendationEvent event) {
+        String id = event.songId;
+        String owner = event.owner;
+
+        BlunoteMessages.SongRequest.Builder builder = BlunoteMessages.SongRequest.newBuilder();
+        builder.setSongId(Long.parseLong(id));
+        builder.setUsername(owner);
+
+        mService.send(builder.build());
     }
 
     private byte[] getSongData(String uri) {
@@ -56,7 +74,7 @@ public class Media implements MessageHandler {
         return songByteArray;
     }
 
-    private SongFragment[] getSongFragments(long id) {
+    private ArrayList<SongFragment> getSongFragments(long id) {
         ArrayList<SongFragment> frags = new ArrayList<>();
         String songUri = getSongUri(id);
         byte[] songData = getSongData(songUri);
@@ -79,7 +97,7 @@ public class Media implements MessageHandler {
             fragBuilder.setFragment(ByteString.copyFrom(songData, start, end));
             frags.add(fragBuilder.build());
         }
-        return (SongFragment[]) frags.toArray();
+        return frags;
     }
 
     private String getSongUri(long id) {
@@ -88,11 +106,37 @@ public class Media implements MessageHandler {
         String selection = MediaStore.Audio.Media._ID + "=?";
         String[] selectionArgs = new String[]{"" + id}; //This is the id you are looking for
 
-        Cursor mediaCursor = mContentResolver.query(mediaContentUri, projection, selection, selectionArgs, null);
-        mediaCursor.moveToFirst();
-        String uri = mediaCursor.getString(mediaCursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-        mediaCursor.close();
-        return uri;
+
+
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        final String where = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+        final String data = MediaStore.Audio.Media.DATA;
+        final String artist = MediaStore.Audio.Media.ARTIST;
+        final String song_id = MediaStore.Audio.Media._ID;
+        final String title = MediaStore.Audio.Media.TITLE;
+        final String[] columns = {artist, data, song_id, title};
+        Cursor cur = mContentResolver.query(uri, columns, where, null, null);
+
+        while (cur != null && cur.moveToNext()) {
+            Log.v(TAG, cur.getString(cur.getColumnIndex(MediaStore.Audio.Media._ID)));
+            Log.v(TAG, cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
+            Log.v(TAG, cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+            Log.v(TAG, cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DATA)));
+        }
+
+
+
+        Uri mediaContentUri = Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.toString(id));
+        String[] projection = new String[]{MediaStore.Audio.Media.DATA};
+        Cursor mediaCursor = mContentResolver.query(mediaContentUri, projection, null, null, null);
+
+        if (mediaCursor != null && mediaCursor.moveToNext()) {
+            String rv = mediaCursor.getString(mediaCursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+            Log.v(TAG, String.format("Id to URI: %s", rv));
+            return rv;
+        } else {
+            throw new RuntimeException("No URI matching ID");
+        }
     }
 
     @Override
@@ -110,10 +154,10 @@ public class Media implements MessageHandler {
     }
 
     private void processMessage(DeliveryInfo dinfo, SongRequest request) {
-        if (request.getUsername() == "FakeUser") {
-            SongFragment frags[] = getSongFragments(request.getSongId());
-            for (int i = 0; i < frags.length; ++i) {
-                mService.send(frags[i]);
+        if (request.getUsername().equals("FakeUser")) {
+            ArrayList<SongFragment> frags = getSongFragments(request.getSongId());
+            for (SongFragment frag : frags) {
+                mService.send(frag);
             }
         }
     }
