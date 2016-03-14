@@ -29,12 +29,12 @@ interface DbSchema {
     String DDL_CREATE_TBL_TRACK =
             "CREATE TABLE track (" +
                     "_id            INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
-                    "album          INTEGER,\n" +
-                    "artist         INTEGER, \n" +
+                    "album          TEXT,\n" +
+                    "artist         TEXT, \n" +
                     "duration       TEXT, \n" +
                     "song_id        INTEGER, \n" +
                     "title          TEXT, \n" +
-                    "track          INTEGER, \n" +
+                    "track          TEXT, \n" +
                     "year           TEXT \n" +
                     ")";
 
