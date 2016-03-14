@@ -101,31 +101,6 @@ public class Media implements MessageHandler {
     }
 
     private String getSongUri(long id) {
-        Uri mediaContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = new String[]{MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DATA};
-        String selection = MediaStore.Audio.Media._ID + "=?";
-        String[] selectionArgs = new String[]{"" + id}; //This is the id you are looking for
-
-
-
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        final String where = MediaStore.Audio.Media.IS_MUSIC + " != 0";
-        final String data = MediaStore.Audio.Media.DATA;
-        final String artist = MediaStore.Audio.Media.ARTIST;
-        final String song_id = MediaStore.Audio.Media._ID;
-        final String title = MediaStore.Audio.Media.TITLE;
-        final String[] columns = {artist, data, song_id, title};
-        Cursor cur = mContentResolver.query(uri, columns, where, null, null);
-
-        while (cur != null && cur.moveToNext()) {
-            Log.v(TAG, cur.getString(cur.getColumnIndex(MediaStore.Audio.Media._ID)));
-            Log.v(TAG, cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
-            Log.v(TAG, cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE)));
-            Log.v(TAG, cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DATA)));
-        }
-
-
-
         Uri mediaContentUri = Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.toString(id));
         String[] projection = new String[]{MediaStore.Audio.Media.DATA};
         Cursor mediaCursor = mContentResolver.query(mediaContentUri, projection, null, null, null);
