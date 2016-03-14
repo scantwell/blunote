@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.Artist;
 import com.drexelsp.blunote.provider.MetaStoreContract;
+import com.google.protobuf.ByteString;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -89,6 +90,7 @@ public class Metadata implements MessageHandler {
         BlunoteMessages.Album.Builder albumsBuilder = BlunoteMessages.Album.newBuilder();
 
         String album, album_art, artist, first_year, last_year, num_of_songs;
+        byte[] album_art_bytes;
 
         while (cur.moveToNext()) {
             album = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
@@ -105,10 +107,10 @@ public class Metadata implements MessageHandler {
             last_year = last_year == null ? "" : last_year;
             num_of_songs = num_of_songs == null ? "" : num_of_songs;
 
-            album_art = getAlbumArt(album_art);
+            album_art_bytes = getAlbumArt(album_art);
 
             albumsBuilder.setAlbum(album);
-            albumsBuilder.setAlbumArt(album_art);
+            albumsBuilder.setAlbumArt(ByteString.copyFrom(album_art_bytes));
             albumsBuilder.setArtist(artist);
             albumsBuilder.setFirstYear(first_year);
             albumsBuilder.setLastYear(last_year);
@@ -118,24 +120,23 @@ public class Metadata implements MessageHandler {
         return albums;
     }
 
-    private String getAlbumArt(String uri) {
+    private byte[] getAlbumArt(String uri) {
         try {
-            FileInputStream fis = new FileInputStream(new File(uri));
-            InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
-            BufferedReader bufferedReader = new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
-            return sb.toString();
+            File file = new File(uri);
+            Log.v(TAG, String.format("Byte array size %d", file.length()));
+            FileInputStream fis = new FileInputStream(file);
+            byte[] ba = new byte[(int) file.length()];
+            fis.read(ba);
+            fis.close();
+
+            return ba;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return "";
+            return new byte[0];
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "";
+        return new byte[0];
     }
 
     private ContentValues[] getAlbumValues(List<BlunoteMessages.Album> albums) {
@@ -146,7 +147,7 @@ public class Metadata implements MessageHandler {
             album = albums.get(i);
             values = new ContentValues();
             values.put(MetaStoreContract.Album.ALBUM, album.getAlbum());
-            values.put(MetaStoreContract.Album.ALBUM_ART, album.getAlbumArt());
+            values.put(MetaStoreContract.Album.ALBUM_ART, album.getAlbumArt().toByteArray());
             values.put(MetaStoreContract.Album.ARTIST, album.getArtist());
             values.put(MetaStoreContract.Album.FIRST_YEAR, album.getFirstYear());
             values.put(MetaStoreContract.Album.LAST_YEAR, album.getLastYear());

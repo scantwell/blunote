@@ -27,7 +27,7 @@ public final class MetaStoreContract {
                         "/vnd.com.drexelsp.blunote.blunote.metastore_track";
         public static final String[] PROJECTION_ALL =
                 {_ID, ALBUM, ARTIST, DURATION, SONG_ID, TITLE, TRACK_NO, YEAR};
-        public static final String SORT_ORDER_DEFAULT = TITLE + "ASC";
+        public static final String SORT_ORDER_DEFAULT = TITLE + " ASC";
     }
 
     public static final class Artist implements CommonColumns {
@@ -44,7 +44,7 @@ public final class MetaStoreContract {
                         "/vnd.com.drexelsp.blunote.blunote.metastore_artist";
         public static final String[] PROJECTION_ALL =
                 {_ID, ARTIST, NUMBER_OF_ALBUMS, NUMBER_OF_TRACKS};
-        public static final String SORT_ORDER_DEFAULT = ARTIST + "ASC";
+        public static final String SORT_ORDER_DEFAULT = ARTIST + " ASC";
     }
 
     public static final class Album implements CommonColumns {
@@ -64,7 +64,7 @@ public final class MetaStoreContract {
                         "/vnd.com.drexelsp.blunote.blunote.metastore_album";
         public static final String[] PROJECTION_ALL =
                 {_ID, ALBUM, ALBUM_ART, ARTIST, FIRST_YEAR, LAST_YEAR, NUMBER_OF_SONGS, NUMBER_OF_SONGS_FOR_ARTIST};
-        public static final String SORT_ORDER_DEFAULT = ALBUM + "ASC";
+        public static final String SORT_ORDER_DEFAULT = ALBUM + " ASC";
     }
 
     public interface CommonColumns extends BaseColumns {
