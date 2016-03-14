@@ -60,7 +60,7 @@ public class Service extends ClientService {
     @Override
     public void onNetworkEvent(BluetoothEvent bluetoothEvent) {
         EventBus.getDefault().post(bluetoothEvent);
-        if (bluetoothEvent.event == BluetoothEvent.CONNECTOR && bluetoothEvent.success) {
+        if ((bluetoothEvent.event == BluetoothEvent.CONNECTOR || bluetoothEvent.event == BluetoothEvent.SERVER_LISTENER) && bluetoothEvent.success) {
             // Gather Metadata and Send it
             Metadata metadata = new Metadata(getApplicationContext());
             BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata();
