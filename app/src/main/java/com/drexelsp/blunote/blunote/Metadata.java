@@ -30,7 +30,10 @@ public class Metadata implements MessageHandler {
     private ContentResolver mContentResolver;
 
     public Metadata(Context context) {
+
         mContentResolver = context.getContentResolver();
+        BlunoteMessages.MetadataUpdate metedata = getMetadata();
+        this.addMetadata(metedata);
     }
 
     private void addMetadata(BlunoteMessages.MetadataUpdate message) {
@@ -117,6 +120,7 @@ public class Metadata implements MessageHandler {
             albumsBuilder.setNumberOfSongs(num_of_songs);
             albums.add(albumsBuilder.build());
         }
+        cur.close();
         return albums;
     }
 
@@ -189,6 +193,7 @@ public class Metadata implements MessageHandler {
             artistsBuilder.setNumberOfTracks(number_of_track);
             artists.add(artistsBuilder.build());
         }
+        cur.close();
         return artists;
     }
 
@@ -213,7 +218,7 @@ public class Metadata implements MessageHandler {
         mdBuilder.addAllAlbums(getAlbumMeta());
         mdBuilder.addAllArtists(getArtistMeta());
         mdBuilder.addAllSongs(getTrackMeta());
-        mdBuilder.setOwner("SomeClient");
+        mdBuilder.setOwner("FakeClient");
         return mdBuilder.build();
     }
 
@@ -283,6 +288,7 @@ public class Metadata implements MessageHandler {
             songBuilder.setYear(year);
             songs.add(songBuilder.build());
         }
+        cur.close();
         return songs;
     }
 
@@ -296,7 +302,7 @@ public class Metadata implements MessageHandler {
             }
             return true;
         } else {
-            Log.v(TAG, "Undefined message.");
+            //Log.v(TAG, "Undefined message.");
         }
         return false;
     }

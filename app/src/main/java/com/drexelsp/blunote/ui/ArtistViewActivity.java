@@ -111,8 +111,12 @@ public class ArtistViewActivity extends BaseBluNoteActivity implements ListView.
 
                         artistViewAdapter.addTrack(track);
                     } while (trackCursor.moveToNext());
+
+                    trackCursor.close();
                 }
             } while (albumCursor.moveToNext());
+
+            albumCursor.close();
         }
     }
 }

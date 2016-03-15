@@ -11,6 +11,7 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
+import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.network.ClientService;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -41,7 +42,7 @@ public class Service extends ClientService {
 
     @Override
     public void onReceived(byte[] data) {
-        Log.v(TAG, "Received a message.");
+        //Log.v(TAG, "Received a message.");
         try {
             Pdu pdu = Pdu.parseFrom(data);
             DeliveryInfo dinfo = pdu.getDeliveryInfo();
@@ -60,7 +61,7 @@ public class Service extends ClientService {
     @Override
     public void onNetworkEvent(BluetoothEvent bluetoothEvent) {
         EventBus.getDefault().post(bluetoothEvent);
-        if (bluetoothEvent.event == BluetoothEvent.CONNECTOR && bluetoothEvent.success) {
+        if ((bluetoothEvent.event == BluetoothEvent.CONNECTOR || bluetoothEvent.event == BluetoothEvent.SERVER_LISTENER) && bluetoothEvent.success) {
             // Gather Metadata and Send it
             Metadata metadata = new Metadata(getApplicationContext());
             BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata();
@@ -116,6 +117,14 @@ public class Service extends ClientService {
                 .setMessage(WrapperMessage.newBuilder()
                         .setType(WrapperMessage.Type.RECOMMEND)
                         .setRecommendation(message)).build();
+        super.send(pdu.toByteArray());
+    }
+
+    public void send(SongRequest message) {
+        Pdu pdu = createMessage()
+                .setMessage(WrapperMessage.newBuilder()
+                        .setType(WrapperMessage.Type.SONG_REQUEST)
+                        .setSongRequest(message)).build();
         super.send(pdu.toByteArray());
     }
 

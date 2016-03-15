@@ -12,9 +12,12 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
+import com.drexelsp.blunote.events.SongRecommendationEvent;
 import com.google.protobuf.ByteString;
 
-import java.io.BufferedInputStream;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,21 +31,36 @@ import java.util.HashMap;
  * from which SongRequests and SongFragments are acknowledged and generated respectively.
  */
 public class Media implements MessageHandler {
-    private final static int FRAGMENT_SIZE = 1024;
+    private final static int FRAGMENT_SIZE = 1024 * 10;
     private final String TAG = "Media";
 
     private File cacheDir;
     private ContentResolver mContentResolver;
-    private MediaPlayer mediaPlayer;
     private Service mService;
     private HashMap<Long, SongAssembler> songsHash;
+    private Player player;
 
     public Media(Context context, Service service) {
         this.mService = service;
         this.mContentResolver = context.getContentResolver();
         this.cacheDir = context.getCacheDir();
-        this.mediaPlayer = new MediaPlayer();
         this.songsHash = new HashMap<>();
+        this.player = new Player(context);
+        Thread thread = new Thread(this.player);
+        thread.start();
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onSongRecommendation(SongRecommendationEvent event) {
+        String id = event.songId;
+        String owner = event.owner;
+
+        BlunoteMessages.SongRequest.Builder builder = BlunoteMessages.SongRequest.newBuilder();
+        builder.setSongId(Long.parseLong(id));
+        builder.setUsername(owner);
+
+        mService.send(builder.build());
     }
 
     private byte[] getSongData(String uri) {
@@ -50,15 +68,15 @@ public class Media implements MessageHandler {
         int filelength = (int) songFile.length();
         byte[] songByteArray = new byte[filelength];
         try {
-            BufferedInputStream bis1 = new BufferedInputStream(new FileInputStream(songFile));
-            bis1.read(songByteArray, 0, songByteArray.length);
+            FileInputStream fis = new FileInputStream(songFile);
+            fis.read(songByteArray);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return songByteArray;
     }
 
-    private SongFragment[] getSongFragments(long id) {
+    private ArrayList<SongFragment> getSongFragments(long id) {
         ArrayList<SongFragment> frags = new ArrayList<>();
         String songUri = getSongUri(id);
         byte[] songData = getSongData(songUri);
@@ -67,32 +85,38 @@ public class Media implements MessageHandler {
             total_frags += 1;
         }
         int start = 0;
-        int end = 0;
+        int size = FRAGMENT_SIZE;
         SongFragment.Builder fragBuilder;
         for (int frag_no = 1; frag_no <= total_frags; ++frag_no) {
             fragBuilder = SongFragment.newBuilder();
-            end += FRAGMENT_SIZE;
-            if (end > songData.length) {
-                end = songData.length;
+            if (start + size > songData.length) {
+                size = songData.length - start;
             }
+            Log.v(TAG, String.format("Start: %d, End: %d, Frag#: %d", start, size, frag_no));
             fragBuilder.setFragmentId(frag_no);
             fragBuilder.setTotalFragments(total_frags);
             fragBuilder.setSongId(id);
-            fragBuilder.setFragment(ByteString.copyFrom(songData, start, end));
+            fragBuilder.setFragment(ByteString.copyFrom(songData, start, size));
             frags.add(fragBuilder.build());
+            start += size;
         }
-        return (SongFragment[]) frags.toArray();
+        return frags;
     }
 
     private String getSongUri(long id) {
-        Uri mediaContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = new String[]{MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DATA};
-        String selection = MediaStore.Audio.Media._ID + "=?";
-        String[] selectionArgs = new String[]{"" + id}; //This is the id you are looking for
+        Uri mediaContentUri = Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.toString(id));
+        String[] projection = new String[]{MediaStore.Audio.Media.DATA};
+        Cursor mediaCursor = mContentResolver.query(mediaContentUri, projection, null, null, null);
 
-        Cursor mediaCursor = mContentResolver.query(mediaContentUri, projection, selection, selectionArgs, null);
-
-        return mediaCursor.getString(mediaCursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+        if (mediaCursor != null && mediaCursor.moveToNext()) {
+            String rv = mediaCursor.getString(mediaCursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+            Log.v(TAG, String.format("Id to URI: %s", rv));
+            mediaCursor.close();
+            return rv;
+        } else {
+            mediaCursor.close();
+            throw new RuntimeException("No URI matching ID");
+        }
     }
 
     @Override
@@ -110,17 +134,23 @@ public class Media implements MessageHandler {
     }
 
     private void processMessage(DeliveryInfo dinfo, SongRequest request) {
-        if (request.getUsername() == "myusername") {
-            SongFragment frags[] = getSongFragments(request.getSongId());
-            for (int i = 0; i < frags.length; ++i) {
-                mService.send(frags[i]);
+        if (request.getUsername().equals("FakeUser")) {
+            ArrayList<SongFragment> frags = getSongFragments(request.getSongId());
+            for (SongFragment frag : frags) {
+                mService.send(frag);
             }
         }
     }
 
     private void processMessage(DeliveryInfo dinfo, SongFragment frag) {
         if (songsHash.containsKey(frag.getSongId())) {
-            songsHash.get(frag.getSongId()).addFragment(frag);
+            SongAssembler asm = songsHash.get(frag.getSongId());
+            asm.addFragment(frag);
+            if (asm.isCompleted())
+            {
+                player.addSongUri(asm.getURI());
+                songsHash.remove(frag.getSongId());
+            }
         } else {
             try {
                 File file = File.createTempFile(Long.toString(frag.getSongId()), "mp3", this.cacheDir);

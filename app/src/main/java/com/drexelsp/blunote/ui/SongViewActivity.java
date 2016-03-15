@@ -16,6 +16,9 @@ import android.widget.TextView;
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.provider.MetaStoreContract;
+import com.drexelsp.blunote.events.SongRecommendationEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by U6020377 on 1/25/2016.
@@ -68,6 +71,12 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        if (v == song_view_add_to_queue) {
+            Intent intent = getIntent();
+            String id = intent.getStringExtra("_id");
+            SongRecommendationEvent event = new SongRecommendationEvent(id, "FakeUser");
+            EventBus.getDefault().post(event);
+        }
 
     }
 
@@ -104,6 +113,7 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
                 byte[] albumArt = cursor1.getBlob(cursor1.getColumnIndex("album_art"));
                 Bitmap bitmap = BitmapFactory.decodeByteArray(albumArt, 0, albumArt.length);
                 songViewAlbumArt.setImageBitmap(bitmap);
+                cursor1.close();
             }
         }
 

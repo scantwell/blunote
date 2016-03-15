@@ -1,6 +1,9 @@
 package com.drexelsp.blunote.blunote;
 
 
+import android.net.Uri;
+import android.util.Log;
+
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.google.protobuf.ByteString;
 
@@ -20,6 +23,7 @@ public class SongAssembler {
     private FileOutputStream fos;
     private HashMap<Long, SongFragment> frags;
     private Set<Long> blackList;
+    private Uri uri;
 
     public SongAssembler(File file) {
         try {
@@ -29,25 +33,27 @@ public class SongAssembler {
             String s = ex.toString();
             ex.printStackTrace();
         }
+        this.uri = Uri.fromFile(file);
         this.target = 1;
         this.frags = new HashMap<>();
         this.blackList = new HashSet<>();
     }
 
-    public void addFragment(SongFragment frag) {
+    public Uri getURI()
+    {
+        return this.uri;
+    }
+
+    public synchronized void addFragment(SongFragment frag) {
         long id = frag.getFragmentId();
+        Log.v("Song Assembler", String.format("Writing Fragment: %d", id));
+        Log.v("Song Assembler", String.format("Frag Size: %d", frag.toByteArray().length));
         if (this.blackList.contains(id)) {
             return;
         }
         this.blackList.add(id);
+        frags.put(id, frag);
         total = frag.getTotalFragments();
-        if (id == target) {
-            writeFragment(frag.getFragment());
-            target++;
-        } else {
-            frags.put(id, frag);
-        }
-
         while (frags.containsKey(target)) {
             frag = frags.remove(target);
             writeFragment(frag.getFragment());
@@ -55,6 +61,7 @@ public class SongAssembler {
         }
         if (isCompleted()) {
             try {
+                Log.v("Song Assembler", String.format("%d", fos.getChannel().size()));
                 fos.close();
             } catch (IOException e) {
                 e.printStackTrace();

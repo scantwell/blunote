@@ -29,7 +29,13 @@ public class BlunoteRouter extends Thread {
     }
 
     public void send(Message msg) {
-        upStream.writeMessage(msg);
+        if (isHost) {
+            for (BlunoteSocket socket : downStream) {
+                socket.writeMessage(msg);
+            }
+        } else {
+            upStream.writeMessage(msg);
+        }
     }
 
     public void setHostMode(Context context) {
@@ -56,13 +62,17 @@ public class BlunoteRouter extends Thread {
 
     public void run() {
         awake = true;
+        doWork();
+    }
+
+    public synchronized  void doWork() {
         //noinspection InfiniteLoopStatement
         while (true) {
 
             if (isHost) {
                 // Host Mode
                 for (BlunoteSocket socket : downStream) {
-                    if (socket.numMessages() > 0) {
+                    while (socket.numMessages() > 0) {
                         Log.v(TAG, "Reading Message from DownStream");
                         Message msg = socket.readMessage();
                         sendMessageToApplication(msg);
@@ -95,7 +105,13 @@ public class BlunoteRouter extends Thread {
             }
 
             Log.v(TAG, "Going to sleep now");
-            napTime();
+            try {
+                awake = false;
+                wait();
+                awake = true;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Log.v(TAG, "Waking up to do work");
         }
     }
@@ -103,15 +119,6 @@ public class BlunoteRouter extends Thread {
     public synchronized void wakeUp() {
         if (!awake) {
             notify();
-        }
-    }
-
-    private synchronized void napTime() {
-        try {
-            awake = false;
-            wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
