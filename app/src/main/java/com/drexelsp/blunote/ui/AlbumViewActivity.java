@@ -89,7 +89,7 @@ public class AlbumViewActivity extends BaseBluNoteActivity implements ListView.O
     public void populateAlbumTrackList() {
         Intent intent = getIntent();
         String album = intent.getStringExtra("album");
-        String[] selection = {"album", "artist", "number_of_tracks", "first_year", "album_art"};
+        String[] selection = {"album", "artist", "number_of_songs", "first_year", "album_art"};
         String where = "album = ?";
         String[] args = {album};
         Cursor cursor = getContentResolver().query(MetaStoreContract.Album.CONTENT_URI,
@@ -100,7 +100,7 @@ public class AlbumViewActivity extends BaseBluNoteActivity implements ListView.O
             String albumName = cursor.getString(cursor.getColumnIndex("album"));
             albumNameView.setText(albumName);
             artistName.setText(cursor.getString(cursor.getColumnIndex("artist")));
-            numberOfTracks.setText(cursor.getString(cursor.getColumnIndex("number_of_tracks")));
+            numberOfTracks.setText(cursor.getString(cursor.getColumnIndex("number_of_songs")));
             albumYear.setText(cursor.getString(cursor.getColumnIndex("first_year")));
 
             byte[] albumArt = cursor.getBlob(cursor.getColumnIndex("album_art"));
@@ -134,6 +134,7 @@ public class AlbumViewActivity extends BaseBluNoteActivity implements ListView.O
         }
 
         trackListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, trackList);
+        trackListView.setAdapter(trackListAdapter);
     }
 
     public void setTrackList(Map<String, String> trackMap) {

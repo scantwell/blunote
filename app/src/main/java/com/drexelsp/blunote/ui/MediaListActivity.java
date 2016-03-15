@@ -18,6 +18,7 @@ import android.widget.ViewFlipper;
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,9 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mediaList = new ArrayList<>();
+        idList = new ArrayList<>();
 
         ViewFlipper vf = ((ViewFlipper) findViewById(R.id.view_flipper));
         vf.setDisplayedChild(Constants.ACTIVITY_MEDIA_LIST);

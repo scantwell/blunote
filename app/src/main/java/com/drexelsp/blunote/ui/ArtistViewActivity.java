@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -23,6 +24,7 @@ import com.drexelsp.blunote.provider.MetaStoreContract;
 public class ArtistViewActivity extends BaseBluNoteActivity implements ListView.OnItemClickListener {
     ListView artistListView;
     ArtistViewAdapter artistViewAdapter;
+    private static final String TAG = "ArtistViewActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +33,8 @@ public class ArtistViewActivity extends BaseBluNoteActivity implements ListView.
         artistListView.setOnItemClickListener(this);
 
         artistViewAdapter = new ArtistViewAdapter(getCurrentContext());
-
         populateArtistAlbums();
+        artistListView.setAdapter(artistViewAdapter);
     }
 
     @Override
@@ -80,8 +82,9 @@ public class ArtistViewActivity extends BaseBluNoteActivity implements ListView.
                 ArtistViewAlbum album = new ArtistViewAlbum();
                 String albumName = albumCursor.getString(albumCursor.getColumnIndex("album"));
                 album.setAlbumName(albumName);
+                Log.v(TAG, String.format("Album Found %s", albumName));
                 album.setNumberOfTracks(albumCursor.getString(
-                        albumCursor.getColumnIndex("number_of_tracks")));
+                        albumCursor.getColumnIndex("number_of_songs")));
                 album.setAlbumYear(albumCursor.getString(albumCursor.getColumnIndex("first_year")));
 
                 byte[] albumArt = albumCursor.getBlob(albumCursor.getColumnIndex("album_art"));
@@ -102,6 +105,7 @@ public class ArtistViewActivity extends BaseBluNoteActivity implements ListView.
                         ArtistViewTrack track = new ArtistViewTrack();
                         String song = trackCursor.getString(trackCursor.getColumnIndex(
                                 MetaStoreContract.Track.TITLE));
+                        Log.v(TAG, String.format("Song Found %s", song));
                         String songID = Integer.toString(trackCursor.getInt(
                                 trackCursor.getColumnIndex(MetaStoreContract.Track.SONG_ID)));
                         if(song != null){
