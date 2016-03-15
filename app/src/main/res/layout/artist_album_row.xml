@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/linearLayoutArtist"
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+    <ImageView
+        android:id="@+id/album_artwork"
+        android:layout_width="0dp"
+        android:layout_height="100sp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_weight=".5"
+        android:src="@android:drawable/ic_notification_clear_all" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_weight=".5"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/album_name"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".33"
+            android:text="@string/album_name" />
+
+        <TextView
+            android:id="@+id/album_number_tracks"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".33"
+            android:text="@string/album_number_tracks" />
+
+        <TextView
+            android:id="@+id/album_year_released"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".34"
+            android:text="@string/album_year_released" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

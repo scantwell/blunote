@@ -18,7 +18,6 @@ import android.widget.ViewFlipper;
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -190,7 +189,9 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
         mediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(AlbumViewActivity.class, position);
+                Intent intent = new Intent(MediaListActivity.this, AlbumViewActivity.class);
+                intent.putExtra("album", mediaList.get(position));
+                startActivity(intent);
             }
         });
     }
@@ -207,7 +208,9 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
         mediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(ArtistViewActivity.class, position);
+                Intent intent = new Intent(MediaListActivity.this, ArtistViewActivity.class);
+                intent.putExtra("artist", mediaList.get(position));
+                startActivity(intent);
             }
         });
     }
@@ -219,8 +222,8 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     }
 
     private void setMediaLists(Map<String, String> mediaMap) {
-        mediaList = new ArrayList<>();
-        idList = new ArrayList<>();
+        mediaList.clear();
+        idList.clear();
 
         for (Map.Entry<String, String> entry : mediaMap.entrySet()) {
             mediaList.add(entry.getKey());

@@ -18,13 +18,6 @@ import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.provider.MetaStoreContract;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import org.greenrobot.eventbus.EventBus;
 
 /**
@@ -90,10 +83,10 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
     public void populateSongDetails() {
         Intent intent = getIntent();
         String id = intent.getStringExtra("_id");
-        Uri uri = Uri.withAppendedPath(MetaStoreContract.Track.CONTENT_URI, id);
-        Log.v(TAG, uri.toString());
-        String[] selection = { "title", "artist", "album" };
-        Cursor cursor = getContentResolver().query(uri, selection, null, null, null);
+        String[] selection = { "song_id", "title", "artist", "album" };
+        String where = "song_id = ?";
+        String[] args = { id };
+        Cursor cursor = getContentResolver().query(MetaStoreContract.Track.CONTENT_URI, selection, where, args, null);
 
         if (cursor != null && cursor.moveToNext()) {
             Log.v(TAG, "Results found");
@@ -105,7 +98,7 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
             songViewAlbum.setText(album);
             String owner = "SongOwner";
             songViewOwner.setText(owner);
-            Log.v(TAG, String.format("Title: %s, Artist: %s, Album: %s, Owner: %s", title, artist, album, owner));
+            //Log.v(TAG, String.format("Title: %s, Artist: %s, Album: %s, Owner: %s", title, artist, album, owner));
             cursor.close();
 
 
@@ -116,7 +109,7 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
             Cursor cursor1 = getContentResolver().query(uri1, selection1, where1, args1, null);
 
             if (cursor1 != null && cursor1.moveToNext()) {
-                Log.v(TAG, "Album Found");
+                //Log.v(TAG, "Album Found");
                 byte[] albumArt = cursor1.getBlob(cursor1.getColumnIndex("album_art"));
                 Bitmap bitmap = BitmapFactory.decodeByteArray(albumArt, 0, albumArt.length);
                 songViewAlbumArt.setImageBitmap(bitmap);

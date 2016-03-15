@@ -168,7 +168,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
         while (cur.moveToNext()) {
             album = cur.getString(cur.getColumnIndex(MetaStoreContract.Album.ALBUM));
             albumID = Integer.toString(cur.getInt(cur.getColumnIndex(MetaStoreContract.Album._ID)));
-            if (album != null && albumID != null) {
+            if (album != null) {
                 albumMap.put(album, albumID);
             }
         }
@@ -184,7 +184,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
         while (cur.moveToNext()) {
             artist = cur.getString(cur.getColumnIndex(MetaStoreContract.Artist.ARTIST));
             artistID = Integer.toString(cur.getInt(cur.getColumnIndex(MetaStoreContract.Artist._ID)));
-            if (artist != null && artistID != null) {
+            if (artist != null) {
                 artistMap.put(artist, artistID);
             }
         }
@@ -200,7 +200,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
         while (cur.moveToNext()) {
             song = cur.getString(cur.getColumnIndex(MetaStoreContract.Track.TITLE));
             songID = Integer.toString(cur.getInt(cur.getColumnIndex(MetaStoreContract.Track.SONG_ID)));
-            if (song != null && songID != null) {
+            if (song != null) {
                 songList.put(song, songID);
             }
         }
