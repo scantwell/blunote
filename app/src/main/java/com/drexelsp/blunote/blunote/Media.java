@@ -30,7 +30,7 @@ import java.util.HashMap;
  * Implements all media functionality of the Blunote application and handles all Network messages
  * from which SongRequests and SongFragments are acknowledged and generated respectively.
  */
-public class Media implements MessageHandler {
+public class Media {
     private final static int FRAGMENT_SIZE = 1024 * 10;
     private final String TAG = "Media";
 
@@ -76,7 +76,7 @@ public class Media implements MessageHandler {
         return songByteArray;
     }
 
-    private ArrayList<SongFragment> getSongFragments(long id) {
+    public ArrayList<SongFragment> getSongFragments(long id) {
         ArrayList<SongFragment> frags = new ArrayList<>();
         String songUri = getSongUri(id);
         byte[] songData = getSongData(songUri);
@@ -116,29 +116,6 @@ public class Media implements MessageHandler {
         } else {
             mediaCursor.close();
             throw new RuntimeException("No URI matching ID");
-        }
-    }
-
-    @Override
-    public boolean processMessage(DeliveryInfo dinfo, WrapperMessage message) {
-        if (WrapperMessage.Type.SONG_FRAGMENT.equals(message.getType())) {
-            processMessage(dinfo, message.getSongFragment());
-            return true;
-        } else if (WrapperMessage.Type.SONG_REQUEST.equals(message.getType())) {
-            processMessage(dinfo, message.getSongRequest());
-            return true;
-        } else {
-            Log.v(TAG, "Undefined message.");
-        }
-        return false;
-    }
-
-    private void processMessage(DeliveryInfo dinfo, SongRequest request) {
-        if (request.getUsername().equals("FakeUser")) {
-            ArrayList<SongFragment> frags = getSongFragments(request.getSongId());
-            for (SongFragment frag : frags) {
-                mService.send(frag);
-            }
         }
     }
 

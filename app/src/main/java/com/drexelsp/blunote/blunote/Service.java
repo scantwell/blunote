@@ -34,6 +34,7 @@ public class Service extends ClientService {
 
     private String TAG = "Service";
     private ArrayList<MessageHandler> handlers = new ArrayList<MessageHandler>();
+    private User user;
 
     public Service() {
         IBinder mBinder = new LocalBinder();
@@ -41,17 +42,40 @@ public class Service extends ClientService {
     }
 
     @Override
-    public void onReceived(byte[] data) {
+    public void onReceive(byte[] data) {
         //Log.v(TAG, "Received a message.");
         try {
             Pdu pdu = Pdu.parseFrom(data);
             DeliveryInfo dinfo = pdu.getDeliveryInfo();
             WrapperMessage message = pdu.getMessage();
 
-            for (MessageHandler handler : handlers) {
-                if (handler.processMessage(dinfo, message)) {
-                    break;
-                }
+            if (WrapperMessage.Type.METADATA_UPDATE.equals(message.getType()))
+            {
+                user.onRecieve(dinfo, message.getMetadataUpdate());
+            }
+            else if (WrapperMessage.Type.MULTI_ANSWER.equals(message.getType()))
+            {
+                user.onRecieve(dinfo, message.getMultiAnswer());
+            }
+            else if (WrapperMessage.Type.RECOMMEND.equals(message.getType()))
+            {
+                user.onRecieve(dinfo, message.getRecommendation());
+            }
+            else if (WrapperMessage.Type.SINGLE_ANSWER.equals(message.getType()))
+            {
+                user.onRecieve(dinfo, message.getSingleAnswer());
+            }
+            else if (WrapperMessage.Type.SONG_FRAGMENT.equals(message.getType()))
+            {
+                user.onRecieve(dinfo, message.getSongFragment());
+            }
+            else if (WrapperMessage.Type.SONG_REQUEST.equals(message.getType()))
+            {
+                user.onRecieve(dinfo, message.getSongRequest());
+            }
+            else if (WrapperMessage.Type.VOTE.equals(message.getType()))
+            {
+                user.onRecieve(dinfo, message.getVote());
             }
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
@@ -78,6 +102,7 @@ public class Service extends ClientService {
         this.handlers.add(new Metadata(getApplicationContext()));
         this.handlers.add(new Media(getApplicationContext(), this));
         this.handlers.add(new VoteEngine());
+        this.user = new User(this, getApplicationContext());
     }
 
     public void startNetwork() {

@@ -22,7 +22,7 @@ public class Receiver extends android.content.BroadcastReceiver {
         if (messageType.equals("MessageReceived")) {
             byte[] data = intent.getByteArrayExtra("Data");
             //Log.v(TAG, "Got message: " + data);
-            cService.onReceived(data);
+            cService.onReceive(data);
         } else if (messageType.equals("BluetoothEvent")) {
             int event = intent.getIntExtra("Event", BluetoothEvent.ERROR);
             boolean success = intent.getBooleanExtra("Success", false);
