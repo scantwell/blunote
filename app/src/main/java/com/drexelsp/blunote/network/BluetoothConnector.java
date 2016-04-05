@@ -61,18 +61,24 @@ public class BluetoothConnector {
             mmSocket = tmp;
         }
 
+        /**
+         * start thread to connect to remote device through bluetooth
+         */
         public void run() {
             BluetoothEvent bluetoothEvent;
             try {
+                //open socket on this device
                 mmSocket.connect();
                 BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(mmSocket);
                 mRouter.setUpStream(blunoteBluetoothSocket);
 
+                //report status of succes to event for connection
                 bluetoothEvent = new BluetoothEvent(BluetoothEvent.CONNECTOR, true, mmDevice.getAddress());
                 mEventBus.post(bluetoothEvent);
 
                 Log.v(TAG, "Connection to a host Accepted");
             } catch (IOException connectException) {
+                //report status of failure to event for connection
                 bluetoothEvent = new BluetoothEvent(BluetoothEvent.CONNECTOR, false, mmDevice.getAddress());
                 mEventBus.post(bluetoothEvent);
 
@@ -85,6 +91,9 @@ public class BluetoothConnector {
             }
         }
 
+        /**
+         * close the socket connecting to remote device
+         */
         public void cancel() {
             try {
                 mmSocket.close();

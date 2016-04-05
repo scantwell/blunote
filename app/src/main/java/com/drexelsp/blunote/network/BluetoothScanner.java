@@ -29,6 +29,10 @@ public class BluetoothScanner extends BroadcastReceiver {
     private ArrayList<BluetoothDevice> mDevices;
     private Set<Integer> whiteList;
 
+    /**
+     * @param context
+     * @param adapter array adapter of connection list
+     */
     public BluetoothScanner(Context context, ArrayAdapter<ConnectionListItem> adapter) {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mAdapter = adapter;
@@ -37,10 +41,16 @@ public class BluetoothScanner extends BroadcastReceiver {
         mDevices = new ArrayList<>();
         whiteList = new HashSet<>();
         // Add Other Devices?
+        // Phone_smart=Smart Phones
         whiteList.add(BluetoothClass.Device.PHONE_SMART);
 
     }
 
+    /**
+     * attempt to start discovery if not already running
+     *
+     * @return
+     */
     public boolean startDiscovery() {
         if (mBluetoothAdapter.isDiscovering()) {
             Log.v(TAG, "Discovery Already Running, ignoring request");
@@ -56,10 +66,15 @@ public class BluetoothScanner extends BroadcastReceiver {
 
     }
 
+    /**
+     * @param context
+     * @param intent
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+            //action found succesfully
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             String name = device.getName();
             String address = device.getAddress();
@@ -70,6 +85,7 @@ public class BluetoothScanner extends BroadcastReceiver {
             if (name != null && address != null) {
                 // Device Class White List
                 if (whiteList.contains(bluetoothClass)) {
+                    //if not in list of devices then add it
                     if (!mDevices.contains(device)) {
                         mDevices.add(device);
                     }
@@ -77,6 +93,7 @@ public class BluetoothScanner extends BroadcastReceiver {
             }
 
         } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+            //discovery finished
             Log.v(TAG, "Discovery Completed, Fetching UUIDs for " + mDevices.size() + " device(s)");
             if (!mDevices.isEmpty()) {
                 BluetoothDevice device = mDevices.remove(0);
@@ -84,6 +101,7 @@ public class BluetoothScanner extends BroadcastReceiver {
             }
 
         } else if (BluetoothDevice.ACTION_UUID.equals(action)) {
+            //
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             Parcelable[] uuids = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
             if (uuids != null) {

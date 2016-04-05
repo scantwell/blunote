@@ -12,12 +12,10 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.Artist;
 import com.drexelsp.blunote.provider.MetaStoreContract;
 import com.google.protobuf.ByteString;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +27,9 @@ public class Metadata implements MessageHandler {
     private String TAG = "Metadata";
     private ContentResolver mContentResolver;
 
+    /**
+     * @param context
+     */
     public Metadata(Context context) {
 
         mContentResolver = context.getContentResolver();
@@ -36,6 +37,11 @@ public class Metadata implements MessageHandler {
         this.addMetadata(metedata);
     }
 
+    /**
+     * add all metadata to Content Resolver
+     *
+     * @param message
+     */
     private void addMetadata(BlunoteMessages.MetadataUpdate message) {
         ContentValues[] songs = getSongValues(message.getSongsList());
         ContentValues[] artists = getArtistValues(message.getArtistsList());
@@ -45,6 +51,10 @@ public class Metadata implements MessageHandler {
         mContentResolver.bulkInsert(MetaStoreContract.Album.CONTENT_URI, albums);
     }
 
+    /**
+     *remove albums from content resolver
+     * @param albums to be removed
+     */
     private void deleteAlbums(List<BlunoteMessages.Album> albums) {
         String[] selectionArgs = new String[albums.size()];
         for (int i = 0; i < albums.size(); ++i) {
@@ -53,6 +63,10 @@ public class Metadata implements MessageHandler {
         mContentResolver.delete(MetaStoreContract.Album.CONTENT_URI, "album=?", selectionArgs);
     }
 
+    /**
+     * remove artists from content resolver
+     * @param artists to be removed
+     */
     private void deleteArtists(List<Artist> artists) {
         String[] selectionArgs = new String[artists.size()];
         for (int i = 0; i < artists.size(); ++i) {
@@ -61,6 +75,10 @@ public class Metadata implements MessageHandler {
         mContentResolver.delete(MetaStoreContract.Album.CONTENT_URI, "artist=?", selectionArgs);
     }
 
+    /**
+     * remove songs from content resolver
+     * @param songs to be removed
+     */
     private void deleteSongs(List<BlunoteMessages.Song> songs) {
         String[] selectionArgs = new String[songs.size()];
         for (int i = 0; i < songs.size(); ++i) {
@@ -69,6 +87,10 @@ public class Metadata implements MessageHandler {
         mContentResolver.delete(MetaStoreContract.Album.CONTENT_URI, "title=?", selectionArgs);
     }
 
+    /**
+     * clean up metadata from content resolver
+     * @param message of albums, artits, songs
+     */
     private void deleteMetadata(BlunoteMessages.MetadataUpdate message) {
         deleteAlbums(message.getAlbumsList());
         deleteArtists(message.getArtistsList());
@@ -292,6 +314,12 @@ public class Metadata implements MessageHandler {
         return songs;
     }
 
+    /**
+     *
+     * @param dinfo delivery info
+     * @param message message with metadata to be updated
+     * @return if successfully updated local metadata
+     */
     @Override
     public boolean processMessage(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.WrapperMessage message) {
         if (BlunoteMessages.WrapperMessage.Type.METADATA_UPDATE.equals(message.getType())) {
