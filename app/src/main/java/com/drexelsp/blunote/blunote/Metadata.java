@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -31,8 +32,20 @@ public class Metadata implements MessageHandler {
     public Metadata(Context context) {
 
         mContentResolver = context.getContentResolver();
-        BlunoteMessages.MetadataUpdate metedata = getMetadata();
+        BlunoteMessages.MetadataUpdate metedata = getMetadata(context);
         this.addMetadata(metedata);
+    }
+
+    public BlunoteMessages.MetadataUpdate getMetadata(Context context) {
+        BlunoteMessages.MetadataUpdate.Builder mdBuilder = BlunoteMessages.MetadataUpdate.newBuilder();
+        mdBuilder.setAction(BlunoteMessages.MetadataUpdate.Action.ADD);
+        mdBuilder.addAllAlbums(getAlbumMeta());
+        mdBuilder.addAllArtists(getArtistMeta());
+        mdBuilder.addAllSongs(getTrackMeta());
+        mdBuilder.setOwner(PreferenceManager.getDefaultSharedPreferences(context).getString(
+                "pref_key_user_name", BluetoothAdapter.getDefaultAdapter().getName()));
+        mdBuilder.setUserId(BluetoothAdapter.getDefaultAdapter().getAddress());
+        return mdBuilder.build();
     }
 
     private void addMetadata(BlunoteMessages.MetadataUpdate message) {
@@ -212,17 +225,6 @@ public class Metadata implements MessageHandler {
             valuesList[i] = values;
         }
         return valuesList;
-    }
-
-    public BlunoteMessages.MetadataUpdate getMetadata() {
-        BlunoteMessages.MetadataUpdate.Builder mdBuilder = BlunoteMessages.MetadataUpdate.newBuilder();
-        mdBuilder.setAction(BlunoteMessages.MetadataUpdate.Action.ADD);
-        mdBuilder.addAllAlbums(getAlbumMeta());
-        mdBuilder.addAllArtists(getArtistMeta());
-        mdBuilder.addAllSongs(getTrackMeta());
-        mdBuilder.setOwner("FakeClient");
-        mdBuilder.setUserId(BluetoothAdapter.getDefaultAdapter().getAddress());
-        return mdBuilder.build();
     }
 
     private ContentValues[] getSongValues(List<BlunoteMessages.Song> songs) {
