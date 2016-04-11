@@ -1,5 +1,6 @@
 package com.drexelsp.blunote.blunote;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,12 +13,10 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.Artist;
 import com.drexelsp.blunote.provider.MetaStoreContract;
 import com.google.protobuf.ByteString;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,9 +39,12 @@ public class Metadata implements MessageHandler {
         ContentValues[] songs = getSongValues(message.getSongsList());
         ContentValues[] artists = getArtistValues(message.getArtistsList());
         ContentValues[] albums = getAlbumValues(message.getAlbumsList());
+        ContentValues[] user_tracks = getUserTracks(message.getSongsList(), message.getUserId());
+        insertNewUser(message.getOwner(), message.getUserId()/* Should add latency here when implemented */);
         mContentResolver.bulkInsert(MetaStoreContract.Track.CONTENT_URI, songs);
         mContentResolver.bulkInsert(MetaStoreContract.Artist.CONTENT_URI, artists);
         mContentResolver.bulkInsert(MetaStoreContract.Album.CONTENT_URI, albums);
+        mContentResolver.bulkInsert(MetaStoreContract.UserTracks.CONTENT_URI, user_tracks);
     }
 
     private void deleteAlbums(List<BlunoteMessages.Album> albums) {
@@ -219,6 +221,7 @@ public class Metadata implements MessageHandler {
         mdBuilder.addAllArtists(getArtistMeta());
         mdBuilder.addAllSongs(getTrackMeta());
         mdBuilder.setOwner("FakeClient");
+        mdBuilder.setUserId(BluetoothAdapter.getDefaultAdapter().getAddress());
         return mdBuilder.build();
     }
 
@@ -290,6 +293,30 @@ public class Metadata implements MessageHandler {
         }
         cur.close();
         return songs;
+    }
+
+    private void insertNewUser(String user, String user_id) {
+        ContentValues values = new ContentValues();
+        values.put(MetaStoreContract.User.USERNAME, user);
+        values.put(MetaStoreContract.User.USER_ID, user_id);
+        values.put(MetaStoreContract.User.LATENCY, 0);
+        mContentResolver.insert(MetaStoreContract.User.CONTENT_URI, values);
+    }
+
+    private ContentValues[] getUserTracks(List<BlunoteMessages.Song> songs, String user_id) {
+        ContentValues[] valuesList = new ContentValues[songs.size()];
+        ContentValues values;
+        BlunoteMessages.Song song;
+        for (int i = 0; i < songs.size(); ++i) {
+            song = songs.get(i);
+            values = new ContentValues();
+            values.put(MetaStoreContract.UserTracks.USER_ID, user_id);
+            values.put(MetaStoreContract.UserTracks.ALBUM, song.getAlbum());
+            values.put(MetaStoreContract.UserTracks.ARTIST, song.getArtist());
+            values.put(MetaStoreContract.UserTracks.TITLE, song.getTitle());
+            valuesList[i] = values;
+        }
+        return valuesList;
     }
 
     @Override

@@ -67,6 +67,45 @@ public final class MetaStoreContract {
         public static final String SORT_ORDER_DEFAULT = ALBUM + " ASC";
     }
 
+    public static final class User implements BaseColumns
+    {
+        public static final String USERNAME = "username";
+        public static final String USER_ID = "user_id";
+        public static final String LATENCY = "latency";
+
+        public static final Uri CONTENT_URI =
+                Uri.withAppendedPath(MetaStoreContract.CONTENT_URI, "user");
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE +
+                        "/vnd.com.drexelsp.blunote.blunote.metastore_user";
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE +
+                        "/vnd.com.drexelsp.blunote.blunote.metastore_user";
+        public static final String[] PROJECTION_ALL =
+                {_ID, USERNAME, USER_ID, LATENCY};
+        public static final String SORT_ORDER_DEFAULT = USERNAME + " ASC";
+    }
+
+    public static final class UserTracks implements BaseColumns
+    {
+        public static final String USER_ID = "user_id";
+        public static final String TITLE = "title";
+        public static final String ALBUM = "album";
+        public static final String ARTIST = "artist";
+
+        public static final Uri CONTENT_URI =
+                Uri.withAppendedPath(MetaStoreContract.CONTENT_URI, "user_tracks");
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE +
+                        "/vnd.com.drexelsp.blunote.blunote.metastore_user_tracks";
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE +
+                        "/vnd.com.drexelsp.blunote.blunote.metastore_user_tracks";
+        public static final String[] PROJECTION_ALL =
+                {_ID, USER_ID, TITLE, ALBUM, ARTIST};
+        public static final String SORT_ORDER_DEFAULT = USER_ID + " ASC";
+    }
+
     public interface CommonColumns extends BaseColumns {
         String ALBUM = "album";
         String ARTIST = "artist";
