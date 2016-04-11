@@ -51,18 +51,6 @@ public class Media {
         EventBus.getDefault().register(this);
     }
 
-    @Subscribe
-    public void onSongRecommendation(SongRecommendationEvent event) {
-        String id = event.songId;
-        String owner = event.owner;
-
-        BlunoteMessages.SongRequest.Builder builder = BlunoteMessages.SongRequest.newBuilder();
-        builder.setSongId(Long.parseLong(id));
-        builder.setUsername(owner);
-
-        mService.send(builder.build());
-    }
-
     private byte[] getSongData(String uri) {
         File songFile = new File(uri);
         int filelength = (int) songFile.length();
@@ -119,7 +107,8 @@ public class Media {
         }
     }
 
-    private void processMessage(DeliveryInfo dinfo, SongFragment frag) {
+    public void addSongFragment(SongFragment frag)
+    {
         if (songsHash.containsKey(frag.getSongId())) {
             SongAssembler asm = songsHash.get(frag.getSongId());
             asm.addFragment(frag);

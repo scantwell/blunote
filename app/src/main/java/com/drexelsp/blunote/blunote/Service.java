@@ -4,14 +4,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
-import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
-import com.drexelsp.blunote.blunote.BlunoteMessages.Pdu;
-import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
-import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;
-import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
-import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
-import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
+import com.drexelsp.blunote.blunote.BlunoteMessages.*;
 import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.network.ClientService;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -33,7 +26,6 @@ public class Service extends ClientService {
     }
 
     private String TAG = "Service";
-    private ArrayList<MessageHandler> handlers = new ArrayList<MessageHandler>();
     private User user;
 
     public Service() {
@@ -43,40 +35,11 @@ public class Service extends ClientService {
 
     @Override
     public void onReceive(byte[] data) {
-        //Log.v(TAG, "Received a message.");
         try {
             Pdu pdu = Pdu.parseFrom(data);
             DeliveryInfo dinfo = pdu.getDeliveryInfo();
             WrapperMessage message = pdu.getMessage();
-
-            if (WrapperMessage.Type.METADATA_UPDATE.equals(message.getType()))
-            {
-                user.onRecieve(dinfo, message.getMetadataUpdate());
-            }
-            else if (WrapperMessage.Type.MULTI_ANSWER.equals(message.getType()))
-            {
-                user.onRecieve(dinfo, message.getMultiAnswer());
-            }
-            else if (WrapperMessage.Type.RECOMMEND.equals(message.getType()))
-            {
-                user.onRecieve(dinfo, message.getRecommendation());
-            }
-            else if (WrapperMessage.Type.SINGLE_ANSWER.equals(message.getType()))
-            {
-                user.onRecieve(dinfo, message.getSingleAnswer());
-            }
-            else if (WrapperMessage.Type.SONG_FRAGMENT.equals(message.getType()))
-            {
-                user.onRecieve(dinfo, message.getSongFragment());
-            }
-            else if (WrapperMessage.Type.SONG_REQUEST.equals(message.getType()))
-            {
-                user.onRecieve(dinfo, message.getSongRequest());
-            }
-            else if (WrapperMessage.Type.VOTE.equals(message.getType()))
-            {
-                user.onRecieve(dinfo, message.getVote());
-            }
+            this.user.onReceive(dinfo, message);
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
         }
@@ -99,17 +62,15 @@ public class Service extends ClientService {
 
     public void onCreate() {
         super.onCreate();
-        this.handlers.add(new Metadata(getApplicationContext()));
-        this.handlers.add(new Media(getApplicationContext(), this));
-        this.handlers.add(new VoteEngine());
-        this.user = new User(this, getApplicationContext());
     }
 
     public void startNetwork() {
+        this.user = new Host(this, getApplicationContext());
         super.startNetwork();
     }
 
     public void connectToNetwork(String macAddress) {
+        this.user = new User(this, getApplicationContext());
         super.connectToNetwork(macAddress);
     }
 
