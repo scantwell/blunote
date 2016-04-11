@@ -12,6 +12,12 @@ public class BluetoothEvent {
     public final boolean success;
     public final String macAddress;
 
+    /**
+     *
+     * @param event new state
+     * @param success success or failure
+     * @param macAddress of remote device
+     */
     public BluetoothEvent(int event, boolean success, String macAddress) {
         this.event = event;
         this.success = success;

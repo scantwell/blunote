@@ -39,12 +39,18 @@ public class BluetoothServerListener {
         mServerThread.start();
     }
 
+    /**
+     * forcefully shut down server thread
+     */
     public void shutdown() {
         Log.v(TAG, "Shutting Down");
         mServerThread.interrupt();
         mServerThread.cancel();
     }
 
+    /**
+     * create thread for server
+     */
     private class ServerThread extends Thread {
         private static final String TAG = "Bluetooth Server Thread";
         private final BluetoothServerSocket mmServerSocket;
@@ -59,6 +65,9 @@ public class BluetoothServerListener {
             mmServerSocket = tmp;
         }
 
+        /**
+         * run thread for server
+         */
         public void run() {
             BluetoothEvent bluetoothEvent;
             BluetoothSocket socket;
@@ -82,6 +91,9 @@ public class BluetoothServerListener {
             }
         }
 
+        /**
+         * close of the bluetoothserver
+         */
         public void cancel() {
             try {
                 mmServerSocket.close();

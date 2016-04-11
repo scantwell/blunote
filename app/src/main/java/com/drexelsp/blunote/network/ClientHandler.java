@@ -26,6 +26,10 @@ public class ClientHandler extends Handler {
         mService = new WeakReference<>(service);
     }
 
+    /**
+     * case switch for how to parse the message
+     * @param msg
+     */
     @Override
     public void handleMessage(Message msg) {
         switch (msg.what) {

@@ -34,11 +34,19 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
         dataTransferThread.start();
     }
 
+    /**
+     * get num of messages
+     * @return num of messages
+     */
     @Override
     public int numMessages() {
         return mailbox.size();
     }
 
+    /**
+     * return first message
+     * @return message
+     */
     @Override
     public Message readMessage() {
         if (numMessages() > 0) {
@@ -48,6 +56,11 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
         }
     }
 
+    /**
+     * create and send a message
+     * @param msg message to be sent
+     * @return succecss of sending
+     */
     @Override
     public boolean writeMessage(Message msg) {
         Bundle bundle = msg.getData();
@@ -55,12 +68,19 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
         return true;
     }
 
+    /**
+     * Thread to send the message across bluetooth
+     */
     private class DataTransferThread extends Thread {
         private static final String TAG = "Bluetooth Data Thread";
         private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
 
+        /**
+         * thread for transfering data across bluetooth
+         * @param socket
+         */
         public DataTransferThread(BluetoothSocket socket) {
             mmSocket = socket;
             InputStream tmpIn = null;
@@ -77,6 +97,9 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
             mmOutStream = tmpOut;
         }
 
+        /**
+         * run thread for message
+         */
         public void run() {
             DataInputStream inStream = new DataInputStream(new BufferedInputStream(mmInStream));
             int messageSize, bytes, bufferSize = 1024 * 10;
@@ -106,6 +129,11 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
 
         }
 
+        /**
+         * send a message across connection
+         * @param bytes byte array to send in message
+         */
+
         public void write(byte[] bytes) {
             try {
                 Log.v(TAG, "Writing to BluetoothSocket");
@@ -124,6 +152,9 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
             }
         }
 
+        /**
+         * close connection
+         */
         public void cancel() {
             try {
                 mmSocket.close();

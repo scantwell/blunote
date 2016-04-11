@@ -23,7 +23,10 @@ abstract public class ClientService extends Service {
 
     abstract public void onNetworkEvent(BluetoothEvent bluetoothEvent);
 
-    // Sends to another application via bluetooth/etc
+    /**
+     * send message across network
+     * @param data to be sent
+     */
     protected void send(byte[] data) {
         Log.v(TAG, "Sending message.");
         Message msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
@@ -37,6 +40,9 @@ abstract public class ClientService extends Service {
         }
     }
 
+    /**
+     * start a new network and prepare for connections
+     */
     protected void startNetwork() {
         Log.v(TAG, "Starting Network.");
         Message msg = Message.obtain(null, ClientHandler.START_NEW_NETWORK, 0, 0);
@@ -47,6 +53,10 @@ abstract public class ClientService extends Service {
         }
     }
 
+    /**
+     * connect to network and send message
+     * @param macAddress to connect to
+     */
     protected void connectToNetwork(String macAddress) {
         Log.v(TAG, String.format("Connecting To Network %s", macAddress));
         Message msg = Message.obtain(null, ClientHandler.CONNECT_TO_NETWORK, 0, 0);
@@ -64,12 +74,20 @@ abstract public class ClientService extends Service {
         this.mBinder = mBinder;
     }
 
+    /**
+     *
+     * @param intent
+     * @return mBinder
+     */
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
 
+    /**
+     * log on created
+     */
     @Override
     public void onCreate() {
         Log.v(TAG, "Created service.");
@@ -87,6 +105,7 @@ abstract public class ClientService extends Service {
         Log.v(TAG, "Destroyed service.");
     }
 
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // If the service is stopped it will be started again with original intent
@@ -94,12 +113,21 @@ abstract public class ClientService extends Service {
         return START_REDELIVER_INTENT;
     }
 
+    /**
+     * log on unbind
+     * @param intent
+     * @return
+     */
     @Override
     public boolean onUnbind(Intent intent) {
         Log.v(TAG, "Unbinding user.");
         return true;
     }
 
+    /**
+     * log on rebind
+     * @param intent
+     */
     @Override
     public void onRebind(Intent intent) {
         Log.v(TAG, "Rebind user.");

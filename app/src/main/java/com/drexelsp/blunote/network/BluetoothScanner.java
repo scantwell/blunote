@@ -48,7 +48,6 @@ public class BluetoothScanner extends BroadcastReceiver {
 
     /**
      * attempt to start discovery if not already running
-     *
      * @return
      */
     public boolean startDiscovery() {

@@ -28,6 +28,10 @@ public class BlunoteRouter extends Thread {
         return instance;
     }
 
+    /**
+     * send message across socket
+     * @param msg
+     */
     public void send(Message msg) {
         if (isHost) {
             for (BlunoteSocket socket : downStream) {
@@ -38,33 +42,55 @@ public class BlunoteRouter extends Thread {
         }
     }
 
+    /**
+     * start the router as host
+     * @param context for application
+     */
     public void setHostMode(Context context) {
         applicationContext = context;
         isHost = true;
         this.start();
     }
 
+    /**
+     * start the router as client
+     * @param context for application
+     */
     public void setClientMode(Context context) {
         applicationContext = context;
         isHost = false;
         this.start();
     }
 
+    /**
+     * add new connection pointing to host/server
+     * @param socket that is upstream
+     */
     public void setUpStream(BlunoteSocket socket) {
         Log.v(TAG, "New Up Stream Set");
         upStream = socket;
     }
 
+    /**
+     * add new connection pointing away from host/server
+     * @param socket that is upstream
+     */
     public void addDownStream(BlunoteSocket socket) {
         Log.v(TAG, "New Down Stream Added");
         downStream.add(socket);
     }
 
+    /**
+     * start thread
+     */
     public void run() {
         awake = true;
         doWork();
     }
 
+    /**
+     * start the router and continually listen
+     */
     public synchronized  void doWork() {
         //noinspection InfiniteLoopStatement
         while (true) {
@@ -116,12 +142,19 @@ public class BlunoteRouter extends Thread {
         }
     }
 
+    /**
+     * wake up the router
+     */
     public synchronized void wakeUp() {
         if (!awake) {
             notify();
         }
     }
 
+    /**
+     * put message for main process to recive
+     * @param msg
+     */
     private void sendMessageToApplication(Message msg) {
         Intent intent = new Intent();
         intent.setAction("networkservice.onrecieved");
