@@ -9,7 +9,6 @@ import java.lang.ref.WeakReference;
 
 /**
  * Created by scantwell on 1/12/2016.
- * <p/>
  * Handles messages from activities or binding service to the background service
  */
 public class ClientHandler extends Handler {

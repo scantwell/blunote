@@ -4,7 +4,6 @@ import android.os.Message;
 
 /**
  * Created by omnia on 2/12/16.
- * <p/>
  * Interface for BluNote Sockets
  * Currently supports BlunoteBluetoothSocket
  */

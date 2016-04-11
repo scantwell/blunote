@@ -14,7 +14,6 @@ import java.util.UUID;
 
 /**
  * Created by omnia on 2/12/16.
- * <p/>
  * Starts a Bluetooth Server listener thread to allow incoming connections
  * Also creates a BluetoothBeacon and begins advertising
  */

@@ -23,7 +23,6 @@ import java.util.UUID;
 
 /**
  * Created by scantwell on 1/12/2016.
- * <p/>
  * NetworkService exposes the meshnetwork
  */
 public class NetworkService extends Service {

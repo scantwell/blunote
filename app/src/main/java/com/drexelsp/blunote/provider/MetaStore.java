@@ -283,7 +283,7 @@ public final class MetaStore extends ContentProvider {
                         selectionArgs);
                 break;
             default:
-                // no support for deleting photos or entities –
+                // no support for deleting photos or entities
                 // photos are deleted by a trigger when the item is deleted
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }

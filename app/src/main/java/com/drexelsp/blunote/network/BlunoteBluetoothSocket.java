@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 /**
  * Created by omnia on 2/12/16.
- * <p/>
  * BluetoothSocket that implements BlunoteSocket interface
  * Allows Reading Messages from mailbox, and writing messages out to the data thread
  */

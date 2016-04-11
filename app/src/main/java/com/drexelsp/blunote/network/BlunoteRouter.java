@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 /**
  * Created by omnia on 2/15/16.
- * <p/>
  * Router for Reading and Writing BlunoteSockets
  */
 public class BlunoteRouter extends Thread {
