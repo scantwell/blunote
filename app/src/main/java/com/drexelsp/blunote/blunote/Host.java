@@ -21,7 +21,7 @@ public class Host extends User {
        // this.player = new Player(context);
     }
 
-    public void onReceive(DeliveryInfo dinfo, MetadataUpdate message)
+   /* public void onReceive(DeliveryInfo dinfo, MetadataUpdate message)
     {
         if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
             this.metadata.addMetadata(message);
@@ -30,7 +30,7 @@ public class Host extends User {
         }
         // Contains the removal of metadata
         //this.service.send(BlunoteMessages.MetadataUpdate);
-    }
+    }*/
 
     @Override
     public void onReceive(DeliveryInfo dinfo, MultiAnswer message)
