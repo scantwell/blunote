@@ -112,7 +112,7 @@ public class Service extends ClientService {
     }
 
     public void send(Recommendation message) {
-        Pdu pdu = createMessage()
+        Pdu pdu = createMessage(message.getUsername())
                 .setMessage(WrapperMessage.newBuilder()
                         .setType(WrapperMessage.Type.RECOMMEND)
                         .setRecommendation(message)).build();
@@ -120,7 +120,7 @@ public class Service extends ClientService {
     }
 
     public void send(SongRequest message) {
-        Pdu pdu = createMessage()
+        Pdu pdu = createMessage(message.getUsername())
                 .setMessage(WrapperMessage.newBuilder()
                         .setType(WrapperMessage.Type.SONG_REQUEST)
                         .setSongRequest(message)).build();
@@ -129,22 +129,24 @@ public class Service extends ClientService {
 
     public Pdu.Builder createMessage() {
         Pdu.Builder pduBuilder = Pdu.newBuilder();
-        pduBuilder.setDeliveryInfo(createDeliveryInfo());
+        pduBuilder.setDeliveryInfo(createDeliveryInfo("FakeUser")); // Can I leave username blank?
         return pduBuilder;
     }
 
-    public DeliveryInfo createDeliveryInfo() {
+    public Pdu.Builder createMessage(String username) {
+        Pdu.Builder pduBuilder = Pdu.newBuilder();
+        pduBuilder.setDeliveryInfo(createDeliveryInfo(username));
+        return pduBuilder;
+    }
+
+    public DeliveryInfo createDeliveryInfo(String username) {
         DeliveryInfo.Builder dinfoBuilder = DeliveryInfo.newBuilder();
         dinfoBuilder.setTimestamp(getTimestamp());
-        dinfoBuilder.setUsername(getUsername());
+        dinfoBuilder.setUsername(username);
         return dinfoBuilder.build();
     }
 
     private long getTimestamp() {
         return System.currentTimeMillis() / 1000;
-    }
-
-    public String getUsername() {
-        return "FakeUser";
     }
 }

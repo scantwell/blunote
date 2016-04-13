@@ -125,7 +125,9 @@ public class Metadata implements MessageHandler {
             last_year = last_year == null ? "" : last_year;
             num_of_songs = num_of_songs == null ? "" : num_of_songs;
 
-            album_art_bytes = getAlbumArt(album_art);
+            //Temp Disable album art
+            //album_art_bytes = getAlbumArt(album_art);
+            album_art_bytes = new byte[0];
 
             albumsBuilder.setAlbum(album);
             albumsBuilder.setAlbumArt(ByteString.copyFrom(album_art_bytes));
@@ -140,20 +142,22 @@ public class Metadata implements MessageHandler {
     }
 
     private byte[] getAlbumArt(String uri) {
-        try {
-            File file = new File(uri);
-            Log.v(TAG, String.format("Byte array size %d", file.length()));
-            FileInputStream fis = new FileInputStream(file);
-            byte[] ba = new byte[(int) file.length()];
-            fis.read(ba);
-            fis.close();
+        if (!uri.isEmpty()) {
+            try {
+                File file = new File(uri);
+                Log.v(TAG, String.format("Byte array size %d", file.length()));
+                FileInputStream fis = new FileInputStream(file);
+                byte[] ba = new byte[(int) file.length()];
+                fis.read(ba);
+                fis.close();
 
-            return ba;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return new byte[0];
-        } catch (IOException e) {
-            e.printStackTrace();
+                return ba;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                return new byte[0];
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return new byte[0];
     }

@@ -107,6 +107,7 @@ public final class MetaStore extends ContentProvider {
                 }
                 db.setTransactionSuccessful();
                 db.endTransaction();
+                break;
             case USER_TRACKS_LIST:
                 db.beginTransaction();
                 for (int i = 0; i < values.length; ++i) {
@@ -117,6 +118,7 @@ public final class MetaStore extends ContentProvider {
                 }
                 db.setTransactionSuccessful();
                 db.endTransaction();
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
