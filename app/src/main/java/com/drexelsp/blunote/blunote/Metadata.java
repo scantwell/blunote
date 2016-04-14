@@ -48,7 +48,7 @@ public class Metadata {
         return mdBuilder.build();
     }
 
-    private void addMetadata(BlunoteMessages.MetadataUpdate message) {
+    public void addMetadata(BlunoteMessages.MetadataUpdate message) {
         ContentValues[] songs = getSongValues(message.getSongsList());
         ContentValues[] artists = getArtistValues(message.getArtistsList());
         ContentValues[] albums = getAlbumValues(message.getAlbumsList());
