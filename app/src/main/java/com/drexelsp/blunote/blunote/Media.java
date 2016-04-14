@@ -1,9 +1,9 @@
 package com.drexelsp.blunote.blunote;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -43,7 +43,8 @@ public class Media implements MessageHandler {
     private Player player;
 
     public Media(Context context, Service service) {
-        this.username = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_user_name", "username");
+        this.username = PreferenceManager.getDefaultSharedPreferences(context).getString(
+                "pref_key_user_name", BluetoothAdapter.getDefaultAdapter().getName());
         this.mService = service;
         this.mContentResolver = context.getContentResolver();
         this.cacheDir = context.getCacheDir();
