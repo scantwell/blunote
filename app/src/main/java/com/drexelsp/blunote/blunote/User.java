@@ -1,8 +1,11 @@
 package com.drexelsp.blunote.blunote;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.preference.PreferenceManager;
 
 import com.drexelsp.blunote.events.SongRecommendationEvent;
+import com.drexelsp.blunote.ui.PreferencesActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -13,7 +16,7 @@ import java.util.ArrayList;
  */
 public class User {
 
-    protected String name = "FakeUser";
+    protected String name;
     protected Service service;
     protected Context context;
     protected Metadata metadata;
@@ -21,10 +24,15 @@ public class User {
 
     public User(Service service, Context context)
     {
+        this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_user_name", BluetoothAdapter.getDefaultAdapter().getName());
         this.service = service;
         this.context = context;
         this.media = new Media(context, service);
         this.metadata = new Metadata(context);
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.WrapperMessage message)

@@ -2,7 +2,6 @@ package com.drexelsp.blunote.blunote;
 
 import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.*;
 import com.drexelsp.blunote.events.BluetoothEvent;
@@ -10,8 +9,6 @@ import com.drexelsp.blunote.network.ClientService;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
 
 /**
  * Created by scantwell on 2/15/2016.
@@ -123,15 +120,11 @@ public class Service extends ClientService {
     public DeliveryInfo createDeliveryInfo() {
         DeliveryInfo.Builder dinfoBuilder = DeliveryInfo.newBuilder();
         dinfoBuilder.setTimestamp(getTimestamp());
-        dinfoBuilder.setUsername(getUsername());
+        dinfoBuilder.setUsername(user.getName());
         return dinfoBuilder.build();
     }
 
     private long getTimestamp() {
         return System.currentTimeMillis() / 1000;
-    }
-
-    public String getUsername() {
-        return "FakeUser";
     }
 }
