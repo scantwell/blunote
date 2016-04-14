@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- General Settings -->
+    <string name="user_name_default">Username</string>
+    <bool name="notifications_default">true</bool>
+    <bool name="ghost_mode_default">false</bool>
+    <bool name="share_songs_default">true</bool>
+
+    <!-- Network Settings -->
+    <string name="network_name_default">Party Jamz</string>
+    <integer name="queue_size_default">20</integer>
+    <integer name="user_votes_default">5</integer>
+    <bool name="client_voting_default">true</bool>
+</resources>

@@ -5,9 +5,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
@@ -66,6 +66,8 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        PreferenceManager.setDefaultValues(this, R.xml.preference, false);
+
         joinNetworkButton = (Button) findViewById(R.id.join_network_button);
         createNetworkButton = (Button) findViewById(R.id.create_network_button);
         refreshButton = (Button) findViewById(R.id.refresh_button);
@@ -97,11 +99,6 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
 
         //dialog.hide();
 
-    }
-
-    @Override
-    public boolean showSettingsCog() {
-        return false;
     }
 
     @Override
@@ -139,13 +136,13 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     }
 
     @Override
-    public boolean showMusicMenuItems() {
-        return false;
+    public Context getCurrentContext() {
+        return LoginActivity.this;
     }
 
     @Override
-    public Context getCurrentContext() {
-        return LoginActivity.this;
+    public boolean showMusicMenuItems() {
+        return false;
     }
 
     @Override
@@ -154,10 +151,17 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     }
 
     @Override
+    public boolean showSettingsCog() {
+        return true;
+    }
+
+    @Override
     protected void onStart() {
         getApplicationContext().getContentResolver().delete(MetaStoreContract.Album.CONTENT_URI, null, null);
         getApplicationContext().getContentResolver().delete(MetaStoreContract.Artist.CONTENT_URI, null, null);
         getApplicationContext().getContentResolver().delete(MetaStoreContract.Track.CONTENT_URI, null, null);
+        getApplicationContext().getContentResolver().delete(MetaStoreContract.User.CONTENT_URI, null, null);
+        getApplicationContext().getContentResolver().delete(MetaStoreContract.UserTracks.CONTENT_URI, null, null);
         super.onStart();
         bindService(new Intent(this, Service.class), this, Context.BIND_AUTO_CREATE);
         EventBus.getDefault().register(this);

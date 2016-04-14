@@ -48,7 +48,7 @@ public class Service extends ClientService {
         if ((bluetoothEvent.event == BluetoothEvent.CONNECTOR || bluetoothEvent.event == BluetoothEvent.SERVER_LISTENER) && bluetoothEvent.success) {
             // Gather Metadata and Send it
             Metadata metadata = new Metadata(getApplicationContext());
-            BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata();
+            BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata(getApplicationContext());
             Pdu pdu = createMessage()
                     .setMessage(WrapperMessage.newBuilder()
                             .setType(WrapperMessage.Type.METADATA_UPDATE)

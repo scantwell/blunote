@@ -101,12 +101,12 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
         Intent intent;
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_network) {
-            intent = new Intent(getCurrentContext(), NetworkSettingsActivity.class);
+        if (id == R.id.action_settings_page) {
+            intent = new Intent(getCurrentContext(), SettingsActivity.class);
             startActivity(intent);
             return true;
-        } else if (id == R.id.action_preferences) {
-            intent = new Intent(getCurrentContext(), PreferencesActivity.class);
+        } else if (id == R.id.action_leave_network) {
+            intent = new Intent(getCurrentContext(), LoginActivity.class);
             startActivity(intent);
             return true;
         } else if (id == R.id.action_songList) {

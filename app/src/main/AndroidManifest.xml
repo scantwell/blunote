@@ -53,6 +53,10 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name="com.drexelsp.blunote.ui.SettingsActivity"
+            android:label="BluNote"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name="com.drexelsp.blunote.ui.AlbumViewActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />

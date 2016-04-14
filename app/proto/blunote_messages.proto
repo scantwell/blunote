@@ -52,7 +52,8 @@ message MetadataUpdate {
 	repeated Album albums = 2; /// A list of albums to update
 	repeated Artist artists = 3; /// A list of artists to update
 	required string owner = 4; /// The user that can supply the song data
-	repeated Song songs = 5; /// A list of songs to update
+	required string user_id = 5; /// The user's mac address to use as a key to the user
+	repeated Song songs = 6; /// A list of songs to update
 }
 
 /**
