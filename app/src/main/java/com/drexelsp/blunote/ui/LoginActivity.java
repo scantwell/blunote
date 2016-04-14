@@ -102,11 +102,6 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     }
 
     @Override
-    public boolean showSettingsCog() {
-        return false;
-    }
-
-    @Override
     public void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -141,13 +136,13 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     }
 
     @Override
-    public boolean showMusicMenuItems() {
-        return false;
+    public Context getCurrentContext() {
+        return LoginActivity.this;
     }
 
     @Override
-    public Context getCurrentContext() {
-        return LoginActivity.this;
+    public boolean showMusicMenuItems() {
+        return false;
     }
 
     @Override
@@ -156,10 +151,17 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     }
 
     @Override
+    public boolean showSettingsCog() {
+        return true;
+    }
+
+    @Override
     protected void onStart() {
         getApplicationContext().getContentResolver().delete(MetaStoreContract.Album.CONTENT_URI, null, null);
         getApplicationContext().getContentResolver().delete(MetaStoreContract.Artist.CONTENT_URI, null, null);
         getApplicationContext().getContentResolver().delete(MetaStoreContract.Track.CONTENT_URI, null, null);
+        getApplicationContext().getContentResolver().delete(MetaStoreContract.User.CONTENT_URI, null, null);
+        getApplicationContext().getContentResolver().delete(MetaStoreContract.UserTracks.CONTENT_URI, null, null);
         super.onStart();
         bindService(new Intent(this, Service.class), this, Context.BIND_AUTO_CREATE);
         EventBus.getDefault().register(this);

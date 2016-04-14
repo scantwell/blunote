@@ -2,7 +2,6 @@ package com.drexelsp.blunote.blunote;
 
 import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
 import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
@@ -10,8 +9,8 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.Pdu;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
-import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
+import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
 import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.network.ClientService;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -64,7 +63,7 @@ public class Service extends ClientService {
         if ((bluetoothEvent.event == BluetoothEvent.CONNECTOR || bluetoothEvent.event == BluetoothEvent.SERVER_LISTENER) && bluetoothEvent.success) {
             // Gather Metadata and Send it
             Metadata metadata = new Metadata(getApplicationContext());
-            BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata();
+            BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata(getApplicationContext());
             Pdu pdu = createMessage()
                     .setMessage(WrapperMessage.newBuilder()
                             .setType(WrapperMessage.Type.METADATA_UPDATE)
@@ -113,7 +112,7 @@ public class Service extends ClientService {
     }
 
     public void send(Recommendation message) {
-        Pdu pdu = createMessage()
+        Pdu pdu = createMessage(message.getUsername())
                 .setMessage(WrapperMessage.newBuilder()
                         .setType(WrapperMessage.Type.RECOMMEND)
                         .setRecommendation(message)).build();
@@ -121,7 +120,7 @@ public class Service extends ClientService {
     }
 
     public void send(SongRequest message) {
-        Pdu pdu = createMessage()
+        Pdu pdu = createMessage(message.getUsername())
                 .setMessage(WrapperMessage.newBuilder()
                         .setType(WrapperMessage.Type.SONG_REQUEST)
                         .setSongRequest(message)).build();
@@ -130,22 +129,24 @@ public class Service extends ClientService {
 
     public Pdu.Builder createMessage() {
         Pdu.Builder pduBuilder = Pdu.newBuilder();
-        pduBuilder.setDeliveryInfo(createDeliveryInfo());
+        pduBuilder.setDeliveryInfo(createDeliveryInfo("FakeUser")); // Can I leave username blank?
         return pduBuilder;
     }
 
-    public DeliveryInfo createDeliveryInfo() {
+    public Pdu.Builder createMessage(String username) {
+        Pdu.Builder pduBuilder = Pdu.newBuilder();
+        pduBuilder.setDeliveryInfo(createDeliveryInfo(username));
+        return pduBuilder;
+    }
+
+    public DeliveryInfo createDeliveryInfo(String username) {
         DeliveryInfo.Builder dinfoBuilder = DeliveryInfo.newBuilder();
         dinfoBuilder.setTimestamp(getTimestamp());
-        dinfoBuilder.setUsername(getUsername());
+        dinfoBuilder.setUsername(username);
         return dinfoBuilder.build();
     }
 
     private long getTimestamp() {
         return System.currentTimeMillis() / 1000;
-    }
-
-    public String getUsername() {
-        return "FakeUser";
     }
 }
