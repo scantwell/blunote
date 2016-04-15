@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
 import com.drexelsp.blunote.ui.PreferencesActivity;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class User {
         this.context = context;
         this.media = new Media(context, service);
         this.metadata = new Metadata(context);
+        EventBus.getDefault().register(this);
     }
 
     public String getName() {

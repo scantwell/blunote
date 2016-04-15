@@ -16,8 +16,6 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
 import com.google.protobuf.ByteString;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,7 +50,6 @@ public class Media {
         this.player = new Player(context);
         Thread thread = new Thread(this.player);
         thread.start();
-        EventBus.getDefault().register(this);
     }
 
     private byte[] getSongData(String uri) {
