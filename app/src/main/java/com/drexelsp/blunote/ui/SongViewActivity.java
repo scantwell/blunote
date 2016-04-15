@@ -32,6 +32,9 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
     TextView songViewOwner;
     Button song_view_add_to_queue;
 
+    String id;
+    String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,9 +75,7 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         if (v == song_view_add_to_queue) {
-            Intent intent = getIntent();
-            String id = intent.getStringExtra("_id");
-            SongRecommendationEvent event = new SongRecommendationEvent(id, "FakeUser");
+            SongRecommendationEvent event = new SongRecommendationEvent(id, username);
             EventBus.getDefault().post(event);
         }
 
@@ -82,7 +83,7 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
 
     public void populateSongDetails() {
         Intent intent = getIntent();
-        String id = intent.getStringExtra("_id");
+        id = intent.getStringExtra("_id");
         String[] selection = { "song_id", "title", "artist", "album" };
         String where = "song_id = ?";
         String[] args = { id };
@@ -96,26 +97,56 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
             songViewArtist.setText(artist);
             String album = cursor.getString(cursor.getColumnIndex("album"));
             songViewAlbum.setText(album);
-            String owner = "SongOwner";
-            songViewOwner.setText(owner);
-            //Log.v(TAG, String.format("Title: %s, Artist: %s, Album: %s, Owner: %s", title, artist, album, owner));
             cursor.close();
 
+            username = getUsername(title,artist,album);
+            songViewOwner.setText(username);
 
-            Uri uri1 = MetaStoreContract.Album.CONTENT_URI;
-            String selection1[] = {"album_art"};
-            String where1 = "album = ?";
-            String[] args1 = { album };
-            Cursor cursor1 = getContentResolver().query(uri1, selection1, where1, args1, null);
-
-            if (cursor1 != null && cursor1.moveToNext()) {
-                //Log.v(TAG, "Album Found");
-                byte[] albumArt = cursor1.getBlob(cursor1.getColumnIndex("album_art"));
-                Bitmap bitmap = BitmapFactory.decodeByteArray(albumArt, 0, albumArt.length);
-                songViewAlbumArt.setImageBitmap(bitmap);
-                cursor1.close();
-            }
+            songViewAlbumArt.setImageBitmap(getAlbumArt(album));
         }
 
+    }
+
+    private Bitmap getAlbumArt(String album) {
+        Uri uri = MetaStoreContract.Album.CONTENT_URI;
+        String selection[] = {"album_art"};
+        String where = "album = ?";
+        String[] args = { album };
+        Cursor cursor = getContentResolver().query(uri, selection, where, args, null);
+
+        if (cursor != null && cursor.moveToNext()) {
+            byte[] albumArt = cursor.getBlob(cursor.getColumnIndex("album_art"));
+            cursor.close();
+
+            return BitmapFactory.decodeByteArray(albumArt, 0, albumArt.length);
+        } else {
+            return null;
+        }
+    }
+
+    private String getUsername(String title, String artist, String album) {
+        String username;
+        String[] selection = {};
+        String where = "title = ? AND artist = ? AND album = ?";
+        String[] args = {title, artist, album};
+        Cursor cursor = getContentResolver().query(MetaStoreContract.UserTracks.CONTENT_URI, selection, where, args, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            String userId = cursor.getString(cursor.getColumnIndex("user_id"));
+            cursor.close();
+
+            where = "user_id = ?";
+            args = new String[]{userId};
+            cursor = getContentResolver().query(MetaStoreContract.User.CONTENT_URI, selection, where, args, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                username = cursor.getString(cursor.getColumnIndex("username"));
+                cursor.close();
+            } else {
+                username = "";
+            }
+
+        } else {
+            username = "";
+        }
+        return username;
     }
 }

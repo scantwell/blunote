@@ -1,9 +1,11 @@
 package com.drexelsp.blunote.blunote;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -32,6 +34,7 @@ import java.util.HashMap;
 public class Media implements MessageHandler {
     private final static int FRAGMENT_SIZE = 1024 * 10;
     private final String TAG = "Media";
+    private final String username;
 
     private File cacheDir;
     private ContentResolver mContentResolver;
@@ -46,6 +49,8 @@ public class Media implements MessageHandler {
      * @param service
      */
     public Media(Context context, Service service) {
+        this.username = PreferenceManager.getDefaultSharedPreferences(context).getString(
+                "pref_key_user_name", BluetoothAdapter.getDefaultAdapter().getName());
         this.mService = service;
         this.mContentResolver = context.getContentResolver();
         this.cacheDir = context.getCacheDir();
@@ -176,7 +181,7 @@ public class Media implements MessageHandler {
      * @param request song that is requested
      */
     private void processMessage(DeliveryInfo dinfo, SongRequest request) {
-        if (request.getUsername().equals("FakeUser")) {
+        if (request.getUsername().equals(username)) {
             ArrayList<SongFragment> frags = getSongFragments(request.getSongId());
             for (SongFragment frag : frags) {
                 //loop through and send each fragment individually

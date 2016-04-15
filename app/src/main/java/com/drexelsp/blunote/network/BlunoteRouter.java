@@ -106,7 +106,7 @@ public class BlunoteRouter extends Thread {
 
             } else {
                 // Client Mode
-                if (upStream != null && upStream.numMessages() > 0) {
+                while (upStream != null && upStream.numMessages() > 0) {
                     Log.v(TAG, "Reading Message from UpStream");
                     Message msg = upStream.readMessage();
                     sendMessageToApplication(msg);
@@ -117,7 +117,7 @@ public class BlunoteRouter extends Thread {
                 }
 
                 for (BlunoteSocket socket : downStream) {
-                    if (socket.numMessages() > 0) {
+                    while (socket.numMessages() > 0) {
                         Log.v(TAG, "Reading Message from DownStream");
                         Message msg = socket.readMessage();
                         if (upStream != null) {

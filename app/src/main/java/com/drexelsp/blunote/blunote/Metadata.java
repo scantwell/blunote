@@ -1,10 +1,12 @@
 package com.drexelsp.blunote.blunote;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -33,8 +35,20 @@ public class Metadata implements MessageHandler {
     public Metadata(Context context) {
 
         mContentResolver = context.getContentResolver();
-        BlunoteMessages.MetadataUpdate metedata = getMetadata();
+        BlunoteMessages.MetadataUpdate metedata = getMetadata(context);
         this.addMetadata(metedata);
+    }
+
+    public BlunoteMessages.MetadataUpdate getMetadata(Context context) {
+        BlunoteMessages.MetadataUpdate.Builder mdBuilder = BlunoteMessages.MetadataUpdate.newBuilder();
+        mdBuilder.setAction(BlunoteMessages.MetadataUpdate.Action.ADD);
+        mdBuilder.addAllAlbums(getAlbumMeta());
+        mdBuilder.addAllArtists(getArtistMeta());
+        mdBuilder.addAllSongs(getTrackMeta());
+        mdBuilder.setOwner(PreferenceManager.getDefaultSharedPreferences(context).getString(
+                "pref_key_user_name", BluetoothAdapter.getDefaultAdapter().getName()));
+        mdBuilder.setUserId(BluetoothAdapter.getDefaultAdapter().getAddress());
+        return mdBuilder.build();
     }
 
     /**
@@ -46,9 +60,12 @@ public class Metadata implements MessageHandler {
         ContentValues[] songs = getSongValues(message.getSongsList());
         ContentValues[] artists = getArtistValues(message.getArtistsList());
         ContentValues[] albums = getAlbumValues(message.getAlbumsList());
+        ContentValues[] user_tracks = getUserTracks(message.getSongsList(), message.getUserId());
+        insertNewUser(message.getOwner(), message.getUserId()/* Should add latency here when implemented */);
         mContentResolver.bulkInsert(MetaStoreContract.Track.CONTENT_URI, songs);
         mContentResolver.bulkInsert(MetaStoreContract.Artist.CONTENT_URI, artists);
         mContentResolver.bulkInsert(MetaStoreContract.Album.CONTENT_URI, albums);
+        mContentResolver.bulkInsert(MetaStoreContract.UserTracks.CONTENT_URI, user_tracks);
     }
 
     /**
@@ -132,7 +149,9 @@ public class Metadata implements MessageHandler {
             last_year = last_year == null ? "" : last_year;
             num_of_songs = num_of_songs == null ? "" : num_of_songs;
 
-            album_art_bytes = getAlbumArt(album_art);
+            //Temp Disable album art
+            //album_art_bytes = getAlbumArt(album_art);
+            album_art_bytes = new byte[0];
 
             albumsBuilder.setAlbum(album);
             albumsBuilder.setAlbumArt(ByteString.copyFrom(album_art_bytes));
@@ -147,20 +166,22 @@ public class Metadata implements MessageHandler {
     }
 
     private byte[] getAlbumArt(String uri) {
-        try {
-            File file = new File(uri);
-            Log.v(TAG, String.format("Byte array size %d", file.length()));
-            FileInputStream fis = new FileInputStream(file);
-            byte[] ba = new byte[(int) file.length()];
-            fis.read(ba);
-            fis.close();
+        if (!uri.isEmpty()) {
+            try {
+                File file = new File(uri);
+                Log.v(TAG, String.format("Byte array size %d", file.length()));
+                FileInputStream fis = new FileInputStream(file);
+                byte[] ba = new byte[(int) file.length()];
+                fis.read(ba);
+                fis.close();
 
-            return ba;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return new byte[0];
-        } catch (IOException e) {
-            e.printStackTrace();
+                return ba;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                return new byte[0];
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return new byte[0];
     }
@@ -234,16 +255,6 @@ public class Metadata implements MessageHandler {
         return valuesList;
     }
 
-    public BlunoteMessages.MetadataUpdate getMetadata() {
-        BlunoteMessages.MetadataUpdate.Builder mdBuilder = BlunoteMessages.MetadataUpdate.newBuilder();
-        mdBuilder.setAction(BlunoteMessages.MetadataUpdate.Action.ADD);
-        mdBuilder.addAllAlbums(getAlbumMeta());
-        mdBuilder.addAllArtists(getArtistMeta());
-        mdBuilder.addAllSongs(getTrackMeta());
-        mdBuilder.setOwner("FakeClient");
-        return mdBuilder.build();
-    }
-
     private ContentValues[] getSongValues(List<BlunoteMessages.Song> songs) {
         ContentValues[] valuesList = new ContentValues[songs.size()];
         ContentValues values;
@@ -312,6 +323,30 @@ public class Metadata implements MessageHandler {
         }
         cur.close();
         return songs;
+    }
+
+    private void insertNewUser(String user, String user_id) {
+        ContentValues values = new ContentValues();
+        values.put(MetaStoreContract.User.USERNAME, user);
+        values.put(MetaStoreContract.User.USER_ID, user_id);
+        values.put(MetaStoreContract.User.LATENCY, 0);
+        mContentResolver.insert(MetaStoreContract.User.CONTENT_URI, values);
+    }
+
+    private ContentValues[] getUserTracks(List<BlunoteMessages.Song> songs, String user_id) {
+        ContentValues[] valuesList = new ContentValues[songs.size()];
+        ContentValues values;
+        BlunoteMessages.Song song;
+        for (int i = 0; i < songs.size(); ++i) {
+            song = songs.get(i);
+            values = new ContentValues();
+            values.put(MetaStoreContract.UserTracks.USER_ID, user_id);
+            values.put(MetaStoreContract.UserTracks.ALBUM, song.getAlbum());
+            values.put(MetaStoreContract.UserTracks.ARTIST, song.getArtist());
+            values.put(MetaStoreContract.UserTracks.TITLE, song.getTitle());
+            valuesList[i] = values;
+        }
+        return valuesList;
     }
 
     /**

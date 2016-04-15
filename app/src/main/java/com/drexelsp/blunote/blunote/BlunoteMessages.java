@@ -4280,7 +4280,33 @@ public final class BlunoteMessages {
         getOwnerBytes();
 
     /**
-     * <code>repeated .blunote.Song songs = 5;</code>
+     * <code>required string user_id = 5;</code>
+     *
+     * <pre>
+     *&#47; The user's mac address to use as a key to the user
+     * </pre>
+     */
+    boolean hasUserId();
+    /**
+     * <code>required string user_id = 5;</code>
+     *
+     * <pre>
+     *&#47; The user's mac address to use as a key to the user
+     * </pre>
+     */
+    java.lang.String getUserId();
+    /**
+     * <code>required string user_id = 5;</code>
+     *
+     * <pre>
+     *&#47; The user's mac address to use as a key to the user
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getUserIdBytes();
+
+    /**
+     * <code>repeated .blunote.Song songs = 6;</code>
      *
      * <pre>
      *&#47; A list of songs to update
@@ -4289,7 +4315,7 @@ public final class BlunoteMessages {
     java.util.List<com.drexelsp.blunote.blunote.BlunoteMessages.Song> 
         getSongsList();
     /**
-     * <code>repeated .blunote.Song songs = 5;</code>
+     * <code>repeated .blunote.Song songs = 6;</code>
      *
      * <pre>
      *&#47; A list of songs to update
@@ -4297,7 +4323,7 @@ public final class BlunoteMessages {
      */
     com.drexelsp.blunote.blunote.BlunoteMessages.Song getSongs(int index);
     /**
-     * <code>repeated .blunote.Song songs = 5;</code>
+     * <code>repeated .blunote.Song songs = 6;</code>
      *
      * <pre>
      *&#47; A list of songs to update
@@ -4305,7 +4331,7 @@ public final class BlunoteMessages {
      */
     int getSongsCount();
     /**
-     * <code>repeated .blunote.Song songs = 5;</code>
+     * <code>repeated .blunote.Song songs = 6;</code>
      *
      * <pre>
      *&#47; A list of songs to update
@@ -4314,7 +4340,7 @@ public final class BlunoteMessages {
     java.util.List<? extends com.drexelsp.blunote.blunote.BlunoteMessages.SongOrBuilder> 
         getSongsOrBuilderList();
     /**
-     * <code>repeated .blunote.Song songs = 5;</code>
+     * <code>repeated .blunote.Song songs = 6;</code>
      *
      * <pre>
      *&#47; A list of songs to update
@@ -4414,9 +4440,15 @@ public final class BlunoteMessages {
               break;
             }
             case 42: {
-              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000004;
+              userId_ = bs;
+              break;
+            }
+            case 50: {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
                 songs_ = new java.util.ArrayList<com.drexelsp.blunote.blunote.BlunoteMessages.Song>();
-                mutable_bitField0_ |= 0x00000010;
+                mutable_bitField0_ |= 0x00000020;
               }
               songs_.add(input.readMessage(com.drexelsp.blunote.blunote.BlunoteMessages.Song.PARSER, extensionRegistry));
               break;
@@ -4435,7 +4467,7 @@ public final class BlunoteMessages {
         if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
           artists_ = java.util.Collections.unmodifiableList(artists_);
         }
-        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
           songs_ = java.util.Collections.unmodifiableList(songs_);
         }
         this.unknownFields = unknownFields.build();
@@ -4739,10 +4771,64 @@ public final class BlunoteMessages {
       }
     }
 
-    public static final int SONGS_FIELD_NUMBER = 5;
+    public static final int USER_ID_FIELD_NUMBER = 5;
+    private java.lang.Object userId_;
+    /**
+     * <code>required string user_id = 5;</code>
+     *
+     * <pre>
+     *&#47; The user's mac address to use as a key to the user
+     * </pre>
+     */
+    public boolean hasUserId() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required string user_id = 5;</code>
+     *
+     * <pre>
+     *&#47; The user's mac address to use as a key to the user
+     * </pre>
+     */
+    public java.lang.String getUserId() {
+      java.lang.Object ref = userId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          userId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string user_id = 5;</code>
+     *
+     * <pre>
+     *&#47; The user's mac address to use as a key to the user
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getUserIdBytes() {
+      java.lang.Object ref = userId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        userId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int SONGS_FIELD_NUMBER = 6;
     private java.util.List<com.drexelsp.blunote.blunote.BlunoteMessages.Song> songs_;
     /**
-     * <code>repeated .blunote.Song songs = 5;</code>
+     * <code>repeated .blunote.Song songs = 6;</code>
      *
      * <pre>
      *&#47; A list of songs to update
@@ -4752,7 +4838,7 @@ public final class BlunoteMessages {
       return songs_;
     }
     /**
-     * <code>repeated .blunote.Song songs = 5;</code>
+     * <code>repeated .blunote.Song songs = 6;</code>
      *
      * <pre>
      *&#47; A list of songs to update
@@ -4763,7 +4849,7 @@ public final class BlunoteMessages {
       return songs_;
     }
     /**
-     * <code>repeated .blunote.Song songs = 5;</code>
+     * <code>repeated .blunote.Song songs = 6;</code>
      *
      * <pre>
      *&#47; A list of songs to update
@@ -4773,7 +4859,7 @@ public final class BlunoteMessages {
       return songs_.size();
     }
     /**
-     * <code>repeated .blunote.Song songs = 5;</code>
+     * <code>repeated .blunote.Song songs = 6;</code>
      *
      * <pre>
      *&#47; A list of songs to update
@@ -4783,7 +4869,7 @@ public final class BlunoteMessages {
       return songs_.get(index);
     }
     /**
-     * <code>repeated .blunote.Song songs = 5;</code>
+     * <code>repeated .blunote.Song songs = 6;</code>
      *
      * <pre>
      *&#47; A list of songs to update
@@ -4799,6 +4885,7 @@ public final class BlunoteMessages {
       albums_ = java.util.Collections.emptyList();
       artists_ = java.util.Collections.emptyList();
       owner_ = "";
+      userId_ = "";
       songs_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
@@ -4812,6 +4899,10 @@ public final class BlunoteMessages {
         return false;
       }
       if (!hasOwner()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasUserId()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -4852,8 +4943,11 @@ public final class BlunoteMessages {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeBytes(4, getOwnerBytes());
       }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(5, getUserIdBytes());
+      }
       for (int i = 0; i < songs_.size(); i++) {
-        output.writeMessage(5, songs_.get(i));
+        output.writeMessage(6, songs_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -4880,9 +4974,13 @@ public final class BlunoteMessages {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(4, getOwnerBytes());
       }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, getUserIdBytes());
+      }
       for (int i = 0; i < songs_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, songs_.get(i));
+          .computeMessageSize(6, songs_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -5025,9 +5123,11 @@ public final class BlunoteMessages {
         }
         owner_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
+        userId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
         if (songsBuilder_ == null) {
           songs_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000010);
+          bitField0_ = (bitField0_ & ~0x00000020);
         } else {
           songsBuilder_.clear();
         }
@@ -5085,10 +5185,14 @@ public final class BlunoteMessages {
           to_bitField0_ |= 0x00000002;
         }
         result.owner_ = owner_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.userId_ = userId_;
         if (songsBuilder_ == null) {
-          if (((bitField0_ & 0x00000010) == 0x00000010)) {
+          if (((bitField0_ & 0x00000020) == 0x00000020)) {
             songs_ = java.util.Collections.unmodifiableList(songs_);
-            bitField0_ = (bitField0_ & ~0x00000010);
+            bitField0_ = (bitField0_ & ~0x00000020);
           }
           result.songs_ = songs_;
         } else {
@@ -5170,11 +5274,16 @@ public final class BlunoteMessages {
           owner_ = other.owner_;
           onChanged();
         }
+        if (other.hasUserId()) {
+          bitField0_ |= 0x00000010;
+          userId_ = other.userId_;
+          onChanged();
+        }
         if (songsBuilder_ == null) {
           if (!other.songs_.isEmpty()) {
             if (songs_.isEmpty()) {
               songs_ = other.songs_;
-              bitField0_ = (bitField0_ & ~0x00000010);
+              bitField0_ = (bitField0_ & ~0x00000020);
             } else {
               ensureSongsIsMutable();
               songs_.addAll(other.songs_);
@@ -5187,7 +5296,7 @@ public final class BlunoteMessages {
               songsBuilder_.dispose();
               songsBuilder_ = null;
               songs_ = other.songs_;
-              bitField0_ = (bitField0_ & ~0x00000010);
+              bitField0_ = (bitField0_ & ~0x00000020);
               songsBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getSongsFieldBuilder() : null;
@@ -5206,6 +5315,10 @@ public final class BlunoteMessages {
           return false;
         }
         if (!hasOwner()) {
+          
+          return false;
+        }
+        if (!hasUserId()) {
           
           return false;
         }
@@ -6024,12 +6137,112 @@ public final class BlunoteMessages {
         return this;
       }
 
+      private java.lang.Object userId_ = "";
+      /**
+       * <code>required string user_id = 5;</code>
+       *
+       * <pre>
+       *&#47; The user's mac address to use as a key to the user
+       * </pre>
+       */
+      public boolean hasUserId() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>required string user_id = 5;</code>
+       *
+       * <pre>
+       *&#47; The user's mac address to use as a key to the user
+       * </pre>
+       */
+      public java.lang.String getUserId() {
+        java.lang.Object ref = userId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            userId_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string user_id = 5;</code>
+       *
+       * <pre>
+       *&#47; The user's mac address to use as a key to the user
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getUserIdBytes() {
+        java.lang.Object ref = userId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          userId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string user_id = 5;</code>
+       *
+       * <pre>
+       *&#47; The user's mac address to use as a key to the user
+       * </pre>
+       */
+      public Builder setUserId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        userId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string user_id = 5;</code>
+       *
+       * <pre>
+       *&#47; The user's mac address to use as a key to the user
+       * </pre>
+       */
+      public Builder clearUserId() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        userId_ = getDefaultInstance().getUserId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string user_id = 5;</code>
+       *
+       * <pre>
+       *&#47; The user's mac address to use as a key to the user
+       * </pre>
+       */
+      public Builder setUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        userId_ = value;
+        onChanged();
+        return this;
+      }
+
       private java.util.List<com.drexelsp.blunote.blunote.BlunoteMessages.Song> songs_ =
         java.util.Collections.emptyList();
       private void ensureSongsIsMutable() {
-        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
+        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
           songs_ = new java.util.ArrayList<com.drexelsp.blunote.blunote.BlunoteMessages.Song>(songs_);
-          bitField0_ |= 0x00000010;
+          bitField0_ |= 0x00000020;
          }
       }
 
@@ -6037,7 +6250,7 @@ public final class BlunoteMessages {
           com.drexelsp.blunote.blunote.BlunoteMessages.Song, com.drexelsp.blunote.blunote.BlunoteMessages.Song.Builder, com.drexelsp.blunote.blunote.BlunoteMessages.SongOrBuilder> songsBuilder_;
 
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6051,7 +6264,7 @@ public final class BlunoteMessages {
         }
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6065,7 +6278,7 @@ public final class BlunoteMessages {
         }
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6079,7 +6292,7 @@ public final class BlunoteMessages {
         }
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6100,7 +6313,7 @@ public final class BlunoteMessages {
         return this;
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6118,7 +6331,7 @@ public final class BlunoteMessages {
         return this;
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6138,7 +6351,7 @@ public final class BlunoteMessages {
         return this;
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6159,7 +6372,7 @@ public final class BlunoteMessages {
         return this;
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6177,7 +6390,7 @@ public final class BlunoteMessages {
         return this;
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6195,7 +6408,7 @@ public final class BlunoteMessages {
         return this;
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6214,7 +6427,7 @@ public final class BlunoteMessages {
         return this;
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6223,7 +6436,7 @@ public final class BlunoteMessages {
       public Builder clearSongs() {
         if (songsBuilder_ == null) {
           songs_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000010);
+          bitField0_ = (bitField0_ & ~0x00000020);
           onChanged();
         } else {
           songsBuilder_.clear();
@@ -6231,7 +6444,7 @@ public final class BlunoteMessages {
         return this;
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6248,7 +6461,7 @@ public final class BlunoteMessages {
         return this;
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6259,7 +6472,7 @@ public final class BlunoteMessages {
         return getSongsFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6273,7 +6486,7 @@ public final class BlunoteMessages {
         }
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6288,7 +6501,7 @@ public final class BlunoteMessages {
         }
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6299,7 +6512,7 @@ public final class BlunoteMessages {
             com.drexelsp.blunote.blunote.BlunoteMessages.Song.getDefaultInstance());
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6311,7 +6524,7 @@ public final class BlunoteMessages {
             index, com.drexelsp.blunote.blunote.BlunoteMessages.Song.getDefaultInstance());
       }
       /**
-       * <code>repeated .blunote.Song songs = 5;</code>
+       * <code>repeated .blunote.Song songs = 6;</code>
        *
        * <pre>
        *&#47; A list of songs to update
@@ -6328,7 +6541,7 @@ public final class BlunoteMessages {
           songsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               com.drexelsp.blunote.blunote.BlunoteMessages.Song, com.drexelsp.blunote.blunote.BlunoteMessages.Song.Builder, com.drexelsp.blunote.blunote.BlunoteMessages.SongOrBuilder>(
                   songs_,
-                  ((bitField0_ & 0x00000010) == 0x00000010),
+                  ((bitField0_ & 0x00000020) == 0x00000020),
                   getParentForChildren(),
                   isClean());
           songs_ = null;
@@ -15225,48 +15438,48 @@ public final class BlunoteMessages {
       "tist\030\003 \001(\t\022\022\n\nfirst_year\030\004 \001(\t\022\021\n\tlast_y" +
       "ear\030\005 \001(\t\022\027\n\017number_of_songs\030\006 \001(\t\"L\n\006Ar" +
       "tist\022\016\n\006artist\030\001 \002(\t\022\030\n\020number_of_albums" +
-      "\030\002 \002(\t\022\030\n\020number_of_tracks\030\003 \002(\t\"\316\001\n\016Met" +
+      "\030\002 \002(\t\022\030\n\020number_of_tracks\030\003 \002(\t\"\337\001\n\016Met" +
       "adataUpdate\022.\n\006action\030\001 \002(\0162\036.blunote.Me",
       "tadataUpdate.Action\022\036\n\006albums\030\002 \003(\0132\016.bl" +
       "unote.Album\022 \n\007artists\030\003 \003(\0132\017.blunote.A" +
-      "rtist\022\r\n\005owner\030\004 \002(\t\022\034\n\005songs\030\005 \003(\0132\r.bl" +
-      "unote.Song\"\035\n\006Action\022\007\n\003ADD\020\001\022\n\n\006REMOVE\020" +
-      "\002\"\365\001\n\004Vote\022\016\n\006voteId\030\001 \002(\005\022/\n\rresponse_t" +
-      "ype\030\002 \002(\0162\030.blunote.Vote.AnswerType\022\020\n\010q" +
-      "uestion\030\003 \002(\t\022\017\n\007options\030\004 \003(\t\022/\n\014displa" +
-      "y_type\030\005 \002(\0162\031.blunote.Vote.DisplayType\"" +
-      "/\n\nAnswerType\022\n\n\006SINGLE\020\001\022\t\n\005MULTI\020\002\022\n\n\006" +
-      "RANKED\020\003\"\'\n\013DisplayType\022\t\n\005ALPHA\020\001\022\r\n\tNU",
-      "MERICAL\020\002\".\n\014SingleAnswer\022\016\n\006voteId\030\001 \002(" +
-      "\005\022\016\n\006choice\030\002 \002(\t\".\n\013MultiAnswer\022\016\n\006vote" +
-      "Id\030\001 \002(\005\022\017\n\007choices\030\002 \003(\t\"\324\001\n\016Recommenda" +
-      "tion\022\020\n\010username\030\001 \002(\t\022*\n\004type\030\002 \002(\0162\034.b" +
-      "lunote.Recommendation.Type\022\037\n\006artist\030\003 \001" +
-      "(\0132\017.blunote.Artist\022\035\n\005album\030\004 \001(\0132\016.blu" +
-      "note.Album\022\033\n\004song\030\005 \001(\0132\r.blunote.Song\"" +
-      "\'\n\004Type\022\n\n\006ARTIST\020\001\022\t\n\005ALBUM\020\002\022\010\n\004SONG\020\003" +
-      "\"/\n\013SongRequest\022\020\n\010username\030\001 \002(\t\022\016\n\006son" +
-      "gId\030\002 \002(\003\"\\\n\014SongFragment\022\016\n\006songId\030\001 \002(",
-      "\003\022\020\n\010fragment\030\003 \002(\014\022\022\n\nfragmentId\030\004 \002(\003\022" +
-      "\026\n\016totalFragments\030\005 \002(\005\"\353\003\n\016WrapperMessa" +
-      "ge\022*\n\004type\030\001 \002(\0162\034.blunote.WrapperMessag" +
-      "e.Type\022/\n\016metadataUpdate\030\002 \001(\0132\027.blunote" +
-      ".MetadataUpdate\022)\n\013multiAnswer\030\003 \001(\0132\024.b" +
-      "lunote.MultiAnswer\022/\n\016recommendation\030\004 \001" +
-      "(\0132\027.blunote.Recommendation\022+\n\014singleAns" +
-      "wer\030\005 \001(\0132\025.blunote.SingleAnswer\022+\n\014song" +
-      "Fragment\030\006 \001(\0132\025.blunote.SongFragment\022)\n" +
-      "\013songRequest\030\007 \001(\0132\024.blunote.SongRequest",
-      "\022\033\n\004vote\030\010 \001(\0132\r.blunote.Vote\"~\n\004Type\022\023\n" +
-      "\017METADATA_UPDATE\020\001\022\020\n\014MULTI_ANSWER\020\002\022\r\n\t" +
-      "RECOMMEND\020\003\022\021\n\rSINGLE_ANSWER\020\004\022\021\n\rSONG_F" +
-      "RAGMENT\020\005\022\020\n\014SONG_REQUEST\020\006\022\010\n\004VOTE\020\007\"?\n" +
-      "\014DeliveryInfo\022\021\n\ttimestamp\030\001 \002(\003\022\020\n\010user" +
-      "name\030\002 \001(\t\022\n\n\002id\030\003 \001(\005\"\\\n\003Pdu\022+\n\014deliver" +
-      "yInfo\030\001 \002(\0132\025.blunote.DeliveryInfo\022(\n\007me" +
-      "ssage\030\002 \002(\0132\027.blunote.WrapperMessageB/\n\034" +
-      "com.drexelsp.blunote.blunoteB\017BlunoteMes" +
-      "sages"
+      "rtist\022\r\n\005owner\030\004 \002(\t\022\017\n\007user_id\030\005 \002(\t\022\034\n" +
+      "\005songs\030\006 \003(\0132\r.blunote.Song\"\035\n\006Action\022\007\n" +
+      "\003ADD\020\001\022\n\n\006REMOVE\020\002\"\365\001\n\004Vote\022\016\n\006voteId\030\001 " +
+      "\002(\005\022/\n\rresponse_type\030\002 \002(\0162\030.blunote.Vot" +
+      "e.AnswerType\022\020\n\010question\030\003 \002(\t\022\017\n\007option" +
+      "s\030\004 \003(\t\022/\n\014display_type\030\005 \002(\0162\031.blunote." +
+      "Vote.DisplayType\"/\n\nAnswerType\022\n\n\006SINGLE" +
+      "\020\001\022\t\n\005MULTI\020\002\022\n\n\006RANKED\020\003\"\'\n\013DisplayType",
+      "\022\t\n\005ALPHA\020\001\022\r\n\tNUMERICAL\020\002\".\n\014SingleAnsw" +
+      "er\022\016\n\006voteId\030\001 \002(\005\022\016\n\006choice\030\002 \002(\t\".\n\013Mu" +
+      "ltiAnswer\022\016\n\006voteId\030\001 \002(\005\022\017\n\007choices\030\002 \003" +
+      "(\t\"\324\001\n\016Recommendation\022\020\n\010username\030\001 \002(\t\022" +
+      "*\n\004type\030\002 \002(\0162\034.blunote.Recommendation.T" +
+      "ype\022\037\n\006artist\030\003 \001(\0132\017.blunote.Artist\022\035\n\005" +
+      "album\030\004 \001(\0132\016.blunote.Album\022\033\n\004song\030\005 \001(" +
+      "\0132\r.blunote.Song\"\'\n\004Type\022\n\n\006ARTIST\020\001\022\t\n\005" +
+      "ALBUM\020\002\022\010\n\004SONG\020\003\"/\n\013SongRequest\022\020\n\010user" +
+      "name\030\001 \002(\t\022\016\n\006songId\030\002 \002(\003\"\\\n\014SongFragme",
+      "nt\022\016\n\006songId\030\001 \002(\003\022\020\n\010fragment\030\003 \002(\014\022\022\n\n" +
+      "fragmentId\030\004 \002(\003\022\026\n\016totalFragments\030\005 \002(\005" +
+      "\"\353\003\n\016WrapperMessage\022*\n\004type\030\001 \002(\0162\034.blun" +
+      "ote.WrapperMessage.Type\022/\n\016metadataUpdat" +
+      "e\030\002 \001(\0132\027.blunote.MetadataUpdate\022)\n\013mult" +
+      "iAnswer\030\003 \001(\0132\024.blunote.MultiAnswer\022/\n\016r" +
+      "ecommendation\030\004 \001(\0132\027.blunote.Recommenda" +
+      "tion\022+\n\014singleAnswer\030\005 \001(\0132\025.blunote.Sin" +
+      "gleAnswer\022+\n\014songFragment\030\006 \001(\0132\025.blunot" +
+      "e.SongFragment\022)\n\013songRequest\030\007 \001(\0132\024.bl",
+      "unote.SongRequest\022\033\n\004vote\030\010 \001(\0132\r.blunot" +
+      "e.Vote\"~\n\004Type\022\023\n\017METADATA_UPDATE\020\001\022\020\n\014M" +
+      "ULTI_ANSWER\020\002\022\r\n\tRECOMMEND\020\003\022\021\n\rSINGLE_A" +
+      "NSWER\020\004\022\021\n\rSONG_FRAGMENT\020\005\022\020\n\014SONG_REQUE" +
+      "ST\020\006\022\010\n\004VOTE\020\007\"?\n\014DeliveryInfo\022\021\n\ttimest" +
+      "amp\030\001 \002(\003\022\020\n\010username\030\002 \001(\t\022\n\n\002id\030\003 \001(\005\"" +
+      "\\\n\003Pdu\022+\n\014deliveryInfo\030\001 \002(\0132\025.blunote.D" +
+      "eliveryInfo\022(\n\007message\030\002 \002(\0132\027.blunote.W" +
+      "rapperMessageB/\n\034com.drexelsp.blunote.bl" +
+      "unoteB\017BlunoteMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -15303,7 +15516,7 @@ public final class BlunoteMessages {
     internal_static_blunote_MetadataUpdate_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_blunote_MetadataUpdate_descriptor,
-        new java.lang.String[] { "Action", "Albums", "Artists", "Owner", "Songs", });
+        new java.lang.String[] { "Action", "Albums", "Artists", "Owner", "UserId", "Songs", });
     internal_static_blunote_Vote_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_blunote_Vote_fieldAccessorTable = new
