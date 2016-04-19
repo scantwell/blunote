@@ -15,10 +15,13 @@ import java.util.ArrayList;
 public class Host extends User {
 
     private Player player;
+    private ArrayList<SongAssembler> songAssemblers;
 
     public Host(Service service, Context context) {
         super(service, context);
-       // this.player = new Player(context);
+        this.songAssemblers = new ArrayList<>();
+        this.player = new Player(context);
+        new Thread(this.player).run();
     }
 
    /* public void onReceive(DeliveryInfo dinfo, MetadataUpdate message)

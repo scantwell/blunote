@@ -15356,6 +15356,1607 @@ public final class BlunoteMessages {
     // @@protoc_insertion_point(class_scope:blunote.Pdu)
   }
 
+  public interface WelcomePacketOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:blunote.WelcomePacket)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>required string networkName = 1;</code>
+     */
+    boolean hasNetworkName();
+    /**
+     * <code>required string networkName = 1;</code>
+     */
+    java.lang.String getNetworkName();
+    /**
+     * <code>required string networkName = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getNetworkNameBytes();
+
+    /**
+     * <code>required string numUsers = 2;</code>
+     */
+    boolean hasNumUsers();
+    /**
+     * <code>required string numUsers = 2;</code>
+     */
+    java.lang.String getNumUsers();
+    /**
+     * <code>required string numUsers = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getNumUsersBytes();
+
+    /**
+     * <code>required string numSongs = 3;</code>
+     */
+    boolean hasNumSongs();
+    /**
+     * <code>required string numSongs = 3;</code>
+     */
+    java.lang.String getNumSongs();
+    /**
+     * <code>required string numSongs = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getNumSongsBytes();
+  }
+  /**
+   * Protobuf type {@code blunote.WelcomePacket}
+   */
+  public static final class WelcomePacket extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:blunote.WelcomePacket)
+      WelcomePacketOrBuilder {
+    // Use WelcomePacket.newBuilder() to construct.
+    private WelcomePacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private WelcomePacket(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final WelcomePacket defaultInstance;
+    public static WelcomePacket getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public WelcomePacket getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private WelcomePacket(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000001;
+              networkName_ = bs;
+              break;
+            }
+            case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000002;
+              numUsers_ = bs;
+              break;
+            }
+            case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000004;
+              numSongs_ = bs;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_WelcomePacket_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_WelcomePacket_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket.class, com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<WelcomePacket> PARSER =
+        new com.google.protobuf.AbstractParser<WelcomePacket>() {
+      public WelcomePacket parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new WelcomePacket(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<WelcomePacket> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int NETWORKNAME_FIELD_NUMBER = 1;
+    private java.lang.Object networkName_;
+    /**
+     * <code>required string networkName = 1;</code>
+     */
+    public boolean hasNetworkName() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required string networkName = 1;</code>
+     */
+    public java.lang.String getNetworkName() {
+      java.lang.Object ref = networkName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          networkName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string networkName = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNetworkNameBytes() {
+      java.lang.Object ref = networkName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        networkName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int NUMUSERS_FIELD_NUMBER = 2;
+    private java.lang.Object numUsers_;
+    /**
+     * <code>required string numUsers = 2;</code>
+     */
+    public boolean hasNumUsers() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required string numUsers = 2;</code>
+     */
+    public java.lang.String getNumUsers() {
+      java.lang.Object ref = numUsers_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          numUsers_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string numUsers = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNumUsersBytes() {
+      java.lang.Object ref = numUsers_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        numUsers_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int NUMSONGS_FIELD_NUMBER = 3;
+    private java.lang.Object numSongs_;
+    /**
+     * <code>required string numSongs = 3;</code>
+     */
+    public boolean hasNumSongs() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required string numSongs = 3;</code>
+     */
+    public java.lang.String getNumSongs() {
+      java.lang.Object ref = numSongs_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          numSongs_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string numSongs = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNumSongsBytes() {
+      java.lang.Object ref = numSongs_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        numSongs_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private void initFields() {
+      networkName_ = "";
+      numUsers_ = "";
+      numSongs_ = "";
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasNetworkName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasNumUsers()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasNumSongs()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getNetworkNameBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getNumUsersBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getNumSongsBytes());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getNetworkNameBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getNumUsersBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getNumSongsBytes());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code blunote.WelcomePacket}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:blunote.WelcomePacket)
+        com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacketOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_WelcomePacket_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_WelcomePacket_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket.class, com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket.Builder.class);
+      }
+
+      // Construct using com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        networkName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        numUsers_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        numSongs_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_WelcomePacket_descriptor;
+      }
+
+      public com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket getDefaultInstanceForType() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket.getDefaultInstance();
+      }
+
+      public com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket build() {
+        com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket buildPartial() {
+        com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket result = new com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.networkName_ = networkName_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.numUsers_ = numUsers_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.numSongs_ = numSongs_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket) {
+          return mergeFrom((com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket other) {
+        if (other == com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket.getDefaultInstance()) return this;
+        if (other.hasNetworkName()) {
+          bitField0_ |= 0x00000001;
+          networkName_ = other.networkName_;
+          onChanged();
+        }
+        if (other.hasNumUsers()) {
+          bitField0_ |= 0x00000002;
+          numUsers_ = other.numUsers_;
+          onChanged();
+        }
+        if (other.hasNumSongs()) {
+          bitField0_ |= 0x00000004;
+          numSongs_ = other.numSongs_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasNetworkName()) {
+          
+          return false;
+        }
+        if (!hasNumUsers()) {
+          
+          return false;
+        }
+        if (!hasNumSongs()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.lang.Object networkName_ = "";
+      /**
+       * <code>required string networkName = 1;</code>
+       */
+      public boolean hasNetworkName() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string networkName = 1;</code>
+       */
+      public java.lang.String getNetworkName() {
+        java.lang.Object ref = networkName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            networkName_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string networkName = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNetworkNameBytes() {
+        java.lang.Object ref = networkName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          networkName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string networkName = 1;</code>
+       */
+      public Builder setNetworkName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        networkName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string networkName = 1;</code>
+       */
+      public Builder clearNetworkName() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        networkName_ = getDefaultInstance().getNetworkName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string networkName = 1;</code>
+       */
+      public Builder setNetworkNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        networkName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object numUsers_ = "";
+      /**
+       * <code>required string numUsers = 2;</code>
+       */
+      public boolean hasNumUsers() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string numUsers = 2;</code>
+       */
+      public java.lang.String getNumUsers() {
+        java.lang.Object ref = numUsers_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            numUsers_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string numUsers = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNumUsersBytes() {
+        java.lang.Object ref = numUsers_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          numUsers_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string numUsers = 2;</code>
+       */
+      public Builder setNumUsers(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        numUsers_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string numUsers = 2;</code>
+       */
+      public Builder clearNumUsers() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        numUsers_ = getDefaultInstance().getNumUsers();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string numUsers = 2;</code>
+       */
+      public Builder setNumUsersBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        numUsers_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object numSongs_ = "";
+      /**
+       * <code>required string numSongs = 3;</code>
+       */
+      public boolean hasNumSongs() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required string numSongs = 3;</code>
+       */
+      public java.lang.String getNumSongs() {
+        java.lang.Object ref = numSongs_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            numSongs_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string numSongs = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNumSongsBytes() {
+        java.lang.Object ref = numSongs_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          numSongs_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string numSongs = 3;</code>
+       */
+      public Builder setNumSongs(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        numSongs_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string numSongs = 3;</code>
+       */
+      public Builder clearNumSongs() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        numSongs_ = getDefaultInstance().getNumSongs();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string numSongs = 3;</code>
+       */
+      public Builder setNumSongsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        numSongs_ = value;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:blunote.WelcomePacket)
+    }
+
+    static {
+      defaultInstance = new WelcomePacket(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:blunote.WelcomePacket)
+  }
+
+  public interface NetworkPacketOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:blunote.NetworkPacket)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>repeated string macAddresses = 1;</code>
+     */
+    com.google.protobuf.ProtocolStringList
+        getMacAddressesList();
+    /**
+     * <code>repeated string macAddresses = 1;</code>
+     */
+    int getMacAddressesCount();
+    /**
+     * <code>repeated string macAddresses = 1;</code>
+     */
+    java.lang.String getMacAddresses(int index);
+    /**
+     * <code>repeated string macAddresses = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getMacAddressesBytes(int index);
+
+    /**
+     * <code>optional bytes pdu = 2;</code>
+     */
+    boolean hasPdu();
+    /**
+     * <code>optional bytes pdu = 2;</code>
+     */
+    com.google.protobuf.ByteString getPdu();
+
+    /**
+     * <code>required .blunote.NetworkPacket.Type type = 3;</code>
+     */
+    boolean hasType();
+    /**
+     * <code>required .blunote.NetworkPacket.Type type = 3;</code>
+     */
+    com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Type getType();
+  }
+  /**
+   * Protobuf type {@code blunote.NetworkPacket}
+   */
+  public static final class NetworkPacket extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:blunote.NetworkPacket)
+      NetworkPacketOrBuilder {
+    // Use NetworkPacket.newBuilder() to construct.
+    private NetworkPacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private NetworkPacket(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final NetworkPacket defaultInstance;
+    public static NetworkPacket getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public NetworkPacket getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private NetworkPacket(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                macAddresses_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              macAddresses_.add(bs);
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000001;
+              pdu_ = input.readBytes();
+              break;
+            }
+            case 24: {
+              int rawValue = input.readEnum();
+              com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Type value = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Type.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(3, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                type_ = value;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          macAddresses_ = macAddresses_.getUnmodifiableView();
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkPacket_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkPacket_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.class, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<NetworkPacket> PARSER =
+        new com.google.protobuf.AbstractParser<NetworkPacket>() {
+      public NetworkPacket parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new NetworkPacket(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<NetworkPacket> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code blunote.NetworkPacket.Type}
+     */
+    public enum Type
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>DOWNSTREAM = 1;</code>
+       */
+      DOWNSTREAM(0, 1),
+      /**
+       * <code>DROP = 2;</code>
+       */
+      DROP(1, 2),
+      /**
+       * <code>NETWORK_DATA_UPDATE = 3;</code>
+       */
+      NETWORK_DATA_UPDATE(2, 3),
+      /**
+       * <code>NEW = 4;</code>
+       */
+      NEW(3, 4),
+      /**
+       * <code>UPSTREAM = 5;</code>
+       */
+      UPSTREAM(4, 5),
+      ;
+
+      /**
+       * <code>DOWNSTREAM = 1;</code>
+       */
+      public static final int DOWNSTREAM_VALUE = 1;
+      /**
+       * <code>DROP = 2;</code>
+       */
+      public static final int DROP_VALUE = 2;
+      /**
+       * <code>NETWORK_DATA_UPDATE = 3;</code>
+       */
+      public static final int NETWORK_DATA_UPDATE_VALUE = 3;
+      /**
+       * <code>NEW = 4;</code>
+       */
+      public static final int NEW_VALUE = 4;
+      /**
+       * <code>UPSTREAM = 5;</code>
+       */
+      public static final int UPSTREAM_VALUE = 5;
+
+
+      public final int getNumber() { return value; }
+
+      public static Type valueOf(int value) {
+        switch (value) {
+          case 1: return DOWNSTREAM;
+          case 2: return DROP;
+          case 3: return NETWORK_DATA_UPDATE;
+          case 4: return NEW;
+          case 5: return UPSTREAM;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<Type>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<Type>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Type>() {
+              public Type findValueByNumber(int number) {
+                return Type.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final Type[] VALUES = values();
+
+      public static Type valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private Type(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:blunote.NetworkPacket.Type)
+    }
+
+    private int bitField0_;
+    public static final int MACADDRESSES_FIELD_NUMBER = 1;
+    private com.google.protobuf.LazyStringList macAddresses_;
+    /**
+     * <code>repeated string macAddresses = 1;</code>
+     */
+    public com.google.protobuf.ProtocolStringList
+        getMacAddressesList() {
+      return macAddresses_;
+    }
+    /**
+     * <code>repeated string macAddresses = 1;</code>
+     */
+    public int getMacAddressesCount() {
+      return macAddresses_.size();
+    }
+    /**
+     * <code>repeated string macAddresses = 1;</code>
+     */
+    public java.lang.String getMacAddresses(int index) {
+      return macAddresses_.get(index);
+    }
+    /**
+     * <code>repeated string macAddresses = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getMacAddressesBytes(int index) {
+      return macAddresses_.getByteString(index);
+    }
+
+    public static final int PDU_FIELD_NUMBER = 2;
+    private com.google.protobuf.ByteString pdu_;
+    /**
+     * <code>optional bytes pdu = 2;</code>
+     */
+    public boolean hasPdu() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional bytes pdu = 2;</code>
+     */
+    public com.google.protobuf.ByteString getPdu() {
+      return pdu_;
+    }
+
+    public static final int TYPE_FIELD_NUMBER = 3;
+    private com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Type type_;
+    /**
+     * <code>required .blunote.NetworkPacket.Type type = 3;</code>
+     */
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required .blunote.NetworkPacket.Type type = 3;</code>
+     */
+    public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Type getType() {
+      return type_;
+    }
+
+    private void initFields() {
+      macAddresses_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      pdu_ = com.google.protobuf.ByteString.EMPTY;
+      type_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Type.DOWNSTREAM;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < macAddresses_.size(); i++) {
+        output.writeBytes(1, macAddresses_.getByteString(i));
+      }
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(2, pdu_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(3, type_.getNumber());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      {
+        int dataSize = 0;
+        for (int i = 0; i < macAddresses_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(macAddresses_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getMacAddressesList().size();
+      }
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, pdu_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(3, type_.getNumber());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code blunote.NetworkPacket}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:blunote.NetworkPacket)
+        com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacketOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkPacket_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkPacket_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.class, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Builder.class);
+      }
+
+      // Construct using com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        macAddresses_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        pdu_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        type_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Type.DOWNSTREAM;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkPacket_descriptor;
+      }
+
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket getDefaultInstanceForType() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.getDefaultInstance();
+      }
+
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket build() {
+        com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket buildPartial() {
+        com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket result = new com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          macAddresses_ = macAddresses_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        }
+        result.macAddresses_ = macAddresses_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.pdu_ = pdu_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.type_ = type_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket) {
+          return mergeFrom((com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket other) {
+        if (other == com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.getDefaultInstance()) return this;
+        if (!other.macAddresses_.isEmpty()) {
+          if (macAddresses_.isEmpty()) {
+            macAddresses_ = other.macAddresses_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            ensureMacAddressesIsMutable();
+            macAddresses_.addAll(other.macAddresses_);
+          }
+          onChanged();
+        }
+        if (other.hasPdu()) {
+          setPdu(other.getPdu());
+        }
+        if (other.hasType()) {
+          setType(other.getType());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasType()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private com.google.protobuf.LazyStringList macAddresses_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureMacAddressesIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          macAddresses_ = new com.google.protobuf.LazyStringArrayList(macAddresses_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public com.google.protobuf.ProtocolStringList
+          getMacAddressesList() {
+        return macAddresses_.getUnmodifiableView();
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public int getMacAddressesCount() {
+        return macAddresses_.size();
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public java.lang.String getMacAddresses(int index) {
+        return macAddresses_.get(index);
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getMacAddressesBytes(int index) {
+        return macAddresses_.getByteString(index);
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public Builder setMacAddresses(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureMacAddressesIsMutable();
+        macAddresses_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public Builder addMacAddresses(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureMacAddressesIsMutable();
+        macAddresses_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public Builder addAllMacAddresses(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureMacAddressesIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, macAddresses_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public Builder clearMacAddresses() {
+        macAddresses_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public Builder addMacAddressesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureMacAddressesIsMutable();
+        macAddresses_.add(value);
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.ByteString pdu_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes pdu = 2;</code>
+       */
+      public boolean hasPdu() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional bytes pdu = 2;</code>
+       */
+      public com.google.protobuf.ByteString getPdu() {
+        return pdu_;
+      }
+      /**
+       * <code>optional bytes pdu = 2;</code>
+       */
+      public Builder setPdu(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        pdu_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bytes pdu = 2;</code>
+       */
+      public Builder clearPdu() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        pdu_ = getDefaultInstance().getPdu();
+        onChanged();
+        return this;
+      }
+
+      private com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Type type_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Type.DOWNSTREAM;
+      /**
+       * <code>required .blunote.NetworkPacket.Type type = 3;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required .blunote.NetworkPacket.Type type = 3;</code>
+       */
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Type getType() {
+        return type_;
+      }
+      /**
+       * <code>required .blunote.NetworkPacket.Type type = 3;</code>
+       */
+      public Builder setType(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Type value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000004;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .blunote.NetworkPacket.Type type = 3;</code>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        type_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Type.DOWNSTREAM;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:blunote.NetworkPacket)
+    }
+
+    static {
+      defaultInstance = new NetworkPacket(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:blunote.NetworkPacket)
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_blunote_Song_descriptor;
   private static
@@ -15421,6 +17022,16 @@ public final class BlunoteMessages {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_blunote_Pdu_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_blunote_WelcomePacket_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_blunote_WelcomePacket_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_blunote_NetworkPacket_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_blunote_NetworkPacket_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -15478,8 +17089,14 @@ public final class BlunoteMessages {
       "amp\030\001 \002(\003\022\020\n\010username\030\002 \001(\t\022\n\n\002id\030\003 \001(\005\"" +
       "\\\n\003Pdu\022+\n\014deliveryInfo\030\001 \002(\0132\025.blunote.D" +
       "eliveryInfo\022(\n\007message\030\002 \002(\0132\027.blunote.W" +
-      "rapperMessageB/\n\034com.drexelsp.blunote.bl" +
-      "unoteB\017BlunoteMessages"
+      "rapperMessage\"H\n\rWelcomePacket\022\023\n\013networ" +
+      "kName\030\001 \002(\t\022\020\n\010numUsers\030\002 \002(\t\022\020\n\010numSong",
+      "s\030\003 \002(\t\"\257\001\n\rNetworkPacket\022\024\n\014macAddresse" +
+      "s\030\001 \003(\t\022\013\n\003pdu\030\002 \001(\014\022)\n\004type\030\003 \002(\0162\033.blu" +
+      "note.NetworkPacket.Type\"P\n\004Type\022\016\n\nDOWNS" +
+      "TREAM\020\001\022\010\n\004DROP\020\002\022\027\n\023NETWORK_DATA_UPDATE" +
+      "\020\003\022\007\n\003NEW\020\004\022\014\n\010UPSTREAM\020\005B/\n\034com.drexels" +
+      "p.blunote.blunoteB\017BlunoteMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -15571,6 +17188,18 @@ public final class BlunoteMessages {
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_blunote_Pdu_descriptor,
         new java.lang.String[] { "DeliveryInfo", "Message", });
+    internal_static_blunote_WelcomePacket_descriptor =
+      getDescriptor().getMessageTypes().get(13);
+    internal_static_blunote_WelcomePacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_blunote_WelcomePacket_descriptor,
+        new java.lang.String[] { "NetworkName", "NumUsers", "NumSongs", });
+    internal_static_blunote_NetworkPacket_descriptor =
+      getDescriptor().getMessageTypes().get(14);
+    internal_static_blunote_NetworkPacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_blunote_NetworkPacket_descriptor,
+        new java.lang.String[] { "MacAddresses", "Pdu", "Type", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
