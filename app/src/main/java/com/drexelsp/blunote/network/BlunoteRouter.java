@@ -65,7 +65,7 @@ public class BlunoteRouter extends Thread {
         doWork();
     }
 
-    public synchronized  void doWork() {
+    public synchronized void doWork() {
         //noinspection InfiniteLoopStatement
         while (true) {
 

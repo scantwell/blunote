@@ -117,8 +117,7 @@ public class AlbumViewActivity extends BaseBluNoteActivity implements ListView.O
             if (trackCursor != null) {
                 String song, songID;
                 Map<String, String> trackListMap = new LinkedHashMap<>();
-                while (trackCursor.moveToNext())
-                {
+                while (trackCursor.moveToNext()) {
                     song = trackCursor.getString(trackCursor.getColumnIndex(MetaStoreContract.Track.TITLE));
                     songID = Integer.toString(trackCursor.getInt(
                             trackCursor.getColumnIndex(MetaStoreContract.Track.SONG_ID)));

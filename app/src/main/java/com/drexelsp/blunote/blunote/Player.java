@@ -19,16 +19,14 @@ public class Player implements Runnable {
     private MediaPlayer mPlayer;
     private Context mContext;
 
-    public Player(Context context)
-    {
+    public Player(Context context) {
         this.mContext = context;
         this.mQueue = new ArrayBlockingQueue<>(10);
         this.mPlayer = new MediaPlayer();
         this.mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
     }
 
-    public synchronized void addSongUri(Uri uri)
-    {
+    public synchronized void addSongUri(Uri uri) {
         Log.v("PLAYER", "ADDING A SONG TO QUEUE");
         mQueue.add(uri);
         this.notify();
@@ -36,12 +34,10 @@ public class Player implements Runnable {
 
     @Override
     public void run() {
-        while (true)
-        {
+        while (true) {
             sleep();
             Log.v("PLAYER", String.format("QUEUE SIZE %d", mQueue.size()));
-            while(mQueue.size() > 0)
-            {
+            while (mQueue.size() > 0) {
                 playSong();
                 try {
                     Thread.sleep(1);
@@ -52,8 +48,7 @@ public class Player implements Runnable {
         }
     }
 
-    private synchronized void sleep()
-    {
+    private synchronized void sleep() {
         try {
             this.wait();
         } catch (InterruptedException e) {
@@ -61,11 +56,9 @@ public class Player implements Runnable {
         }
     }
 
-    public void playSong()
-    {
+    public void playSong() {
         try {
-            if (!mPlayer.isPlaying())
-            {
+            if (!mPlayer.isPlaying()) {
                 Uri uri = mQueue.remove();
                 mPlayer.reset();
                 mPlayer.setDataSource(mContext, uri);
