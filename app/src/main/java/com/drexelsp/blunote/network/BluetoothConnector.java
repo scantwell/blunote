@@ -67,6 +67,7 @@ public class BluetoothConnector {
                 mmSocket.connect();
                 BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(mmSocket);
                 mRouter.setUpStream(blunoteBluetoothSocket);
+                blunoteBluetoothSocket.start();
 
                 bluetoothEvent = new BluetoothEvent(BluetoothEvent.CONNECTOR, true, mmDevice.getAddress());
                 mEventBus.post(bluetoothEvent);

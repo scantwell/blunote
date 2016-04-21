@@ -161,7 +161,7 @@ message WelcomePacket {
 }
 
 message NetworkPacket {
-	enum Type { DOWNSTREAM = 1; DROP = 2; NETWORK_DATA_UPDATE = 3; NEW = 4; UPSTREAM = 5; }
+	enum Type { DOWNSTREAM = 1; DROP = 2; HANDSHAKE = 3; NETWORK_DATA_UPDATE = 4; NEW = 5; UPSTREAM = 6; }
 
 	repeated string macAddresses = 1;
 	optional bytes pdu = 2;

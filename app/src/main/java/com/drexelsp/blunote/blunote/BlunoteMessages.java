@@ -16344,17 +16344,21 @@ public final class BlunoteMessages {
        */
       DROP(1, 2),
       /**
-       * <code>NETWORK_DATA_UPDATE = 3;</code>
+       * <code>HANDSHAKE = 3;</code>
        */
-      NETWORK_DATA_UPDATE(2, 3),
+      HANDSHAKE(2, 3),
       /**
-       * <code>NEW = 4;</code>
+       * <code>NETWORK_DATA_UPDATE = 4;</code>
        */
-      NEW(3, 4),
+      NETWORK_DATA_UPDATE(3, 4),
       /**
-       * <code>UPSTREAM = 5;</code>
+       * <code>NEW = 5;</code>
        */
-      UPSTREAM(4, 5),
+      NEW(4, 5),
+      /**
+       * <code>UPSTREAM = 6;</code>
+       */
+      UPSTREAM(5, 6),
       ;
 
       /**
@@ -16366,17 +16370,21 @@ public final class BlunoteMessages {
        */
       public static final int DROP_VALUE = 2;
       /**
-       * <code>NETWORK_DATA_UPDATE = 3;</code>
+       * <code>HANDSHAKE = 3;</code>
        */
-      public static final int NETWORK_DATA_UPDATE_VALUE = 3;
+      public static final int HANDSHAKE_VALUE = 3;
       /**
-       * <code>NEW = 4;</code>
+       * <code>NETWORK_DATA_UPDATE = 4;</code>
        */
-      public static final int NEW_VALUE = 4;
+      public static final int NETWORK_DATA_UPDATE_VALUE = 4;
       /**
-       * <code>UPSTREAM = 5;</code>
+       * <code>NEW = 5;</code>
        */
-      public static final int UPSTREAM_VALUE = 5;
+      public static final int NEW_VALUE = 5;
+      /**
+       * <code>UPSTREAM = 6;</code>
+       */
+      public static final int UPSTREAM_VALUE = 6;
 
 
       public final int getNumber() { return value; }
@@ -16385,9 +16393,10 @@ public final class BlunoteMessages {
         switch (value) {
           case 1: return DOWNSTREAM;
           case 2: return DROP;
-          case 3: return NETWORK_DATA_UPDATE;
-          case 4: return NEW;
-          case 5: return UPSTREAM;
+          case 3: return HANDSHAKE;
+          case 4: return NETWORK_DATA_UPDATE;
+          case 5: return NEW;
+          case 6: return UPSTREAM;
           default: return null;
         }
       }
@@ -17091,12 +17100,13 @@ public final class BlunoteMessages {
       "eliveryInfo\022(\n\007message\030\002 \002(\0132\027.blunote.W" +
       "rapperMessage\"H\n\rWelcomePacket\022\023\n\013networ" +
       "kName\030\001 \002(\t\022\020\n\010numUsers\030\002 \002(\t\022\020\n\010numSong",
-      "s\030\003 \002(\t\"\257\001\n\rNetworkPacket\022\024\n\014macAddresse" +
+      "s\030\003 \002(\t\"\276\001\n\rNetworkPacket\022\024\n\014macAddresse" +
       "s\030\001 \003(\t\022\013\n\003pdu\030\002 \001(\014\022)\n\004type\030\003 \002(\0162\033.blu" +
-      "note.NetworkPacket.Type\"P\n\004Type\022\016\n\nDOWNS" +
-      "TREAM\020\001\022\010\n\004DROP\020\002\022\027\n\023NETWORK_DATA_UPDATE" +
-      "\020\003\022\007\n\003NEW\020\004\022\014\n\010UPSTREAM\020\005B/\n\034com.drexels" +
-      "p.blunote.blunoteB\017BlunoteMessages"
+      "note.NetworkPacket.Type\"_\n\004Type\022\016\n\nDOWNS" +
+      "TREAM\020\001\022\010\n\004DROP\020\002\022\r\n\tHANDSHAKE\020\003\022\027\n\023NETW" +
+      "ORK_DATA_UPDATE\020\004\022\007\n\003NEW\020\005\022\014\n\010UPSTREAM\020\006" +
+      "B/\n\034com.drexelsp.blunote.blunoteB\017Blunot" +
+      "eMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

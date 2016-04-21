@@ -2,6 +2,8 @@ package com.drexelsp.blunote.network;
 
 import android.os.Message;
 
+import com.drexelsp.blunote.blunote.BlunoteMessages;
+
 /**
  * Created by omnia on 2/12/16.
  * <p/>
@@ -9,9 +11,9 @@ import android.os.Message;
  * Currently supports BlunoteBluetoothSocket
  */
 public interface BlunoteSocket {
-    int numMessages();
+    //int numMessages();
 
-    Message readMessage();
+    //Message readMessage();
 
-    boolean writeMessage(Message msg);
+    boolean write(BlunoteMessages.NetworkPacket packet);
 }

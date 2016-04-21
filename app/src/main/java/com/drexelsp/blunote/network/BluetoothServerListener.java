@@ -68,7 +68,8 @@ public class BluetoothServerListener {
                     socket = mmServerSocket.accept();
                     if (socket != null) {
                         BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(socket);
-                        mBlunoteRouter.addDownStream(blunoteBluetoothSocket);
+                        mBlunoteRouter.addHandshaking(blunoteBluetoothSocket);
+                        blunoteBluetoothSocket.start();
 
                         bluetoothEvent = new BluetoothEvent(BluetoothEvent.SERVER_LISTENER, true, socket.getRemoteDevice().getAddress());
                         mEventBus.post(bluetoothEvent);
