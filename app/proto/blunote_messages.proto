@@ -160,10 +160,23 @@ message WelcomePacket {
 	required string numSongs = 3;
 }
 
+message NetworkMap {
+	repeated string macAddresses = 1;
+}
+
 message NetworkPacket {
 	enum Type { DOWNSTREAM = 1; DROP = 2; HANDSHAKE = 3; NETWORK_DATA_UPDATE = 4; NEW = 5; UPSTREAM = 6; }
 
-	repeated string macAddresses = 1;
+	optional NetworkMap networkMap = 1;
 	optional bytes pdu = 2;
 	required Type type = 3;
+}
+
+message NetworkConfiguration {
+	optional bytes handshake = 1;
+	optional bool notifyOnDisconnect = 2 [default = false];
+	optional bool notifyOnConnect = 3 [default = false];
+	optional bool receiveUpstream = 4 [default = false]; /// Receive callbacks with client data
+	optional bool receiveDownstream = 5 [default = false]; /// Receive callbacks with host data
+	optional NetworkMap networkMap = 6;
 }

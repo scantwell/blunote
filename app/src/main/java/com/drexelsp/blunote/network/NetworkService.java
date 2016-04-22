@@ -17,6 +17,7 @@ import android.util.Log;
 import com.drexelsp.blunote.blunote.BlunoteMessages.*;
 import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.events.BluetoothEvent;
+import com.google.protobuf.ByteString;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -77,6 +78,13 @@ public class NetworkService extends Service {
         BlunoteRouter.getInstance().setHostMode(getApplicationContext());
         mBluetoothServerListener = new BluetoothServerListener(uuid);
         makeDiscoverable();
+    }
+
+    public void updateHandshake(ByteString handshake)
+    {
+        NetworkConfiguration.Builder configBuilder = NetworkConfiguration.newBuilder().mergeFrom(this.configuration);
+        configBuilder.setHandshake(handshake);
+        this.configuration = configBuilder.build();
     }
 
     public void getAvailableNetworks() {
