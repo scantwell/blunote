@@ -42,27 +42,12 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
         this.outputStream = tmpOut;
     }
 
-    @Override
     public boolean write(NetworkPacket networkPacket) throws IOException {
-        Log.v(TAG, "Writing packet to bluetooth socket");
-        try {
-            byte[] bytes = networkPacket.toByteArray();
-            DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(outputStream, bytes.length + 4));
-            dataOutputStream.writeInt(bytes.length);
-            for (int i = 0; i < bytes.length; i += BUFFERSIZE) {
-                int b = ((i + BUFFERSIZE) < bytes.length) ? BUFFERSIZE : bytes.length - i;
-                dataOutputStream.write(bytes, i, b);
-                dataOutputStream.flush();
-            }
-        } catch (IOException e) {
-            Log.e(TAG, String.format("Error writing packet to socket: %s", e.getMessage()));
-            return false;
         byte[] bytes = networkPacket.toByteArray();
         DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(outputStream, bytes.length + 4));
         dataOutputStream.writeInt(bytes.length);
-        int bufferSize = 1024;
-        for (int i = 0; i < bytes.length; i += bufferSize) {
-            int b = ((i + bufferSize) < bytes.length) ? bufferSize : bytes.length - i;
+        for (int i = 0; i < bytes.length; i += BUFFERSIZE) {
+            int b = ((i + BUFFERSIZE) < bytes.length) ? BUFFERSIZE : bytes.length - i;
             dataOutputStream.write(bytes, i, b);
             dataOutputStream.flush();
         }
@@ -73,29 +58,11 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
         DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(inputStream));
         int messageSize, bytes;
         byte[] buffer;
-
-        while (true) {
-            try {
-                messageSize = dataInputStream.readInt();
-                bytes = 0;
-                buffer = new byte[messageSize];
-                while (bytes < messageSize) {
-                    int b = ((bytes + BUFFERSIZE) < messageSize) ? BUFFERSIZE : messageSize - bytes;
-                    bytes += dataInputStream.read(buffer, bytes, b);
-                }
-
-                NetworkPacket packet = NetworkPacket.parseFrom(buffer);
-                router.addPacketToQueue(this, packet);
-            } catch (IOException e) {
-                Log.e(TAG, "Error Connection Lost: " + e.getMessage());
-                cancel();
-                break;
-            }
         messageSize = dataInputStream.readInt();
         bytes = 0;
         buffer = new byte[messageSize];
         while (bytes < messageSize) {
-            int b = ((bytes + bufferSize) < messageSize) ? bufferSize : messageSize - bytes;
+            int b = ((bytes + BUFFERSIZE) < messageSize) ? BUFFERSIZE : messageSize - bytes;
             bytes += dataInputStream.read(buffer, bytes, b);
         }
         return NetworkPacket.parseFrom(buffer);
