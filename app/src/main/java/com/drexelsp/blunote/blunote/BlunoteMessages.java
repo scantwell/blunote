@@ -16170,8 +16170,8 @@ public final class BlunoteMessages {
     // @@protoc_insertion_point(class_scope:blunote.WelcomePacket)
   }
 
-  public interface NetworkPacketOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:blunote.NetworkPacket)
+  public interface NetworkMapOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:blunote.NetworkMap)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -16192,6 +16192,499 @@ public final class BlunoteMessages {
      */
     com.google.protobuf.ByteString
         getMacAddressesBytes(int index);
+  }
+  /**
+   * Protobuf type {@code blunote.NetworkMap}
+   */
+  public static final class NetworkMap extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:blunote.NetworkMap)
+      NetworkMapOrBuilder {
+    // Use NetworkMap.newBuilder() to construct.
+    private NetworkMap(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private NetworkMap(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final NetworkMap defaultInstance;
+    public static NetworkMap getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public NetworkMap getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private NetworkMap(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                macAddresses_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              macAddresses_.add(bs);
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          macAddresses_ = macAddresses_.getUnmodifiableView();
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkMap_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkMap_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.class, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<NetworkMap> PARSER =
+        new com.google.protobuf.AbstractParser<NetworkMap>() {
+      public NetworkMap parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new NetworkMap(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<NetworkMap> getParserForType() {
+      return PARSER;
+    }
+
+    public static final int MACADDRESSES_FIELD_NUMBER = 1;
+    private com.google.protobuf.LazyStringList macAddresses_;
+    /**
+     * <code>repeated string macAddresses = 1;</code>
+     */
+    public com.google.protobuf.ProtocolStringList
+        getMacAddressesList() {
+      return macAddresses_;
+    }
+    /**
+     * <code>repeated string macAddresses = 1;</code>
+     */
+    public int getMacAddressesCount() {
+      return macAddresses_.size();
+    }
+    /**
+     * <code>repeated string macAddresses = 1;</code>
+     */
+    public java.lang.String getMacAddresses(int index) {
+      return macAddresses_.get(index);
+    }
+    /**
+     * <code>repeated string macAddresses = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getMacAddressesBytes(int index) {
+      return macAddresses_.getByteString(index);
+    }
+
+    private void initFields() {
+      macAddresses_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < macAddresses_.size(); i++) {
+        output.writeBytes(1, macAddresses_.getByteString(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      {
+        int dataSize = 0;
+        for (int i = 0; i < macAddresses_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(macAddresses_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getMacAddressesList().size();
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code blunote.NetworkMap}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:blunote.NetworkMap)
+        com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMapOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkMap_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkMap_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.class, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.Builder.class);
+      }
+
+      // Construct using com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        macAddresses_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkMap_descriptor;
+      }
+
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap getDefaultInstanceForType() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.getDefaultInstance();
+      }
+
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap build() {
+        com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap buildPartial() {
+        com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap result = new com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap(this);
+        int from_bitField0_ = bitField0_;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          macAddresses_ = macAddresses_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        }
+        result.macAddresses_ = macAddresses_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap) {
+          return mergeFrom((com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap other) {
+        if (other == com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.getDefaultInstance()) return this;
+        if (!other.macAddresses_.isEmpty()) {
+          if (macAddresses_.isEmpty()) {
+            macAddresses_ = other.macAddresses_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            ensureMacAddressesIsMutable();
+            macAddresses_.addAll(other.macAddresses_);
+          }
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private com.google.protobuf.LazyStringList macAddresses_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureMacAddressesIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          macAddresses_ = new com.google.protobuf.LazyStringArrayList(macAddresses_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public com.google.protobuf.ProtocolStringList
+          getMacAddressesList() {
+        return macAddresses_.getUnmodifiableView();
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public int getMacAddressesCount() {
+        return macAddresses_.size();
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public java.lang.String getMacAddresses(int index) {
+        return macAddresses_.get(index);
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getMacAddressesBytes(int index) {
+        return macAddresses_.getByteString(index);
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public Builder setMacAddresses(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureMacAddressesIsMutable();
+        macAddresses_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public Builder addMacAddresses(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureMacAddressesIsMutable();
+        macAddresses_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public Builder addAllMacAddresses(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureMacAddressesIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, macAddresses_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public Builder clearMacAddresses() {
+        macAddresses_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string macAddresses = 1;</code>
+       */
+      public Builder addMacAddressesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureMacAddressesIsMutable();
+        macAddresses_.add(value);
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:blunote.NetworkMap)
+    }
+
+    static {
+      defaultInstance = new NetworkMap(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:blunote.NetworkMap)
+  }
+
+  public interface NetworkPacketOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:blunote.NetworkPacket)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional .blunote.NetworkMap networkMap = 1;</code>
+     */
+    boolean hasNetworkMap();
+    /**
+     * <code>optional .blunote.NetworkMap networkMap = 1;</code>
+     */
+    com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap getNetworkMap();
+    /**
+     * <code>optional .blunote.NetworkMap networkMap = 1;</code>
+     */
+    com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMapOrBuilder getNetworkMapOrBuilder();
 
     /**
      * <code>optional bytes pdu = 2;</code>
@@ -16264,16 +16757,20 @@ public final class BlunoteMessages {
               break;
             }
             case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                macAddresses_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000001;
+              com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                subBuilder = networkMap_.toBuilder();
               }
-              macAddresses_.add(bs);
+              networkMap_ = input.readMessage(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(networkMap_);
+                networkMap_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000001;
               break;
             }
             case 18: {
-              bitField0_ |= 0x00000001;
+              bitField0_ |= 0x00000002;
               pdu_ = input.readBytes();
               break;
             }
@@ -16283,7 +16780,7 @@ public final class BlunoteMessages {
               if (value == null) {
                 unknownFields.mergeVarintField(3, rawValue);
               } else {
-                bitField0_ |= 0x00000002;
+                bitField0_ |= 0x00000004;
                 type_ = value;
               }
               break;
@@ -16296,9 +16793,6 @@ public final class BlunoteMessages {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          macAddresses_ = macAddresses_.getUnmodifiableView();
-        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -16449,33 +16943,25 @@ public final class BlunoteMessages {
     }
 
     private int bitField0_;
-    public static final int MACADDRESSES_FIELD_NUMBER = 1;
-    private com.google.protobuf.LazyStringList macAddresses_;
+    public static final int NETWORKMAP_FIELD_NUMBER = 1;
+    private com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap networkMap_;
     /**
-     * <code>repeated string macAddresses = 1;</code>
+     * <code>optional .blunote.NetworkMap networkMap = 1;</code>
      */
-    public com.google.protobuf.ProtocolStringList
-        getMacAddressesList() {
-      return macAddresses_;
+    public boolean hasNetworkMap() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>repeated string macAddresses = 1;</code>
+     * <code>optional .blunote.NetworkMap networkMap = 1;</code>
      */
-    public int getMacAddressesCount() {
-      return macAddresses_.size();
+    public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap getNetworkMap() {
+      return networkMap_;
     }
     /**
-     * <code>repeated string macAddresses = 1;</code>
+     * <code>optional .blunote.NetworkMap networkMap = 1;</code>
      */
-    public java.lang.String getMacAddresses(int index) {
-      return macAddresses_.get(index);
-    }
-    /**
-     * <code>repeated string macAddresses = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getMacAddressesBytes(int index) {
-      return macAddresses_.getByteString(index);
+    public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMapOrBuilder getNetworkMapOrBuilder() {
+      return networkMap_;
     }
 
     public static final int PDU_FIELD_NUMBER = 2;
@@ -16484,7 +16970,7 @@ public final class BlunoteMessages {
      * <code>optional bytes pdu = 2;</code>
      */
     public boolean hasPdu() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
+      return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>optional bytes pdu = 2;</code>
@@ -16499,7 +16985,7 @@ public final class BlunoteMessages {
      * <code>required .blunote.NetworkPacket.Type type = 3;</code>
      */
     public boolean hasType() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>required .blunote.NetworkPacket.Type type = 3;</code>
@@ -16509,7 +16995,7 @@ public final class BlunoteMessages {
     }
 
     private void initFields() {
-      macAddresses_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      networkMap_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.getDefaultInstance();
       pdu_ = com.google.protobuf.ByteString.EMPTY;
       type_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.Type.DOWNSTREAM;
     }
@@ -16530,13 +17016,13 @@ public final class BlunoteMessages {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      for (int i = 0; i < macAddresses_.size(); i++) {
-        output.writeBytes(1, macAddresses_.getByteString(i));
-      }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(2, pdu_);
+        output.writeMessage(1, networkMap_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, pdu_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeEnum(3, type_.getNumber());
       }
       getUnknownFields().writeTo(output);
@@ -16548,20 +17034,15 @@ public final class BlunoteMessages {
       if (size != -1) return size;
 
       size = 0;
-      {
-        int dataSize = 0;
-        for (int i = 0; i < macAddresses_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeBytesSizeNoTag(macAddresses_.getByteString(i));
-        }
-        size += dataSize;
-        size += 1 * getMacAddressesList().size();
-      }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, networkMap_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, pdu_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(3, type_.getNumber());
       }
@@ -16674,6 +17155,7 @@ public final class BlunoteMessages {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getNetworkMapFieldBuilder();
         }
       }
       private static Builder create() {
@@ -16682,7 +17164,11 @@ public final class BlunoteMessages {
 
       public Builder clear() {
         super.clear();
-        macAddresses_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        if (networkMapBuilder_ == null) {
+          networkMap_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.getDefaultInstance();
+        } else {
+          networkMapBuilder_.clear();
+        }
         bitField0_ = (bitField0_ & ~0x00000001);
         pdu_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -16716,17 +17202,20 @@ public final class BlunoteMessages {
         com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket result = new com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          macAddresses_ = macAddresses_.getUnmodifiableView();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        }
-        result.macAddresses_ = macAddresses_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
+        }
+        if (networkMapBuilder_ == null) {
+          result.networkMap_ = networkMap_;
+        } else {
+          result.networkMap_ = networkMapBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
         }
         result.pdu_ = pdu_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000002;
+          to_bitField0_ |= 0x00000004;
         }
         result.type_ = type_;
         result.bitField0_ = to_bitField0_;
@@ -16745,15 +17234,8 @@ public final class BlunoteMessages {
 
       public Builder mergeFrom(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket other) {
         if (other == com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket.getDefaultInstance()) return this;
-        if (!other.macAddresses_.isEmpty()) {
-          if (macAddresses_.isEmpty()) {
-            macAddresses_ = other.macAddresses_;
-            bitField0_ = (bitField0_ & ~0x00000001);
-          } else {
-            ensureMacAddressesIsMutable();
-            macAddresses_.addAll(other.macAddresses_);
-          }
-          onChanged();
+        if (other.hasNetworkMap()) {
+          mergeNetworkMap(other.getNetworkMap());
         }
         if (other.hasPdu()) {
           setPdu(other.getPdu());
@@ -16792,97 +17274,120 @@ public final class BlunoteMessages {
       }
       private int bitField0_;
 
-      private com.google.protobuf.LazyStringList macAddresses_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensureMacAddressesIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          macAddresses_ = new com.google.protobuf.LazyStringArrayList(macAddresses_);
-          bitField0_ |= 0x00000001;
-         }
+      private com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap networkMap_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.Builder, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMapOrBuilder> networkMapBuilder_;
+      /**
+       * <code>optional .blunote.NetworkMap networkMap = 1;</code>
+       */
+      public boolean hasNetworkMap() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>repeated string macAddresses = 1;</code>
+       * <code>optional .blunote.NetworkMap networkMap = 1;</code>
        */
-      public com.google.protobuf.ProtocolStringList
-          getMacAddressesList() {
-        return macAddresses_.getUnmodifiableView();
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap getNetworkMap() {
+        if (networkMapBuilder_ == null) {
+          return networkMap_;
+        } else {
+          return networkMapBuilder_.getMessage();
+        }
       }
       /**
-       * <code>repeated string macAddresses = 1;</code>
+       * <code>optional .blunote.NetworkMap networkMap = 1;</code>
        */
-      public int getMacAddressesCount() {
-        return macAddresses_.size();
-      }
-      /**
-       * <code>repeated string macAddresses = 1;</code>
-       */
-      public java.lang.String getMacAddresses(int index) {
-        return macAddresses_.get(index);
-      }
-      /**
-       * <code>repeated string macAddresses = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getMacAddressesBytes(int index) {
-        return macAddresses_.getByteString(index);
-      }
-      /**
-       * <code>repeated string macAddresses = 1;</code>
-       */
-      public Builder setMacAddresses(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureMacAddressesIsMutable();
-        macAddresses_.set(index, value);
-        onChanged();
+      public Builder setNetworkMap(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap value) {
+        if (networkMapBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          networkMap_ = value;
+          onChanged();
+        } else {
+          networkMapBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000001;
         return this;
       }
       /**
-       * <code>repeated string macAddresses = 1;</code>
+       * <code>optional .blunote.NetworkMap networkMap = 1;</code>
        */
-      public Builder addMacAddresses(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureMacAddressesIsMutable();
-        macAddresses_.add(value);
-        onChanged();
+      public Builder setNetworkMap(
+          com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.Builder builderForValue) {
+        if (networkMapBuilder_ == null) {
+          networkMap_ = builderForValue.build();
+          onChanged();
+        } else {
+          networkMapBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000001;
         return this;
       }
       /**
-       * <code>repeated string macAddresses = 1;</code>
+       * <code>optional .blunote.NetworkMap networkMap = 1;</code>
        */
-      public Builder addAllMacAddresses(
-          java.lang.Iterable<java.lang.String> values) {
-        ensureMacAddressesIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, macAddresses_);
-        onChanged();
+      public Builder mergeNetworkMap(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap value) {
+        if (networkMapBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001) &&
+              networkMap_ != com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.getDefaultInstance()) {
+            networkMap_ =
+              com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.newBuilder(networkMap_).mergeFrom(value).buildPartial();
+          } else {
+            networkMap_ = value;
+          }
+          onChanged();
+        } else {
+          networkMapBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000001;
         return this;
       }
       /**
-       * <code>repeated string macAddresses = 1;</code>
+       * <code>optional .blunote.NetworkMap networkMap = 1;</code>
        */
-      public Builder clearMacAddresses() {
-        macAddresses_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      public Builder clearNetworkMap() {
+        if (networkMapBuilder_ == null) {
+          networkMap_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.getDefaultInstance();
+          onChanged();
+        } else {
+          networkMapBuilder_.clear();
+        }
         bitField0_ = (bitField0_ & ~0x00000001);
-        onChanged();
         return this;
       }
       /**
-       * <code>repeated string macAddresses = 1;</code>
+       * <code>optional .blunote.NetworkMap networkMap = 1;</code>
        */
-      public Builder addMacAddressesBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureMacAddressesIsMutable();
-        macAddresses_.add(value);
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.Builder getNetworkMapBuilder() {
+        bitField0_ |= 0x00000001;
         onChanged();
-        return this;
+        return getNetworkMapFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .blunote.NetworkMap networkMap = 1;</code>
+       */
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMapOrBuilder getNetworkMapOrBuilder() {
+        if (networkMapBuilder_ != null) {
+          return networkMapBuilder_.getMessageOrBuilder();
+        } else {
+          return networkMap_;
+        }
+      }
+      /**
+       * <code>optional .blunote.NetworkMap networkMap = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.Builder, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMapOrBuilder> 
+          getNetworkMapFieldBuilder() {
+        if (networkMapBuilder_ == null) {
+          networkMapBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.Builder, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMapOrBuilder>(
+                  getNetworkMap(),
+                  getParentForChildren(),
+                  isClean());
+          networkMap_ = null;
+        }
+        return networkMapBuilder_;
       }
 
       private com.google.protobuf.ByteString pdu_ = com.google.protobuf.ByteString.EMPTY;
@@ -16966,6 +17471,971 @@ public final class BlunoteMessages {
     // @@protoc_insertion_point(class_scope:blunote.NetworkPacket)
   }
 
+  public interface NetworkConfigurationOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:blunote.NetworkConfiguration)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional bytes handshake = 1;</code>
+     */
+    boolean hasHandshake();
+    /**
+     * <code>optional bytes handshake = 1;</code>
+     */
+    com.google.protobuf.ByteString getHandshake();
+
+    /**
+     * <code>optional bool notifyOnDisconnect = 2 [default = false];</code>
+     */
+    boolean hasNotifyOnDisconnect();
+    /**
+     * <code>optional bool notifyOnDisconnect = 2 [default = false];</code>
+     */
+    boolean getNotifyOnDisconnect();
+
+    /**
+     * <code>optional bool notifyOnConnect = 3 [default = false];</code>
+     */
+    boolean hasNotifyOnConnect();
+    /**
+     * <code>optional bool notifyOnConnect = 3 [default = false];</code>
+     */
+    boolean getNotifyOnConnect();
+
+    /**
+     * <code>optional bool receiveUpstream = 4 [default = false];</code>
+     *
+     * <pre>
+     *&#47; Receive callbacks with client data
+     * </pre>
+     */
+    boolean hasReceiveUpstream();
+    /**
+     * <code>optional bool receiveUpstream = 4 [default = false];</code>
+     *
+     * <pre>
+     *&#47; Receive callbacks with client data
+     * </pre>
+     */
+    boolean getReceiveUpstream();
+
+    /**
+     * <code>optional bool receiveDownstream = 5 [default = false];</code>
+     *
+     * <pre>
+     *&#47; Receive callbacks with host data
+     * </pre>
+     */
+    boolean hasReceiveDownstream();
+    /**
+     * <code>optional bool receiveDownstream = 5 [default = false];</code>
+     *
+     * <pre>
+     *&#47; Receive callbacks with host data
+     * </pre>
+     */
+    boolean getReceiveDownstream();
+
+    /**
+     * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+     */
+    boolean hasNetworkMap();
+    /**
+     * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+     */
+    com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap getNetworkMap();
+    /**
+     * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+     */
+    com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMapOrBuilder getNetworkMapOrBuilder();
+  }
+  /**
+   * Protobuf type {@code blunote.NetworkConfiguration}
+   */
+  public static final class NetworkConfiguration extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:blunote.NetworkConfiguration)
+      NetworkConfigurationOrBuilder {
+    // Use NetworkConfiguration.newBuilder() to construct.
+    private NetworkConfiguration(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private NetworkConfiguration(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final NetworkConfiguration defaultInstance;
+    public static NetworkConfiguration getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public NetworkConfiguration getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private NetworkConfiguration(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              handshake_ = input.readBytes();
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              notifyOnDisconnect_ = input.readBool();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              notifyOnConnect_ = input.readBool();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              receiveUpstream_ = input.readBool();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              receiveDownstream_ = input.readBool();
+              break;
+            }
+            case 50: {
+              com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000020) == 0x00000020)) {
+                subBuilder = networkMap_.toBuilder();
+              }
+              networkMap_ = input.readMessage(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(networkMap_);
+                networkMap_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000020;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkConfiguration_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkConfiguration_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration.class, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<NetworkConfiguration> PARSER =
+        new com.google.protobuf.AbstractParser<NetworkConfiguration>() {
+      public NetworkConfiguration parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new NetworkConfiguration(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<NetworkConfiguration> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int HANDSHAKE_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString handshake_;
+    /**
+     * <code>optional bytes handshake = 1;</code>
+     */
+    public boolean hasHandshake() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional bytes handshake = 1;</code>
+     */
+    public com.google.protobuf.ByteString getHandshake() {
+      return handshake_;
+    }
+
+    public static final int NOTIFYONDISCONNECT_FIELD_NUMBER = 2;
+    private boolean notifyOnDisconnect_;
+    /**
+     * <code>optional bool notifyOnDisconnect = 2 [default = false];</code>
+     */
+    public boolean hasNotifyOnDisconnect() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional bool notifyOnDisconnect = 2 [default = false];</code>
+     */
+    public boolean getNotifyOnDisconnect() {
+      return notifyOnDisconnect_;
+    }
+
+    public static final int NOTIFYONCONNECT_FIELD_NUMBER = 3;
+    private boolean notifyOnConnect_;
+    /**
+     * <code>optional bool notifyOnConnect = 3 [default = false];</code>
+     */
+    public boolean hasNotifyOnConnect() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional bool notifyOnConnect = 3 [default = false];</code>
+     */
+    public boolean getNotifyOnConnect() {
+      return notifyOnConnect_;
+    }
+
+    public static final int RECEIVEUPSTREAM_FIELD_NUMBER = 4;
+    private boolean receiveUpstream_;
+    /**
+     * <code>optional bool receiveUpstream = 4 [default = false];</code>
+     *
+     * <pre>
+     *&#47; Receive callbacks with client data
+     * </pre>
+     */
+    public boolean hasReceiveUpstream() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional bool receiveUpstream = 4 [default = false];</code>
+     *
+     * <pre>
+     *&#47; Receive callbacks with client data
+     * </pre>
+     */
+    public boolean getReceiveUpstream() {
+      return receiveUpstream_;
+    }
+
+    public static final int RECEIVEDOWNSTREAM_FIELD_NUMBER = 5;
+    private boolean receiveDownstream_;
+    /**
+     * <code>optional bool receiveDownstream = 5 [default = false];</code>
+     *
+     * <pre>
+     *&#47; Receive callbacks with host data
+     * </pre>
+     */
+    public boolean hasReceiveDownstream() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional bool receiveDownstream = 5 [default = false];</code>
+     *
+     * <pre>
+     *&#47; Receive callbacks with host data
+     * </pre>
+     */
+    public boolean getReceiveDownstream() {
+      return receiveDownstream_;
+    }
+
+    public static final int NETWORKMAP_FIELD_NUMBER = 6;
+    private com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap networkMap_;
+    /**
+     * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+     */
+    public boolean hasNetworkMap() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+     */
+    public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap getNetworkMap() {
+      return networkMap_;
+    }
+    /**
+     * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+     */
+    public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMapOrBuilder getNetworkMapOrBuilder() {
+      return networkMap_;
+    }
+
+    private void initFields() {
+      handshake_ = com.google.protobuf.ByteString.EMPTY;
+      notifyOnDisconnect_ = false;
+      notifyOnConnect_ = false;
+      receiveUpstream_ = false;
+      receiveDownstream_ = false;
+      networkMap_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.getDefaultInstance();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, handshake_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBool(2, notifyOnDisconnect_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBool(3, notifyOnConnect_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBool(4, receiveUpstream_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBool(5, receiveDownstream_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeMessage(6, networkMap_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, handshake_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(2, notifyOnDisconnect_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(3, notifyOnConnect_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(4, receiveUpstream_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(5, receiveDownstream_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(6, networkMap_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code blunote.NetworkConfiguration}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:blunote.NetworkConfiguration)
+        com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfigurationOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkConfiguration_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkConfiguration_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration.class, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration.Builder.class);
+      }
+
+      // Construct using com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getNetworkMapFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        handshake_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        notifyOnDisconnect_ = false;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        notifyOnConnect_ = false;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        receiveUpstream_ = false;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        receiveDownstream_ = false;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        if (networkMapBuilder_ == null) {
+          networkMap_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.getDefaultInstance();
+        } else {
+          networkMapBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.internal_static_blunote_NetworkConfiguration_descriptor;
+      }
+
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration getDefaultInstanceForType() {
+        return com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration.getDefaultInstance();
+      }
+
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration build() {
+        com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration buildPartial() {
+        com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration result = new com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.handshake_ = handshake_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.notifyOnDisconnect_ = notifyOnDisconnect_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.notifyOnConnect_ = notifyOnConnect_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.receiveUpstream_ = receiveUpstream_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.receiveDownstream_ = receiveDownstream_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        if (networkMapBuilder_ == null) {
+          result.networkMap_ = networkMap_;
+        } else {
+          result.networkMap_ = networkMapBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration) {
+          return mergeFrom((com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration other) {
+        if (other == com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration.getDefaultInstance()) return this;
+        if (other.hasHandshake()) {
+          setHandshake(other.getHandshake());
+        }
+        if (other.hasNotifyOnDisconnect()) {
+          setNotifyOnDisconnect(other.getNotifyOnDisconnect());
+        }
+        if (other.hasNotifyOnConnect()) {
+          setNotifyOnConnect(other.getNotifyOnConnect());
+        }
+        if (other.hasReceiveUpstream()) {
+          setReceiveUpstream(other.getReceiveUpstream());
+        }
+        if (other.hasReceiveDownstream()) {
+          setReceiveDownstream(other.getReceiveDownstream());
+        }
+        if (other.hasNetworkMap()) {
+          mergeNetworkMap(other.getNetworkMap());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private com.google.protobuf.ByteString handshake_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes handshake = 1;</code>
+       */
+      public boolean hasHandshake() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional bytes handshake = 1;</code>
+       */
+      public com.google.protobuf.ByteString getHandshake() {
+        return handshake_;
+      }
+      /**
+       * <code>optional bytes handshake = 1;</code>
+       */
+      public Builder setHandshake(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        handshake_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bytes handshake = 1;</code>
+       */
+      public Builder clearHandshake() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        handshake_ = getDefaultInstance().getHandshake();
+        onChanged();
+        return this;
+      }
+
+      private boolean notifyOnDisconnect_ ;
+      /**
+       * <code>optional bool notifyOnDisconnect = 2 [default = false];</code>
+       */
+      public boolean hasNotifyOnDisconnect() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional bool notifyOnDisconnect = 2 [default = false];</code>
+       */
+      public boolean getNotifyOnDisconnect() {
+        return notifyOnDisconnect_;
+      }
+      /**
+       * <code>optional bool notifyOnDisconnect = 2 [default = false];</code>
+       */
+      public Builder setNotifyOnDisconnect(boolean value) {
+        bitField0_ |= 0x00000002;
+        notifyOnDisconnect_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool notifyOnDisconnect = 2 [default = false];</code>
+       */
+      public Builder clearNotifyOnDisconnect() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        notifyOnDisconnect_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean notifyOnConnect_ ;
+      /**
+       * <code>optional bool notifyOnConnect = 3 [default = false];</code>
+       */
+      public boolean hasNotifyOnConnect() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional bool notifyOnConnect = 3 [default = false];</code>
+       */
+      public boolean getNotifyOnConnect() {
+        return notifyOnConnect_;
+      }
+      /**
+       * <code>optional bool notifyOnConnect = 3 [default = false];</code>
+       */
+      public Builder setNotifyOnConnect(boolean value) {
+        bitField0_ |= 0x00000004;
+        notifyOnConnect_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool notifyOnConnect = 3 [default = false];</code>
+       */
+      public Builder clearNotifyOnConnect() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        notifyOnConnect_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean receiveUpstream_ ;
+      /**
+       * <code>optional bool receiveUpstream = 4 [default = false];</code>
+       *
+       * <pre>
+       *&#47; Receive callbacks with client data
+       * </pre>
+       */
+      public boolean hasReceiveUpstream() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional bool receiveUpstream = 4 [default = false];</code>
+       *
+       * <pre>
+       *&#47; Receive callbacks with client data
+       * </pre>
+       */
+      public boolean getReceiveUpstream() {
+        return receiveUpstream_;
+      }
+      /**
+       * <code>optional bool receiveUpstream = 4 [default = false];</code>
+       *
+       * <pre>
+       *&#47; Receive callbacks with client data
+       * </pre>
+       */
+      public Builder setReceiveUpstream(boolean value) {
+        bitField0_ |= 0x00000008;
+        receiveUpstream_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool receiveUpstream = 4 [default = false];</code>
+       *
+       * <pre>
+       *&#47; Receive callbacks with client data
+       * </pre>
+       */
+      public Builder clearReceiveUpstream() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        receiveUpstream_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean receiveDownstream_ ;
+      /**
+       * <code>optional bool receiveDownstream = 5 [default = false];</code>
+       *
+       * <pre>
+       *&#47; Receive callbacks with host data
+       * </pre>
+       */
+      public boolean hasReceiveDownstream() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional bool receiveDownstream = 5 [default = false];</code>
+       *
+       * <pre>
+       *&#47; Receive callbacks with host data
+       * </pre>
+       */
+      public boolean getReceiveDownstream() {
+        return receiveDownstream_;
+      }
+      /**
+       * <code>optional bool receiveDownstream = 5 [default = false];</code>
+       *
+       * <pre>
+       *&#47; Receive callbacks with host data
+       * </pre>
+       */
+      public Builder setReceiveDownstream(boolean value) {
+        bitField0_ |= 0x00000010;
+        receiveDownstream_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool receiveDownstream = 5 [default = false];</code>
+       *
+       * <pre>
+       *&#47; Receive callbacks with host data
+       * </pre>
+       */
+      public Builder clearReceiveDownstream() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        receiveDownstream_ = false;
+        onChanged();
+        return this;
+      }
+
+      private com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap networkMap_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.Builder, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMapOrBuilder> networkMapBuilder_;
+      /**
+       * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+       */
+      public boolean hasNetworkMap() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+       */
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap getNetworkMap() {
+        if (networkMapBuilder_ == null) {
+          return networkMap_;
+        } else {
+          return networkMapBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+       */
+      public Builder setNetworkMap(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap value) {
+        if (networkMapBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          networkMap_ = value;
+          onChanged();
+        } else {
+          networkMapBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+       */
+      public Builder setNetworkMap(
+          com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.Builder builderForValue) {
+        if (networkMapBuilder_ == null) {
+          networkMap_ = builderForValue.build();
+          onChanged();
+        } else {
+          networkMapBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+       */
+      public Builder mergeNetworkMap(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap value) {
+        if (networkMapBuilder_ == null) {
+          if (((bitField0_ & 0x00000020) == 0x00000020) &&
+              networkMap_ != com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.getDefaultInstance()) {
+            networkMap_ =
+              com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.newBuilder(networkMap_).mergeFrom(value).buildPartial();
+          } else {
+            networkMap_ = value;
+          }
+          onChanged();
+        } else {
+          networkMapBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+       */
+      public Builder clearNetworkMap() {
+        if (networkMapBuilder_ == null) {
+          networkMap_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.getDefaultInstance();
+          onChanged();
+        } else {
+          networkMapBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
+        return this;
+      }
+      /**
+       * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+       */
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.Builder getNetworkMapBuilder() {
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return getNetworkMapFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+       */
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMapOrBuilder getNetworkMapOrBuilder() {
+        if (networkMapBuilder_ != null) {
+          return networkMapBuilder_.getMessageOrBuilder();
+        } else {
+          return networkMap_;
+        }
+      }
+      /**
+       * <code>optional .blunote.NetworkMap networkMap = 6;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.Builder, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMapOrBuilder> 
+          getNetworkMapFieldBuilder() {
+        if (networkMapBuilder_ == null) {
+          networkMapBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap.Builder, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMapOrBuilder>(
+                  getNetworkMap(),
+                  getParentForChildren(),
+                  isClean());
+          networkMap_ = null;
+        }
+        return networkMapBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:blunote.NetworkConfiguration)
+    }
+
+    static {
+      defaultInstance = new NetworkConfiguration(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:blunote.NetworkConfiguration)
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_blunote_Song_descriptor;
   private static
@@ -17037,10 +18507,20 @@ public final class BlunoteMessages {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_blunote_WelcomePacket_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_blunote_NetworkMap_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_blunote_NetworkMap_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_blunote_NetworkPacket_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_blunote_NetworkPacket_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_blunote_NetworkConfiguration_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_blunote_NetworkConfiguration_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -17100,13 +18580,20 @@ public final class BlunoteMessages {
       "eliveryInfo\022(\n\007message\030\002 \002(\0132\027.blunote.W" +
       "rapperMessage\"H\n\rWelcomePacket\022\023\n\013networ" +
       "kName\030\001 \002(\t\022\020\n\010numUsers\030\002 \002(\t\022\020\n\010numSong",
-      "s\030\003 \002(\t\"\276\001\n\rNetworkPacket\022\024\n\014macAddresse" +
-      "s\030\001 \003(\t\022\013\n\003pdu\030\002 \001(\014\022)\n\004type\030\003 \002(\0162\033.blu" +
-      "note.NetworkPacket.Type\"_\n\004Type\022\016\n\nDOWNS" +
-      "TREAM\020\001\022\010\n\004DROP\020\002\022\r\n\tHANDSHAKE\020\003\022\027\n\023NETW" +
-      "ORK_DATA_UPDATE\020\004\022\007\n\003NEW\020\005\022\014\n\010UPSTREAM\020\006" +
-      "B/\n\034com.drexelsp.blunote.blunoteB\017Blunot" +
-      "eMessages"
+      "s\030\003 \002(\t\"\"\n\nNetworkMap\022\024\n\014macAddresses\030\001 " +
+      "\003(\t\"\321\001\n\rNetworkPacket\022\'\n\nnetworkMap\030\001 \001(" +
+      "\0132\023.blunote.NetworkMap\022\013\n\003pdu\030\002 \001(\014\022)\n\004t" +
+      "ype\030\003 \002(\0162\033.blunote.NetworkPacket.Type\"_" +
+      "\n\004Type\022\016\n\nDOWNSTREAM\020\001\022\010\n\004DROP\020\002\022\r\n\tHAND" +
+      "SHAKE\020\003\022\027\n\023NETWORK_DATA_UPDATE\020\004\022\007\n\003NEW\020" +
+      "\005\022\014\n\010UPSTREAM\020\006\"\327\001\n\024NetworkConfiguration" +
+      "\022\021\n\thandshake\030\001 \001(\014\022!\n\022notifyOnDisconnec" +
+      "t\030\002 \001(\010:\005false\022\036\n\017notifyOnConnect\030\003 \001(\010:" +
+      "\005false\022\036\n\017receiveUpstream\030\004 \001(\010:\005false\022 ",
+      "\n\021receiveDownstream\030\005 \001(\010:\005false\022\'\n\nnetw" +
+      "orkMap\030\006 \001(\0132\023.blunote.NetworkMapB/\n\034com" +
+      ".drexelsp.blunote.blunoteB\017BlunoteMessag" +
+      "es"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -17204,12 +18691,24 @@ public final class BlunoteMessages {
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_blunote_WelcomePacket_descriptor,
         new java.lang.String[] { "NetworkName", "NumUsers", "NumSongs", });
-    internal_static_blunote_NetworkPacket_descriptor =
+    internal_static_blunote_NetworkMap_descriptor =
       getDescriptor().getMessageTypes().get(14);
+    internal_static_blunote_NetworkMap_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_blunote_NetworkMap_descriptor,
+        new java.lang.String[] { "MacAddresses", });
+    internal_static_blunote_NetworkPacket_descriptor =
+      getDescriptor().getMessageTypes().get(15);
     internal_static_blunote_NetworkPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_blunote_NetworkPacket_descriptor,
-        new java.lang.String[] { "MacAddresses", "Pdu", "Type", });
+        new java.lang.String[] { "NetworkMap", "Pdu", "Type", });
+    internal_static_blunote_NetworkConfiguration_descriptor =
+      getDescriptor().getMessageTypes().get(16);
+    internal_static_blunote_NetworkConfiguration_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_blunote_NetworkConfiguration_descriptor,
+        new java.lang.String[] { "Handshake", "NotifyOnDisconnect", "NotifyOnConnect", "ReceiveUpstream", "ReceiveDownstream", "NetworkMap", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
