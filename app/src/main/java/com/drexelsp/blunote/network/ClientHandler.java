@@ -1,10 +1,17 @@
 package com.drexelsp.blunote.network;
 
+import android.net.Network;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.drexelsp.blunote.blunote.BlunoteMessages.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.lang.ref.WeakReference;
 
 /**
@@ -28,6 +35,7 @@ public class ClientHandler extends Handler {
 
     @Override
     public void handleMessage(Message msg) {
+        Bundle b;
         switch (msg.what) {
             case SONG_RECOMMENDATION:
                 msg.getData();
@@ -42,17 +50,38 @@ public class ClientHandler extends Handler {
                 break;
             case CONNECT_TO_NETWORK:
                 Log.v(TAG, "Connect To Network");
-                Bundle data = msg.getData();
-                String macAddress = data.getString("MacAddress");
-                mService.get().connectToNetwork(macAddress);
+                b = msg.getData();
+                try {
+                    NetworkConfiguration config = serializeConfiguration(b.get("configuration"));
+                    mService.get().connectToNetwork(config);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Failed to connect to network. Could not parse 'NetworkConfiguration'.");
+                }
                 break;
             case START_NEW_NETWORK:
                 Log.v(TAG, "Starting New Network");
-                mService.get().startNetwork();
+                b = msg.getData();
+                b.get("configuration");
+                try {
+                    NetworkConfiguration config = serializeConfiguration(b.get("configuration"));
+                    mService.get().startNetwork(config);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Failed to start new network. Could not parse 'NetworkConfiguration'.");
+                }
                 break;
             default:
                 Log.v(TAG, "Unknown message type, sending to parent handleMessage().");
                 super.handleMessage(msg);
         }
+    }
+
+    public static NetworkConfiguration serializeConfiguration(Object obj) throws IOException{
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(out);
+        os.writeObject(obj);
+        NetworkConfiguration config = NetworkConfiguration.parseFrom(out.toByteArray());
+        return config;
     }
 }

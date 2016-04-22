@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.drexelsp.blunote.events.BluetoothEvent;
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration;
 
 abstract public class ClientService extends Service {
     private String TAG = "ClientService";
@@ -37,9 +38,12 @@ abstract public class ClientService extends Service {
         }
     }
 
-    protected void startNetwork() {
+    protected void startNetwork(NetworkConfiguration config) {
         Log.v(TAG, "Starting Network.");
         Message msg = Message.obtain(null, ClientHandler.START_NEW_NETWORK, 0, 0);
+        Bundle b = new Bundle();
+        b.putByteArray("configuration", config.toByteArray());
+        msg.setData(b);
         try {
             mConnection.send(msg);
         } catch (RemoteException e) {
@@ -47,11 +51,11 @@ abstract public class ClientService extends Service {
         }
     }
 
-    protected void connectToNetwork(String macAddress) {
-        Log.v(TAG, String.format("Connecting To Network %s", macAddress));
+    protected void connectToNetwork(NetworkConfiguration config) {
+        //Log.v(TAG, String.format("Connecting To Network %s", macAddress));
         Message msg = Message.obtain(null, ClientHandler.CONNECT_TO_NETWORK, 0, 0);
         Bundle bundle = new Bundle(1);
-        bundle.putString("MacAddress", macAddress);
+        bundle.putByteArray("configuration", config.toByteArray());
         msg.setData(bundle);
         try {
             mConnection.send(msg);

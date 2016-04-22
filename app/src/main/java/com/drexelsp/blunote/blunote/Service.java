@@ -6,6 +6,7 @@ import android.os.IBinder;
 import com.drexelsp.blunote.blunote.BlunoteMessages.*;
 import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.network.ClientService;
+import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import org.greenrobot.eventbus.EventBus;
@@ -63,12 +64,22 @@ public class Service extends ClientService {
 
     public void startNetwork() {
         this.user = new Host(this, getApplicationContext());
-        super.startNetwork();
+        NetworkConfiguration.Builder configBuilder = NetworkConfiguration.newBuilder();
+        configBuilder.setHandshake(ByteString.copyFrom(WelcomePacket.newBuilder().setNetworkName("Party Jamz HardCoded").setNumSongs("0").setNumUsers("0").build().toByteArray()));
+        configBuilder.setNotifyOnConnect(true);
+        configBuilder.setNotifyOnDisconnect(true);
+        configBuilder.setReceiveUpstream(true);
+        super.startNetwork(configBuilder.build());
     }
 
-    public void connectToNetwork(String macAddress) {
+    public void connectToNetwork(NetworkMap networkMap) {
         this.user = new User(this, getApplicationContext());
-        super.connectToNetwork(macAddress);
+        NetworkConfiguration.Builder configBuilder = NetworkConfiguration.newBuilder();
+        configBuilder.setNotifyOnConnect(true);
+        configBuilder.setNotifyOnDisconnect(true);
+        configBuilder.setReceiveDownstream(true);
+        configBuilder.setNetworkMap(networkMap);
+        super.connectToNetwork(configBuilder.build());
     }
 
     public void send(SingleAnswer message) {

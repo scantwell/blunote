@@ -6,6 +6,7 @@ import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Network;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -13,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.drexelsp.blunote.blunote.BlunoteMessages.*;
 import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.events.BluetoothEvent;
 
@@ -33,6 +35,7 @@ public class NetworkService extends Service {
     private int NOTIFICATION_ID = 1234;
     private UUID uuid = UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a");
     private BluetoothServerListener mBluetoothServerListener;
+    private NetworkConfiguration configuration;
 
     public void onReceived(String data) {
         Log.v(TAG, "Received a message.");
@@ -61,7 +64,7 @@ public class NetworkService extends Service {
         sendBroadcast(intent);
     }
 
-    public void connectToNetwork(String device) {
+    public void connectToNetwork(NetworkConfiguration configuration) {
         BlunoteRouter.getInstance().setClientMode(getApplicationContext());
         BluetoothConnector bluetoothConnector = new BluetoothConnector(uuid);
         bluetoothConnector.connectToDevice(device);
@@ -69,7 +72,8 @@ public class NetworkService extends Service {
         makeDiscoverable();
     }
 
-    public void startNetwork() {
+    public void startNetwork(NetworkConfiguration config) {
+        this.configuration = config;
         BlunoteRouter.getInstance().setHostMode(getApplicationContext());
         mBluetoothServerListener = new BluetoothServerListener(uuid);
         makeDiscoverable();

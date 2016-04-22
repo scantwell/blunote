@@ -3,6 +3,7 @@ package com.drexelsp.blunote.network;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
+import com.drexelsp.blunote.blunote.BlunoteMessages;
 import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
 
 import java.io.BufferedInputStream;
@@ -12,6 +13,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 
 /**
  * Created by omnia on 2/12/16.
@@ -25,6 +27,7 @@ public class BlunoteBluetoothSocket extends Thread implements BlunoteSocket {
     private BlunoteRouter router;
     private final InputStream inputStream;
     private final OutputStream outputStream ;
+    private static int BUFFERSIZE = 1024;
 
     public BlunoteBluetoothSocket(BluetoothSocket socket) {
         this.router = BlunoteRouter.getInstance();
@@ -50,9 +53,8 @@ public class BlunoteBluetoothSocket extends Thread implements BlunoteSocket {
             byte[] bytes = networkPacket.toByteArray();
             DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(outputStream, bytes.length + 4));
             dataOutputStream.writeInt(bytes.length);
-            int bufferSize = 1024;
-            for (int i = 0; i < bytes.length; i += bufferSize) {
-                int b = ((i + bufferSize) < bytes.length) ? bufferSize : bytes.length - i;
+            for (int i = 0; i < bytes.length; i += BUFFERSIZE) {
+                int b = ((i + BUFFERSIZE) < bytes.length) ? BUFFERSIZE : bytes.length - i;
                 dataOutputStream.write(bytes, i, b);
                 dataOutputStream.flush();
             }
@@ -65,7 +67,7 @@ public class BlunoteBluetoothSocket extends Thread implements BlunoteSocket {
 
     public void run() {
         DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(inputStream));
-        int messageSize, bytes, bufferSize = 1024 * 10;
+        int messageSize, bytes;
         byte[] buffer;
 
         while (true) {
@@ -74,7 +76,7 @@ public class BlunoteBluetoothSocket extends Thread implements BlunoteSocket {
                 bytes = 0;
                 buffer = new byte[messageSize];
                 while (bytes < messageSize) {
-                    int b = ((bytes + bufferSize) < messageSize) ? bufferSize : messageSize - bytes;
+                    int b = ((bytes + BUFFERSIZE) < messageSize) ? BUFFERSIZE : messageSize - bytes;
                     bytes += dataInputStream.read(buffer, bytes, b);
                 }
 

@@ -1,6 +1,8 @@
 package com.drexelsp.blunote.blunote;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.preference.PreferenceManager;
 
 import com.drexelsp.blunote.events.SongRecommendationEvent;
 import com.drexelsp.blunote.blunote.BlunoteMessages.*;
@@ -16,9 +18,12 @@ public class Host extends User {
 
     private Player player;
     private ArrayList<SongAssembler> songAssemblers;
+    private String serverName;
 
     public Host(Service service, Context context) {
         super(service, context);
+        this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_user_name", BluetoothAdapter.getDefaultAdapter().getName());
+        this.serverName = this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_server_name", "Party Jamz");
         this.songAssemblers = new ArrayList<>();
         this.player = new Player(context);
         new Thread(this.player).run();
