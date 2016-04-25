@@ -96,9 +96,9 @@ message Recommendation {
 	enum Type {  ARTIST = 1; ALBUM = 2; SONG = 3;}
 	required string username = 1;
 	required Type type = 2;
-	optional Artist artist = 3;
-	optional Album album = 4;
-	optional Song song = 5;
+	optional string artist = 3;
+	optional string album = 4;
+	optional string song = 5;
 }
 
 /**

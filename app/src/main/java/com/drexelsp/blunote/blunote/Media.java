@@ -84,4 +84,9 @@ public class Media {
         mediaCursor.close();
         return rv;
     }
+
+    public long findSongId(String title, String artist, String album, String username)
+    {
+        return 0;
+    }
 }

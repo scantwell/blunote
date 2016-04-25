@@ -55,12 +55,12 @@ public class Host extends User implements Observer {
 
     @Override
     public void onReceive(DeliveryInfo dinfo, Recommendation message) {
-        //long id = findSongId(message.getSong().getTitle());
+        long id = media.findSongId(message.getSong().getTitle(),
+                message.getArtist().getArtist(), message.getAlbum().getAlbum(), message.getUsername());
         if (message.getUsername() == this.getName()) {
-            //playerSongById(id);
+            playerSongById(id);
         } else {
-            //addRequestSong(message.getUsername(), id);
-
+            addSongRequest(message.getUsername(), id);
         }
         throw new RuntimeException("Not implemented.");
     }
