@@ -79,12 +79,6 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         Intent intent = new Intent(this, Service.class);
         startService(intent);
 
-        /*ProgressDialog dialog = new ProgressDialog(this);
-        dialog.setMessage("Loading Available Networks");
-        dialog.setCancelable(false);
-        dialog.setInverseBackgroundForced(false);
-        dialog.show();*/
-
         //Make Call to load networks
         if (!Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             networkListView = (ListView) findViewById(R.id.connection_list);

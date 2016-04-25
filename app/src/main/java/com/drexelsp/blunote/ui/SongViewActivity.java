@@ -15,8 +15,8 @@ import android.widget.TextView;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
-import com.drexelsp.blunote.provider.MetaStoreContract;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
+import com.drexelsp.blunote.provider.MetaStoreContract;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -84,9 +84,9 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
     public void populateSongDetails() {
         Intent intent = getIntent();
         id = intent.getStringExtra("_id");
-        String[] selection = { "song_id", "title", "artist", "album" };
+        String[] selection = {"song_id", "title", "artist", "album"};
         String where = "song_id = ?";
-        String[] args = { id };
+        String[] args = {id};
         Cursor cursor = getContentResolver().query(MetaStoreContract.Track.CONTENT_URI, selection, where, args, null);
 
         if (cursor != null && cursor.moveToNext()) {
@@ -99,7 +99,7 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
             songViewAlbum.setText(album);
             cursor.close();
 
-            username = getUsername(title,artist,album);
+            username = getUsername(title, artist, album);
             songViewOwner.setText(username);
 
             songViewAlbumArt.setImageBitmap(getAlbumArt(album));
@@ -111,7 +111,7 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
         Uri uri = MetaStoreContract.Album.CONTENT_URI;
         String selection[] = {"album_art"};
         String where = "album = ?";
-        String[] args = { album };
+        String[] args = {album};
         Cursor cursor = getContentResolver().query(uri, selection, where, args, null);
 
         if (cursor != null && cursor.moveToNext()) {

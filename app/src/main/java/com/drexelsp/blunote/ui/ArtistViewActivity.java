@@ -60,7 +60,7 @@ public class ArtistViewActivity extends BaseBluNoteActivity implements ListView.
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Object itemClicked = artistViewAdapter.getItem(position);
-        if (itemClicked instanceof ArtistViewTrack){
+        if (itemClicked instanceof ArtistViewTrack) {
             Intent intent = new Intent(ArtistViewActivity.this, SongViewActivity.class);
             intent.putExtra("_id", ((ArtistViewTrack) itemClicked).getSong_id());
             startActivity(intent);
@@ -108,7 +108,7 @@ public class ArtistViewActivity extends BaseBluNoteActivity implements ListView.
                         Log.v(TAG, String.format("Song Found %s", song));
                         String songID = Integer.toString(trackCursor.getInt(
                                 trackCursor.getColumnIndex(MetaStoreContract.Track.SONG_ID)));
-                        if(song != null){
+                        if (song != null) {
                             track.setTrackName(song);
                             track.setSong_id(songID);
                         }

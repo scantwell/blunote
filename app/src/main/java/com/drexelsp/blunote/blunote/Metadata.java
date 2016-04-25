@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Created by scantwell on 3/10/2016.
  */
-public class Metadata implements MessageHandler {
+public class Metadata {
 
     private String TAG = "Metadata";
     private ContentResolver mContentResolver;
@@ -48,7 +48,7 @@ public class Metadata implements MessageHandler {
         return mdBuilder.build();
     }
 
-    private void addMetadata(BlunoteMessages.MetadataUpdate message) {
+    public void addMetadata(BlunoteMessages.MetadataUpdate message) {
         ContentValues[] songs = getSongValues(message.getSongsList());
         ContentValues[] artists = getArtistValues(message.getArtistsList());
         ContentValues[] albums = getAlbumValues(message.getAlbumsList());
@@ -84,7 +84,7 @@ public class Metadata implements MessageHandler {
         mContentResolver.delete(MetaStoreContract.Album.CONTENT_URI, "title=?", selectionArgs);
     }
 
-    private void deleteMetadata(BlunoteMessages.MetadataUpdate message) {
+    public void deleteMetadata(BlunoteMessages.MetadataUpdate message) {
         deleteAlbums(message.getAlbumsList());
         deleteArtists(message.getArtistsList());
         deleteSongs(message.getSongsList());
@@ -323,20 +323,5 @@ public class Metadata implements MessageHandler {
             valuesList[i] = values;
         }
         return valuesList;
-    }
-
-    @Override
-    public boolean processMessage(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.WrapperMessage message) {
-        if (BlunoteMessages.WrapperMessage.Type.METADATA_UPDATE.equals(message.getType())) {
-            if (message.getMetadataUpdate().getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
-                addMetadata(message.getMetadataUpdate());
-            } else {
-                deleteMetadata(message.getMetadataUpdate());
-            }
-            return true;
-        } else {
-            //Log.v(TAG, "Undefined message.");
-        }
-        return false;
     }
 }

@@ -153,3 +153,17 @@ message Pdu {
 	required DeliveryInfo deliveryInfo = 1;
 	required WrapperMessage message = 2;
 }
+
+message WelcomePacket {
+	required string networkName = 1;
+	required string numUsers = 2;
+	required string numSongs = 3;
+}
+
+message NetworkPacket {
+	enum Type { DOWNSTREAM = 1; DROP = 2; NETWORK_DATA_UPDATE = 3; NEW = 4; UPSTREAM = 5; }
+
+	repeated string macAddresses = 1;
+	optional bytes pdu = 2;
+	required Type type = 3;
+}

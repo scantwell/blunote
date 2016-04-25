@@ -17,8 +17,6 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
-
 /**
  * Created by scantwell on 2/15/2016.
  * Allows communication to flow from the Application process to another device on the network.
@@ -32,7 +30,7 @@ public class Service extends ClientService {
     }
 
     private String TAG = "Service";
-    private ArrayList<MessageHandler> handlers = new ArrayList<MessageHandler>();
+    private User user;
 
     public Service() {
         IBinder mBinder = new LocalBinder();
@@ -40,18 +38,12 @@ public class Service extends ClientService {
     }
 
     @Override
-    public void onReceived(byte[] data) {
-        //Log.v(TAG, "Received a message.");
+    public void onReceive(byte[] data) {
         try {
             Pdu pdu = Pdu.parseFrom(data);
             DeliveryInfo dinfo = pdu.getDeliveryInfo();
             WrapperMessage message = pdu.getMessage();
-
-            for (MessageHandler handler : handlers) {
-                if (handler.processMessage(dinfo, message)) {
-                    break;
-                }
-            }
+            this.user.onReceive(dinfo, message);
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
         }
@@ -74,16 +66,15 @@ public class Service extends ClientService {
 
     public void onCreate() {
         super.onCreate();
-        this.handlers.add(new Metadata(getApplicationContext()));
-        this.handlers.add(new Media(getApplicationContext(), this));
-        this.handlers.add(new VoteEngine());
     }
 
     public void startNetwork() {
+        this.user = new Host(this, getApplicationContext());
         super.startNetwork();
     }
 
     public void connectToNetwork(String macAddress) {
+        this.user = new User(this, getApplicationContext());
         super.connectToNetwork(macAddress);
     }
 
@@ -112,7 +103,7 @@ public class Service extends ClientService {
     }
 
     public void send(Recommendation message) {
-        Pdu pdu = createMessage(message.getUsername())
+        Pdu pdu = createMessage()
                 .setMessage(WrapperMessage.newBuilder()
                         .setType(WrapperMessage.Type.RECOMMEND)
                         .setRecommendation(message)).build();
@@ -120,7 +111,7 @@ public class Service extends ClientService {
     }
 
     public void send(SongRequest message) {
-        Pdu pdu = createMessage(message.getUsername())
+        Pdu pdu = createMessage()
                 .setMessage(WrapperMessage.newBuilder()
                         .setType(WrapperMessage.Type.SONG_REQUEST)
                         .setSongRequest(message)).build();
@@ -129,20 +120,14 @@ public class Service extends ClientService {
 
     public Pdu.Builder createMessage() {
         Pdu.Builder pduBuilder = Pdu.newBuilder();
-        pduBuilder.setDeliveryInfo(createDeliveryInfo("FakeUser")); // Can I leave username blank?
+        pduBuilder.setDeliveryInfo(createDeliveryInfo());
         return pduBuilder;
     }
 
-    public Pdu.Builder createMessage(String username) {
-        Pdu.Builder pduBuilder = Pdu.newBuilder();
-        pduBuilder.setDeliveryInfo(createDeliveryInfo(username));
-        return pduBuilder;
-    }
-
-    public DeliveryInfo createDeliveryInfo(String username) {
+    public DeliveryInfo createDeliveryInfo() {
         DeliveryInfo.Builder dinfoBuilder = DeliveryInfo.newBuilder();
         dinfoBuilder.setTimestamp(getTimestamp());
-        dinfoBuilder.setUsername(username);
+        dinfoBuilder.setUsername(user.getName());
         return dinfoBuilder.build();
     }
 
