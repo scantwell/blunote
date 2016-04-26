@@ -9,5 +9,6 @@ package com.drexelsp.blunote.network;
 public interface BlunoteSocket {
     BlunoteInputStream getInputStream();
     BlunoteOutputStream getOutputStream();
+    String getAddress();
     void close();
 }

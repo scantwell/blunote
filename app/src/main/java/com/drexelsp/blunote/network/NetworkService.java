@@ -37,6 +37,7 @@ public class NetworkService extends Service {
     private UUID uuid = UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a");
     private BluetoothServerListener mBluetoothServerListener;
     private NetworkConfiguration configuration;
+    private Router router;
 
     public void onReceived(String data) {
         Log.v(TAG, "Received a message.");
@@ -66,14 +67,20 @@ public class NetworkService extends Service {
     }
 
     public void connectToNetwork(NetworkConfiguration config) {
-        this.router = new Router(config);
-        connectionHost.write()
+        this.router = new Router();
+        this.router.registerUpstream(new OnReceiveCallback(this));
+
         /*BlunoteRouter.getInstance().setClientMode(getApplicationContext());
         BluetoothConnector bluetoothConnector = new BluetoothConnector(uuid);
         bluetoothConnector.connectToDevice(device);
         mBluetoothServerListener = new BluetoothServerListener(uuid);
         makeDiscoverable();
         */
+    }
+
+    public void onReceiveUpstream(byte[] data)
+    {
+        // send a broadcast request ?or check the networkpack for other events?
     }
 
     public void startNetwork(NetworkConfiguration config) {

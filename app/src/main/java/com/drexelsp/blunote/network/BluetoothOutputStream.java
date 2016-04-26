@@ -24,31 +24,28 @@ public class BluetoothOutputStream implements BlunoteOutputStream{
         this.outputStream = socket.getOutputStream();
     }
 
-    public boolean write(BlunoteMessages.NetworkPacket networkPacket) throws IOException {
+    public int write(BlunoteMessages.NetworkPacket networkPacket) throws IOException {
         byte[] bytes = networkPacket.toByteArray();
-        DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(outputStream, bytes.length + 4));
-        dataOutputStream.writeInt(bytes.length);
-        for (int i = 0; i < bytes.length; i += BUFFERSIZE) {
-            int b = ((i + BUFFERSIZE) < bytes.length) ? BUFFERSIZE : bytes.length - i;
-            dataOutputStream.write(bytes, i, b);
-            dataOutputStream.flush();
-        }
-        return true;
+        return this.write(bytes);
     }
 
     @Override
     public int write(ByteString data) throws IOException {
         byte[] bytes = data.toByteArray();
-        DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(outputStream, bytes.length + 4));
-        dataOutputStream.writeInt(bytes.length);
+        return this.write(bytes);
+    }
+
+    public int write(byte[] data) throws IOException {
+        DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(outputStream, data.length + 4));
+        dataOutputStream.writeInt(data.length);
         int b = 0;
         int i = 0;
-        for (i = 0; i < bytes.length; i += BUFFERSIZE) {
-            b = ((i + BUFFERSIZE) < bytes.length) ? BUFFERSIZE : bytes.length - i;
-            dataOutputStream.write(bytes, i, b);
+        for (i = 0; i < data.length; i += BUFFERSIZE) {
+            b = ((i + BUFFERSIZE) < data.length) ? BUFFERSIZE : data.length - i;
+            dataOutputStream.write(data, i, b);
             dataOutputStream.flush();
         }
-        return bytes.length;
+        return data.length;
     }
 
     public void close() {
