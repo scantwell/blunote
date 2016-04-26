@@ -17,81 +17,48 @@ import java.util.UUID;
  * <p/>
  * Initializes a connection to a host device
  */
-public class BluetoothConnector {
+public class BluetoothConnector extends Thread {
     private static final String TAG = "Bluetooth Connector";
-    private final UUID MY_UUID;
+    private Router router;
+    private final UUID uuid;
+    private BluetoothAdapter bluetoothAdapter;
+    private EventBus eventBus;
+    private BluetoothSocket socket;
 
-    private BluetoothAdapter mBluetoothAdapter;
-    private BlunoteRouter mRouter;
-    private EventBus mEventBus;
-
-    public BluetoothConnector(UUID uuid) {
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mEventBus = EventBus.getDefault();
-        mRouter = BlunoteRouter.getInstance();
-        MY_UUID = uuid;
-    }
-
-    /**
-     * Connect To Device
-     * Initiates a connection to a new Host Bluetooth Device
-     */
-    public void connectToDevice(String deviceMacAddress) {
-        ClientThread clientThread = new ClientThread(deviceMacAddress);
-        clientThread.start();
-    }
-
-    /**
-     * Bluetooth Client Thread
-     * Connect to a Device running the Server Thread
-     */
-    private class ClientThread extends Thread {
-        private static final String TAG = "Bluetooth Client Thread";
-        private final BluetoothSocket mmSocket;
-        private final BluetoothDevice mmDevice;
-
-        public ClientThread(String deviceMacAddress) {
-            mmDevice = mBluetoothAdapter.getRemoteDevice(deviceMacAddress);
-            BluetoothSocket tmp = null;
-            try {
-                tmp = mmDevice.createInsecureRfcommSocketToServiceRecord(MY_UUID);
-            } catch (IOException e) {
-                Log.e(TAG, "Error creating Insecure Socket: " + e.getMessage());
-            }
-            mmSocket = tmp;
+    public BluetoothConnector(Router router, UUID uuid, String macAddress) {
+        this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        this.eventBus = EventBus.getDefault();
+        this.router = router;
+        this.uuid = uuid;
+        try {
+            this.socket = this.bluetoothAdapter.getRemoteDevice(macAddress)
+                    .createInsecureRfcommSocketToServiceRecord(uuid);
+        } catch (IOException e) {
+            Log.e(TAG, String.format("Error creating insecure socket: %s", e.getMessage()));
         }
 
-        public void run() {
-            BluetoothEvent bluetoothEvent;
-            try {
-                mmSocket.connect();
-                BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(mmSocket);
-                mRouter.setUpStream(blunoteBluetoothSocket);
-                blunoteBluetoothSocket.start();
+    }
 
-                bluetoothEvent = new BluetoothEvent(BluetoothEvent.CONNECTOR, true, mmDevice.getAddress());
-                mEventBus.post(bluetoothEvent);
-
-                Log.v(TAG, "Connection to a host Accepted");
-            } catch (IOException connectException) {
-                bluetoothEvent = new BluetoothEvent(BluetoothEvent.CONNECTOR, false, mmDevice.getAddress());
-                mEventBus.post(bluetoothEvent);
-
-                Log.e(TAG, "Connection to a host Refused: " + connectException.getMessage());
-                try {
-                    mmSocket.close();
-                } catch (IOException closeException) {
-                    Log.e(TAG, "Error closing socket: " + closeException.getMessage());
-                }
-            }
+    public void run() {
+        BluetoothEvent bluetoothEvent;
+        try {
+            this.socket.connect();
+            BlunoteSocket blunoteSocket = new BlunoteBluetoothSocket(this.socket);
+            new Thread(new ClientHandshake(blunoteSocket, router, true));
+            Log.v(TAG, "Connection to a host Accepted, starting handshake");
+        } catch (IOException connectException) {
+            bluetoothEvent = new BluetoothEvent(BluetoothEvent.CONNECTOR, false, this.socket.getRemoteDevice().getAddress());
+            eventBus.post(bluetoothEvent);
+            Log.e(TAG, String.format("Connection to a host Refused, handshake failed: %s", connectException.getMessage()));
+            close();
         }
+    }
 
-        public void cancel() {
-            try {
-                mmSocket.close();
-            } catch (IOException e) {
-                Log.e(TAG, "Error closing Socket: " + e.getMessage());
-            }
+    public void close() {
+        try {
+            this.socket.close();
+        } catch (IOException e) {
+            Log.e(TAG, String.format("Error closing socket: %s", e.getMessage()));
         }
     }
 }

@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
 import com.drexelsp.blunote.events.BluetoothEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -21,22 +22,25 @@ import java.util.UUID;
 public class BluetoothServerListener {
     private static final String TAG = "BluetoothServerListener";
     private static final String NAME = "BluNote";
+    private final Router router;
     private final UUID MY_UUID;
-
+    private NetworkPacket handshake;
     private BluetoothAdapter mBluetoothAdapter;
     private ServerThread mServerThread;
-    private BlunoteRouter mBlunoteRouter;
-    private EventBus mEventBus;
 
-    public BluetoothServerListener(UUID uuid) {
+    public BluetoothServerListener(Router router, UUID uuid, NetworkPacket handshake) {
         Log.v(TAG, "Created");
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mEventBus = EventBus.getDefault();
-        mBlunoteRouter = BlunoteRouter.getInstance();
-        MY_UUID = uuid;
+        this.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        this.router = router;
+        this.MY_UUID = uuid;
+        this.handshake = handshake;
 
         mServerThread = new ServerThread();
         mServerThread.start();
+    }
+
+    public void setHandshake(NetworkPacket handshake) {
+        this.handshake = handshake;
     }
 
     public void shutdown() {
@@ -60,21 +64,13 @@ public class BluetoothServerListener {
         }
 
         public void run() {
-            BluetoothEvent bluetoothEvent;
             BluetoothSocket socket;
-            BlunoteBluetoothSocket blunoteBluetoothSocket;
             while (true) {
                 try {
                     Log.v(TAG, "Listening for new connection");
                     socket = mmServerSocket.accept();
-                    blunoteBluetoothSocket socket = new BlunoteBluetoothSocket(socket);
-                    //Handshake(Runnable) -> creates new Connection(socket) and adds it to router
-
-
-                    new Thread(new Connection(socket)).start();
-
-                    //bluetoothEvent = new BluetoothEvent(BluetoothEvent.SERVER_LISTENER, true, socket.getRemoteDevice().getAddress());
-                    //mEventBus.post(bluetoothEvent);
+                    BlunoteSocket blunoteSocket = new BlunoteBluetoothSocket(socket);
+                    new Thread(new Handshake(blunoteSocket, router, handshake)).start();
 
                     Log.v(TAG, "New Client Connected: " + socket.getRemoteDevice());
                 } catch (IOException e) {
