@@ -65,12 +65,15 @@ public class NetworkService extends Service {
         sendBroadcast(intent);
     }
 
-    public void connectToNetwork(NetworkConfiguration configuration) {
-        BlunoteRouter.getInstance().setClientMode(getApplicationContext());
+    public void connectToNetwork(NetworkConfiguration config) {
+        this.router = new Router(config);
+        connectionHost.write()
+        /*BlunoteRouter.getInstance().setClientMode(getApplicationContext());
         BluetoothConnector bluetoothConnector = new BluetoothConnector(uuid);
         bluetoothConnector.connectToDevice(device);
         mBluetoothServerListener = new BluetoothServerListener(uuid);
         makeDiscoverable();
+        */
     }
 
     public void startNetwork(NetworkConfiguration config) {

@@ -62,20 +62,21 @@ public class BluetoothServerListener {
         public void run() {
             BluetoothEvent bluetoothEvent;
             BluetoothSocket socket;
+            BlunoteBluetoothSocket blunoteBluetoothSocket;
             while (true) {
                 try {
                     Log.v(TAG, "Listening for new connection");
                     socket = mmServerSocket.accept();
-                    if (socket != null) {
-                        BlunoteBluetoothSocket blunoteBluetoothSocket = new BlunoteBluetoothSocket(socket);
-                        mBlunoteRouter.addHandshaking(blunoteBluetoothSocket);
-                        blunoteBluetoothSocket.start();
+                    blunoteBluetoothSocket socket = new BlunoteBluetoothSocket(socket);
+                    //Handshake(Runnable) -> creates new Connection(socket) and adds it to router
 
-                        bluetoothEvent = new BluetoothEvent(BluetoothEvent.SERVER_LISTENER, true, socket.getRemoteDevice().getAddress());
-                        mEventBus.post(bluetoothEvent);
 
-                        Log.v(TAG, "New Client Connected: " + socket.getRemoteDevice());
-                    }
+                    new Thread(new Connection(socket)).start();
+
+                    //bluetoothEvent = new BluetoothEvent(BluetoothEvent.SERVER_LISTENER, true, socket.getRemoteDevice().getAddress());
+                    //mEventBus.post(bluetoothEvent);
+
+                    Log.v(TAG, "New Client Connected: " + socket.getRemoteDevice());
                 } catch (IOException e) {
                     Log.e(TAG, "Error connecting new Client: " + e.getMessage());
                     break;
