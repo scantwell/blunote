@@ -34,6 +34,7 @@ public final class MetaStore extends ContentProvider {
     private static final int USER_ID = 8;
     private static final int USER_TRACKS_LIST = 9;
     private static final int USER_TRACKS_ID = 10;
+    private static final int FIND_USERNAME = 11;
     private static final UriMatcher URI_MATCHER;
     private MetaStoreOpenHelper mHelper = null;
 
@@ -49,6 +50,7 @@ public final class MetaStore extends ContentProvider {
         URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "user/#", USER_ID);
         URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "user_tracks", USER_TRACKS_LIST);
         URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "user_tracks/#", USER_TRACKS_ID);
+        URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "find_username", FIND_USERNAME);
     }
 
     @Override
@@ -192,6 +194,8 @@ public final class MetaStore extends ContentProvider {
                 builder.appendWhere(UserTracks._ID + " = " +
                         uri.getLastPathSegment());
                 break;
+            case FIND_USERNAME:
+                return songUsernameQuery(db, selectionArgs);
             default:
                 throw new IllegalArgumentException(
                         "Unsupported URI: " + uri);
@@ -518,4 +522,10 @@ public final class MetaStore extends ContentProvider {
         }
         return updateCount;
     }
+
+    public Cursor songUsernameQuery(SQLiteDatabase db, String[] selectionArgs){
+        String QUERY = "SELECT u.username FROM user u INNER JOIN user_tracks ut ON ut.user_id = u.user_id WHERE ut.title=? AND ut.artist=? AND ut.album=?";
+        return db.rawQuery(QUERY, selectionArgs);
+    }
+
 }

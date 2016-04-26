@@ -34,7 +34,7 @@ public class Host extends User implements Observer {
         super(service, context);
         this.songHash = new ConcurrentHashMap<>();
         this.player = new Player(context);
-        new Thread(this.player).run();
+        new Thread(this.player).start();
     }
 
    /* public void onReceive(DeliveryInfo dinfo, MetadataUpdate message)
@@ -55,14 +55,17 @@ public class Host extends User implements Observer {
 
     @Override
     public void onReceive(DeliveryInfo dinfo, Recommendation message) {
-        //long id = findSongId(message.getSong().getTitle());
-        if (message.getUsername() == this.getName()) {
-            //playerSongById(id);
+        Log.v(TAG, "Entered on received");
+        int id = media.findSongId(message.getSong(),
+                message.getArtist(), message.getAlbum());
+        String username = message.getUsername().isEmpty() ?
+                media.findSongUsername(message.getSong(), message.getArtist(), message.getAlbum()) : message.getUsername();
+        if (username.equals(this.getName())) {
+            playerSongById(id);
         } else {
-            //addRequestSong(message.getUsername(), id);
-
+            addSongRequest(username, id);
         }
-        throw new RuntimeException("Not implemented.");
+        //throw new RuntimeException("Not implemented.");
     }
 
     @Override
@@ -88,7 +91,7 @@ public class Host extends User implements Observer {
     }
 
     /*
-    Could potentially cause problems with onRecommendation because of the User class also implemeting the same functionality
+    Could potentially cause problems with onRecommendation because of the User class also implementing the same functionality
      */
     @Override
     @Subscribe
@@ -96,16 +99,16 @@ public class Host extends User implements Observer {
         long id = Long.parseLong(event.songId);
         String owner = event.owner;
 
-        if (owner == this.name) {
+        if (owner.equals(this.name)) {
             playerSongById(id);
         } else {
-            super.onSongRecommendation(event);
+            addSongRequest(event.owner, id);
         }
     }
 
     @Override
     public void update(Observable observable, Object data) {
-        Song song = (Song) data;
+        Song song = (Song) observable;
         player.addSongUri(song.getUri());
         songHash.remove(song.getId());
     }

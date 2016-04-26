@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
+import com.drexelsp.blunote.provider.MetaStoreContract;
 import com.google.protobuf.ByteString;
 
 import java.io.File;
@@ -83,5 +84,33 @@ public class Media {
         Log.v(TAG, String.format("Id to URI: %s", rv));
         mediaCursor.close();
         return rv;
+    }
+
+    public int findSongId(String title, String artist, String album){
+        Uri uri = MetaStoreContract.Track.CONTENT_URI;
+        String[] proj = new String[]{MetaStoreContract.Track.SONG_ID};
+        String where = "title = ? AND artist = ? AND album = ?";
+        String[] params = new String[]{title, artist, album};
+        Cursor c = contentResolver.query(uri, proj, where, params, null);
+
+        if(c == null) {
+            throw new RuntimeException(String.format(
+                    "No valid song with params: Title - %s, Artist - %s, Album - %s", title, artist, album));
+        }
+        c.moveToFirst();
+        return c.getInt(c.getColumnIndex(MetaStoreContract.Track.SONG_ID));
+    }
+
+    public String findSongUsername(String title, String artist, String album) {
+        Uri uri = MetaStoreContract.FIND_USERNAME_URI;
+        String[] params = new String[]{title, artist, album};
+        Cursor c = contentResolver.query(uri, null, null, params, null);
+
+        if(c == null) {
+            throw new RuntimeException(String.format(
+                    "No valid username for params: Title - %s, Artist - %s, Album - %s", title, artist, album));
+        }
+        c.moveToFirst();
+        return c.getString(c.getColumnIndex(MetaStoreContract.User.USERNAME));
     }
 }

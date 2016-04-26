@@ -95,13 +95,17 @@ public class User {
 
     @Subscribe
     public void onSongRecommendation(SongRecommendationEvent event) {
-        String id = event.songId;
+        String title = event.song;
+        String artist = event.artist;
+        String album = event.album;
         String owner = event.owner;
 
-        BlunoteMessages.SongRequest.Builder builder = BlunoteMessages.SongRequest.newBuilder();
-        builder.setSongId(Long.parseLong(id));
+        BlunoteMessages.Recommendation.Builder builder = BlunoteMessages.Recommendation.newBuilder();
+        builder.setSong(title);
+        builder.setArtist(artist);
+        builder.setAlbum(album);
         builder.setUsername(owner);
-
+        builder.setType(BlunoteMessages.Recommendation.Type.SONG);
         service.send(builder.build());
     }
 }

@@ -26,7 +26,7 @@ public class Song extends Observable {
 
     public Song(long id, File file) throws FileNotFoundException {
         this.id = id;
-        this.target = 0;
+        this.target = 1;
         this.cache = new HashMap<>();
         this.fos = new FileOutputStream(file);
         this.uri = Uri.fromFile(file);
