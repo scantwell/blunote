@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import com.drexelsp.blunote.events.SongRecommendationEvent;
 import com.drexelsp.blunote.ui.PreferencesActivity;
+import com.google.protobuf.ByteString;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,6 +36,11 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public byte[] getWelcomePacket()
+    {
+        return new byte[0];
     }
 
     public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.WrapperMessage message)

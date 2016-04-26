@@ -36,6 +36,11 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
         return this.bluetoothInputStream;
     }
 
+    public String getAddress()
+    {
+        return this.socket.getRemoteDevice().getAddress();
+    }
+
     public void close() {
         try {
             this.bluetoothInputStream.close();

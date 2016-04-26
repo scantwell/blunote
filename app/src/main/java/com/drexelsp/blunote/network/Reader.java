@@ -1,5 +1,8 @@
 package com.drexelsp.blunote.network;
 
+import android.util.Log;
+
+import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -7,17 +10,29 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class Reader implements Runnable {
 
+    private BlunoteSocket socket;
     private BlunoteInputStream inputStream;
-    private ConcurrentLinkedQueue<byte[]> queue;
+    private Callback callback;
 
-    public Reader(ConcurrentLinkedQueue<byte[]> queue, BlunoteInputStream inputStream)
+    public Reader(Callback callback, BlunoteSocket socket)
     {
-        this.queue = queue;
-        this.inputStream = inputStream;
+        this.callback = callback;
+        this.socket = socket;
+        this.inputStream = socket.getInputStream();
     }
 
     @Override
     public void run() {
-
+        while(true)
+        {
+            try {
+                byte[] buf = this.inputStream.rawRead();
+                callback.onReceivePacket(buf);
+            } catch (IOException e) {
+                Log.w("Reader", String.format("Failed to read from connection %s",socket.getAddress()));
+                e.printStackTrace();
+                return;
+            }
+        }
     }
 }

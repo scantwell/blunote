@@ -8,17 +8,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Writer implements Runnable {
 
-    private CopyOnWriteArrayList<BlunoteOutputStream> outs;
-    private ConcurrentLinkedQueue<byte[]> queue;
+    private Router router;
 
-    public Writer(ConcurrentLinkedQueue queue, CopyOnWriteArrayList<BlunoteOutputStream> outs)
+    public Writer(Router router)
     {
-        this.queue = queue;
-        this.outs = outs;
+        this.router = router;
     }
 
     @Override
     public void run() {
-
+        while(true)
+        {
+            this.router.processMessage();
+        }
     }
 }

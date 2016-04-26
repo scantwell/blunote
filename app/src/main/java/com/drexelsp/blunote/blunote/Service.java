@@ -69,6 +69,7 @@ public class Service extends ClientService {
         configBuilder.setNotifyOnConnect(true);
         configBuilder.setNotifyOnDisconnect(true);
         configBuilder.setReceiveUpstream(true);
+        configBuilder.setHandshake(ByteString.copyFrom(user.getWelcomePacket()));
         super.startNetwork(configBuilder.build());
     }
 

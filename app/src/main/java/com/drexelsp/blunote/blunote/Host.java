@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import com.drexelsp.blunote.events.SongRecommendationEvent;
 import com.drexelsp.blunote.blunote.BlunoteMessages.*;
+import com.google.protobuf.ByteString;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -29,8 +30,10 @@ public class Host extends User {
         new Thread(this.player).run();
     }
 
-   /* public void onReceive(DeliveryInfo dinfo, MetadataUpdate message)
+   public void onReceive(DeliveryInfo dinfo, MetadataUpdate message)
     {
+        super.onReceive(dinfo, message);
+
         if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
             this.metadata.addMetadata(message);
         } else {
@@ -38,7 +41,8 @@ public class Host extends User {
         }
         // Contains the removal of metadata
         //this.service.send(BlunoteMessages.MetadataUpdate);
-    }*/
+        updateWelcomePacket();
+    }
 
     @Override
     public void onReceive(DeliveryInfo dinfo, MultiAnswer message)
@@ -84,5 +88,19 @@ public class Host extends User {
         builder.setUsername(owner);
 
         service.send(builder.build());
+    }
+
+    private void updateWelcomePacket()
+    {
+        this.service.updateHandshake(getWelcomePacket());
+    }
+
+    public byte[] getWelcomePacket()
+    {
+        WelcomePacket.Builder wp = WelcomePacket.newBuilder();
+        wp.setNetworkName(this.serverName);
+        wp.setNumSongs("0");
+        wp.setNumUsers("1");
+        return wp.build().toByteArray();
     }
 }
