@@ -66,7 +66,7 @@ abstract public class ClientService extends Service {
         }
     }
 
-    protected void updateHandshake(byte[] handshake){
+    public void updateHandshake(byte[] handshake){
         Message msg = Message.obtain(null, ClientHandler.UPDATE_HANDSHAKE, 0, 0);
         Bundle bundle = new Bundle(1);
         bundle.putByteArray("handshake", handshake);
