@@ -16,10 +16,12 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.drexelsp.blunote.beans.ConnectionListItem;
+import com.drexelsp.blunote.blunote.BlunoteMessages;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.jar.Manifest;
 
 /**
@@ -27,10 +29,12 @@ import java.util.jar.Manifest;
  */
 public class BluetoothScanner extends BroadcastReceiver {
     private static final String TAG = "Bluetooth Scanner";
+    private static final UUID uuid = UUID.fromString("d0153a8f-b137-4fb2-a5be-6788ece4834a");
     private BluetoothAdapter mBluetoothAdapter;
     private Context mContext;
     private ArrayAdapter<ConnectionListItem> mAdapter;
     private ArrayList<BluetoothDevice> mDevices;
+    private ArrayList<String> networkDevices;
     private Set<Integer> whiteList;
     private ProgressDialog dialog;
 
@@ -40,6 +44,7 @@ public class BluetoothScanner extends BroadcastReceiver {
         mContext = context;
 
         mDevices = new ArrayList<>();
+        networkDevices = new ArrayList<>();
         whiteList = new HashSet<>();
         // Add Other Devices?
         whiteList.add(BluetoothClass.Device.PHONE_SMART);
@@ -101,11 +106,12 @@ public class BluetoothScanner extends BroadcastReceiver {
             Parcelable[] uuids = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
             if (uuids != null) {
                 for (Parcelable uuid : uuids) {
-                    if (uuid.toString().equals("d0153a8f-b137-4fb2-a5be-6788ece4834a")) {
+                    if (uuid.toString().equals(uuid.toString())) {
                         Log.v(TAG, String.format("Blunote Device Found: %s", device.getName()));
 
                         // Get Welcome Packet
                         // Still needs to be implemented
+                        networkDevices.add(device.getAddress());
 
                         // Temporary Solution
                         ConnectionListItem item = new ConnectionListItem();
@@ -119,13 +125,33 @@ public class BluetoothScanner extends BroadcastReceiver {
                 }
             }
 
-            if (mDevices.isEmpty()) {
+            if (!mDevices.isEmpty()) {
+                BluetoothDevice nextDevice = mDevices.remove(0);
+                nextDevice.fetchUuidsWithSdp();
+            } else {
                 Log.v(TAG, "Fetching UUIDs Completed, Deregister Receiver");
                 context.unregisterReceiver(this);
                 dialog.hide();
-            } else {
-                BluetoothDevice nextDevice = mDevices.remove(0);
-                nextDevice.fetchUuidsWithSdp();
+
+
+                ArrayList<BluetoothGreeter> greeters = new ArrayList<>();
+                for (String macAddress : networkDevices) {
+                    BluetoothGreeter greeter = new BluetoothGreeter(macAddress, uuid);
+                    greeter.start();
+                    greeters.add(greeter);
+                }
+
+                ArrayList<BlunoteMessages.NetworkPacket> packets = new ArrayList<>();
+                for (BluetoothGreeter greeter : greeters) {
+                    try {
+                        greeter.join();
+                        packets.add(greeter.getPacket());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                //
             }
         }
     }
