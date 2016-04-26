@@ -3,15 +3,7 @@ package com.drexelsp.blunote.network;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * Created by omnia on 2/12/16.
@@ -22,9 +14,6 @@ import java.io.OutputStream;
 public class BlunoteBluetoothSocket implements BlunoteSocket {
     private static final String TAG = "BlunoteBluetoothSocket";
     private BluetoothSocket socket;
-    private static int BUFFERSIZE = 1024;
-
-
     private BluetoothInputStream bluetoothInputStream;
     private BluetoothOutputStream bluetoothOutputStream;
 
