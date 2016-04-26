@@ -1,5 +1,7 @@
 package com.drexelsp.blunote.network;
 
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
+
 import java.io.IOException;
 
 /**
@@ -7,5 +9,7 @@ import java.io.IOException;
  */
 public interface BlunoteInputStream  {
 
-    byte[] read() throws IOException;
+    NetworkPacket read() throws IOException;
+
+    byte[] rawRead() throws IOException;
 }
