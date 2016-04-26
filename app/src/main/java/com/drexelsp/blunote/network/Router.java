@@ -31,17 +31,17 @@ public class Router {
         writers.add(new Writer(upBucket, upstreamOuts));
     }
 
-    public void addUpstream(BlunoteBluetoothSocket socket)
+    public void addUpstream(BlunoteSocket socket)
     {
         this.addConnection(socket, downBucket, upstreamOuts);
     }
 
-    public void addDownstream(BlunoteBluetoothSocket socket)
+    public void addDownstream(BlunoteSocket socket)
     {
         this.addConnection(socket, upBucket, downstreamOuts);
     }
 
-    private void addConnection(BlunoteBluetoothSocket socket, ConcurrentLinkedQueue<byte[]> bucket, CopyOnWriteArrayList<BlunoteOutputStream> streams)
+    private void addConnection(BlunoteSocket socket, ConcurrentLinkedQueue<byte[]> bucket, CopyOnWriteArrayList<BlunoteOutputStream> streams)
     {
         BlunoteOutputStream out = socket.getOutputStream();
         BlunoteInputStream in = socket.getInputStream();
@@ -49,7 +49,7 @@ public class Router {
         readers.add(new Reader(bucket, in));
     }
 
-    public void addUpstreamMessage(byte[] )
+    public void addUpstreamMessage(byte[])
     {
 
     }
