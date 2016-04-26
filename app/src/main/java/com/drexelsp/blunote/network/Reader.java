@@ -7,10 +7,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class Reader implements Runnable {
 
-    private BluetoothInputStream inputStream;
+    private BlunoteInputStream inputStream;
     private ConcurrentLinkedQueue<byte[]> queue;
 
-    public Reader(ConcurrentLinkedQueue<byte[]> queue, BluetoothInputStream inputStream)
+    public Reader(ConcurrentLinkedQueue<byte[]> queue, BlunoteInputStream inputStream)
     {
         this.queue = queue;
         this.inputStream = inputStream;

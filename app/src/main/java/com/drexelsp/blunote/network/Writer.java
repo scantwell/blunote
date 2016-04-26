@@ -8,10 +8,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Writer implements Runnable {
 
-    private CopyOnWriteArrayList<BluetoothOutputStream> outs;
+    private CopyOnWriteArrayList<BlunoteOutputStream> outs;
     private ConcurrentLinkedQueue<byte[]> queue;
 
-    public Writer(ConcurrentLinkedQueue queue, CopyOnWriteArrayList<BluetoothOutputStream> outs)
+    public Writer(ConcurrentLinkedQueue queue, CopyOnWriteArrayList<BlunoteOutputStream> outs)
     {
         this.queue = queue;
         this.outs = outs;

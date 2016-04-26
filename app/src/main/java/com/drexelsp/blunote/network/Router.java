@@ -15,16 +15,47 @@ public class Router {
     private ArrayList<Writer> writers;
     private ConcurrentLinkedQueue<byte[]> upBucket;
     private ConcurrentLinkedQueue<byte[]> downBucket;
-    private CopyOnWriteArrayList<BluetoothOutputStream> upstreamOuts;
-    private CopyOnWriteArrayList<BluetoothOutputStream> downstreamOuts;
+    private CopyOnWriteArrayList<BlunoteOutputStream> upstreamOuts;
+    private CopyOnWriteArrayList<BlunoteOutputStream> downstreamOuts;
 
 
     public Router(BlunoteMessages.NetworkConfiguration config)
     {
+        this.upstreamOuts = new CopyOnWriteArrayList<>();
+        this.downstreamOuts = new CopyOnWriteArrayList<>();
+        this.upBucket = new ConcurrentLinkedQueue<>();
+        this.downBucket = new ConcurrentLinkedQueue<>();
+        this.readers = new ArrayList<>();
+        this.writers = new ArrayList<>();
+        writers.add(new Writer(downBucket, downstreamOuts));
+        writers.add(new Writer(upBucket, upstreamOuts));
+    }
+
+    public void addUpstream(BlunoteBluetoothSocket socket)
+    {
+        this.addConnection(socket, downBucket, upstreamOuts);
+    }
+
+    public void addDownstream(BlunoteBluetoothSocket socket)
+    {
+        this.addConnection(socket, upBucket, downstreamOuts);
+    }
+
+    private void addConnection(BlunoteBluetoothSocket socket, ConcurrentLinkedQueue<byte[]> bucket, CopyOnWriteArrayList<BlunoteOutputStream> streams)
+    {
+        BlunoteOutputStream out = socket.getOutputStream();
+        BlunoteInputStream in = socket.getInputStream();
+        streams.add(out);
+        readers.add(new Reader(bucket, in));
+    }
+
+    public void addUpstreamMessage(byte[] )
+    {
 
     }
 
-    public void addUpstream(BluetoothSocket)
+    public void addDownstreamMessage(byte[])
+    {
 
-
+    }
 }
