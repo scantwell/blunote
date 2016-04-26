@@ -79,7 +79,7 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
     public void onClick(View v) {
         if (v == song_view_add_to_queue) {
             SongRecommendationEvent event = new SongRecommendationEvent(
-                    title, artist, album, username);
+                    id, title, artist, album, username);
             EventBus.getDefault().post(event);
         }
 

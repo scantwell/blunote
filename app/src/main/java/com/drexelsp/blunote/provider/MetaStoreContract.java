@@ -10,6 +10,7 @@ import android.provider.BaseColumns;
 public final class MetaStoreContract {
     public static final String AUTHORITY = "com.drexelsp.blunote.blunote.metastore";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+    public static final Uri FIND_USERNAME_URI = Uri.withAppendedPath(CONTENT_URI, "find_username");
 
     public static final class Track implements CommonColumns {
         public static final String DURATION = "duration";

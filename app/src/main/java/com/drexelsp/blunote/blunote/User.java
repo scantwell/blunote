@@ -101,7 +101,9 @@ public class User {
         String owner = event.owner;
 
         BlunoteMessages.Recommendation.Builder builder = BlunoteMessages.Recommendation.newBuilder();
-        builder.setSong();
+        builder.setSong(title);
+        builder.setArtist(artist);
+        builder.setAlbum(album);
         builder.setUsername(owner);
         service.send(builder.build());
     }

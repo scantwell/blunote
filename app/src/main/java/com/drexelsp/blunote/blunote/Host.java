@@ -55,14 +55,16 @@ public class Host extends User implements Observer {
 
     @Override
     public void onReceive(DeliveryInfo dinfo, Recommendation message) {
-        long id = media.findSongId(message.getSong().getTitle(),
-                message.getArtist().getArtist(), message.getAlbum().getAlbum(), message.getUsername());
-        if (message.getUsername() == this.getName()) {
+        int id = media.findSongId(message.getSong(),
+                message.getArtist(), message.getAlbum());
+        String username = message.getUsername() != null ? message.getUsername() :
+                media.findSongUsername(message.getSong(), message.getArtist(), message.getAlbum());
+        if (username.equals(this.getName())) {
             playerSongById(id);
         } else {
-            addSongRequest(message.getUsername(), id);
+            addSongRequest(username, id);
         }
-        throw new RuntimeException("Not implemented.");
+        //throw new RuntimeException("Not implemented.");
     }
 
     @Override
@@ -88,7 +90,7 @@ public class Host extends User implements Observer {
     }
 
     /*
-    Could potentially cause problems with onRecommendation because of the User class also implemeting the same functionality
+    Could potentially cause problems with onRecommendation because of the User class also implementing the same functionality
      */
     @Override
     @Subscribe
@@ -99,7 +101,7 @@ public class Host extends User implements Observer {
         if (owner == this.name) {
             playerSongById(id);
         } else {
-            super.onSongRecommendation(event);
+            addSongRequest(event.owner, id);
         }
     }
 
