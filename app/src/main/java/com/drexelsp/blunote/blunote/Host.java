@@ -34,7 +34,7 @@ public class Host extends User implements Observer {
         super(service, context);
         this.songHash = new ConcurrentHashMap<>();
         this.player = new Player(context);
-        new Thread(this.player).run();
+        new Thread(this.player).start();
     }
 
    /* public void onReceive(DeliveryInfo dinfo, MetadataUpdate message)
@@ -57,8 +57,8 @@ public class Host extends User implements Observer {
     public void onReceive(DeliveryInfo dinfo, Recommendation message) {
         int id = media.findSongId(message.getSong(),
                 message.getArtist(), message.getAlbum());
-        String username = message.getUsername() != null ? message.getUsername() :
-                media.findSongUsername(message.getSong(), message.getArtist(), message.getAlbum());
+        String username = message.getUsername().isEmpty() ?
+                media.findSongUsername(message.getSong(), message.getArtist(), message.getAlbum()) : message.getUsername();
         if (username.equals(this.getName())) {
             playerSongById(id);
         } else {
