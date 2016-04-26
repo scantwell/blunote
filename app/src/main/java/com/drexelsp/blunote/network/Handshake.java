@@ -2,8 +2,8 @@ package com.drexelsp.blunote.network;
 
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket;
 import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
+import com.google.protobuf.ByteString;
 
 import java.io.IOException;
 
@@ -11,59 +11,56 @@ import java.io.IOException;
  * Created by omnia on 4/21/16.
  */
 public class Handshake implements Runnable{
-    private static final String TAG = "Connection";
-    private BlunoteBluetoothSocket socket;
-    private BlunoteRouter router;
+    private static final String TAG = "Handshake";
+    private BlunoteSocket socket;
+    private BlunoteInputStream inputStream;
+    private BlunoteOutputStream outputStream;
+    private Router router;
+    private NetworkPacket handshakePacket;
 
-    public Handshake(BlunoteBluetoothSocket blunoteBluetoothSocket) {
-        this.socket = blunoteBluetoothSocket;
-        this.router = BlunoteRouter.getInstance();
+    public Handshake(BlunoteSocket socket, Router router, NetworkPacket handshakePacket) {
+        this.socket = socket;
+        this.inputStream = socket.getInputStream();
+        this.outputStream = socket.getOutputStream();
+        this.router = router;
+        this.handshakePacket = handshakePacket;
     }
 
     public void run() {
-        // TODO: Get Handshake Packet (Welcome + Network) from configuration
-        WelcomePacket.Builder WPBuilder = WelcomePacket.newBuilder();
-        WelcomePacket wp = WPBuilder.build();
+        write(handshakePacket.toByteString());
 
-        NetworkPacket.Builder NPBuilder = NetworkPacket.newBuilder();
-        NPBuilder.setType(NetworkPacket.Type.HANDSHAKE);
-        //NPBuilder.setMacAddresses(0, "");
-        NPBuilder.setPdu(wp.toByteString());
-        NetworkPacket handshake = NPBuilder.build();
-
-        write(handshake);
         NetworkPacket response = read();
-        switch(response.getType()) {
-            case NEW:
-                // Maintain Connection
-                this.router.addDownStream(this.socket);
-                break;
-            case DROP:
-                // Clean up and remove Socket
-                this.router.removeHandshaking(this.socket);
-                this.socket.close();
-                return;
-            default:
-                Log.e(TAG, "Bad handshake response");
-                return;
+        if (response != null) {
+            switch (response.getType()) {
+                case NEW:
+                    this.router.addDownstream(this.socket);
+                    break;
+                case DROP:
+                    this.socket.close();
+                    break;
+                default:
+                    Log.e(TAG, "Bad handshake response, closing connection");
+                    this.socket.close();
+                    break;
+            }
         }
     }
 
     private NetworkPacket read() {
         try {
-            return this.socket.read();
+            return this.inputStream.read();
         } catch (IOException e) {
-            Log.e(TAG, "Unable to read from socket");
+            Log.e(TAG, String.format("Unable to read from input stream: %s", e.getMessage()));
             return null;
         }
     }
 
-    private boolean write(NetworkPacket packet){
+    private int write(ByteString byteString) {
         try {
-            return this.socket.write(packet);
+            return this.outputStream.write(byteString);
         } catch (IOException e) {
-            Log.e(TAG, String.format("Unable to write to socket: %s", e.getMessage()));
-            return false;
+            Log.e(TAG, String.format("Unable to write to output stream: %s", e.getMessage()));
+            return 0;
         }
     }
 }
