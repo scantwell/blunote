@@ -55,6 +55,7 @@ public class Host extends User implements Observer {
 
     @Override
     public void onReceive(DeliveryInfo dinfo, Recommendation message) {
+        Log.v(TAG, "Entered on received");
         int id = media.findSongId(message.getSong(),
                 message.getArtist(), message.getAlbum());
         String username = message.getUsername().isEmpty() ?
@@ -98,7 +99,7 @@ public class Host extends User implements Observer {
         long id = Long.parseLong(event.songId);
         String owner = event.owner;
 
-        if (owner == this.name) {
+        if (owner.equals(this.name)) {
             playerSongById(id);
         } else {
             addSongRequest(event.owner, id);
@@ -107,7 +108,7 @@ public class Host extends User implements Observer {
 
     @Override
     public void update(Observable observable, Object data) {
-        Song song = (Song) data;
+        Song song = (Song) observable;
         player.addSongUri(song.getUri());
         songHash.remove(song.getId());
     }

@@ -105,6 +105,7 @@ public class User {
         builder.setArtist(artist);
         builder.setAlbum(album);
         builder.setUsername(owner);
+        builder.setType(BlunoteMessages.Recommendation.Type.SONG);
         service.send(builder.build());
     }
 }

@@ -89,7 +89,7 @@ public class Media {
     public int findSongId(String title, String artist, String album){
         Uri uri = MetaStoreContract.Track.CONTENT_URI;
         String[] proj = new String[]{MetaStoreContract.Track.SONG_ID};
-        String where = "WHERE title = ? AND artist = ? AND album = ?";
+        String where = "title = ? AND artist = ? AND album = ?";
         String[] params = new String[]{title, artist, album};
         Cursor c = contentResolver.query(uri, proj, where, params, null);
 
