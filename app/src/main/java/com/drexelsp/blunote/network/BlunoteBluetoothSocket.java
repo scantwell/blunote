@@ -22,58 +22,36 @@ import java.io.OutputStream;
 public class BlunoteBluetoothSocket implements BlunoteSocket {
     private static final String TAG = "BlunoteBluetoothSocket";
     private BluetoothSocket socket;
-    private final InputStream inputStream;
-    private final OutputStream outputStream ;
     private static int BUFFERSIZE = 1024;
+
+
+    private BluetoothInputStream bluetoothInputStream;
+    private BluetoothOutputStream bluetoothOutputStream;
+
 
     public BlunoteBluetoothSocket(BluetoothSocket socket) {
         this.socket = socket;
-        InputStream tmpIn = null;
-        OutputStream tmpOut = null;
-
         try {
-            tmpIn = socket.getInputStream();
-            tmpOut = socket.getOutputStream();
+            this.bluetoothInputStream = new BluetoothInputStream(socket);
+            this.bluetoothOutputStream = new BluetoothOutputStream(socket);
         } catch (IOException e) {
             Log.e(TAG, "Error setting Input/Output Stream: " + e.getMessage());
         }
-
-        this.inputStream = tmpIn;
-        this.outputStream = tmpOut;
     }
 
-    public boolean write(NetworkPacket networkPacket) throws IOException {
-        byte[] bytes = networkPacket.toByteArray();
-        DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(outputStream, bytes.length + 4));
-        dataOutputStream.writeInt(bytes.length);
-        for (int i = 0; i < bytes.length; i += BUFFERSIZE) {
-            int b = ((i + BUFFERSIZE) < bytes.length) ? BUFFERSIZE : bytes.length - i;
-            dataOutputStream.write(bytes, i, b);
-            dataOutputStream.flush();
-        }
-        return true;
+    public BluetoothOutputStream getOutputStream() {
+        return this.bluetoothOutputStream;
     }
 
-    public NetworkPacket read() throws IOException {
-        DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(inputStream));
-        int messageSize, bytes;
-        byte[] buffer;
-        messageSize = dataInputStream.readInt();
-        bytes = 0;
-        buffer = new byte[messageSize];
-        while (bytes < messageSize) {
-            int b = ((bytes + BUFFERSIZE) < messageSize) ? BUFFERSIZE : messageSize - bytes;
-            bytes += dataInputStream.read(buffer, bytes, b);
-        }
-        return NetworkPacket.parseFrom(buffer);
+    public BluetoothInputStream getInputStream() {
+        return this.bluetoothInputStream;
     }
-
 
     public void close() {
         try {
-            inputStream.close();
-            outputStream.close();
-            socket.close();
+            this.bluetoothInputStream.close();
+            this.bluetoothOutputStream.close();
+            this.socket.close();
         } catch (IOException e) {
             Log.e(TAG, "Error closing Socket: " + e.getMessage());
         }

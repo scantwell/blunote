@@ -36,4 +36,12 @@ public class BluetoothInputStream implements BlunoteInputStream {
         }
         return buffer;
     }
+
+    public void close() {
+        try {
+            this.inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

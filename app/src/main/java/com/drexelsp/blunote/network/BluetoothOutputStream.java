@@ -50,4 +50,12 @@ public class BluetoothOutputStream implements BlunoteOutputStream{
         }
         return bytes.length;
     }
+
+    public void close() {
+        try {
+            this.outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
