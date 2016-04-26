@@ -66,6 +66,18 @@ abstract public class ClientService extends Service {
         }
     }
 
+    public void disconnect()
+    {
+        Message msg = Message.obtain(null, ClientHandler.DISCONNECT, 0, 0);
+        Bundle bundle = new Bundle(1);
+        msg.setData(bundle);
+        try {
+            mConnection.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void updateHandshake(byte[] handshake){
         Message msg = Message.obtain(null, ClientHandler.UPDATE_HANDSHAKE, 0, 0);
         Bundle bundle = new Bundle(1);

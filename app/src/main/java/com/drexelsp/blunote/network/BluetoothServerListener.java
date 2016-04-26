@@ -24,11 +24,11 @@ public class BluetoothServerListener {
     private static final String NAME = "BluNote";
     private final Router router;
     private final UUID MY_UUID;
-    private NetworkPacket handshake;
+    private byte[] handshake;
     private BluetoothAdapter mBluetoothAdapter;
     private ServerThread mServerThread;
 
-    public BluetoothServerListener(Router router, UUID uuid, NetworkPacket handshake) {
+    public BluetoothServerListener(Router router, UUID uuid, byte[] handshake) {
         Log.v(TAG, "Created");
         this.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         this.router = router;
@@ -39,7 +39,7 @@ public class BluetoothServerListener {
         mServerThread.start();
     }
 
-    public void setHandshake(NetworkPacket handshake) {
+    public void setHandshake(byte[] handshake) {
         this.handshake = handshake;
     }
 

@@ -83,6 +83,9 @@ public class Service extends ClientService {
         super.connectToNetwork(configBuilder.build());
     }
 
+    public void disconnect() {
+        super.disconnect();
+    }
     public void send(SingleAnswer message) {
         Pdu pdu = createMessage()
                 .setMessage(WrapperMessage.newBuilder()

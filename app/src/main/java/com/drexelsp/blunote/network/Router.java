@@ -1,8 +1,15 @@
 package com.drexelsp.blunote.network;
 
 import android.telecom.Call;
+import android.util.Log;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages;
+import com.drexelsp.blunote.events.OnConnectionEvent;
+import com.drexelsp.blunote.events.OnDisconnectionEvent;
+import com.drexelsp.blunote.events.OnReceiveDownstream;
+import com.drexelsp.blunote.events.OnReceiveUpstream;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,8 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Router extends Thread {
 
-    private ArrayList<Reader> readers;
-    private ArrayList<Writer> writers;
+    private static String TAG = "Router";
     private ConcurrentLinkedQueue<byte[]> upBucket;
     private ConcurrentLinkedQueue<byte[]> downBucket;
     private CopyOnWriteArrayList<BlunoteSocket> upSockets;
@@ -25,6 +31,11 @@ public class Router extends Thread {
     private boolean isRunning;
     private Callback downstreamCallback;
     private Callback upstreamCallback;
+    private ArrayList<String> networkList;
+    private boolean notifyOnReceiveUpstream;
+    private boolean notifyOnReceiveDownstream;
+    private boolean notifyOnDisconnect;
+    private boolean notifyOnConnect;
 
 
     public Router()
@@ -36,33 +47,42 @@ public class Router extends Thread {
         this.downSockets = new CopyOnWriteArrayList<>();
         this.upBucket = new ConcurrentLinkedQueue<>();
         this.downBucket = new ConcurrentLinkedQueue<>();
-        this.readers = new ArrayList<>();
-        this.writers = new ArrayList<>();
-        writers.add(new Writer(this));
-        writers.add(new Writer(this));
+        this.networkList = new ArrayList<>();
     }
 
     public void start()
     {
+        Log.d(TAG, "Starting router.");
         super.start();
         this.isRunning = true;
     }
 
     public void shutdown()
     {
+
+        Log.d(TAG, "Shutting down router.");
         this.isRunning = false;
     }
 
-    public void registerUpstream(Callback cb) {
-        this.upstreamCallback = cb;
+    public void setNotifyOnReceiveUpstream(boolean notifyOnReceiveUpstream) {
+        this.notifyOnReceiveUpstream = notifyOnReceiveUpstream;
     }
 
-    public void registerDownstream(Callback cb) {
-        this.downstreamCallback = cb;
+    public void setNotifyOnReceiveDownstream(boolean notifyOnReceiveDownstream) {
+        this.notifyOnReceiveDownstream = notifyOnReceiveDownstream;
+    }
+
+    public void setNotifyOnDisconnect(boolean notifyOnDisconnect) {
+        this.notifyOnDisconnect = notifyOnDisconnect;
+    }
+
+    public void setNotifyOnConnect(boolean notifyOnConnect) {
+        this.notifyOnConnect = notifyOnConnect;
     }
 
     public void addUpstream(BlunoteSocket socket)
     {
+        networkList.add(socket.getAddress());
         new Thread(new Reader(new UpstreamCallback(this), socket)).start();
         upSockets.add(socket);
         upOuts.add(socket.getOutputStream());
@@ -70,9 +90,20 @@ public class Router extends Thread {
 
     public void addDownstream(BlunoteSocket socket)
     {
+        this.onConnection(socket);
         new Thread(new Reader(new DownstreamCallback(this), socket)).start();
         downSockets.add(socket);
         downOuts.add(socket.getOutputStream());
+    }
+
+    private void onConnection(BlunoteSocket socket)
+    {
+        networkList.add(socket.getAddress());
+        if (notifyOnConnect)
+        {
+            OnConnectionEvent event = new OnConnectionEvent(socket.getAddress());
+            EventBus.getDefault().post(event);
+        }
     }
 
 
@@ -101,8 +132,36 @@ public class Router extends Thread {
                 this.sendUpstream(data);
             }
         }
-        //clean up
+        cleanUp();
     }
+
+    private void onDisconnect(BlunoteSocket socket)
+    {
+        if (notifyOnDisconnect)
+        {
+            OnDisconnectionEvent event = new OnDisconnectionEvent(socket.getAddress());
+            EventBus.getDefault().post(event);
+        }
+    }
+
+    private void cleanUp() {
+        Log.d(TAG, "Closing all open connections.");
+        closeConnections(upSockets);
+        closeConnections(downSockets);
+    }
+
+    private void closeConnections(CopyOnWriteArrayList<BlunoteSocket> sockets)
+    {
+        for (BlunoteSocket s : sockets)
+        {
+            try {
+                s.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     protected synchronized void waitForMessages() {
         while (downBucket.size() < 1 && upBucket.size() < 1) {
             try {
@@ -113,14 +172,12 @@ public class Router extends Thread {
         }
     }
 
-    public void onDrop(BlunoteSocket socket)
-    {
-
-    }
-
     private void sendDownstream(byte[] data)
     {
-        if (this.downstreamCallback != null) {
+        if (notifyOnReceiveDownstream)
+        {
+            OnReceiveDownstream event = new OnReceiveDownstream(data);
+            EventBus.getDefault().post(event);
             this.downstreamCallback.onReceivePacket(data);
         }
         send(data, downOuts);
@@ -128,7 +185,9 @@ public class Router extends Thread {
 
     private void sendUpstream(byte[] data)
     {
-        if (this.upstreamCallback != null) {
+        if (notifyOnReceiveUpstream) {
+            OnReceiveUpstream event = new OnReceiveUpstream(data);
+            EventBus.getDefault().post(event);
             this.upstreamCallback.onReceivePacket(data);
         }
         send(data, upOuts);
@@ -142,6 +201,7 @@ public class Router extends Thread {
                 outs.get(i).write(data);
             } catch (IOException e) {
                 e.printStackTrace();
+
             }
         }
     }

@@ -17,7 +17,12 @@ import android.util.Log;
 import com.drexelsp.blunote.blunote.BlunoteMessages.*;
 import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.events.BluetoothEvent;
+import com.drexelsp.blunote.events.OnConnectionEvent;
+import com.drexelsp.blunote.events.OnDisconnectionEvent;
+import com.drexelsp.blunote.events.OnReceiveDownstream;
+import com.drexelsp.blunote.events.OnReceiveUpstream;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,6 +44,11 @@ public class NetworkService extends Service {
     private NetworkConfiguration configuration;
     private Router router;
 
+    public NetworkService()
+    {
+        EventBus.getDefault().register(this);
+    }
+
     public void onReceived(String data) {
         Log.v(TAG, "Received a message.");
         Intent intent = new Intent();
@@ -55,20 +65,9 @@ public class NetworkService extends Service {
         blunoteRouter.send(msg);
     }
 
-    @Subscribe
-    public void onBluetoothEvent(BluetoothEvent bluetoothEvent) {
-        Intent intent = new Intent();
-        intent.setAction("networkservice.onrecieved");
-        intent.putExtra("Type", "BluetoothEvent");
-        intent.putExtra("Event", bluetoothEvent.event);
-        intent.putExtra("Success", bluetoothEvent.success);
-        intent.putExtra("MacAddress", bluetoothEvent.macAddress);
-        sendBroadcast(intent);
-    }
-
     public void connectToNetwork(NetworkConfiguration config) {
         this.router = new Router();
-        this.router.registerUpstream(new OnReceiveCallback(this));
+        this.router.setNotifyOnReceiveUpstream(true);
 
         /*BlunoteRouter.getInstance().setClientMode(getApplicationContext());
         BluetoothConnector bluetoothConnector = new BluetoothConnector(uuid);
@@ -78,15 +77,55 @@ public class NetworkService extends Service {
         */
     }
 
-    public void onReceiveUpstream(byte[] data)
+    public void disconnect()
     {
+        Log.w(TAG, "Disconnecting from network.");
+        this.router.shutdown();
+    }
+
+    @Subscribe
+    public void onConnectionEvent(OnConnectionEvent event)
+    {
+
+    }
+
+    @Subscribe
+    public void onDisconnectEvent(OnDisconnectionEvent event)
+    {
+
+    }
+
+    @Subscribe
+    public void onReceiveUpstream(OnReceiveUpstream event)
+    {
+        try {
+            NetworkPacket np = event.getNetworkPacket();
+            if (NetworkPacket.Type.NETWORK_DATA_UPDATE.equals(np.getType()))
+            {
+
+            }
+            if (np.hasPdu())
+            {
+                //broadcast np.getPdu()
+            }
+        } catch (InvalidProtocolBufferException e) {
+            e.printStackTrace();
+        }
+
+
         // send a broadcast request ?or check the networkpack for other events?
+    }
+
+    @Subscribe
+    public void onReceiveDownstream(OnReceiveDownstream event)
+    {
+
     }
 
     public void startNetwork(NetworkConfiguration config) {
         this.configuration = config;
         BlunoteRouter.getInstance().setHostMode(getApplicationContext());
-        mBluetoothServerListener = new BluetoothServerListener(uuid);
+        mBluetoothServerListener = new BluetoothServerListener(this.router, uuid, config.getHandshake().toByteArray());
         makeDiscoverable();
     }
 

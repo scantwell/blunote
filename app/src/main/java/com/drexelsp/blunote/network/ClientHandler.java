@@ -28,6 +28,7 @@ public class ClientHandler extends Handler {
     static public final int CONNECT_TO_NETWORK = 4;
     static public final int START_NEW_NETWORK = 5;
     static public final int UPDATE_HANDSHAKE = 6;
+    static public final int DISCONNECT = 7;
     private final WeakReference<NetworkService> mService;
     private String TAG = "NetworkServiceClientHandler";
 
@@ -83,6 +84,8 @@ public class ClientHandler extends Handler {
                     Log.e(TAG, "Failed to update handshake content. Could not serialize.");
                 }
                 break;
+            case DISCONNECT:
+                this.mService.get().disconnect();
             default:
                 Log.v(TAG, "Unknown message type, sending to parent handleMessage().");
                 super.handleMessage(msg);

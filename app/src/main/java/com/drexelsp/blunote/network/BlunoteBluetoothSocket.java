@@ -14,26 +14,17 @@ import java.io.IOException;
 public class BlunoteBluetoothSocket implements BlunoteSocket {
     private static final String TAG = "BlunoteBluetoothSocket";
     private BluetoothSocket socket;
-    private BluetoothInputStream bluetoothInputStream;
-    private BluetoothOutputStream bluetoothOutputStream;
-
 
     public BlunoteBluetoothSocket(BluetoothSocket socket) {
         this.socket = socket;
-        try {
-            this.bluetoothInputStream = new BluetoothInputStream(socket);
-            this.bluetoothOutputStream = new BluetoothOutputStream(socket);
-        } catch (IOException e) {
-            Log.e(TAG, "Error setting Input/Output Stream: " + e.getMessage());
-        }
     }
 
-    public BluetoothOutputStream getOutputStream() {
-        return this.bluetoothOutputStream;
+    public BluetoothOutputStream getOutputStream() throws IOException {
+        return new BluetoothOutputStream(this.socket);
     }
 
-    public BluetoothInputStream getInputStream() {
-        return this.bluetoothInputStream;
+    public BluetoothInputStream getInputStream() throws IOException {
+        return new BluetoothInputStream(this.socket);
     }
 
     public String getAddress()
@@ -41,13 +32,7 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
         return this.socket.getRemoteDevice().getAddress();
     }
 
-    public void close() {
-        try {
-            this.bluetoothInputStream.close();
-            this.bluetoothOutputStream.close();
-            this.socket.close();
-        } catch (IOException e) {
-            Log.e(TAG, "Error closing Socket: " + e.getMessage());
-        }
+    public void close() throws IOException {
+        this.socket.close();
     }
 }

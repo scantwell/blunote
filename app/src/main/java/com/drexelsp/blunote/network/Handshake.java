@@ -19,18 +19,26 @@ public class Handshake implements Runnable{
     private BlunoteInputStream inputStream;
     private BlunoteOutputStream outputStream;
     private Router router;
-    private NetworkPacket handshakePacket;
+    private byte[] handshakePacket;
 
-    public Handshake(BlunoteSocket socket, Router router, NetworkPacket handshakePacket) {
+    public Handshake(BlunoteSocket socket, Router router, byte[] handshakePacket) {
         this.socket = socket;
-        this.inputStream = socket.getInputStream();
-        this.outputStream = socket.getOutputStream();
         this.router = router;
         this.handshakePacket = handshakePacket;
     }
 
     public void run() {
-        write(handshakePacket.toByteString());
+
+        try {
+            this.inputStream = socket.getInputStream();
+            this.outputStream = socket.getOutputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        //np = createNetworkPacket
+        //Stick handshake in
+        //write(np.toByte);
 
         NetworkPacket response = read();
         if (response != null) {
@@ -39,13 +47,22 @@ public class Handshake implements Runnable{
                     this.router.addDownstream(this.socket);
                     break;
                 case DROP:
-                    this.socket.close();
+                    this.close(socket);
                     break;
                 default:
                     Log.e(TAG, "Bad handshake response, closing connection");
-                    this.socket.close();
+                    this.close(socket);
                     break;
             }
+        }
+    }
+
+    private void close(BlunoteSocket socket)
+    {
+        try {
+            this.socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
