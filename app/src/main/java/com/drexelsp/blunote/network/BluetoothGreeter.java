@@ -10,20 +10,20 @@ import java.io.IOException;
 import java.util.UUID;
 
 /**
+ * Bluetooth Greeter makes a temporary connection to a bluetooth device
+ * and saves the welcome packet data to be retrieved by the scanner
+ *
  * Created by omnia on 4/26/16.
  */
 public class BluetoothGreeter extends Thread {
     private static final String TAG = "Bluetooth Greeter";
-    private final BluetoothAdapter bluetoothAdapter;
-    private final UUID uuid;
     private BluetoothSocket socket;
     private NetworkPacket packet;
 
     public BluetoothGreeter(String macAddress, UUID uuid) {
-        this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        this.uuid = uuid;
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         try {
-            this.socket = this.bluetoothAdapter.getRemoteDevice(macAddress)
+            this.socket = bluetoothAdapter.getRemoteDevice(macAddress)
                     .createInsecureRfcommSocketToServiceRecord(uuid);
         } catch (IOException e) {
             Log.e(TAG, String.format("Error creating insecure socket: %s", e.getMessage()));
