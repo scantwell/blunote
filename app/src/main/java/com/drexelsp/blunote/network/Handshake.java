@@ -8,6 +8,9 @@ import com.google.protobuf.ByteString;
 import java.io.IOException;
 
 /**
+ * Handshake is a runnable that runs the host side of the handshaking process
+ * using the BlunoteInputStream and BlunoteOutputStream from the BlunoteSocket
+ *
  * Created by omnia on 4/21/16.
  */
 public class Handshake implements Runnable{

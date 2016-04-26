@@ -8,6 +8,9 @@ import com.google.protobuf.ByteString;
 import java.io.IOException;
 
 /**
+ * Client Handshake is a runnable that runs the client side of the handshaking process
+ * using the BlunoteInputStream and BlunoteOutputStream from the BlunoteSocket
+ *
  * Created by omnia on 4/25/16.
  */
 public class ClientHandshake implements Runnable{
