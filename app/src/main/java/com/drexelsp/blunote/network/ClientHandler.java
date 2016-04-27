@@ -58,7 +58,7 @@ public class ClientHandler extends Handler {
                 Log.v(TAG, "Connect To Network");
                 b = msg.getData();
                 try {
-                    NetworkConfiguration config = serializeConfiguration(b.get("configuration"));
+                    NetworkConfiguration config = serializeConfiguration(b.getByteArray("configuration"));
                     mService.get().connectToNetwork(config);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -68,9 +68,8 @@ public class ClientHandler extends Handler {
             case START_NEW_NETWORK:
                 Log.v(TAG, "Starting New Network");
                 b = msg.getData();
-                b.get("configuration");
                 try {
-                    NetworkConfiguration config = serializeConfiguration(b.get("configuration"));
+                    NetworkConfiguration config = serializeConfiguration(b.getByteArray("configuration"));
                     mService.get().startNetwork(config);
                 } catch (IOException e) {
                     e.printStackTrace();
