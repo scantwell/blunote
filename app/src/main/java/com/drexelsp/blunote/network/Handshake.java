@@ -1,7 +1,10 @@
 package com.drexelsp.blunote.network;
 
+import android.bluetooth.BluetoothAdapter;
 import android.util.Log;
 
+import com.drexelsp.blunote.blunote.BlunoteMessages.Pdu;
+import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
 import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
 import com.google.protobuf.ByteString;
 
@@ -28,7 +31,6 @@ public class Handshake implements Runnable {
     }
 
     public void run() {
-
         try {
             this.inputStream = socket.getInputStream();
             this.outputStream = socket.getOutputStream();
@@ -36,28 +38,43 @@ public class Handshake implements Runnable {
             e.printStackTrace();
             return;
         }
-        //np = createNetworkPacket
-        //Stick handshake in
-        //write(np.toByte);
 
-        NetworkPacket response = read();
+        DeliveryInfo.Builder dinfoBuilder = DeliveryInfo.newBuilder();
+        dinfoBuilder.setTimestamp(System.currentTimeMillis());
+        dinfoBuilder.setUsername(BluetoothAdapter.getDefaultAdapter().getAddress());
+
+        Pdu.Builder pduBuilder = Pdu.newBuilder();
+        pduBuilder.setDeliveryInfo(dinfoBuilder.build());
+        pduBuilder.setData(ByteString.copyFrom(this.handshakePacket));
+
+        NetworkPacket.Builder networkPacketBuilder = NetworkPacket.newBuilder();
+        networkPacketBuilder.setNetworkMap(this.router.getNetworkMap());
+        networkPacketBuilder.setPdu(pduBuilder.build());
+
+        this.write(networkPacketBuilder.build().toByteArray());
+
+        NetworkPacket response = this.read();
         if (response != null) {
             switch (response.getType()) {
                 case NEW:
-                    this.router.addDownstream(this.socket);
+                    try {
+                        this.router.addDownstream(this.socket);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case DROP:
-                    this.close(socket);
+                    this.close();
                     break;
                 default:
                     Log.e(TAG, "Bad handshake response, closing connection");
-                    this.close(socket);
+                    this.close();
                     break;
             }
         }
     }
 
-    private void close(BlunoteSocket socket) {
+    private void close() {
         try {
             this.socket.close();
         } catch (IOException e) {
@@ -74,9 +91,9 @@ public class Handshake implements Runnable {
         }
     }
 
-    private int write(ByteString byteString) {
+    private int write(byte[] byteArray) {
         try {
-            return this.outputStream.write(byteString);
+            return this.outputStream.write(byteArray);
         } catch (IOException e) {
             Log.e(TAG, String.format("Unable to write to output stream: %s", e.getMessage()));
             return 0;
