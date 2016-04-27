@@ -43,10 +43,6 @@ public class NetworkService extends Service {
     private NetworkConfiguration configuration;
     private Router router;
 
-    public NetworkService() {
-        EventBus.getDefault().register(this);
-    }
-
     @Subscribe
     public void onConnectionEvent(OnConnectionEvent event) {
         if (event.direction == OnConnectionEvent.UPSTREAM) {
@@ -185,6 +181,7 @@ public class NetworkService extends Service {
     @Override
     public void onCreate() {
         Log.v(TAG, "Created service.");
+        EventBus.getDefault().register(this);
     }
 
     @Override

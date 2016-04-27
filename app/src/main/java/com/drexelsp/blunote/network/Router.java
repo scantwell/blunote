@@ -124,14 +124,14 @@ public class Router extends Thread {
 
 
     public synchronized void addUpstreamMessage(byte[] data) {
-        Log.d(TAG, String.format("Storing upstream message."));
         this.downBucket.add(data);
+        Log.d(TAG, String.format("Added upstream message to queue. New size %d", this.downBucket.size()));
         notifyAll();
     }
 
     public synchronized void addDownstreamMessage(byte[] data) {
-        Log.d(TAG, String.format("Storing downstream message."));
         this.upBucket.add(data);
+        Log.d(TAG, String.format("Added downstream message to queue. New size %d", this.upBucket.size()));
         notifyAll();
     }
 
@@ -153,6 +153,18 @@ public class Router extends Thread {
         cleanUp();
     }
 
+    protected synchronized void waitForMessages() {
+        while (downBucket.size() < 1 && upBucket.size() < 1) {
+            try {
+                Log.d(TAG, String.format("Router thread going to sleep, awaiting incoming messages."));
+                wait();
+                Log.d(TAG, String.format("Router thread awake."));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public BlunoteMessages.NetworkMap getNetworkMap()
     {
         BlunoteMessages.NetworkMap.Builder builder = BlunoteMessages.NetworkMap.newBuilder();
@@ -164,8 +176,8 @@ public class Router extends Thread {
 
         for (int i = 0; i < networkList.size(); i++) {
             if (networkList.get(i).equals(socket.getAddress())) {
-                Log.d(TAG, String.format("Removing socket from network list with address %s.", socket.getAddress()));
                 networkList.remove(i);
+                Log.d(TAG, String.format("Removed socket from network list with address %s. New size %d", socket.getAddress(), networkList.size()));
             }
         }
     }
@@ -204,21 +216,9 @@ public class Router extends Thread {
         }
     }
 
-    protected synchronized void waitForMessages() {
-        while (downBucket.size() < 1 && upBucket.size() < 1) {
-            try {
-                Log.d(TAG, String.format("Router thread going to sleep, awaiting incoming messages."));
-                wait();
-                Log.d(TAG, String.format("Router thread awake."));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     private void sendDownstream(byte[] data) {
-        Log.d(TAG, String.format("Sending downstream message."));
         send(data, downOuts);
+        Log.d(TAG, String.format("Sent downstream message."));
         if (notifyOnReceiveDownstream) {
             Log.d(TAG, String.format("Posting OnReceiveDownstream for message."));
             OnReceiveDownstream event = new OnReceiveDownstream(data);
