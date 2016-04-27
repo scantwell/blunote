@@ -33,7 +33,7 @@ public class Host extends User {
         this.serverName = this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_server_name", "Party Jamz");
         this.songAssemblers = new ArrayList<>();
         this.player = new Player(context);
-        new Thread(this.player).run();
+        new Thread(this.player).start();
     }
 
     public void onReceive(DeliveryInfo dinfo, MetadataUpdate message) {
