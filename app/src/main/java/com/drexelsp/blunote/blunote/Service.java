@@ -3,7 +3,17 @@ package com.drexelsp.blunote.blunote;
 import android.os.Binder;
 import android.os.IBinder;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.*;
+import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
+import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration;
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Pdu;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
+import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;
+import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
+import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
+import com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket;
+import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
 import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.network.ClientService;
 import com.google.protobuf.ByteString;
@@ -84,6 +94,7 @@ public class Service extends ClientService {
     public void disconnect() {
         super.disconnect();
     }
+
     public void send(SingleAnswer message) {
         super.sendUpstream(WrapperMessage.newBuilder()
                 .setType(WrapperMessage.Type.SINGLE_ANSWER)

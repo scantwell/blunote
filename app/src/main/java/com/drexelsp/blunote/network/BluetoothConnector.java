@@ -1,7 +1,6 @@
 package com.drexelsp.blunote.network;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
@@ -14,7 +13,7 @@ import java.util.UUID;
 
 /**
  * Created by omnia on 1/13/16.
- * <p/>
+ * <p>
  * Initializes a connection to a host device
  */
 public class BluetoothConnector extends Thread {

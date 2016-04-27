@@ -1,23 +1,21 @@
 package com.drexelsp.blunote.network;
 
-import android.net.Network;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.*;
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration;
 import com.google.protobuf.ByteString;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.lang.ref.WeakReference;
 
 /**
  * Created by scantwell on 1/12/2016.
- * <p/>
+ * <p>
  * Handles messages from activities or binding service to the background service
  */
 public class ClientHandler extends Handler {
@@ -97,12 +95,12 @@ public class ClientHandler extends Handler {
         }
     }
 
-    public static NetworkConfiguration serializeConfiguration(Object obj) throws IOException{
+    public static NetworkConfiguration serializeConfiguration(Object obj) throws IOException {
         NetworkConfiguration config = NetworkConfiguration.parseFrom(serialize(obj));
         return config;
     }
 
-    public static byte[] serialize(Object obj) throws IOException{
+    public static byte[] serialize(Object obj) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ObjectOutputStream os = new ObjectOutputStream(out);
         os.writeObject(obj);

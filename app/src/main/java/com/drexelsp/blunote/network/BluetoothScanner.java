@@ -8,10 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.Parcelable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
@@ -22,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.jar.Manifest;
 
 /**
  * Created by omnia on 2/21/16.

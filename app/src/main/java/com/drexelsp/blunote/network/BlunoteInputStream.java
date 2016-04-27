@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * Created by stephencantwell on 4/25/16.
  */
-public interface BlunoteInputStream  {
+public interface BlunoteInputStream {
 
     NetworkPacket read() throws IOException;
 

@@ -10,8 +10,7 @@ public class OnReceiveUpstream {
 
     private NetworkPacket networkPacket;
 
-    public OnReceiveUpstream(byte[] data)
-    {
+    public OnReceiveUpstream(byte[] data) {
         try {
             this.networkPacket = NetworkPacket.parseFrom(data);
         } catch (InvalidProtocolBufferException e) {

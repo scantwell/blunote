@@ -5,17 +5,12 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
-import com.drexelsp.blunote.events.BluetoothEvent;
-
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.IOException;
 import java.util.UUID;
 
 /**
  * Created by omnia on 2/12/16.
- * <p/>
+ * <p>
  * Starts a Bluetooth Server listener thread to allow incoming connections
  * Also creates a BluetoothBeacon and begins advertising
  */

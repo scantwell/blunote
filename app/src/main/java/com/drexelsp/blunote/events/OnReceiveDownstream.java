@@ -9,8 +9,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 public class OnReceiveDownstream {
     private BlunoteMessages.NetworkPacket networkPacket;
 
-    public OnReceiveDownstream(byte[] data)
-    {
+    public OnReceiveDownstream(byte[] data) {
         try {
             this.networkPacket = BlunoteMessages.NetworkPacket.parseFrom(data);
         } catch (InvalidProtocolBufferException e) {

@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -12,9 +11,8 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.*;
-import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration;
+import com.drexelsp.blunote.events.BluetoothEvent;
 
 abstract public class ClientService extends Service {
     private String TAG = "ClientService";
@@ -76,8 +74,7 @@ abstract public class ClientService extends Service {
         }
     }
 
-    public void disconnect()
-    {
+    public void disconnect() {
         Message msg = Message.obtain(null, ClientHandler.DISCONNECT, 0, 0);
         Bundle bundle = new Bundle(1);
         msg.setData(bundle);
@@ -88,7 +85,7 @@ abstract public class ClientService extends Service {
         }
     }
 
-    public void updateHandshake(byte[] handshake){
+    public void updateHandshake(byte[] handshake) {
         Message msg = Message.obtain(null, ClientHandler.UPDATE_HANDSHAKE, 0, 0);
         Bundle bundle = new Bundle(1);
         bundle.putByteArray("handshake", handshake);

@@ -4,9 +4,15 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.preference.PreferenceManager;
 
+import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
+import com.drexelsp.blunote.blunote.BlunoteMessages.MetadataUpdate;
+import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
+import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;
+import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Vote;
+import com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
-import com.drexelsp.blunote.blunote.BlunoteMessages.*;
-import com.google.protobuf.ByteString;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -30,8 +36,7 @@ public class Host extends User {
         new Thread(this.player).run();
     }
 
-   public void onReceive(DeliveryInfo dinfo, MetadataUpdate message)
-    {
+    public void onReceive(DeliveryInfo dinfo, MetadataUpdate message) {
         super.onReceive(dinfo, message);
 
         if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
@@ -45,32 +50,27 @@ public class Host extends User {
     }
 
     @Override
-    public void onReceive(DeliveryInfo dinfo, MultiAnswer message)
-    {
+    public void onReceive(DeliveryInfo dinfo, MultiAnswer message) {
         throw new RuntimeException("Not implemented.");
     }
 
     @Override
-    public void onReceive(DeliveryInfo dinfo, Recommendation message)
-    {
+    public void onReceive(DeliveryInfo dinfo, Recommendation message) {
         throw new RuntimeException("Not implemented.");
     }
 
     @Override
-    public void onReceive(DeliveryInfo dinfo, SingleAnswer message)
-    {
+    public void onReceive(DeliveryInfo dinfo, SingleAnswer message) {
         throw new RuntimeException("Not implemented.");
     }
 
     @Override
-    public void onReceive(DeliveryInfo dinfo, SongFragment message)
-    {
+    public void onReceive(DeliveryInfo dinfo, SongFragment message) {
         this.media.addSongFragment(message);
     }
 
     @Override
-    public void onReceive(DeliveryInfo dinfo, Vote message)
-    {
+    public void onReceive(DeliveryInfo dinfo, Vote message) {
         throw new RuntimeException("Not implemented.");
     }
 
@@ -90,13 +90,11 @@ public class Host extends User {
         service.send(builder.build());
     }
 
-    private void updateWelcomePacket()
-    {
+    private void updateWelcomePacket() {
         this.service.updateHandshake(getWelcomePacket());
     }
 
-    public byte[] getWelcomePacket()
-    {
+    public byte[] getWelcomePacket() {
         WelcomePacket.Builder wp = WelcomePacket.newBuilder();
         wp.setNetworkName(this.serverName);
         wp.setNumSongs("0");

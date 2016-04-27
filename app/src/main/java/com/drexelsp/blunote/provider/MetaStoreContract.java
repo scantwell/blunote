@@ -67,8 +67,7 @@ public final class MetaStoreContract {
         public static final String SORT_ORDER_DEFAULT = ALBUM + " ASC";
     }
 
-    public static final class User implements BaseColumns
-    {
+    public static final class User implements BaseColumns {
         public static final String USERNAME = "username";
         public static final String USER_ID = "user_id";
         public static final String LATENCY = "latency";
@@ -86,8 +85,7 @@ public final class MetaStoreContract {
         public static final String SORT_ORDER_DEFAULT = USERNAME + " ASC";
     }
 
-    public static final class UserTracks implements BaseColumns
-    {
+    public static final class UserTracks implements BaseColumns {
         public static final String USER_ID = "user_id";
         public static final String TITLE = "title";
         public static final String ALBUM = "album";

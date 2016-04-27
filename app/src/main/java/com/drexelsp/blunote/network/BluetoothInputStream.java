@@ -1,7 +1,6 @@
 package com.drexelsp.blunote.network;
 
 import android.bluetooth.BluetoothSocket;
-import android.util.Log;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
 import com.google.protobuf.ByteString;
@@ -10,7 +9,6 @@ import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * Created by stephencantwell on 4/25/16.
@@ -23,8 +21,7 @@ public class BluetoothInputStream implements BlunoteInputStream {
         this.inputStream = socket.getInputStream();
     }
 
-    public NetworkPacket read() throws IOException
-    {
+    public NetworkPacket read() throws IOException {
         byte[] buffer = rawRead();
         return NetworkPacket.parseFrom(buffer);
     }

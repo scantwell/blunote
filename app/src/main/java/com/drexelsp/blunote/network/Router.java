@@ -1,9 +1,7 @@
 package com.drexelsp.blunote.network;
 
-import android.telecom.Call;
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages;
 import com.drexelsp.blunote.events.OnConnectionEvent;
 import com.drexelsp.blunote.events.OnDisconnectionEvent;
 import com.drexelsp.blunote.events.OnReceiveDownstream;
@@ -34,12 +32,14 @@ public class Router extends Thread {
     private ArrayList<String> networkList;
     private boolean notifyOnReceiveUpstream;
     private boolean notifyOnReceiveDownstream;
-    private boolean notifyOnDisconnect;
-    private boolean notifyOnConnect;
+    private boolean notifyOnDisconnectUpstream;
+    private boolean notifyOnDisconnectDownstream;
+    private boolean notifyOnConnectUpstream;
+
+    private boolean notifyOnConnectDownstream;
 
 
-    public Router()
-    {
+    public Router() {
         this.downstreamCallback = null;
         this.upstreamCallback = null;
         this.isRunning = false;
@@ -50,15 +50,13 @@ public class Router extends Thread {
         this.networkList = new ArrayList<>();
     }
 
-    public void start()
-    {
+    public void start() {
         Log.d(TAG, "Starting router.");
         super.start();
         this.isRunning = true;
     }
 
-    public void shutdown()
-    {
+    public void shutdown() {
 
         Log.d(TAG, "Shutting down router.");
         this.isRunning = false;
@@ -72,56 +70,66 @@ public class Router extends Thread {
         this.notifyOnReceiveDownstream = notifyOnReceiveDownstream;
     }
 
-    public void setNotifyOnDisconnect(boolean notifyOnDisconnect) {
-        this.notifyOnDisconnect = notifyOnDisconnect;
+    public void setNotifyOnConnectDownstream(boolean notifyOnConnectDownstream) {
+        this.notifyOnConnectDownstream = notifyOnConnectDownstream;
     }
 
-    public void setNotifyOnConnect(boolean notifyOnConnect) {
-        this.notifyOnConnect = notifyOnConnect;
+    public void setNotifyOnConnectUpstream(boolean notifyOnConnectUpstream) {
+        this.notifyOnConnectUpstream = notifyOnConnectUpstream;
     }
 
-    protected void addUpstream(BlunoteSocket socket)
-    {
+    public void setNotifyOnDisconnectDownstream(boolean notifyOnDisconnectDownstream) {
+        this.notifyOnDisconnectDownstream = notifyOnDisconnectDownstream;
+    }
+
+    public void setNotifyOnDisconnectUpstream(boolean notifyOnDisconnectUpstream) {
+        this.notifyOnDisconnectUpstream = notifyOnDisconnectUpstream;
+    }
+
+    protected void addUpstream(BlunoteSocket socket) throws IOException {
+        postOnUpstreamConnection(socket);
         networkList.add(socket.getAddress());
         new Thread(new Reader(new UpstreamCallback(this), socket)).start();
         upSockets.add(socket);
         upOuts.add(socket.getOutputStream());
     }
 
-    protected void addDownstream(BlunoteSocket socket)
-    {
-        this.onConnection(socket);
+    protected void addDownstream(BlunoteSocket socket) throws IOException {
+        postOnDownstreamConnection(socket);
+        networkList.add(socket.getAddress());
         new Thread(new Reader(new DownstreamCallback(this), socket)).start();
         downSockets.add(socket);
         downOuts.add(socket.getOutputStream());
     }
 
-    private void onConnection(BlunoteSocket socket)
-    {
-        networkList.add(socket.getAddress());
-        if (notifyOnConnect)
-        {
-            OnConnectionEvent event = new OnConnectionEvent(socket.getAddress());
+    private void postOnUpstreamConnection(BlunoteSocket socket) {
+        if (notifyOnConnectUpstream) {
+            OnConnectionEvent event = new OnConnectionEvent(OnConnectionEvent.UPSTREAM, socket.getAddress());
+            EventBus.getDefault().post(event);
+        }
+    }
+
+    private void postOnDownstreamConnection(BlunoteSocket socket) {
+        if (notifyOnConnectUpstream) {
+            OnConnectionEvent event = new OnConnectionEvent(OnConnectionEvent.DOWNSTREAM, socket.getAddress());
             EventBus.getDefault().post(event);
         }
     }
 
 
-    public synchronized void addUpstreamMessage(byte[] data)
-    {
+    public synchronized void addUpstreamMessage(byte[] data) {
         this.downBucket.add(data);
         notifyAll();
     }
 
-    public synchronized void addDownstreamMessage(byte[] data)
-    {
+    public synchronized void addDownstreamMessage(byte[] data) {
         this.upBucket.add(data);
         notifyAll();
     }
 
     @Override
     public void run() {
-        while(this.isRunning) {
+        while (this.isRunning) {
             waitForMessages();
             if (downBucket.size() > 0) {
                 byte[] data = downBucket.remove();
@@ -135,20 +143,28 @@ public class Router extends Thread {
         cleanUp();
     }
 
-    private void onDisconnect(BlunoteSocket socket)
-    {
-        if (notifyOnDisconnect)
-        {
-            OnDisconnectionEvent event = new OnDisconnectionEvent(socket.getAddress());
-            EventBus.getDefault().post(event);
-        }
-        for (int i = 0; i < networkList.size(); i++)
-        {
-            if (networkList.get(i).equals(socket.getAddress()))
-            {
+    private void removeSocketFromNetworkList(BlunoteSocket socket) {
+        for (int i = 0; i < networkList.size(); i++) {
+            if (networkList.get(i).equals(socket.getAddress())) {
                 networkList.remove(i);
             }
         }
+    }
+
+    private void postOnDownstreamDisconnection(BlunoteSocket socket) {
+        if (notifyOnDisconnectDownstream) {
+            OnDisconnectionEvent event = new OnDisconnectionEvent(OnDisconnectionEvent.DOWNSTREAM, socket.getAddress());
+            EventBus.getDefault().post(event);
+        }
+        removeSocketFromNetworkList(socket);
+    }
+
+    private void postOnUpstreamDisconnection(BlunoteSocket socket) {
+        if (notifyOnDisconnectUpstream) {
+            OnDisconnectionEvent event = new OnDisconnectionEvent(OnDisconnectionEvent.UPSTREAM, socket.getAddress());
+            EventBus.getDefault().post(event);
+        }
+        removeSocketFromNetworkList(socket);
     }
 
     private void cleanUp() {
@@ -157,10 +173,8 @@ public class Router extends Thread {
         closeConnections(downSockets);
     }
 
-    private void closeConnections(CopyOnWriteArrayList<BlunoteSocket> sockets)
-    {
-        for (BlunoteSocket s : sockets)
-        {
+    private void closeConnections(CopyOnWriteArrayList<BlunoteSocket> sockets) {
+        for (BlunoteSocket s : sockets) {
             try {
                 s.close();
             } catch (IOException e) {
@@ -179,10 +193,8 @@ public class Router extends Thread {
         }
     }
 
-    private void sendDownstream(byte[] data)
-    {
-        if (notifyOnReceiveDownstream)
-        {
+    private void sendDownstream(byte[] data) {
+        if (notifyOnReceiveDownstream) {
             OnReceiveDownstream event = new OnReceiveDownstream(data);
             EventBus.getDefault().post(event);
             this.downstreamCallback.onReceivePacket(data);
@@ -190,8 +202,7 @@ public class Router extends Thread {
         send(data, downOuts);
     }
 
-    private void sendUpstream(byte[] data)
-    {
+    private void sendUpstream(byte[] data) {
         if (notifyOnReceiveUpstream) {
             OnReceiveUpstream event = new OnReceiveUpstream(data);
             EventBus.getDefault().post(event);
@@ -200,10 +211,8 @@ public class Router extends Thread {
         send(data, upOuts);
     }
 
-    private void send(byte[] data, CopyOnWriteArrayList<BlunoteOutputStream> outs)
-    {
-        for (int i = 0; i < outs.size(); i++)
-        {
+    private void send(byte[] data, CopyOnWriteArrayList<BlunoteOutputStream> outs) {
+        for (int i = 0; i < outs.size(); i++) {
             try {
                 outs.get(i).write(data);
             } catch (IOException e) {

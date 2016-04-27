@@ -39,8 +39,7 @@ public class SongAssembler {
         this.blackList = new HashSet<>();
     }
 
-    public Uri getURI()
-    {
+    public Uri getURI() {
         return this.uri;
     }
 

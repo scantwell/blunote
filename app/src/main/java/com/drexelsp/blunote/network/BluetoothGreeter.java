@@ -12,7 +12,7 @@ import java.util.UUID;
 /**
  * Bluetooth Greeter makes a temporary connection to a bluetooth device
  * and saves the welcome packet data to be retrieved by the scanner
- *
+ * <p>
  * Created by omnia on 4/26/16.
  */
 public class BluetoothGreeter extends Thread {

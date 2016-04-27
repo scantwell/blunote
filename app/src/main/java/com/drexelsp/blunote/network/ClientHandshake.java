@@ -10,10 +10,10 @@ import java.io.IOException;
 /**
  * Client Handshake is a runnable that runs the client side of the handshaking process
  * using the BlunoteInputStream and BlunoteOutputStream from the BlunoteSocket
- *
+ * <p>
  * Created by omnia on 4/25/16.
  */
-public class ClientHandshake implements Runnable{
+public class ClientHandshake implements Runnable {
     private static final String TAG = "ClientHandshake";
     private BlunoteSocket socket;
     private BlunoteInputStream inputStream;

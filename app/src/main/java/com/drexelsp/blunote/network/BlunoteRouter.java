@@ -7,14 +7,13 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
-import com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket;
 import com.google.protobuf.ByteString;
 
 import java.util.ArrayList;
 
 /**
  * Created by omnia on 2/15/16.
- * <p/>
+ * <p>
  * Router for Reading and Writing BlunoteSockets
  */
 public class BlunoteRouter extends Thread {

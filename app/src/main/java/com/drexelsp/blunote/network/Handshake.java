@@ -10,10 +10,10 @@ import java.io.IOException;
 /**
  * Handshake is a runnable that runs the host side of the handshaking process
  * using the BlunoteInputStream and BlunoteOutputStream from the BlunoteSocket
- *
+ * <p>
  * Created by omnia on 4/21/16.
  */
-public class Handshake implements Runnable{
+public class Handshake implements Runnable {
     private static final String TAG = "Handshake";
     private BlunoteSocket socket;
     private BlunoteInputStream inputStream;
@@ -57,8 +57,7 @@ public class Handshake implements Runnable{
         }
     }
 
-    private void close(BlunoteSocket socket)
-    {
+    private void close(BlunoteSocket socket) {
         try {
             this.socket.close();
         } catch (IOException e) {

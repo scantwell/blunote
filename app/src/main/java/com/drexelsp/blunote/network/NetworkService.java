@@ -6,17 +6,17 @@ import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Network;
 import android.os.IBinder;
-import android.os.Message;
 import android.os.Messenger;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.*;
+import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration;
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Pdu;
 import com.drexelsp.blunote.blunote.R;
-import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.events.OnConnectionEvent;
 import com.drexelsp.blunote.events.OnDisconnectionEvent;
 import com.drexelsp.blunote.events.OnReceiveDownstream;
@@ -31,7 +31,7 @@ import java.util.UUID;
 
 /**
  * Created by scantwell on 1/12/2016.
- * <p/>
+ * <p>
  * NetworkService exposes the meshnetwork
  */
 public class NetworkService extends Service {
@@ -44,61 +44,52 @@ public class NetworkService extends Service {
     private NetworkConfiguration configuration;
     private Router router;
 
-    public NetworkService()
-    {
+    public NetworkService() {
         EventBus.getDefault().register(this);
     }
 
     @Subscribe
-    public void onConnectionEvent(OnConnectionEvent event)
-    {
-        if (this.configuration.getNotifyOnConnect())
-        {
+    public void onConnectionEvent(OnConnectionEvent event) {
+        if (event.direction == OnConnectionEvent.UPSTREAM) {
+            if (this.configuration.getNotifyOnConnectUpstream()) {
+            }
+        } else if (event.direction == OnConnectionEvent.DOWNSTREAM) {
+            if (this.configuration.getNotifyOnConnectDownstream()) {
+            }
         }
     }
 
     @Subscribe
-    public void onDisconnectEvent(OnDisconnectionEvent event)
-    {
-        if (this.configuration.getNotifyOnDisconnect())
-        {
+    public void onDisconnectEvent(OnDisconnectionEvent event) {
+        if (event.direction == OnDisconnectionEvent.UPSTREAM) {
+            if (this.configuration.getNotifyOnDisconnectUpstream()) {
+            }
+        } else if (event.direction == OnDisconnectionEvent.DOWNSTREAM) {
+            if (this.configuration.getNotifyOnDisconnectUpstream()) {
+            }
         }
     }
 
     @Subscribe
-    public void onReceiveUpstream(OnReceiveUpstream event)
-    {
-        try {
-            NetworkPacket np = event.getNetworkPacket();
-            if (NetworkPacket.Type.NETWORK_DATA_UPDATE.equals(np.getType()))
-            {
+    public void onReceiveUpstream(OnReceiveUpstream event) {
+        NetworkPacket np = event.getNetworkPacket();
+        if (NetworkPacket.Type.NETWORK_DATA_UPDATE.equals(np.getType())) {
 
-            }
-            if (this.configuration.getReceiveDownstream() && np.hasPdu())
-            {
-                //broadcast np.getPdu()
-            }
-        } catch (InvalidProtocolBufferException e) {
-            e.printStackTrace();
+        }
+        if (this.configuration.getReceiveDownstream() && np.hasPdu()) {
+            //broadcast np.getPdu()
         }
         // send a broadcast request ?or check the networkpack for other events?
     }
 
     @Subscribe
-    public void onReceiveDownstream(OnReceiveDownstream event)
-    {
-        try {
-            NetworkPacket np = event.getNetworkPacket();
-            if (NetworkPacket.Type.NETWORK_DATA_UPDATE.equals(np.getType()))
-            {
+    public void onReceiveDownstream(OnReceiveDownstream event) {
+        NetworkPacket np = event.getNetworkPacket();
+        if (NetworkPacket.Type.NETWORK_DATA_UPDATE.equals(np.getType())) {
 
-            }
-            if (this.configuration.getReceiveDownstream() && np.hasPdu())
-            {
-                //broadcast np.getPdu()
-            }
-        } catch (InvalidProtocolBufferException e) {
-            e.printStackTrace();
+        }
+        if (this.configuration.getReceiveDownstream() && np.hasPdu()) {
+            //broadcast np.getPdu()
         }
     }
 
@@ -114,8 +105,7 @@ public class NetworkService extends Service {
     // Sends to another application via bluetooth/etc
     public void sendDownstream(byte[] data) {
         Log.v(TAG, "Sending message.");
-        if (this.router != null)
-        {
+        if (this.router != null) {
             this.router.addDownstreamMessage(createNetworkPacket(data).build().toByteArray());
         }
     }
@@ -123,15 +113,13 @@ public class NetworkService extends Service {
     // Sends to another application via bluetooth/etc
     public void sendUpstream(byte[] data) {
         Log.v(TAG, "Sending message.");
-        if (this.router != null)
-        {
+        if (this.router != null) {
             this.router.addUpstreamMessage(createNetworkPacket(data).build().toByteArray());
         }
     }
 
     public void connectToNetwork(NetworkConfiguration config) {
-        this.router = new Router();
-        this.router.setNotifyOnReceiveUpstream(true);
+        this.router = createRouter(config);
 
         /*BlunoteRouter.getInstance().setClientMode(getApplicationContext());
         BluetoothConnector bluetoothConnector = new BluetoothConnector(uuid);
@@ -141,8 +129,7 @@ public class NetworkService extends Service {
         */
     }
 
-    public void disconnect()
-    {
+    public void disconnect() {
         Log.w(TAG, "Disconnecting from network.");
         this.router.shutdown();
     }
@@ -154,20 +141,21 @@ public class NetworkService extends Service {
         makeDiscoverable();
     }
 
-    public void updateHandshake(ByteString handshake)
-    {
+    public void updateHandshake(ByteString handshake) {
         NetworkConfiguration.Builder configBuilder = NetworkConfiguration.newBuilder().mergeFrom(this.configuration);
         configBuilder.setHandshake(handshake);
         this.configuration = configBuilder.build();
     }
 
-    private void createRouter(NetworkConfiguration config)
-    {
-        this.router = new Router();
-        this.router.setNotifyOnConnect(true);
-        this.router.setNotifyOnDisconnect(true);
-        this.router.setNotifyOnReceiveDownstream(true);
-        this.router.setNotifyOnReceiveUpstream(true);
+    private Router createRouter(NetworkConfiguration config) {
+        Router router = new Router();
+        router.setNotifyOnConnectDownstream(true);
+        router.setNotifyOnConnectUpstream(true);
+        router.setNotifyOnDisconnectDownstream(true);
+        router.setNotifyOnDisconnectUpstream(true);
+        router.setNotifyOnReceiveDownstream(true);
+        router.setNotifyOnReceiveUpstream(true);
+        return router;
     }
 
     private void makeDiscoverable() {
@@ -252,8 +240,7 @@ public class NetworkService extends Service {
         return networkBuilder;
     }
 
-    private Pdu createPdu(byte[] data)
-    {
+    private Pdu createPdu(byte[] data) {
         Pdu.Builder builder = Pdu.newBuilder()
                 .setDeliveryInfo(createDeliveryInfo())
                 .setData(ByteString.copyFrom(data));

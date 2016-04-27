@@ -1,13 +1,12 @@
 package com.drexelsp.blunote.network;
 
 import android.bluetooth.BluetoothSocket;
-import android.util.Log;
 
 import java.io.IOException;
 
 /**
  * Created by omnia on 2/12/16.
- * <p/>
+ * <p>
  * BluetoothSocket that implements BlunoteSocket interface
  * Allows Reading Messages from mailbox, and writing messages out to the data thread
  */
@@ -27,8 +26,7 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
         return new BluetoothInputStream(this.socket);
     }
 
-    public String getAddress()
-    {
+    public String getAddress() {
         return this.socket.getRemoteDevice().getAddress();
     }
 

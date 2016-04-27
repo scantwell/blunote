@@ -6,8 +6,12 @@ package com.drexelsp.blunote.events;
 public class OnConnectionEvent {
 
     public final String macAddress;
+    public int direction;
+    public static int UPSTREAM = 1;
+    public static int DOWNSTREAM = 2;
 
-    public OnConnectionEvent(String macAddress) {
+    public OnConnectionEvent(int direction, String macAddress) {
         this.macAddress = macAddress;
+        this.direction = direction;
     }
 }

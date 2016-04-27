@@ -9,13 +9,8 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
-import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
-import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
-import com.drexelsp.blunote.events.SongRecommendationEvent;
 import com.google.protobuf.ByteString;
-
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -108,13 +103,11 @@ public class Media {
         }
     }
 
-    public void addSongFragment(SongFragment frag)
-    {
+    public void addSongFragment(SongFragment frag) {
         if (songsHash.containsKey(frag.getSongId())) {
             SongAssembler asm = songsHash.get(frag.getSongId());
             asm.addFragment(frag);
-            if (asm.isCompleted())
-            {
+            if (asm.isCompleted()) {
                 player.addSongUri(asm.getURI());
                 songsHash.remove(frag.getSongId());
             }
