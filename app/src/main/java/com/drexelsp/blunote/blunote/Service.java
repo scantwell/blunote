@@ -4,6 +4,7 @@ import android.os.Binder;
 import android.os.IBinder;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
+import com.drexelsp.blunote.blunote.BlunoteMessages.MetadataUpdate;
 import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Pdu;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
@@ -23,6 +24,7 @@ import org.greenrobot.eventbus.EventBus;
  * Handles incoming messages via the onReceived method and sends messages via the send overloads.
  */
 public class Service extends ClientService {
+
     public class LocalBinder extends Binder {
         public Service getService() {
             return Service.this;
@@ -115,6 +117,14 @@ public class Service extends ClientService {
                 .setMessage(WrapperMessage.newBuilder()
                         .setType(WrapperMessage.Type.SONG_REQUEST)
                         .setSongRequest(message)).build();
+        super.send(pdu.toByteArray());
+    }
+
+    public void send(MetadataUpdate message) {
+        Pdu pdu = createMessage()
+                .setMessage(WrapperMessage.newBuilder()
+                        .setType(WrapperMessage.Type.METADATA_UPDATE)
+                        .setMetadataUpdate(message)).build();
         super.send(pdu.toByteArray());
     }
 

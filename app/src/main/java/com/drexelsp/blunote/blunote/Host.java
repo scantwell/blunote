@@ -37,16 +37,20 @@ public class Host extends User implements Observer {
         new Thread(this.player).start();
     }
 
-   /* public void onReceive(DeliveryInfo dinfo, MetadataUpdate message)
+
+    @Override
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message)
     {
         if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
             this.metadata.addMetadata(message);
         } else {
+
             this.metadata.deleteMetadata(message);
         }
-        // Contains the removal of metadata
-        //this.service.send(BlunoteMessages.MetadataUpdate);
-    }*/
+        //Contains the removal of metadata
+        BlunoteMessages.MetadataUpdate.Builder builder = BlunoteMessages.MetadataUpdate.newBuilder();
+        this.service.send(builder.build());
+    }
 
     @Override
     public void onReceive(DeliveryInfo dinfo, MultiAnswer message) {
