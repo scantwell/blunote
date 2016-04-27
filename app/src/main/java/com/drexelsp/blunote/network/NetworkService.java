@@ -99,7 +99,7 @@ public class NetworkService extends Service {
 
     // Sends to another application via bluetooth/etc
     public void sendDownstream(byte[] data) {
-        Log.v(TAG, "Sending message.");
+        Log.v(TAG, "Sending message downstream.");
         if (this.router != null) {
             this.router.addDownstreamMessage(createNetworkPacket(data).build().toByteArray());
         }
@@ -107,7 +107,7 @@ public class NetworkService extends Service {
 
     // Sends to another application via bluetooth/etc
     public void sendUpstream(byte[] data) {
-        Log.v(TAG, "Sending message.");
+        Log.v(TAG, "Sending message upstream.");
         if (this.router != null) {
             this.router.addUpstreamMessage(createNetworkPacket(data).build().toByteArray());
         }
