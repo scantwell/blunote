@@ -74,8 +74,10 @@ public class Service extends ClientService {
         this.user = new Host(this, getApplicationContext());
         NetworkConfiguration.Builder configBuilder = NetworkConfiguration.newBuilder();
         configBuilder.setHandshake(ByteString.copyFrom(WelcomePacket.newBuilder().setNetworkName("Party Jamz HardCoded").setNumSongs("0").setNumUsers("0").build().toByteArray()));
-        configBuilder.setNotifyOnConnect(true);
-        configBuilder.setNotifyOnDisconnect(true);
+        configBuilder.setNotifyOnConnectDownstream(true);
+        configBuilder.setNotifyOnConnectUpstream(true);
+        configBuilder.setNotifyOnDisconnectDownstream(true);
+        configBuilder.setNotifyOnDisconnectUpstream(true);
         configBuilder.setReceiveUpstream(true);
         configBuilder.setHandshake(ByteString.copyFrom(user.getWelcomePacket()));
         super.startNetwork(configBuilder.build());
@@ -84,8 +86,10 @@ public class Service extends ClientService {
     public void connectToNetwork(NetworkMap networkMap) {
         this.user = new User(this, getApplicationContext());
         NetworkConfiguration.Builder configBuilder = NetworkConfiguration.newBuilder();
-        configBuilder.setNotifyOnConnect(true);
-        configBuilder.setNotifyOnDisconnect(true);
+        configBuilder.setNotifyOnConnectDownstream(true);
+        configBuilder.setNotifyOnConnectUpstream(true);
+        configBuilder.setNotifyOnDisconnectDownstream(true);
+        configBuilder.setNotifyOnDisconnectUpstream(true);
         configBuilder.setReceiveDownstream(true);
         configBuilder.setNetworkMap(networkMap);
         super.connectToNetwork(configBuilder.build());
