@@ -85,10 +85,6 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             ArrayList<ConnectionListItem> mNetworks = new ArrayList<>();
             mAdapter = new NetworkArrayAdapter(this, mNetworks);
             networkListView.setAdapter(mAdapter);
-
-            // Launch Scanner
-            mScanner = new BluetoothScanner(getCurrentContext(), mAdapter);
-            mScanner.startDiscovery();
         }
 
         //dialog.hide();
@@ -196,6 +192,11 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             //Intent intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);
             //startActivity(intent);
         } else if (v == refreshButton) {
+            if (mScanner == null)
+            {
+                // Launch Scanner
+                mScanner = new BluetoothScanner(getCurrentContext(), mAdapter);
+            }
             mAdapter.clear();
             mScanner.startDiscovery();
         }
