@@ -58,7 +58,7 @@ public class ClientHandler extends Handler {
                 Log.v(TAG, "Connect To Network");
                 b = msg.getData();
                 try {
-                    NetworkConfiguration config = serializeConfiguration(b.getByteArray("configuration"));
+                    NetworkConfiguration config = NetworkConfiguration.parseFrom(b.getByteArray("configuration"));
                     mService.get().connectToNetwork(config);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -69,7 +69,7 @@ public class ClientHandler extends Handler {
                 Log.v(TAG, "Starting New Network");
                 b = msg.getData();
                 try {
-                    NetworkConfiguration config = serializeConfiguration(b.getByteArray("configuration"));
+                    NetworkConfiguration config = NetworkConfiguration.parseFrom(b.getByteArray("configuration"));
                     mService.get().startNetwork(config);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -78,13 +78,8 @@ public class ClientHandler extends Handler {
                 break;
             case UPDATE_HANDSHAKE:
                 b = msg.getData();
-                try {
-                    byte[] handshake = serialize(b.get("handshake"));
-                    this.mService.get().updateHandshake(ByteString.copyFrom(handshake));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "Failed to update handshake content. Could not serialize.");
-                }
+                byte[] handshake = b.getByteArray("handshake");
+                this.mService.get().updateHandshake(ByteString.copyFrom(handshake));
                 break;
             case DISCONNECT:
                 this.mService.get().disconnect();
@@ -92,17 +87,5 @@ public class ClientHandler extends Handler {
                 Log.v(TAG, "Unknown message type, sending to parent handleMessage().");
                 super.handleMessage(msg);
         }
-    }
-
-    public static NetworkConfiguration serializeConfiguration(Object obj) throws IOException {
-        NetworkConfiguration config = NetworkConfiguration.parseFrom(serialize(obj));
-        return config;
-    }
-
-    public static byte[] serialize(Object obj) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ObjectOutputStream os = new ObjectOutputStream(out);
-        os.writeObject(obj);
-        return out.toByteArray();
     }
 }
