@@ -124,7 +124,7 @@ public class Service extends ClientService {
     }
 
     public void send(SongRequest message) {
-        super.sendUpstream(WrapperMessage.newBuilder()
+        super.sendDownstream(WrapperMessage.newBuilder()
                 .setType(WrapperMessage.Type.SONG_REQUEST)
                 .setSongRequest(message).build().toByteArray());
     }
