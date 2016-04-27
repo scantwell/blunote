@@ -151,7 +151,7 @@ message DeliveryInfo {
 */
 message Pdu {
 	required DeliveryInfo deliveryInfo = 1;
-	required WrapperMessage message = 2;
+	required bytes data = 2;
 }
 
 message WelcomePacket {
@@ -168,7 +168,7 @@ message NetworkPacket {
 	enum Type { DOWNSTREAM = 1; DROP = 2; HANDSHAKE = 3; NETWORK_DATA_UPDATE = 4; NEW = 5; UPSTREAM = 6; }
 
 	optional NetworkMap networkMap = 1;
-	optional bytes pdu = 2;
+	optional Pdu pdu = 2;
 	required Type type = 3;
 }
 

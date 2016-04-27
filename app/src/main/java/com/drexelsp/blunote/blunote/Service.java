@@ -36,7 +36,7 @@ public class Service extends ClientService {
         try {
             Pdu pdu = Pdu.parseFrom(data);
             DeliveryInfo dinfo = pdu.getDeliveryInfo();
-            WrapperMessage message = pdu.getMessage();
+            WrapperMessage message = WrapperMessage.parseFrom(pdu.getData());
             this.user.onReceive(dinfo, message);
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
@@ -50,11 +50,9 @@ public class Service extends ClientService {
             // Gather Metadata and Send it
             Metadata metadata = new Metadata(getApplicationContext());
             BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata(getApplicationContext());
-            Pdu pdu = createMessage()
-                    .setMessage(WrapperMessage.newBuilder()
-                            .setType(WrapperMessage.Type.METADATA_UPDATE)
-                            .setMetadataUpdate(metadataUpdate)).build();
-            super.send(pdu.toByteArray());
+            super.sendUpstream(WrapperMessage.newBuilder()
+                    .setType(WrapperMessage.Type.METADATA_UPDATE)
+                    .setMetadataUpdate(metadataUpdate).build().toByteArray());
         }
     }
 
@@ -87,59 +85,32 @@ public class Service extends ClientService {
         super.disconnect();
     }
     public void send(SingleAnswer message) {
-        Pdu pdu = createMessage()
-                .setMessage(WrapperMessage.newBuilder()
-                        .setType(WrapperMessage.Type.SINGLE_ANSWER)
-                        .setSingleAnswer(message)).build();
-        super.send(pdu.toByteArray());
+        super.sendUpstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.SINGLE_ANSWER)
+                .setSingleAnswer(message).build().toByteArray());
     }
 
     public void send(MultiAnswer message) {
-        Pdu pdu = createMessage()
-                .setMessage(WrapperMessage.newBuilder()
-                        .setType(WrapperMessage.Type.MULTI_ANSWER)
-                        .setMultiAnswer(message)).build();
-        super.send(pdu.toByteArray());
+        super.sendUpstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.MULTI_ANSWER)
+                .setMultiAnswer(message).build().toByteArray());
     }
 
     public void send(SongFragment message) {
-        Pdu pdu = createMessage()
-                .setMessage(WrapperMessage.newBuilder()
-                        .setType(WrapperMessage.Type.SONG_FRAGMENT)
-                        .setSongFragment(message)).build();
-        super.send(pdu.toByteArray());
+        super.sendUpstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.SONG_FRAGMENT)
+                .setSongFragment(message).build().toByteArray());
     }
 
     public void send(Recommendation message) {
-        Pdu pdu = createMessage()
-                .setMessage(WrapperMessage.newBuilder()
-                        .setType(WrapperMessage.Type.RECOMMEND)
-                        .setRecommendation(message)).build();
-        super.send(pdu.toByteArray());
+        super.sendUpstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.RECOMMEND)
+                .setRecommendation(message).build().toByteArray());
     }
 
     public void send(SongRequest message) {
-        Pdu pdu = createMessage()
-                .setMessage(WrapperMessage.newBuilder()
-                        .setType(WrapperMessage.Type.SONG_REQUEST)
-                        .setSongRequest(message)).build();
-        super.send(pdu.toByteArray());
-    }
-
-    public Pdu.Builder createMessage() {
-        Pdu.Builder pduBuilder = Pdu.newBuilder();
-        pduBuilder.setDeliveryInfo(createDeliveryInfo());
-        return pduBuilder;
-    }
-
-    public DeliveryInfo createDeliveryInfo() {
-        DeliveryInfo.Builder dinfoBuilder = DeliveryInfo.newBuilder();
-        dinfoBuilder.setTimestamp(getTimestamp());
-        dinfoBuilder.setUsername(user.getName());
-        return dinfoBuilder.build();
-    }
-
-    private long getTimestamp() {
-        return System.currentTimeMillis() / 1000;
+        super.sendUpstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.SONG_REQUEST)
+                .setSongRequest(message).build().toByteArray());
     }
 }

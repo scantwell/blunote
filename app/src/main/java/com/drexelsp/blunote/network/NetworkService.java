@@ -49,6 +49,59 @@ public class NetworkService extends Service {
         EventBus.getDefault().register(this);
     }
 
+    @Subscribe
+    public void onConnectionEvent(OnConnectionEvent event)
+    {
+        if (this.configuration.getNotifyOnConnect())
+        {
+        }
+    }
+
+    @Subscribe
+    public void onDisconnectEvent(OnDisconnectionEvent event)
+    {
+        if (this.configuration.getNotifyOnDisconnect())
+        {
+        }
+    }
+
+    @Subscribe
+    public void onReceiveUpstream(OnReceiveUpstream event)
+    {
+        try {
+            NetworkPacket np = event.getNetworkPacket();
+            if (NetworkPacket.Type.NETWORK_DATA_UPDATE.equals(np.getType()))
+            {
+
+            }
+            if (this.configuration.getReceiveDownstream() && np.hasPdu())
+            {
+                //broadcast np.getPdu()
+            }
+        } catch (InvalidProtocolBufferException e) {
+            e.printStackTrace();
+        }
+        // send a broadcast request ?or check the networkpack for other events?
+    }
+
+    @Subscribe
+    public void onReceiveDownstream(OnReceiveDownstream event)
+    {
+        try {
+            NetworkPacket np = event.getNetworkPacket();
+            if (NetworkPacket.Type.NETWORK_DATA_UPDATE.equals(np.getType()))
+            {
+
+            }
+            if (this.configuration.getReceiveDownstream() && np.hasPdu())
+            {
+                //broadcast np.getPdu()
+            }
+        } catch (InvalidProtocolBufferException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void onReceived(String data) {
         Log.v(TAG, "Received a message.");
         Intent intent = new Intent();
@@ -59,10 +112,21 @@ public class NetworkService extends Service {
     }
 
     // Sends to another application via bluetooth/etc
-    public void send(Message msg) {
+    public void sendDownstream(byte[] data) {
         Log.v(TAG, "Sending message.");
-        BlunoteRouter blunoteRouter = BlunoteRouter.getInstance();
-        blunoteRouter.send(msg);
+        if (this.router != null)
+        {
+            this.router.addDownstreamMessage(createNetworkPacket(data).build().toByteArray());
+        }
+    }
+
+    // Sends to another application via bluetooth/etc
+    public void sendUpstream(byte[] data) {
+        Log.v(TAG, "Sending message.");
+        if (this.router != null)
+        {
+            this.router.addUpstreamMessage(createNetworkPacket(data).build().toByteArray());
+        }
     }
 
     public void connectToNetwork(NetworkConfiguration config) {
@@ -83,45 +147,6 @@ public class NetworkService extends Service {
         this.router.shutdown();
     }
 
-    @Subscribe
-    public void onConnectionEvent(OnConnectionEvent event)
-    {
-
-    }
-
-    @Subscribe
-    public void onDisconnectEvent(OnDisconnectionEvent event)
-    {
-
-    }
-
-    @Subscribe
-    public void onReceiveUpstream(OnReceiveUpstream event)
-    {
-        try {
-            NetworkPacket np = event.getNetworkPacket();
-            if (NetworkPacket.Type.NETWORK_DATA_UPDATE.equals(np.getType()))
-            {
-
-            }
-            if (np.hasPdu())
-            {
-                //broadcast np.getPdu()
-            }
-        } catch (InvalidProtocolBufferException e) {
-            e.printStackTrace();
-        }
-
-
-        // send a broadcast request ?or check the networkpack for other events?
-    }
-
-    @Subscribe
-    public void onReceiveDownstream(OnReceiveDownstream event)
-    {
-
-    }
-
     public void startNetwork(NetworkConfiguration config) {
         this.configuration = config;
         BlunoteRouter.getInstance().setHostMode(getApplicationContext());
@@ -136,8 +161,13 @@ public class NetworkService extends Service {
         this.configuration = configBuilder.build();
     }
 
-    public void getAvailableNetworks() {
-
+    private void createRouter(NetworkConfiguration config)
+    {
+        this.router = new Router();
+        this.router.setNotifyOnConnect(true);
+        this.router.setNotifyOnDisconnect(true);
+        this.router.setNotifyOnReceiveDownstream(true);
+        this.router.setNotifyOnReceiveUpstream(true);
     }
 
     private void makeDiscoverable() {
@@ -205,7 +235,6 @@ public class NetworkService extends Service {
     }
 
     // Private
-
     private void createNotification() {
         Notification note =
                 new NotificationCompat.Builder(this)
@@ -215,5 +244,30 @@ public class NetworkService extends Service {
         note.flags |= Notification.FLAG_NO_CLEAR;
         NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         nManager.notify(NOTIFICATION_ID, note);
+    }
+
+    private NetworkPacket.Builder createNetworkPacket(byte[] data) {
+        NetworkPacket.Builder networkBuilder = NetworkPacket.newBuilder();
+        networkBuilder.setPdu(createPdu(data));
+        return networkBuilder;
+    }
+
+    private Pdu createPdu(byte[] data)
+    {
+        Pdu.Builder builder = Pdu.newBuilder()
+                .setDeliveryInfo(createDeliveryInfo())
+                .setData(ByteString.copyFrom(data));
+        return builder.build();
+    }
+
+    private DeliveryInfo createDeliveryInfo() {
+        DeliveryInfo.Builder dinfoBuilder = DeliveryInfo.newBuilder();
+        dinfoBuilder.setTimestamp(getTimestamp());
+        dinfoBuilder.setUsername(BluetoothAdapter.getDefaultAdapter().getAddress());
+        return dinfoBuilder.build();
+    }
+
+    private long getTimestamp() {
+        return System.currentTimeMillis() / 1000;
     }
 }

@@ -22,9 +22,9 @@ import java.lang.ref.WeakReference;
  */
 public class ClientHandler extends Handler {
 
-    static public final int SEND = 1;
-    static public final int SONG_RECOMMENDATION = 2;
-    static public final int GET_AVAILABLE_NETWORKS = 3;
+    static public final int SEND_UPSTREAM = 1;
+    static public final int SEND_DOWNSTREAM = 2;
+    static public final int SONG_RECOMMENDATION = 3;
     static public final int CONNECT_TO_NETWORK = 4;
     static public final int START_NEW_NETWORK = 5;
     static public final int UPDATE_HANDSHAKE = 6;
@@ -39,17 +39,22 @@ public class ClientHandler extends Handler {
     @Override
     public void handleMessage(Message msg) {
         Bundle b;
+        byte[] data;
         switch (msg.what) {
             case SONG_RECOMMENDATION:
                 msg.getData();
                 break;
-            case SEND:
-                Log.v(TAG, "Sending message.");
-                mService.get().send(msg);
+            case SEND_UPSTREAM:
+                Log.v(TAG, "Sending upstream message.");
+                b = msg.getData();
+                data = b.getByteArray("data");
+                mService.get().sendUpstream(data);
                 break;
-            case GET_AVAILABLE_NETWORKS:
-                Log.v(TAG, "Get Available Networks");
-                mService.get().getAvailableNetworks();
+            case SEND_DOWNSTREAM:
+                Log.v(TAG, "Sending downstream message.");
+                b = msg.getData();
+                data = b.getByteArray("data");
+                mService.get().sendDownstream(data);
                 break;
             case CONNECT_TO_NETWORK:
                 Log.v(TAG, "Connect To Network");

@@ -80,7 +80,7 @@ public class Router extends Thread {
         this.notifyOnConnect = notifyOnConnect;
     }
 
-    public void addUpstream(BlunoteSocket socket)
+    protected void addUpstream(BlunoteSocket socket)
     {
         networkList.add(socket.getAddress());
         new Thread(new Reader(new UpstreamCallback(this), socket)).start();
@@ -88,7 +88,7 @@ public class Router extends Thread {
         upOuts.add(socket.getOutputStream());
     }
 
-    public void addDownstream(BlunoteSocket socket)
+    protected void addDownstream(BlunoteSocket socket)
     {
         this.onConnection(socket);
         new Thread(new Reader(new DownstreamCallback(this), socket)).start();
@@ -141,6 +141,13 @@ public class Router extends Thread {
         {
             OnDisconnectionEvent event = new OnDisconnectionEvent(socket.getAddress());
             EventBus.getDefault().post(event);
+        }
+        for (int i = 0; i < networkList.size(); i++)
+        {
+            if (networkList.get(i).equals(socket.getAddress()))
+            {
+                networkList.remove(i);
+            }
         }
     }
 

@@ -27,9 +27,19 @@ abstract public class ClientService extends Service {
     abstract public void onNetworkEvent(BluetoothEvent bluetoothEvent);
 
     // Sends to another application via bluetooth/etc
-    protected void send(byte[] data) {
+    protected void sendUpstream(byte[] data) {
+        this.send(ClientHandler.SEND_UPSTREAM, data);
+    }
+
+    // Sends to another application via bluetooth/etc
+    protected void sendDownstream(byte[] data) {
+        this.send(ClientHandler.SEND_DOWNSTREAM, data);
+    }
+
+    // Sends to another application via bluetooth/etc
+    private void send(int direction, byte[] data) {
         Log.v(TAG, "Sending message.");
-        Message msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
+        Message msg = Message.obtain(null, direction, 0, 0);
         Bundle bundle = new Bundle(1);
         bundle.putByteArray("data", data);
         msg.setData(bundle);
