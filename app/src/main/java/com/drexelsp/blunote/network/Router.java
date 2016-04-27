@@ -40,7 +40,7 @@ public class Router extends Thread {
     private boolean notifyOnConnectDownstream;
 
 
-    public Router() {
+    public Router(String address) {
         this.downstreamCallback = null;
         this.upstreamCallback = null;
         this.isRunning = false;
@@ -49,6 +49,7 @@ public class Router extends Thread {
         this.upBucket = new ConcurrentLinkedQueue<>();
         this.downBucket = new ConcurrentLinkedQueue<>();
         this.networkList = new ArrayList<>();
+        this.networkList.add(address);
     }
 
     public void start() {

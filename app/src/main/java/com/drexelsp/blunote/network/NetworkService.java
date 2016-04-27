@@ -22,7 +22,6 @@ import com.drexelsp.blunote.events.OnDisconnectionEvent;
 import com.drexelsp.blunote.events.OnReceiveDownstream;
 import com.drexelsp.blunote.events.OnReceiveUpstream;
 import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -136,7 +135,7 @@ public class NetworkService extends Service {
 
     public void startNetwork(NetworkConfiguration config) {
         this.configuration = config;
-        BlunoteRouter.getInstance().setHostMode(getApplicationContext());
+        this.router = createRouter(config);
         mBluetoothServerListener = new BluetoothServerListener(this.router, uuid, config.getHandshake().toByteArray());
         makeDiscoverable();
     }
@@ -148,7 +147,7 @@ public class NetworkService extends Service {
     }
 
     private Router createRouter(NetworkConfiguration config) {
-        Router router = new Router();
+        Router router = new Router(BluetoothAdapter.getDefaultAdapter().getAddress());
         router.setNotifyOnConnectDownstream(true);
         router.setNotifyOnConnectUpstream(true);
         router.setNotifyOnDisconnectDownstream(true);

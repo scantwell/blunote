@@ -13,7 +13,7 @@ public class Reader implements Runnable {
     private BlunoteInputStream inputStream;
     private Callback callback;
 
-    public Reader(Callback callback, BlunoteSocket socket) {
+    public Reader(Callback callback, BlunoteSocket socket) throws IOException {
         this.callback = callback;
         this.socket = socket;
         this.inputStream = socket.getInputStream();
