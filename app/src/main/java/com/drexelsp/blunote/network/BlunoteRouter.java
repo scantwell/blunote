@@ -16,6 +16,7 @@ import java.util.ArrayList;
  * <p>
  * Router for Reading and Writing BlunoteSockets
  */
+/*
 public class BlunoteRouter extends Thread {
     private static final String TAG = "Blunote Router";
     private static BlunoteRouter instance = new BlunoteRouter();
@@ -169,3 +170,4 @@ public class BlunoteRouter extends Thread {
         applicationContext.sendBroadcast(intent);
     }
 }
+*/
