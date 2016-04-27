@@ -24,13 +24,19 @@ public class ClientHandshake implements Runnable {
 
     public ClientHandshake(BlunoteSocket socket, Router router, boolean maintain) {
         this.socket = socket;
-        this.inputStream = socket.getInputStream();
-        this.outputStream = socket.getOutputStream();
         this.router = router;
         this.maintain = maintain;
     }
 
     public void run() {
+        try {
+            this.inputStream = socket.getInputStream();
+            this.outputStream = socket.getOutputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
         this.networkPacket = read();
 
         NetworkPacket.Builder builder = NetworkPacket.newBuilder();
@@ -44,16 +50,27 @@ public class ClientHandshake implements Runnable {
         write(response.toByteString());
 
         if (this.maintain) {
-            // TODO: Store Up To Date NetworkPacket
-            // this.router.setNetworkPacket(networkPacket);
-            this.router.addUpstream(socket);
+            try {
+                this.router.addUpstream(socket);
+            } catch (IOException e) {
+                e.printStackTrace();
+                this.close();
+            }
         } else {
-            this.socket.close();
+            this.close();
         }
     }
 
     public NetworkPacket getNetworkPacket() {
         return this.networkPacket;
+    }
+
+    private void close() {
+        try {
+            this.socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private NetworkPacket read() {
