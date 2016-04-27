@@ -47,9 +47,19 @@ public class NetworkService extends Service {
     public void onConnectionEvent(OnConnectionEvent event) {
         if (event.direction == OnConnectionEvent.UPSTREAM) {
             if (this.configuration.getNotifyOnConnectUpstream()) {
+                Intent intent = new Intent();
+                intent.setAction("networkservice.onrecieved");
+                intent.putExtra("Type", "OnConnectionUpstream");
+                intent.putExtra("MacAddress", event.macAddress);
+                sendBroadcast(intent);
             }
         } else if (event.direction == OnConnectionEvent.DOWNSTREAM) {
             if (this.configuration.getNotifyOnConnectDownstream()) {
+                Intent intent = new Intent();
+                intent.setAction("networkservice.onrecieved");
+                intent.putExtra("Type", "OnConnectionDownstream");
+                intent.putExtra("MacAddress", event.macAddress);
+                sendBroadcast(intent);
             }
         }
     }
@@ -69,10 +79,13 @@ public class NetworkService extends Service {
     public void onReceiveUpstream(OnReceiveUpstream event) {
         NetworkPacket np = event.getNetworkPacket();
         if (NetworkPacket.Type.NETWORK_DATA_UPDATE.equals(np.getType())) {
-
         }
-        if (this.configuration.getReceiveDownstream() && np.hasPdu()) {
-            //broadcast np.getPdu()
+        if (this.configuration.getReceiveUpstream() && np.hasPdu()) {
+            Intent intent = new Intent();
+            intent.setAction("networkservice.onrecieved");
+            intent.putExtra("Type", "OnReceiveUpstream");
+            intent.putExtra("Data", event.getNetworkPacket().getPdu().toByteArray());
+            sendBroadcast(intent);
         }
         // send a broadcast request ?or check the networkpack for other events?
     }
@@ -84,17 +97,12 @@ public class NetworkService extends Service {
 
         }
         if (this.configuration.getReceiveDownstream() && np.hasPdu()) {
-            //broadcast np.getPdu()
+            Intent intent = new Intent();
+            intent.setAction("networkservice.onrecieved");
+            intent.putExtra("Type", "OnReceiveDownstream");
+            intent.putExtra("Data", event.getNetworkPacket().getPdu().toByteArray());
+            sendBroadcast(intent);
         }
-    }
-
-    public void onReceived(String data) {
-        Log.v(TAG, "Received a message.");
-        Intent intent = new Intent();
-        intent.setAction("networkservice.onrecieved");
-        intent.putExtra("Type", "MessageReceived");
-        intent.putExtra("Data", data);
-        sendBroadcast(intent);
     }
 
     // Sends to another application via bluetooth/etc

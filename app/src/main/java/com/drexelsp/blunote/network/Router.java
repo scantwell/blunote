@@ -123,13 +123,13 @@ public class Router extends Thread {
 
     public synchronized void addUpstreamMessage(byte[] data) {
         this.upBucket.add(data);
-        Log.d(TAG, String.format("Added upstream message to queue. New size %d", this.downBucket.size()));
+        Log.d(TAG, String.format("Added upstream message to queue. New size %d", this.upBucket.size()));
         notifyAll();
     }
 
     public synchronized void addDownstreamMessage(byte[] data) {
         this.downBucket.add(data);
-        Log.d(TAG, String.format("Added downstream message to queue. New size %d", this.upBucket.size()));
+        Log.d(TAG, String.format("Added downstream message to queue. New size %d", this.downBucket.size()));
         notifyAll();
     }
 

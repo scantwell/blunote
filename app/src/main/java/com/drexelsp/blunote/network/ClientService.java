@@ -20,9 +20,13 @@ abstract public class ClientService extends Service {
     protected Receiver receiver = new Receiver(this);
     protected IBinder mBinder = null;
 
-    abstract public void onReceive(byte[] data);
+    abstract public void onConnectionDownstream(String address);
 
-    abstract public void onNetworkEvent(BluetoothEvent bluetoothEvent);
+    abstract public void onConnectionUpstream(String address);
+
+    abstract public void onReceiveDownstream(byte[] data);
+
+    abstract public void onReceiveUpstream(byte[] data);
 
     // Sends to another application via bluetooth/etc
     protected void sendUpstream(byte[] data) { this.send(ClientHandler.SEND_UPSTREAM, data); }

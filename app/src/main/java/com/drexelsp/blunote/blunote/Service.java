@@ -2,6 +2,7 @@ package com.drexelsp.blunote.blunote;
 
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
 import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
@@ -14,12 +15,9 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
-import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.network.ClientService;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by scantwell on 2/15/2016.
@@ -41,8 +39,11 @@ public class Service extends ClientService {
         super.setBinder(mBinder);
     }
 
-    @Override
-    public void onReceive(byte[] data) {
+    public void onReceiveDownstream(byte[] data) {
+        this.onReceiveUpstream(data);
+    }
+
+    public void onReceiveUpstream(byte[] data) {
         try {
             Pdu pdu = Pdu.parseFrom(data);
             DeliveryInfo dinfo = pdu.getDeliveryInfo();
@@ -53,18 +54,16 @@ public class Service extends ClientService {
         }
     }
 
-    @Override
-    public void onNetworkEvent(BluetoothEvent bluetoothEvent) {
-        EventBus.getDefault().post(bluetoothEvent);
-        if ((bluetoothEvent.event == BluetoothEvent.CONNECTOR || bluetoothEvent.event == BluetoothEvent.SERVER_LISTENER) && bluetoothEvent.success) {
-            // Gather Metadata and Send it
-            Metadata metadata = new Metadata(getApplicationContext());
-            BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata(getApplicationContext());
-            super.sendUpstream(WrapperMessage.newBuilder()
-                    .setType(WrapperMessage.Type.METADATA_UPDATE)
-                    .setMetadataUpdate(metadataUpdate).build().toByteArray());
-        }
+    public void onConnectionUpstream(String address)
+    {
+        Metadata metadata = new Metadata(getApplicationContext());
+        BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata(getApplicationContext());
+        super.sendUpstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.METADATA_UPDATE)
+                .setMetadataUpdate(metadataUpdate).build().toByteArray());
     }
+
+    public void onConnectionDownstream(String address) { Log.v(TAG, "Client has connected to us."); }
 
     public void onCreate() {
         super.onCreate();
