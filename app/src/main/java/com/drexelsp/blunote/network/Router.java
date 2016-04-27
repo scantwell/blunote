@@ -28,8 +28,6 @@ public class Router extends Thread {
     private CopyOnWriteArrayList<BlunoteOutputStream> upOuts;
     private CopyOnWriteArrayList<BlunoteOutputStream> downOuts;
     private boolean isRunning;
-    private Callback downstreamCallback;
-    private Callback upstreamCallback;
     private ArrayList<String> networkList;
     private boolean notifyOnReceiveUpstream;
     private boolean notifyOnReceiveDownstream;
@@ -41,8 +39,6 @@ public class Router extends Thread {
 
 
     public Router(String address) {
-        this.downstreamCallback = null;
-        this.upstreamCallback = null;
         this.isRunning = false;
         this.upSockets = new CopyOnWriteArrayList<>();
         this.downSockets = new CopyOnWriteArrayList<>();
@@ -50,6 +46,8 @@ public class Router extends Thread {
         this.downBucket = new ConcurrentLinkedQueue<>();
         this.networkList = new ArrayList<>();
         this.networkList.add(address);
+        this.downOuts = new CopyOnWriteArrayList<>();
+        this.upOuts = new CopyOnWriteArrayList<>();
     }
 
     public void start() {
@@ -223,7 +221,6 @@ public class Router extends Thread {
             Log.d(TAG, String.format("Posting OnReceiveDownstream for message."));
             OnReceiveDownstream event = new OnReceiveDownstream(data);
             EventBus.getDefault().post(event);
-            this.downstreamCallback.onReceivePacket(data);
         }
     }
 
@@ -234,7 +231,6 @@ public class Router extends Thread {
             Log.d(TAG, String.format("Posting OnReceiveUpstream for messsage"));
             OnReceiveUpstream event = new OnReceiveUpstream(data);
             EventBus.getDefault().post(event);
-            this.upstreamCallback.onReceivePacket(data);
         }
     }
 
