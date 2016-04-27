@@ -179,10 +179,7 @@ public class NetworkService extends Service {
     }
 
     @Override
-    public void onCreate() {
-        Log.v(TAG, "Created service.");
-        EventBus.getDefault().register(this);
-    }
+    public void onCreate()  { Log.v(TAG, "Created service."); }
 
     @Override
     public void onDestroy() {
