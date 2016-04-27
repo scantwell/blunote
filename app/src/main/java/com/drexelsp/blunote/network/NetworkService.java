@@ -115,7 +115,7 @@ public class NetworkService extends Service {
 
     public void connectToNetwork(NetworkConfiguration config) {
         this.router = createRouter(config);
-
+        this.router.start();
         /*BlunoteRouter.getInstance().setClientMode(getApplicationContext());
         BluetoothConnector bluetoothConnector = new BluetoothConnector(uuid);
         bluetoothConnector.connectToDevice(device);
@@ -134,6 +134,7 @@ public class NetworkService extends Service {
         this.router = createRouter(config);
         mBluetoothServerListener = new BluetoothServerListener(this.router, uuid, config.getHandshake().toByteArray());
         makeDiscoverable();
+        this.router.start();
     }
 
     public void updateHandshake(ByteString handshake) {
