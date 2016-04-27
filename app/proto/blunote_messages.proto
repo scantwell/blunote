@@ -174,9 +174,11 @@ message NetworkPacket {
 
 message NetworkConfiguration {
 	optional bytes handshake = 1;
-	optional bool notifyOnDisconnect = 2 [default = false];
-	optional bool notifyOnConnect = 3 [default = false];
-	optional bool receiveUpstream = 4 [default = false]; /// Receive callbacks with client data
-	optional bool receiveDownstream = 5 [default = false]; /// Receive callbacks with host data
-	optional NetworkMap networkMap = 6;
+	optional bool notifyOnDisconnectDownstream = 2 [default = false];
+	optional bool notifyOnDisconnectUpstream = 3 [default = false];
+	optional bool notifyOnConnectDownstream = 4 [default = false];
+	optional bool notifyOnConnectUpstream = 5 [default = false];
+	optional bool receiveUpstream = 6 [default = false]; /// Receive callbacks with client data
+	optional bool receiveDownstream = 7 [default = false]; /// Receive callbacks with host data
+	optional NetworkMap networkMap = 8;
 }
