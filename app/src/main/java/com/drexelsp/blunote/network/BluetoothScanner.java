@@ -95,8 +95,8 @@ public class BluetoothScanner extends BroadcastReceiver {
             if (!mDevices.isEmpty()) {
                 BluetoothDevice device = mDevices.remove(0);
                 device.fetchUuidsWithSdp();
-            }
-
+            } else
+                dialog.hide();
         } else if (BluetoothDevice.ACTION_UUID.equals(action)) {
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             Parcelable[] uuids = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);

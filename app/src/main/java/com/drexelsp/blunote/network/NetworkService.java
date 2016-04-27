@@ -231,6 +231,7 @@ public class NetworkService extends Service {
     private NetworkPacket.Builder createNetworkPacket(byte[] data) {
         NetworkPacket.Builder networkBuilder = NetworkPacket.newBuilder();
         networkBuilder.setPdu(createPdu(data));
+        networkBuilder.setType(NetworkPacket.Type.DOWNSTREAM);
         return networkBuilder;
     }
 

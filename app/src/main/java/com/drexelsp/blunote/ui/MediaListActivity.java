@@ -41,9 +41,6 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mediaList = new ArrayList<>();
-        idList = new ArrayList<>();
-
         ViewFlipper vf = ((ViewFlipper) findViewById(R.id.view_flipper));
         vf.setDisplayedChild(Constants.ACTIVITY_MEDIA_LIST);
 
@@ -193,9 +190,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
         mediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MediaListActivity.this, AlbumViewActivity.class);
-                intent.putExtra("album", mediaList.get(position));
-                startActivity(intent);
+                startActivity(AlbumViewActivity.class, position);
             }
         });
     }
@@ -212,9 +207,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
         mediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MediaListActivity.this, ArtistViewActivity.class);
-                intent.putExtra("artist", mediaList.get(position));
-                startActivity(intent);
+                startActivity(ArtistViewActivity.class, position);
             }
         });
     }
@@ -226,8 +219,8 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     }
 
     private void setMediaLists(Map<String, String> mediaMap) {
-        mediaList.clear();
-        idList.clear();
+        mediaList = new ArrayList<>();
+        idList = new ArrayList<>();
 
         for (Map.Entry<String, String> entry : mediaMap.entrySet()) {
             mediaList.add(entry.getKey());
