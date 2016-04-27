@@ -219,7 +219,7 @@ public class Router extends Thread {
         Log.d(TAG, String.format("Sending downstream message."));
         send(data, downOuts);
         if (notifyOnReceiveDownstream) {
-            Log.d(TAG, String.format("Posting OnReceiveDownstream for message.");
+            Log.d(TAG, String.format("Posting OnReceiveDownstream for message."));
             OnReceiveDownstream event = new OnReceiveDownstream(data);
             EventBus.getDefault().post(event);
             this.downstreamCallback.onReceivePacket(data);
