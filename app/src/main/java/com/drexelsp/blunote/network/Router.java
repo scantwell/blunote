@@ -2,6 +2,7 @@ package com.drexelsp.blunote.network;
 
 import android.util.Log;
 
+import com.drexelsp.blunote.blunote.BlunoteMessages;
 import com.drexelsp.blunote.events.OnConnectionEvent;
 import com.drexelsp.blunote.events.OnDisconnectionEvent;
 import com.drexelsp.blunote.events.OnReceiveDownstream;
@@ -87,6 +88,7 @@ public class Router extends Thread {
     }
 
     protected void addUpstream(BlunoteSocket socket) throws IOException {
+        Log.d(TAG, String.format("Adding upstream connection with address: %s", socket.getAddress()));
         postOnUpstreamConnection(socket);
         networkList.add(socket.getAddress());
         new Thread(new Reader(new UpstreamCallback(this), socket)).start();
@@ -95,6 +97,7 @@ public class Router extends Thread {
     }
 
     protected void addDownstream(BlunoteSocket socket) throws IOException {
+        Log.d(TAG, String.format("Adding downstream connection with address: %s", socket.getAddress()));
         postOnDownstreamConnection(socket);
         networkList.add(socket.getAddress());
         new Thread(new Reader(new DownstreamCallback(this), socket)).start();
@@ -104,13 +107,15 @@ public class Router extends Thread {
 
     private void postOnUpstreamConnection(BlunoteSocket socket) {
         if (notifyOnConnectUpstream) {
+            Log.d(TAG, String.format("Posting OnConnectionEvent for upstream connection with address: %s", socket.getAddress()));
             OnConnectionEvent event = new OnConnectionEvent(OnConnectionEvent.UPSTREAM, socket.getAddress());
             EventBus.getDefault().post(event);
         }
     }
 
     private void postOnDownstreamConnection(BlunoteSocket socket) {
-        if (notifyOnConnectUpstream) {
+        if (notifyOnConnectDownstream) {
+            Log.d(TAG, String.format("Posting OnConnectionEvent for downstream connection with address: %s", socket.getAddress()));
             OnConnectionEvent event = new OnConnectionEvent(OnConnectionEvent.DOWNSTREAM, socket.getAddress());
             EventBus.getDefault().post(event);
         }
@@ -118,11 +123,13 @@ public class Router extends Thread {
 
 
     public synchronized void addUpstreamMessage(byte[] data) {
+        Log.d(TAG, String.format("Storing upstream message."));
         this.downBucket.add(data);
         notifyAll();
     }
 
     public synchronized void addDownstreamMessage(byte[] data) {
+        Log.d(TAG, String.format("Storing downstream message."));
         this.upBucket.add(data);
         notifyAll();
     }
@@ -132,10 +139,12 @@ public class Router extends Thread {
         while (this.isRunning) {
             waitForMessages();
             if (downBucket.size() > 0) {
+                Log.d(TAG, "Processing downstream message queue.");
                 byte[] data = downBucket.remove();
                 this.sendDownstream(data);
             }
             if (upBucket.size() > 0) {
+                Log.d(TAG, "Processing upstream message queue.");
                 byte[] data = upBucket.remove();
                 this.sendUpstream(data);
             }
@@ -143,9 +152,18 @@ public class Router extends Thread {
         cleanUp();
     }
 
+    public BlunoteMessages.NetworkMap getNetworkMap()
+    {
+        BlunoteMessages.NetworkMap.Builder builder = BlunoteMessages.NetworkMap.newBuilder();
+        builder.addAllMacAddresses(networkList);
+        return builder.build();
+    }
+
     private void removeSocketFromNetworkList(BlunoteSocket socket) {
+
         for (int i = 0; i < networkList.size(); i++) {
             if (networkList.get(i).equals(socket.getAddress())) {
+                Log.d(TAG, String.format("Removing socket from network list with address %s.", socket.getAddress()));
                 networkList.remove(i);
             }
         }
@@ -153,6 +171,7 @@ public class Router extends Thread {
 
     private void postOnDownstreamDisconnection(BlunoteSocket socket) {
         if (notifyOnDisconnectDownstream) {
+            Log.d(TAG, String.format("Posting OnDisconnectionEvent for downstream connection with address: %s", socket.getAddress()));
             OnDisconnectionEvent event = new OnDisconnectionEvent(OnDisconnectionEvent.DOWNSTREAM, socket.getAddress());
             EventBus.getDefault().post(event);
         }
@@ -161,6 +180,7 @@ public class Router extends Thread {
 
     private void postOnUpstreamDisconnection(BlunoteSocket socket) {
         if (notifyOnDisconnectUpstream) {
+            Log.d(TAG, String.format("Posting OnDisconnectionEvent for upstream connection with address: %s", socket.getAddress()));
             OnDisconnectionEvent event = new OnDisconnectionEvent(OnDisconnectionEvent.UPSTREAM, socket.getAddress());
             EventBus.getDefault().post(event);
         }
@@ -186,7 +206,9 @@ public class Router extends Thread {
     protected synchronized void waitForMessages() {
         while (downBucket.size() < 1 && upBucket.size() < 1) {
             try {
+                Log.d(TAG, String.format("Router thread going to sleep, awaiting incoming messages."));
                 wait();
+                Log.d(TAG, String.format("Router thread awake."));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -194,21 +216,25 @@ public class Router extends Thread {
     }
 
     private void sendDownstream(byte[] data) {
+        Log.d(TAG, String.format("Sending downstream message."));
+        send(data, downOuts);
         if (notifyOnReceiveDownstream) {
+            Log.d(TAG, String.format("Posting OnReceiveDownstream for message.");
             OnReceiveDownstream event = new OnReceiveDownstream(data);
             EventBus.getDefault().post(event);
             this.downstreamCallback.onReceivePacket(data);
         }
-        send(data, downOuts);
     }
 
     private void sendUpstream(byte[] data) {
+        Log.d(TAG, String.format("Sending upstream message."));
+        send(data, upOuts);
         if (notifyOnReceiveUpstream) {
+            Log.d(TAG, String.format("Posting OnReceiveUpstream for messsage"));
             OnReceiveUpstream event = new OnReceiveUpstream(data);
             EventBus.getDefault().post(event);
             this.upstreamCallback.onReceivePacket(data);
         }
-        send(data, upOuts);
     }
 
     private void send(byte[] data, CopyOnWriteArrayList<BlunoteOutputStream> outs) {
