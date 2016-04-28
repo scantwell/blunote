@@ -48,6 +48,7 @@ public class Handshake implements Runnable {
         pduBuilder.setData(ByteString.copyFrom(this.handshakePacket));
 
         NetworkPacket.Builder networkPacketBuilder = NetworkPacket.newBuilder();
+        networkPacketBuilder.setType(NetworkPacket.Type.HANDSHAKE);
         networkPacketBuilder.setNetworkMap(this.router.getNetworkMap());
         networkPacketBuilder.setPdu(pduBuilder.build());
 

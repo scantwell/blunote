@@ -122,8 +122,12 @@ public class NetworkService extends Service {
     }
 
     public void connectToNetwork(NetworkConfiguration config) {
+        this.configuration = config;
         this.router = createRouter(config);
         this.router.start();
+        BluetoothConnector bluetoothConnector = new BluetoothConnector(this.router, this.uuid, config.getNetworkMap());
+        bluetoothConnector.start();
+        // TODO: On successful connection, start serverListener and makeDiscoverable
         /*BlunoteRouter.getInstance().setClientMode(getApplicationContext());
         BluetoothConnector bluetoothConnector = new BluetoothConnector(uuid);
         bluetoothConnector.connectToDevice(device);

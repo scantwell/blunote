@@ -173,9 +173,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
                 toast.show();
             } else if (mBound && mService != null) {
                 ConnectionListItem network = mAdapter.getItem(position);
-                String macAddress = network.getMacAddress();
-                //mService.connectToNetwork(macAddress); // Commented out until scanner is in place
-
+                mService.connectToNetwork(network.getNetworkMap());
             }
         } else if (v == createNetworkButton) {
             if (mBound && mService != null) {

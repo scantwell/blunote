@@ -1,5 +1,8 @@
 package com.drexelsp.blunote.beans;
 
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap;
+import com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket;
+
 /**
  * List Item data container to view available connections on login screen.
  */
@@ -7,9 +10,21 @@ public class ConnectionListItem {
     private String connectionName;
     private int totalConnections;
     private int totalSongs;
-    // Temp
-    private String macAddress;
 
+    private NetworkMap networkMap;
+
+    public ConnectionListItem() { }
+
+    public ConnectionListItem(NetworkMap networkMap, WelcomePacket welcomePacket) {
+        this.connectionName = welcomePacket.getNetworkName();
+        this.totalConnections = Integer.parseInt(welcomePacket.getNumUsers());
+        this.totalSongs = Integer.parseInt(welcomePacket.getNumSongs());
+        this.networkMap = networkMap;
+    }
+
+    public NetworkMap getNetworkMap() {
+        return this.networkMap;
+    }
 
     public String getConnectionName() {
         return connectionName;
@@ -33,13 +48,5 @@ public class ConnectionListItem {
 
     public void setTotalSongs(int totalSongs) {
         this.totalSongs = totalSongs;
-    }
-
-    public String getMacAddress() {
-        return this.macAddress;
-    }
-
-    public void setMacAddress(String macAddress) {
-        this.macAddress = macAddress;
     }
 }
