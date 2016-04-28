@@ -1,8 +1,12 @@
 package com.drexelsp.blunote.blunote;
 
-import android.content.Context;
-import android.net.Uri;
-import android.util.Log;
+import java.io.File;
+import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
 import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
@@ -13,13 +17,9 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Vote;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
 
-import org.greenrobot.eventbus.Subscribe;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.concurrent.ConcurrentHashMap;
+import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
 
 /**
  * Created by scantwell on 3/31/2016.
@@ -41,15 +41,27 @@ public class Host extends User implements Observer {
     @Override
     public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message)
     {
-        if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
-            this.metadata.addMetadata(message);
-        } else {
+        super.onReceive(dinfo, message);
 
-            this.metadata.deleteMetadata(message);
+        /*BlunoteMessages.MetadataUpdate.Builder builder = BlunoteMessages.MetadataUpdate.newBuilder();
+        builder.setAction(message.getAction());
+        builder.setOwner(message.getOwner());
+        builder.setUserId(message.getUserId());
+        List<BlunoteMessages.Album> albums = message.getAlbumsList();
+        List<BlunoteMessages.Artist> artists = message.getArtistsList();
+        List<BlunoteMessages.Song> songs = message.getSongsList();
+
+        for (int i = 0; i < albums.size(); ++i){
+            builder.setAlbums(i, albums.get(i));
         }
-        //Contains the removal of metadata
-        BlunoteMessages.MetadataUpdate.Builder builder = BlunoteMessages.MetadataUpdate.newBuilder();
-        this.service.send(builder.build());
+        for (int i = 0; i < artists.size(); ++i){
+            builder.setArtists(i, artists.get(i));
+        }
+        for (int i = 0; i < songs.size(); ++i){
+            builder.setSongs(i, songs.get(i));
+        }*/
+
+        this.service.send(message);
     }
 
     @Override

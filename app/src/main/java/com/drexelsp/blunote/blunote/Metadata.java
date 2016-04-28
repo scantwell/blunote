@@ -1,5 +1,16 @@
 package com.drexelsp.blunote.blunote;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.drexelsp.blunote.blunote.BlunoteMessages.Artist;
+import com.drexelsp.blunote.provider.MetaStoreContract;
+import com.google.protobuf.ByteString;
+
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -9,17 +20,6 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
-
-import com.drexelsp.blunote.blunote.BlunoteMessages.Artist;
-import com.drexelsp.blunote.provider.MetaStoreContract;
-import com.google.protobuf.ByteString;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by scantwell on 3/10/2016.
@@ -84,10 +84,19 @@ public class Metadata {
         mContentResolver.delete(MetaStoreContract.Album.CONTENT_URI, "title=?", selectionArgs);
     }
 
+    public void deleteUserAndTracks(String username, String user_id){
+        String[] userTracksSelection = new String[]{user_id};
+        mContentResolver.delete(MetaStoreContract.UserTracks.CONTENT_URI, "user_id=?", userTracksSelection);
+        String[] userSelection = new String[]{username};
+        mContentResolver.delete(MetaStoreContract.User.CONTENT_URI, "username=?", userSelection);
+    }
+
     public void deleteMetadata(BlunoteMessages.MetadataUpdate message) {
         deleteAlbums(message.getAlbumsList());
         deleteArtists(message.getArtistsList());
         deleteSongs(message.getSongsList());
+        deleteUserAndTracks(message.getOwner(), message.getUserId());
+
     }
 
     private Cursor getAlbumcursor() {
