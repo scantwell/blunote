@@ -41,27 +41,14 @@ public class Host extends User implements Observer {
     @Override
     public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message)
     {
-        super.onReceive(dinfo, message);
-
-        /*BlunoteMessages.MetadataUpdate.Builder builder = BlunoteMessages.MetadataUpdate.newBuilder();
-        builder.setAction(message.getAction());
-        builder.setOwner(message.getOwner());
-        builder.setUserId(message.getUserId());
-        List<BlunoteMessages.Album> albums = message.getAlbumsList();
-        List<BlunoteMessages.Artist> artists = message.getArtistsList();
-        List<BlunoteMessages.Song> songs = message.getSongsList();
-
-        for (int i = 0; i < albums.size(); ++i){
-            builder.setAlbums(i, albums.get(i));
+        BlunoteMessages.MetadataUpdate update;
+        if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
+            update = this.metadata.addHostMetadata(message);
+        } else {
+            update = this.metadata.deleteHostMetadata(message);
         }
-        for (int i = 0; i < artists.size(); ++i){
-            builder.setArtists(i, artists.get(i));
-        }
-        for (int i = 0; i < songs.size(); ++i){
-            builder.setSongs(i, songs.get(i));
-        }*/
 
-        this.service.send(message);
+        this.service.send(update);
     }
 
     @Override

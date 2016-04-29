@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.Artist;
@@ -29,6 +31,8 @@ public class Metadata {
     private String TAG = "Metadata";
     private ContentResolver mContentResolver;
 
+    private static final ContentValues[] EMPTY_CONTENT_ARRAY = new ContentValues[0];
+
     public Metadata(Context context) {
 
         mContentResolver = context.getContentResolver();
@@ -46,6 +50,211 @@ public class Metadata {
                 "pref_key_user_name", BluetoothAdapter.getDefaultAdapter().getName()));
         mdBuilder.setUserId(BluetoothAdapter.getDefaultAdapter().getAddress());
         return mdBuilder.build();
+    }
+
+    public BlunoteMessages.MetadataUpdate addHostMetadata(BlunoteMessages.MetadataUpdate message)
+    {
+        BlunoteMessages.MetadataUpdate.Builder builder = BlunoteMessages.MetadataUpdate.newBuilder();
+        builder.setAction(message.getAction());
+        builder.setUserId(message.getUserId());
+        builder.setOwner(message.getOwner());
+
+        ContentValues[] songs = removeSongAddDuplicates(getSongValues(message.getSongsList()));
+        ContentValues[] artists = removeArtistAddDuplicates(getArtistValues(message.getArtistsList()));
+        ContentValues[] albums = removeAlbumAddDuplicates(getAlbumValues(message.getAlbumsList()));
+        ContentValues[] user_tracks = getUserTracks(message.getSongsList(), message.getUserId());
+        insertNewUser(message.getOwner(), message.getUserId()/* Should add latency here when implemented */);
+        mContentResolver.bulkInsert(MetaStoreContract.Track.CONTENT_URI, songs);
+        mContentResolver.bulkInsert(MetaStoreContract.Artist.CONTENT_URI, artists);
+        mContentResolver.bulkInsert(MetaStoreContract.Album.CONTENT_URI, albums);
+        mContentResolver.bulkInsert(MetaStoreContract.UserTracks.CONTENT_URI, user_tracks);
+
+        builder.addAllSongs(rebuildSongs(songs));
+        builder.addAllArtists(rebuildArtists(artists));
+        builder.addAllAlbums(rebuildAlbums(albums));
+
+        return builder.build();
+    }
+
+    private ContentValues[] removeSongAddDuplicates(ContentValues[] songs){
+        List<ContentValues> songList = new ArrayList<>();
+        Collections.addAll(songList, songs);
+
+        Iterator<ContentValues> iterator = songList.iterator();
+        while (iterator.hasNext()){
+            ContentValues song = iterator.next();
+            Cursor c = checkAddSong(song.get(MetaStoreContract.Track.TITLE), song.get(MetaStoreContract.Track.ALBUM),
+                    song.get(MetaStoreContract.Track.ARTIST));
+            if (c.moveToFirst()){
+                iterator.remove();
+            }
+            c.close();
+        }
+
+        return songList.toArray(EMPTY_CONTENT_ARRAY);
+    }
+
+    private ContentValues[] removeArtistAddDuplicates(ContentValues[] artists){
+        List<ContentValues> artistList = new ArrayList<>();
+        Collections.addAll(artistList, artists);
+
+        Iterator<ContentValues> iterator = artistList.iterator();
+        while (iterator.hasNext()) {
+            ContentValues artist = iterator.next();
+            Cursor c = checkAddArtist(artist.get(MetaStoreContract.Artist.ARTIST));
+            if (c.moveToFirst()){
+                iterator.remove();
+            }
+            c.close();
+        }
+
+        return artistList.toArray(EMPTY_CONTENT_ARRAY);
+    }
+
+    private ContentValues[] removeAlbumAddDuplicates(ContentValues[] albums){
+        List<ContentValues> albumList = new ArrayList<>();
+        Collections.addAll(albumList, albums);
+
+        Iterator<ContentValues> iterator = albumList.iterator();
+        while (iterator.hasNext()) {
+            ContentValues album = iterator.next();
+            Cursor c = checkAddAlbum(album.get(MetaStoreContract.Album.ALBUM),
+                    album.get(MetaStoreContract.Album.ARTIST));
+            if (c.moveToFirst()) {
+                iterator.remove();
+            }
+            c.close();
+        }
+
+        return albumList.toArray(EMPTY_CONTENT_ARRAY);
+    }
+
+    private List<BlunoteMessages.Song> rebuildSongs(ContentValues[] addedSongs){
+        List<BlunoteMessages.Song> rebuiltSongs = new ArrayList<>();
+        BlunoteMessages.Song.Builder builder;
+        for (ContentValues values : addedSongs) {
+            builder = BlunoteMessages.Song.newBuilder();
+            builder.setAlbum(((String) values.get(MetaStoreContract.Track.ALBUM)));
+            builder.setArtist(((String) values.get(MetaStoreContract.Track.ARTIST)));
+            builder.setDuration(((String) values.get(MetaStoreContract.Track.DURATION)));
+            builder.setSongId(((Long) values.get(MetaStoreContract.Track.SONG_ID)));
+            builder.setTitle(((String) values.get(MetaStoreContract.Track.TITLE)));
+            builder.setTrack(((String) values.get(MetaStoreContract.Track.TRACK_NO)));
+            builder.setYear(((String) values.get(MetaStoreContract.Track.YEAR)));
+            rebuiltSongs.add(builder.build());
+        }
+        return rebuiltSongs;
+    }
+
+    private List<BlunoteMessages.Artist> rebuildArtists(ContentValues[] addedArtists){
+        List<BlunoteMessages.Artist> rebuiltArtists = new ArrayList<>();
+        BlunoteMessages.Artist.Builder builder;
+        for (ContentValues values : addedArtists) {
+            builder = BlunoteMessages.Artist.newBuilder();
+            builder.setArtist(((String) values.get(MetaStoreContract.Artist.ARTIST)));
+            builder.setNumberOfAlbums(((String) values.get(MetaStoreContract.Artist.NUMBER_OF_ALBUMS)));
+            builder.setNumberOfTracks(((String) values.get(MetaStoreContract.Artist.NUMBER_OF_TRACKS)));
+            rebuiltArtists.add(builder.build());
+        }
+        return rebuiltArtists;
+    }
+
+    private List<BlunoteMessages.Album> rebuildAlbums(ContentValues[] addedAlbums){
+        List<BlunoteMessages.Album> rebuiltAlbums = new ArrayList<>();
+        BlunoteMessages.Album.Builder builder = BlunoteMessages.Album.newBuilder();
+        for (ContentValues values : addedAlbums) {
+            builder.setAlbum(((String) values.get(MetaStoreContract.Album.ALBUM)));
+            builder.setAlbumArt(((ByteString) values.get(MetaStoreContract.Album.ALBUM_ART)));
+            builder.setArtist(((String) values.get(MetaStoreContract.Album.ARTIST)));
+            builder.setFirstYear(((String) values.get(MetaStoreContract.Album.FIRST_YEAR)));
+            builder.setLastYear(values.get(MetaStoreContract.Album.LAST_YEAR).toString());
+            builder.setNumberOfSongs(((String) values.get(MetaStoreContract.Album.NUMBER_OF_SONGS)));
+            rebuiltAlbums.add(builder.build());
+        }
+        return rebuiltAlbums;
+    }
+
+    private Cursor checkAddSong(Object song, Object album, Object artist){
+        String[] selectionArgs = new String[]{((String) song), ((String) album), ((String) artist)};
+        String where = "track=? AND album=? AND artist=?";
+        return mContentResolver.query(MetaStoreContract.Track.CONTENT_URI, null, where, selectionArgs, null);
+    }
+
+    private Cursor checkAddArtist(Object artist){
+        String[] selectionArgs = new String[]{((String) artist)};
+        String where = "artist=?";
+        return mContentResolver.query(MetaStoreContract.Artist.CONTENT_URI, null, where, selectionArgs, null);
+    }
+
+    private Cursor checkAddAlbum(Object album, Object artist){
+        String[] selectionArgs = new String[]{((String) album), ((String) artist)};
+        String where = "album=? AND artist=?";
+        return mContentResolver.query(MetaStoreContract.Album.CONTENT_URI, null, where, selectionArgs, null);
+    }
+
+    public BlunoteMessages.MetadataUpdate deleteHostMetadata(BlunoteMessages.MetadataUpdate message)
+    {
+        BlunoteMessages.MetadataUpdate.Builder builder = BlunoteMessages.MetadataUpdate.newBuilder();
+        builder.setAction(message.getAction());
+        builder.setUserId(message.getUserId());
+        builder.setOwner(message.getOwner());
+
+        deleteUserAndTracks(message.getOwner(), message.getUserId());
+        List<BlunoteMessages.Song> songs = removeSongDeleteDuplicates(message.getSongsList());
+        List<BlunoteMessages.Artist> artists = removeArtistDeleteDuplicates(message.getArtistsList());
+        List<BlunoteMessages.Album> albums = removeAlbumDeleteDuplicates(message.getAlbumsList());
+
+        deleteSongs(songs);
+        deleteArtists(artists);
+        deleteAlbums(albums);
+
+        builder.addAllSongs(songs);
+        builder.addAllArtists(artists);
+        builder.addAllAlbums(albums);
+
+        return builder.build();
+    }
+
+    private List<BlunoteMessages.Song> removeSongDeleteDuplicates(List<BlunoteMessages.Song> songs) {
+        Iterator<BlunoteMessages.Song> iterator = songs.iterator();
+        while (iterator.hasNext()) {
+
+        }
+        return null;
+    }
+
+    private List<BlunoteMessages.Artist> removeArtistDeleteDuplicates(List<BlunoteMessages.Artist> artists) {
+        Iterator<BlunoteMessages.Artist> iterator = artists.iterator();
+        while (iterator.hasNext()) {
+
+        }
+        return null;
+    }
+
+    private List<BlunoteMessages.Album> removeAlbumDeleteDuplicates(List<BlunoteMessages.Album> albums) {
+        Iterator<BlunoteMessages.Album> iterator = albums.iterator();
+        while (iterator.hasNext()) {
+
+        }
+        return null;
+    }
+
+    private Cursor checkDeleteSong(String song, String album, String artist){
+        String[] selectionArgs = new String[]{song, album, artist};
+        String where = "track=? AND album=? AND artist=?";
+        return mContentResolver.query(MetaStoreContract.Track.CONTENT_URI, null, where, selectionArgs, null);
+    }
+
+    private Cursor checkDeleteArtist(String artist){
+        String[] selectionArgs = new String[]{artist};
+        String where = "artist=?";
+        return mContentResolver.query(MetaStoreContract.Artist.CONTENT_URI, null, where, selectionArgs, null);
+    }
+
+    private Cursor checkDeleteAlbum(String album, String artist){
+        String[] selectionArgs = new String[]{album, artist};
+        String where = "album=? AND artist=?";
+        return mContentResolver.query(MetaStoreContract.Album.CONTENT_URI, null, where, selectionArgs, null);
     }
 
     public void addMetadata(BlunoteMessages.MetadataUpdate message) {
