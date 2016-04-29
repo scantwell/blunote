@@ -14191,18 +14191,18 @@ public final class BlunoteMessages {
     long getTimestamp();
 
     /**
-     * <code>optional string username = 2;</code>
+     * <code>optional string address = 2;</code>
      */
-    boolean hasUsername();
+    boolean hasAddress();
     /**
-     * <code>optional string username = 2;</code>
+     * <code>optional string address = 2;</code>
      */
-    java.lang.String getUsername();
+    java.lang.String getAddress();
     /**
-     * <code>optional string username = 2;</code>
+     * <code>optional string address = 2;</code>
      */
     com.google.protobuf.ByteString
-        getUsernameBytes();
+        getAddressBytes();
 
     /**
      * <code>optional int32 id = 3;</code>
@@ -14278,7 +14278,7 @@ public final class BlunoteMessages {
             case 18: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              username_ = bs;
+              address_ = bs;
               break;
             }
             case 24: {
@@ -14341,19 +14341,19 @@ public final class BlunoteMessages {
       return timestamp_;
     }
 
-    public static final int USERNAME_FIELD_NUMBER = 2;
-    private java.lang.Object username_;
+    public static final int ADDRESS_FIELD_NUMBER = 2;
+    private java.lang.Object address_;
     /**
-     * <code>optional string username = 2;</code>
+     * <code>optional string address = 2;</code>
      */
-    public boolean hasUsername() {
+    public boolean hasAddress() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional string username = 2;</code>
+     * <code>optional string address = 2;</code>
      */
-    public java.lang.String getUsername() {
-      java.lang.Object ref = username_;
+    public java.lang.String getAddress() {
+      java.lang.Object ref = address_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
@@ -14361,22 +14361,22 @@ public final class BlunoteMessages {
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
-          username_ = s;
+          address_ = s;
         }
         return s;
       }
     }
     /**
-     * <code>optional string username = 2;</code>
+     * <code>optional string address = 2;</code>
      */
     public com.google.protobuf.ByteString
-        getUsernameBytes() {
-      java.lang.Object ref = username_;
+        getAddressBytes() {
+      java.lang.Object ref = address_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        username_ = b;
+        address_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -14400,7 +14400,7 @@ public final class BlunoteMessages {
 
     private void initFields() {
       timestamp_ = 0L;
-      username_ = "";
+      address_ = "";
       id_ = 0;
     }
     private byte memoizedIsInitialized = -1;
@@ -14424,7 +14424,7 @@ public final class BlunoteMessages {
         output.writeInt64(1, timestamp_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getUsernameBytes());
+        output.writeBytes(2, getAddressBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt32(3, id_);
@@ -14444,7 +14444,7 @@ public final class BlunoteMessages {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getUsernameBytes());
+          .computeBytesSize(2, getAddressBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
@@ -14574,7 +14574,7 @@ public final class BlunoteMessages {
         super.clear();
         timestamp_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000001);
-        username_ = "";
+        address_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
         id_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -14613,7 +14613,7 @@ public final class BlunoteMessages {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.username_ = username_;
+        result.address_ = address_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
@@ -14637,9 +14637,9 @@ public final class BlunoteMessages {
         if (other.hasTimestamp()) {
           setTimestamp(other.getTimestamp());
         }
-        if (other.hasUsername()) {
+        if (other.hasAddress()) {
           bitField0_ |= 0x00000002;
-          username_ = other.username_;
+          address_ = other.address_;
           onChanged();
         }
         if (other.hasId()) {
@@ -14708,24 +14708,24 @@ public final class BlunoteMessages {
         return this;
       }
 
-      private java.lang.Object username_ = "";
+      private java.lang.Object address_ = "";
       /**
-       * <code>optional string username = 2;</code>
+       * <code>optional string address = 2;</code>
        */
-      public boolean hasUsername() {
+      public boolean hasAddress() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional string username = 2;</code>
+       * <code>optional string address = 2;</code>
        */
-      public java.lang.String getUsername() {
-        java.lang.Object ref = username_;
+      public java.lang.String getAddress() {
+        java.lang.Object ref = address_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           if (bs.isValidUtf8()) {
-            username_ = s;
+            address_ = s;
           }
           return s;
         } else {
@@ -14733,53 +14733,53 @@ public final class BlunoteMessages {
         }
       }
       /**
-       * <code>optional string username = 2;</code>
+       * <code>optional string address = 2;</code>
        */
       public com.google.protobuf.ByteString
-          getUsernameBytes() {
-        java.lang.Object ref = username_;
+          getAddressBytes() {
+        java.lang.Object ref = address_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          username_ = b;
+          address_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string username = 2;</code>
+       * <code>optional string address = 2;</code>
        */
-      public Builder setUsername(
+      public Builder setAddress(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000002;
-        username_ = value;
+        address_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string username = 2;</code>
+       * <code>optional string address = 2;</code>
        */
-      public Builder clearUsername() {
+      public Builder clearAddress() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        username_ = getDefaultInstance().getUsername();
+        address_ = getDefaultInstance().getAddress();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string username = 2;</code>
+       * <code>optional string address = 2;</code>
        */
-      public Builder setUsernameBytes(
+      public Builder setAddressBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000002;
-        username_ = value;
+        address_ = value;
         onChanged();
         return this;
       }
@@ -18946,27 +18946,27 @@ public final class BlunoteMessages {
       "E\020\001\022\020\n\014MULTI_ANSWER\020\002\022\r\n\tRECOMMEND\020\003\022\021\n\r" +
       "SINGLE_ANSWER\020\004\022\021\n\rSONG_FRAGMENT\020\005\022\020\n\014SO" +
       "NG_REQUEST\020\006\022\010\n\004VOTE\020\007\022\022\n\016WELCOME_PACKET" +
-      "\020\010\"?\n\014DeliveryInfo\022\021\n\ttimestamp\030\001 \002(\003\022\020\n" +
-      "\010username\030\002 \001(\t\022\n\n\002id\030\003 \001(\005\"@\n\003Pdu\022+\n\014de" +
-      "liveryInfo\030\001 \002(\0132\025.blunote.DeliveryInfo\022" +
-      "\014\n\004data\030\002 \002(\014\"H\n\rWelcomePacket\022\023\n\013networ",
-      "kName\030\001 \002(\t\022\020\n\010numUsers\030\002 \002(\t\022\020\n\010numSong" +
-      "s\030\003 \002(\t\"\"\n\nNetworkMap\022\024\n\014macAddresses\030\001 " +
-      "\003(\t\"\337\001\n\rNetworkPacket\022\'\n\nnetworkMap\030\001 \001(" +
-      "\0132\023.blunote.NetworkMap\022\031\n\003pdu\030\002 \001(\0132\014.bl" +
-      "unote.Pdu\022)\n\004type\030\003 \002(\0162\033.blunote.Networ" +
-      "kPacket.Type\"_\n\004Type\022\016\n\nDOWNSTREAM\020\001\022\010\n\004" +
-      "DROP\020\002\022\r\n\tHANDSHAKE\020\003\022\027\n\023NETWORK_DATA_UP" +
-      "DATE\020\004\022\007\n\003NEW\020\005\022\014\n\010UPSTREAM\020\006\"\276\002\n\024Networ" +
-      "kConfiguration\022\021\n\thandshake\030\001 \001(\014\022+\n\034not" +
-      "ifyOnDisconnectDownstream\030\002 \001(\010:\005false\022)",
-      "\n\032notifyOnDisconnectUpstream\030\003 \001(\010:\005fals" +
-      "e\022(\n\031notifyOnConnectDownstream\030\004 \001(\010:\005fa" +
-      "lse\022&\n\027notifyOnConnectUpstream\030\005 \001(\010:\005fa" +
-      "lse\022\036\n\017receiveUpstream\030\006 \001(\010:\005false\022 \n\021r" +
-      "eceiveDownstream\030\007 \001(\010:\005false\022\'\n\nnetwork" +
-      "Map\030\010 \001(\0132\023.blunote.NetworkMapB/\n\034com.dr" +
-      "exelsp.blunote.blunoteB\017BlunoteMessages"
+      "\020\010\">\n\014DeliveryInfo\022\021\n\ttimestamp\030\001 \002(\003\022\017\n" +
+      "\007address\030\002 \001(\t\022\n\n\002id\030\003 \001(\005\"@\n\003Pdu\022+\n\014del" +
+      "iveryInfo\030\001 \002(\0132\025.blunote.DeliveryInfo\022\014" +
+      "\n\004data\030\002 \002(\014\"H\n\rWelcomePacket\022\023\n\013network",
+      "Name\030\001 \002(\t\022\020\n\010numUsers\030\002 \002(\t\022\020\n\010numSongs" +
+      "\030\003 \002(\t\"\"\n\nNetworkMap\022\024\n\014macAddresses\030\001 \003" +
+      "(\t\"\337\001\n\rNetworkPacket\022\'\n\nnetworkMap\030\001 \001(\013" +
+      "2\023.blunote.NetworkMap\022\031\n\003pdu\030\002 \001(\0132\014.blu" +
+      "note.Pdu\022)\n\004type\030\003 \002(\0162\033.blunote.Network" +
+      "Packet.Type\"_\n\004Type\022\016\n\nDOWNSTREAM\020\001\022\010\n\004D" +
+      "ROP\020\002\022\r\n\tHANDSHAKE\020\003\022\027\n\023NETWORK_DATA_UPD" +
+      "ATE\020\004\022\007\n\003NEW\020\005\022\014\n\010UPSTREAM\020\006\"\276\002\n\024Network" +
+      "Configuration\022\021\n\thandshake\030\001 \001(\014\022+\n\034noti" +
+      "fyOnDisconnectDownstream\030\002 \001(\010:\005false\022)\n",
+      "\032notifyOnDisconnectUpstream\030\003 \001(\010:\005false" +
+      "\022(\n\031notifyOnConnectDownstream\030\004 \001(\010:\005fal" +
+      "se\022&\n\027notifyOnConnectUpstream\030\005 \001(\010:\005fal" +
+      "se\022\036\n\017receiveUpstream\030\006 \001(\010:\005false\022 \n\021re" +
+      "ceiveDownstream\030\007 \001(\010:\005false\022\'\n\nnetworkM" +
+      "ap\030\010 \001(\0132\023.blunote.NetworkMapB/\n\034com.dre" +
+      "xelsp.blunote.blunoteB\017BlunoteMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -19051,7 +19051,7 @@ public final class BlunoteMessages {
     internal_static_blunote_DeliveryInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_blunote_DeliveryInfo_descriptor,
-        new java.lang.String[] { "Timestamp", "Username", "Id", });
+        new java.lang.String[] { "Timestamp", "Address", "Id", });
     internal_static_blunote_Pdu_descriptor =
       getDescriptor().getMessageTypes().get(12);
     internal_static_blunote_Pdu_fieldAccessorTable = new
