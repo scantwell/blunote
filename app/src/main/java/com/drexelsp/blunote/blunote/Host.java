@@ -53,8 +53,6 @@ public class Host extends User {
     }
 
     public void onReceive(DeliveryInfo dinfo, MetadataUpdate message) {
-        super.onReceive(dinfo, message);
-
         if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
             addUser();
             this.metadata.addMetadata(message);
@@ -62,8 +60,6 @@ public class Host extends User {
             removeUser();
             this.metadata.deleteMetadata(message);
         }
-        // Contains the removal of metadata
-        //this.service.send(BlunoteMessages.MetadataUpdate);
         updateWelcomePacket();
     }
 

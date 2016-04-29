@@ -153,6 +153,10 @@ public class NetworkService extends Service {
         NetworkConfiguration.Builder configBuilder = NetworkConfiguration.newBuilder().mergeFrom(this.configuration);
         configBuilder.setHandshake(handshake);
         this.configuration = configBuilder.build();
+        if (this.mBluetoothServerListener != null)
+        {
+            mBluetoothServerListener.setHandshake(handshake.toByteArray());
+        }
     }
 
     private Router createRouter(NetworkConfiguration config) {
