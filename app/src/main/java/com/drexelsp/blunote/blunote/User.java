@@ -54,6 +54,8 @@ public class User {
             this.onReceive(dinfo, message.getSongRequest());
         } else if (BlunoteMessages.WrapperMessage.Type.VOTE.equals(message.getType())) {
             this.onReceive(dinfo, message.getVote());
+        } else if (BlunoteMessages.WrapperMessage.Type.WELCOME_PACKET.equals(message.getType())) {
+            this.onReceive(dinfo, message.getWelcomePacket());
         } else {
             throw new RuntimeException(String.format("Unhandled message of type '%s'", message.getType().name()));
         }
@@ -90,6 +92,10 @@ public class User {
                 service.send(frag);
             }
         }
+    }
+
+    public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.WelcomePacket message) {
+        this.service.updateHandshake(message.toByteArray());
     }
 
     public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.Vote message) {

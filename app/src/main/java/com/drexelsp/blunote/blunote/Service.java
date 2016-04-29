@@ -127,4 +127,10 @@ public class Service extends ClientService {
                 .setType(WrapperMessage.Type.SONG_REQUEST)
                 .setSongRequest(message).build().toByteArray());
     }
+
+    public void send(WelcomePacket message) {
+        super.sendDownstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.WELCOME_PACKET)
+                .setWelcomePacket(message).build().toByteArray());
+    }
 }

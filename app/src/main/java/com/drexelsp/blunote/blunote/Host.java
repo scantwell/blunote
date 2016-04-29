@@ -26,22 +26,40 @@ public class Host extends User {
     private Player player;
     private ArrayList<SongAssembler> songAssemblers;
     private String serverName;
+    private int numUsers;
 
     public Host(Service service, Context context) {
         super(service, context);
+        this.numUsers = 1;
         this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_user_name", BluetoothAdapter.getDefaultAdapter().getName());
-        this.serverName = this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_server_name", "Party Jamz");
+        this.serverName = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_server_name", "Party Jamz");
         this.songAssemblers = new ArrayList<>();
         this.player = new Player(context);
         new Thread(this.player).start();
+    }
+
+    public void addUser()
+    {
+        this.numUsers++;
+    }
+
+    public void removeUser()
+    {
+        if (this.numUsers < 2)
+        {
+            return;
+        }
+        this.numUsers--;
     }
 
     public void onReceive(DeliveryInfo dinfo, MetadataUpdate message) {
         super.onReceive(dinfo, message);
 
         if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
+            addUser();
             this.metadata.addMetadata(message);
         } else {
+            removeUser();
             this.metadata.deleteMetadata(message);
         }
         // Contains the removal of metadata
@@ -91,14 +109,16 @@ public class Host extends User {
     }
 
     private void updateWelcomePacket() {
-        this.service.updateHandshake(getWelcomePacket());
+        WelcomePacket wp = getWelcomePacket();
+        this.service.updateHandshake(wp.toByteArray());
+        this.service.send(wp);
     }
 
-    public byte[] getWelcomePacket() {
+    public WelcomePacket getWelcomePacket() {
         WelcomePacket.Builder wp = WelcomePacket.newBuilder();
         wp.setNetworkName(this.serverName);
-        wp.setNumSongs("0");
-        wp.setNumUsers("1");
-        return wp.build().toByteArray();
+        wp.setNumSongs(this.metadata.getSongCount());
+        wp.setNumUsers(Integer.toString(this.numUsers));
+        return wp.build();
     }
 }
