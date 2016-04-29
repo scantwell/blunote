@@ -164,7 +164,8 @@ public class Metadata {
         BlunoteMessages.Album.Builder builder = BlunoteMessages.Album.newBuilder();
         for (ContentValues values : addedAlbums) {
             builder.setAlbum(((String) values.get(MetaStoreContract.Album.ALBUM)));
-            builder.setAlbumArt(((ByteString) values.get(MetaStoreContract.Album.ALBUM_ART)));
+            builder.setAlbumArt(ByteString.copyFrom(
+                    ((byte[]) values.get(MetaStoreContract.Album.ALBUM_ART))));
             builder.setArtist(((String) values.get(MetaStoreContract.Album.ARTIST)));
             builder.setFirstYear(((String) values.get(MetaStoreContract.Album.FIRST_YEAR)));
             builder.setLastYear(values.get(MetaStoreContract.Album.LAST_YEAR).toString());
