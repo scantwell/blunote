@@ -28,6 +28,10 @@ abstract public class ClientService extends Service {
 
     abstract public void onReceiveUpstream(byte[] data);
 
+    abstract public void onDisconnectionDownstream(String address);
+
+    abstract public void onDisconnectionUpstream(String address);
+
     // Sends to another application via bluetooth/etc
     protected void sendUpstream(byte[] data) { this.send(ClientHandler.SEND_UPSTREAM, data); }
 

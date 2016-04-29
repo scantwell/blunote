@@ -68,9 +68,19 @@ public class NetworkService extends Service {
     public void onDisconnectEvent(OnDisconnectionEvent event) {
         if (event.direction == OnDisconnectionEvent.UPSTREAM) {
             if (this.configuration.getNotifyOnDisconnectUpstream()) {
+                Intent intent = new Intent();
+                intent.setAction("networkservice.onrecieved");
+                intent.putExtra("Type", "OnDisconnectionUpstream");
+                intent.putExtra("MacAddress", event.macAddress);
+                sendBroadcast(intent);
             }
         } else if (event.direction == OnDisconnectionEvent.DOWNSTREAM) {
             if (this.configuration.getNotifyOnDisconnectUpstream()) {
+                Intent intent = new Intent();
+                intent.setAction("networkservice.onrecieved");
+                intent.putExtra("Type", "OnDisconnectionDownstream");
+                intent.putExtra("MacAddress", event.macAddress);
+                sendBroadcast(intent);
             }
         }
     }

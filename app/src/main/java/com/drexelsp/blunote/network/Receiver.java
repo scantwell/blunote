@@ -28,12 +28,17 @@ public class Receiver extends android.content.BroadcastReceiver {
             byte[] data = intent.getByteArrayExtra("Data");
             cService.onReceiveUpstream(data);
         } else if (messageType.equals("OnConnectionDownstream")) {
-            Log.v(TAG, "OnConnectionDownstream event has occured.");
+            Log.v(TAG, "OnConnectionDownstream event has occurred.");
             cService.onConnectionDownstream(intent.getStringExtra("MacAddress"));
         } else if (messageType.equals("OnConnectionUpstream")) {
-            Log.v(TAG, "OnConnectionUpstream event has occured.");
+            Log.v(TAG, "OnConnectionUpstream event has occurred.");
             cService.onConnectionUpstream(intent.getStringExtra("MacAddress"));
+        } else if (messageType.equals("OnDisconnectionDownstream")) {
+            Log.v(TAG, "OnDisconnectionDownstream event has occurred.");
+            cService.onDisconnectionDownstream(intent.getStringExtra("MacAddress"));
+        } else if (messageType.equals("OnDisconnectionUpstream")) {
+            Log.v(TAG, "OnDisconnectionUpstream event has occurred.");
+            cService.onDisconnectionUpstream(intent.getStringExtra("MacAddress"));
         }
-
     }
 }
