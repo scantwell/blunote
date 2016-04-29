@@ -7,6 +7,7 @@ import android.util.Log;
 import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -19,21 +20,27 @@ public class BluetoothGreeter extends Thread {
     private static final String TAG = "Bluetooth Greeter";
     private BluetoothSocket socket;
     private NetworkPacket packet;
+    private BluetoothConnector2 connector;
 
     public BluetoothGreeter(String macAddress, UUID uuid) {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        try {
+        /*try {
             this.socket = bluetoothAdapter.getRemoteDevice(macAddress)
                     .createInsecureRfcommSocketToServiceRecord(uuid);
         } catch (IOException e) {
             Log.e(TAG, String.format("Error creating insecure socket: %s", e.getMessage()));
-        }
+        }*/
+        ArrayList<UUID> uuids = new ArrayList<>();
+        uuids.add(uuid);
+        this.connector  = new BluetoothConnector2(bluetoothAdapter.getRemoteDevice(macAddress), false, bluetoothAdapter, uuids);
     }
 
     public void run() {
         try {
-            this.socket.connect();
-            BlunoteSocket blunoteSocket = new BlunoteBluetoothSocket(this.socket);
+            //this.socket.connect();
+            BluetoothConnector2.BluetoothSocketWrapper socket = this.connector.connect();
+            //BlunoteSocket blunoteSocket = new BlunoteBluetoothSocket(this.socket);
+            BlunoteSocket blunoteSocket = new BlunoteBluetoothSocket(socket.getUnderlyingSocket());
             BlunoteOutputStream outputStream = blunoteSocket.getOutputStream();
             BlunoteInputStream inputStream = blunoteSocket.getInputStream();
 
