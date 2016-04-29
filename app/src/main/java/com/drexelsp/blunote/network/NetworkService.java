@@ -139,6 +139,9 @@ public class NetworkService extends Service {
     public void disconnect() {
         Log.w(TAG, "Disconnecting from network.");
         this.router.shutdown();
+        if(mBluetoothServerListener != null)
+            this.mBluetoothServerListener.shutdown();
+        cancelDiscoverable();
     }
 
     public void startNetwork(NetworkConfiguration config) {

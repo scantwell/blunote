@@ -20,7 +20,10 @@ import android.widget.ViewFlipper;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.events.OnLeaveNetworkEvent;
 import com.drexelsp.blunote.provider.MetaStoreContract;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -106,6 +109,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         } else if (id == R.id.action_leave_network) {
+            EventBus.getDefault().post(new OnLeaveNetworkEvent());
             intent = new Intent(getCurrentContext(), LoginActivity.class);
             startActivity(intent);
             return true;

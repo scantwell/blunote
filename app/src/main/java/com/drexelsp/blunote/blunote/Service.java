@@ -16,11 +16,13 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
 import com.drexelsp.blunote.events.BluetoothEvent;
+import com.drexelsp.blunote.events.OnLeaveNetworkEvent;
 import com.drexelsp.blunote.network.ClientService;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by scantwell on 2/15/2016.
@@ -73,6 +75,7 @@ public class Service extends ClientService {
     public void onConnectionDownstream(String address) { Log.v(TAG, "Client has connected to us."); }
 
     public void onCreate() {
+        EventBus.getDefault().register(this);
         super.onCreate();
     }
 
@@ -99,6 +102,13 @@ public class Service extends ClientService {
         configBuilder.setReceiveDownstream(true);
         configBuilder.setNetworkMap(networkMap);
         super.connectToNetwork(configBuilder.build());
+    }
+
+    @Subscribe
+    public void onLeaveNetworkEvent(OnLeaveNetworkEvent event)
+    {
+        Log.v(TAG, "Disconnecting");
+        this.disconnect();
     }
 
     public void disconnect() {
