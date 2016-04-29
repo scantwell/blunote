@@ -218,43 +218,61 @@ public class Metadata {
     private List<BlunoteMessages.Song> removeSongDeleteDuplicates(List<BlunoteMessages.Song> songs) {
         Iterator<BlunoteMessages.Song> iterator = songs.iterator();
         while (iterator.hasNext()) {
-
+            BlunoteMessages.Song song = iterator.next();
+            Cursor c = checkDeleteSong(song.getTitle(), song.getAlbum(), song.getArtist());
+            if (c.moveToFirst()) {
+                iterator.remove();
+            }
+            c.close();
         }
-        return null;
+
+        return songs;
     }
 
     private List<BlunoteMessages.Artist> removeArtistDeleteDuplicates(List<BlunoteMessages.Artist> artists) {
         Iterator<BlunoteMessages.Artist> iterator = artists.iterator();
         while (iterator.hasNext()) {
-
+            BlunoteMessages.Artist artist = iterator.next();
+            Cursor c = checkDeleteArtist(artist.getArtist());
+            if (c.moveToFirst()) {
+                iterator.remove();
+            }
+            c.close();
         }
-        return null;
+
+        return artists;
     }
 
     private List<BlunoteMessages.Album> removeAlbumDeleteDuplicates(List<BlunoteMessages.Album> albums) {
         Iterator<BlunoteMessages.Album> iterator = albums.iterator();
         while (iterator.hasNext()) {
-
+            BlunoteMessages.Album album = iterator.next();
+            Cursor c = checkDeleteAlbum(album.getAlbum(), album.getArtist());
+            if (c.moveToFirst()) {
+                iterator.remove();
+            }
+            c.close();
         }
-        return null;
+
+        return albums;
     }
 
     private Cursor checkDeleteSong(String song, String album, String artist){
         String[] selectionArgs = new String[]{song, album, artist};
-        String where = "track=? AND album=? AND artist=?";
-        return mContentResolver.query(MetaStoreContract.Track.CONTENT_URI, null, where, selectionArgs, null);
+        String where = "title=? AND album=? AND artist=?";
+        return mContentResolver.query(MetaStoreContract.UserTracks.CONTENT_URI, null, where, selectionArgs, null);
     }
 
     private Cursor checkDeleteArtist(String artist){
         String[] selectionArgs = new String[]{artist};
         String where = "artist=?";
-        return mContentResolver.query(MetaStoreContract.Artist.CONTENT_URI, null, where, selectionArgs, null);
+        return mContentResolver.query(MetaStoreContract.UserTracks.CONTENT_URI, null, where, selectionArgs, null);
     }
 
     private Cursor checkDeleteAlbum(String album, String artist){
         String[] selectionArgs = new String[]{album, artist};
         String where = "album=? AND artist=?";
-        return mContentResolver.query(MetaStoreContract.Album.CONTENT_URI, null, where, selectionArgs, null);
+        return mContentResolver.query(MetaStoreContract.UserTracks.CONTENT_URI, null, where, selectionArgs, null);
     }
 
     public void addMetadata(BlunoteMessages.MetadataUpdate message) {
