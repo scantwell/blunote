@@ -15,9 +15,12 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
+import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.network.ClientService;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by scantwell on 2/15/2016.
@@ -56,6 +59,10 @@ public class Service extends ClientService {
 
     public void onConnectionUpstream(String address)
     {
+        // Should throw a connection event
+        BluetoothEvent event = new BluetoothEvent(BluetoothEvent.CONNECTOR, true, address);
+        EventBus.getDefault().post(event);
+
         Metadata metadata = new Metadata(getApplicationContext());
         BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata(getApplicationContext());
         super.sendUpstream(WrapperMessage.newBuilder()
