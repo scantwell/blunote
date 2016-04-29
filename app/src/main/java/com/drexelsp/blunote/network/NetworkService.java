@@ -261,7 +261,7 @@ public class NetworkService extends Service {
     private DeliveryInfo createDeliveryInfo() {
         DeliveryInfo.Builder dinfoBuilder = DeliveryInfo.newBuilder();
         dinfoBuilder.setTimestamp(getTimestamp());
-        dinfoBuilder.setUsername(BluetoothAdapter.getDefaultAdapter().getAddress());
+        dinfoBuilder.setAddress(BluetoothAdapter.getDefaultAdapter().getAddress());
         return dinfoBuilder.build();
     }
 
