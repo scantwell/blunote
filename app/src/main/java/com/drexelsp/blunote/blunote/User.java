@@ -35,8 +35,8 @@ public class User {
         return name;
     }
 
-    public byte[] getWelcomePacket() {
-        return new byte[0];
+    public BlunoteMessages.WelcomePacket getWelcomePacket() {
+        return BlunoteMessages.WelcomePacket.newBuilder().build();
     }
 
     public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.WrapperMessage message) {
