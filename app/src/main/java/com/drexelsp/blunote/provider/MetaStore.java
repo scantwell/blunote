@@ -1,5 +1,11 @@
 package com.drexelsp.blunote.provider;
 
+import com.drexelsp.blunote.provider.MetaStoreContract.Album;
+import com.drexelsp.blunote.provider.MetaStoreContract.Artist;
+import com.drexelsp.blunote.provider.MetaStoreContract.Track;
+import com.drexelsp.blunote.provider.MetaStoreContract.User;
+import com.drexelsp.blunote.provider.MetaStoreContract.UserTracks;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -11,12 +17,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-
-import com.drexelsp.blunote.provider.MetaStoreContract.Album;
-import com.drexelsp.blunote.provider.MetaStoreContract.Artist;
-import com.drexelsp.blunote.provider.MetaStoreContract.Track;
-import com.drexelsp.blunote.provider.MetaStoreContract.User;
-import com.drexelsp.blunote.provider.MetaStoreContract.UserTracks;
 
 /**
  * Created by scantwell on 3/10/2016.
@@ -35,6 +35,9 @@ public final class MetaStore extends ContentProvider {
     private static final int USER_TRACKS_LIST = 9;
     private static final int USER_TRACKS_ID = 10;
     private static final int FIND_USERNAME = 11;
+    private static final int SONG_DELETION = 12;
+    private static final int ALBUM_DELETION = 13;
+    private static final int ARTIST_DELETION = 14;
     private static final UriMatcher URI_MATCHER;
     private MetaStoreOpenHelper mHelper = null;
 
@@ -51,6 +54,9 @@ public final class MetaStore extends ContentProvider {
         URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "user_tracks", USER_TRACKS_LIST);
         URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "user_tracks/#", USER_TRACKS_ID);
         URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "find_username", FIND_USERNAME);
+        URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "song_deletion", SONG_DELETION);
+        URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "album_deletion", ALBUM_DELETION);
+        URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "artist_deletion", ARTIST_DELETION);
     }
 
     @Override
@@ -196,6 +202,12 @@ public final class MetaStore extends ContentProvider {
                 break;
             case FIND_USERNAME:
                 return songUsernameQuery(db, selectionArgs);
+            case SONG_DELETION:
+                return songDeletion(db);
+            case ALBUM_DELETION:
+                return albumDeletion(db);
+            case ARTIST_DELETION:
+                return artistDeletion(db);
             default:
                 throw new IllegalArgumentException(
                         "Unsupported URI: " + uri);
@@ -528,4 +540,18 @@ public final class MetaStore extends ContentProvider {
         return db.rawQuery(QUERY, selectionArgs);
     }
 
+    public Cursor songDeletion(SQLiteDatabase db) {
+        String QUERY = "SELECT * FROM track t LEFT OUTER JOIN user_tracks ut ON t.title = ut.title AND t.album = ut.album AND t.artist = ut.artist WHERE ut._id IS NULL";
+        return db.rawQuery(QUERY, null);
+    }
+
+    public Cursor artistDeletion(SQLiteDatabase db) {
+        String QUERY = "SELECT * FROM artist a LEFT OUTER JOIN user_tracks ut ON a.artist = ut.artist WHERE ut._id IS NULL";
+        return db.rawQuery(QUERY, null);
+    }
+
+    public Cursor albumDeletion(SQLiteDatabase db) {
+        String QUERY = "SELECT * FROM album a LEFT OUTER JOIN user_tracks ut ON a.album = ut.album AND a.artist = ut.artist WHERE ut._id IS NULL";
+        return db.rawQuery(QUERY, null);
+    }
 }
