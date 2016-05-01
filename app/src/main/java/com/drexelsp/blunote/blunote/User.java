@@ -16,6 +16,7 @@ import java.util.ArrayList;
  */
 public class User {
 
+    protected static String TAG = "USER";
     protected String name;
     protected Service service;
     protected Context context;
@@ -26,7 +27,7 @@ public class User {
         this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_user_name", BluetoothAdapter.getDefaultAdapter().getName());
         this.service = service;
         this.context = context;
-        this.media = new Media(context, service);
+        this.media = new Media(context.getContentResolver());
         this.metadata = new Metadata(context);
         EventBus.getDefault().register(this);
     }
@@ -104,13 +105,17 @@ public class User {
 
     @Subscribe
     public void onSongRecommendation(SongRecommendationEvent event) {
-        String id = event.songId;
+        String title = event.song;
+        String artist = event.artist;
+        String album = event.album;
         String owner = event.owner;
 
-        BlunoteMessages.SongRequest.Builder builder = BlunoteMessages.SongRequest.newBuilder();
-        builder.setSongId(Long.parseLong(id));
+        BlunoteMessages.Recommendation.Builder builder = BlunoteMessages.Recommendation.newBuilder();
+        builder.setSong(title);
+        builder.setArtist(artist);
+        builder.setAlbum(album);
         builder.setUsername(owner);
-
+        builder.setType(BlunoteMessages.Recommendation.Type.SONG);
         service.send(builder.build());
     }
 }

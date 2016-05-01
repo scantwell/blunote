@@ -15,14 +15,12 @@ import android.widget.TextView;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.provider.MetaStoreContract;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
 import com.drexelsp.blunote.provider.MetaStoreContract;
 
 import org.greenrobot.eventbus.EventBus;
 
-/**
- * Created by U6020377 on 1/25/2016.
- */
 public class SongViewActivity extends BaseBluNoteActivity implements View.OnClickListener {
     private static final String TAG = "Song View Activity";
     ImageView songViewAlbumArt;
@@ -34,6 +32,9 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
 
     String id;
     String username;
+    String title;
+    String artist;
+    String album;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,8 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         if (v == song_view_add_to_queue) {
-            SongRecommendationEvent event = new SongRecommendationEvent(id, username);
+            SongRecommendationEvent event = new SongRecommendationEvent(
+                    id, title, artist, album, username);
             EventBus.getDefault().post(event);
         }
 
@@ -91,18 +93,22 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
 
         if (cursor != null && cursor.moveToNext()) {
             Log.v(TAG, "Results found");
-            String title = cursor.getString(cursor.getColumnIndex("title"));
-            songViewTitle.setText(title);
-            String artist = cursor.getString(cursor.getColumnIndex("artist"));
-            songViewArtist.setText(artist);
-            String album = cursor.getString(cursor.getColumnIndex("album"));
-            songViewAlbum.setText(album);
+            String songTitle = cursor.getString(cursor.getColumnIndex("title"));
+            songViewTitle.setText(songTitle);
+            String songArtist = cursor.getString(cursor.getColumnIndex("artist"));
+            songViewArtist.setText(songArtist);
+            String songAlbum = cursor.getString(cursor.getColumnIndex("album"));
+            songViewAlbum.setText(songAlbum);
             cursor.close();
 
-            username = getUsername(title, artist, album);
+            title = songTitle;
+            artist = songArtist;
+            album = songAlbum;
+
+            username = getUsername(songTitle, songArtist, songAlbum);
             songViewOwner.setText(username);
 
-            songViewAlbumArt.setImageBitmap(getAlbumArt(album));
+            songViewAlbumArt.setImageBitmap(getAlbumArt(songAlbum));
         }
 
     }
