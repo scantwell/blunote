@@ -6,6 +6,11 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 
+import com.drexelsp.blunote.events.NextSongEvent;
+import com.drexelsp.blunote.events.PreviousSongEvent;
+
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -18,6 +23,7 @@ public class Player implements Runnable {
     private BlockingQueue<Uri> mQueue;
     private MediaPlayer mPlayer;
     private Context mContext;
+    private String lastSong;
 
     public Player(Context context)
     {
@@ -75,5 +81,16 @@ public class Player implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Subscribe
+    public void nextSongEvent(NextSongEvent event)
+    {
+    }
+
+    @Subscribe
+    public void previousSongEvent(PreviousSongEvent event)
+    {
+
     }
 }

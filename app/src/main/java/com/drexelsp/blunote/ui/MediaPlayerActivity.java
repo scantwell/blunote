@@ -12,6 +12,12 @@ import android.widget.ToggleButton;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.events.NextSongEvent;
+import com.drexelsp.blunote.events.PlaySongEvent;
+import com.drexelsp.blunote.events.PreviousSongEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by Brisbin on 1/29/2016.
@@ -90,15 +96,19 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
     @Override
     public void onClick(View v) {
         //Handles all of the other onclicks for the media player screen
-        if (v == downVote) {
-            //handle downvote click
-        } else if (v == previous) {
-            //handle previous click
-        } else if (v == upVote) {
-            //handle upvote click
+        if (v == previous) {
+            PreviousSongEvent prevSong = new PreviousSongEvent();
+            EventBus.getDefault().post(prevSong);
         } else if (v == next) {
-            //handle next click
+            NextSongEvent nextSong = new NextSongEvent();
+            EventBus.getDefault().post(nextSong);
         }
+    }
+
+    @Subscribe
+    public void onPlaySong(PlaySongEvent event)
+    {
+
     }
 
     public void updateTrackInformation() {
