@@ -1,85 +1,59 @@
 package com.drexelsp.blunote.blunote;
 
 
-import android.net.Uri;
 import android.util.Log;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
-import com.google.protobuf.ByteString;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by scantwell on 3/12/2016.
  */
-public class SongAssembler {
-    private long target;
-    private int total;
-    private FileOutputStream fos;
-    private HashMap<Long, SongFragment> frags;
-    private Set<Long> blackList;
-    private Uri uri;
+public class SongAssembler extends Observable implements Observer {
+    private static String TAG = "SongAssembler";
+    private File cacheDir;
+    private ConcurrentHashMap<Long, Song> songHash;
+    private long fileNameSeed;
 
-    public SongAssembler(File file) {
-        try {
-            this.fos = new FileOutputStream(file);
-
-        } catch (IOException ex) {
-            String s = ex.toString();
-            ex.printStackTrace();
-        }
-        this.uri = Uri.fromFile(file);
-        this.target = 1;
-        this.frags = new HashMap<>();
-        this.blackList = new HashSet<>();
+    public SongAssembler(File cacheDir) {
+        this.cacheDir = cacheDir;
+        this.fileNameSeed = 0;
+        this.songHash = new ConcurrentHashMap<>();
     }
 
-    public Uri getURI() {
-        return this.uri;
-    }
-
-    public synchronized void addFragment(SongFragment frag) {
-        long id = frag.getFragmentId();
-        Log.v("Song Assembler", String.format("Writing Fragment: %d", id));
-        Log.v("Song Assembler", String.format("Frag Size: %d", frag.toByteArray().length));
-        if (this.blackList.contains(id)) {
-            return;
-        }
-        this.blackList.add(id);
-        frags.put(id, frag);
-        total = frag.getTotalFragments();
-        while (frags.containsKey(target)) {
-            frag = frags.remove(target);
-            writeFragment(frag.getFragment());
-            target++;
-        }
-        if (isCompleted()) {
-            try {
-                Log.v("Song Assembler", String.format("%d", fos.getChannel().size()));
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public void registerSong(long songId) throws IOException {
+        if (songHash.containsKey(songId)) {
+            throw new RuntimeException("Song has already been registered.");
+        } else {
+            File file = createTempFile();
+            Song s = new Song(songId, file);
+            s.addObserver(this);
+            songHash.put(songId, s);
         }
     }
 
-    public boolean isCompleted() {
-        return target > total;
+    public void onFragment(SongFragment frag) {
+        if (songHash.containsKey(frag.getSongId())) {
+            this.songHash.get(frag.getSongId()).addFragment(frag);
+        } else {
+            Log.w(TAG, String.format("Cannot process unrecognized song fragment. id(%d) fragment(%d/%d)",
+                    frag.getSongId(),
+                    frag.getFragmentId(),
+                    frag.getTotalFragments()));
+        }
     }
 
-    public void writeFragment(ByteString frag) {
-        try {
-            byte[] data = new byte[frag.size()];
-            frag.copyTo(data, 0);
-            fos.write(data);
-        } catch (IOException ex) {
-            String s = ex.toString();
-            ex.printStackTrace();
-        }
+    @Override
+    public void update(Observable observable, Object data) {
+        Song song = (Song) data;
+    }
+
+    private File createTempFile() throws IOException {
+        return File.createTempFile(java.util.UUID.randomUUID().toString(), ".mp3", this.cacheDir);
     }
 }
