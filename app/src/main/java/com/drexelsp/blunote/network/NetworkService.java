@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
@@ -29,8 +28,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -259,10 +256,10 @@ public class NetworkService extends Service {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         for (String macAddress : networkMap.getMacAddressesList()) {
 
-            BluetoothConnector2 bluetoothConnector2 = new BluetoothConnector2(bluetoothAdapter.getRemoteDevice(macAddress),
+            BluetoothConnector bluetoothConnector = new BluetoothConnector(bluetoothAdapter.getRemoteDevice(macAddress),
                     false, bluetoothAdapter, Collections.singletonList(uuid));
             try {
-                BluetoothConnector2.BluetoothSocketWrapper socket = bluetoothConnector2.connect();
+                BluetoothConnector.BluetoothSocketWrapper socket = bluetoothConnector.connect();
                 BlunoteSocket blunoteSocket = new BlunoteBluetoothSocket(socket.getUnderlyingSocket());
                 ClientHandshake clientHandshake = new ClientHandshake(blunoteSocket, true);
                 clientHandshake.run();

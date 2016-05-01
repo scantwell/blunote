@@ -11,20 +11,20 @@ import com.google.protobuf.ByteString;
 import java.io.IOException;
 
 /**
- * Handshake is a runnable that runs the host side of the handshaking process
+ * ServerHandshake is a runnable that runs the host side of the handshaking process
  * using the BlunoteInputStream and BlunoteOutputStream from the BlunoteSocket
  * <p>
  * Created by omnia on 4/21/16.
  */
-public class Handshake implements Runnable {
-    private static final String TAG = "Handshake";
+public class ServerHandshake implements Runnable {
+    private static final String TAG = "ServerHandshake";
     private BlunoteSocket socket;
     private BlunoteInputStream inputStream;
     private BlunoteOutputStream outputStream;
     private Router router;
     private byte[] handshakePacket;
 
-    public Handshake(BlunoteSocket socket, Router router, byte[] handshakePacket) {
+    public ServerHandshake(BlunoteSocket socket, Router router, byte[] handshakePacket) {
         this.socket = socket;
         this.router = router;
         this.handshakePacket = handshakePacket;

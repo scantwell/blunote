@@ -143,10 +143,10 @@ public class BluetoothScanner extends BroadcastReceiver {
         Log.v(TAG, String.format("Requesting handshake from %d device(s)", macAddresses.size()));
         ArrayList<Pair<Thread, ClientHandshake>> threads = new ArrayList<>();
         for (String macAddress : macAddresses) {
-            BluetoothConnector2 bluetoothConnector2 = new BluetoothConnector2(this.bluetoothAdapter.getRemoteDevice(macAddress),
+            BluetoothConnector bluetoothConnector = new BluetoothConnector(this.bluetoothAdapter.getRemoteDevice(macAddress),
                     false, this.bluetoothAdapter, Collections.singletonList(this.uuid));
             try {
-                BluetoothConnector2.BluetoothSocketWrapper socket = bluetoothConnector2.connect();
+                BluetoothConnector.BluetoothSocketWrapper socket = bluetoothConnector.connect();
                 BlunoteSocket blunoteSocket = new BlunoteBluetoothSocket(socket.getUnderlyingSocket());
                 ClientHandshake clientHandshake = new ClientHandshake(blunoteSocket, false);
                 Thread thread = new Thread(clientHandshake);

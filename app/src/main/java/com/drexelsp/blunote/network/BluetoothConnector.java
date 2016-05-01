@@ -16,7 +16,7 @@ import android.util.Log;
 /**
  * Created by stephencantwell on 4/28/16.
  */
-public class BluetoothConnector2 {
+public class BluetoothConnector {
 
     private BluetoothSocketWrapper bluetoothSocket;
     private BluetoothDevice device;
@@ -32,7 +32,7 @@ public class BluetoothConnector2 {
      * @param adapter the Android BT adapter
      * @param uuidCandidates a list of UUIDs. if null or empty, the Serial PP id is used
      */
-    public BluetoothConnector2(BluetoothDevice device, boolean secure, BluetoothAdapter adapter,
+    public BluetoothConnector(BluetoothDevice device, boolean secure, BluetoothAdapter adapter,
                               List<UUID> uuidCandidates) {
         this.device = device;
         this.secure = secure;

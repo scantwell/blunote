@@ -65,7 +65,7 @@ public class BluetoothServerListener {
                     Log.v(TAG, "Listening for new connection");
                     socket = mmServerSocket.accept();
                     BlunoteSocket blunoteSocket = new BlunoteBluetoothSocket(socket);
-                    new Thread(new Handshake(blunoteSocket, router, handshake)).start();
+                    new Thread(new ServerHandshake(blunoteSocket, router, handshake)).start();
 
                     Log.v(TAG, "New Client Connected: " + socket.getRemoteDevice());
                 } catch (IOException e) {
