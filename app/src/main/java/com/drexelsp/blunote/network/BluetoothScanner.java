@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Parcelable;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.ArrayAdapter;
 
 import com.drexelsp.blunote.beans.ConnectionListItem;
@@ -18,7 +19,9 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -35,8 +38,8 @@ public class BluetoothScanner extends BroadcastReceiver {
     private BluetoothAdapter bluetoothAdapter;
     private Context context;
     private ArrayAdapter<ConnectionListItem> arrayAdapter;
-    private ArrayList<BluetoothDevice> mDevices;
-    private ArrayList<String> networkDevices;
+    private ArrayList<BluetoothDevice> discoveredDevices;
+    private ArrayList<String> blunoteDevices;
     private Set<Integer> whiteList;
     private ProgressDialog dialog;
 
@@ -44,8 +47,8 @@ public class BluetoothScanner extends BroadcastReceiver {
         this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         this.arrayAdapter = adapter;
         this.context = context;
-        this.mDevices = new ArrayList<>();
-        this.networkDevices = new ArrayList<>();
+        this.discoveredDevices = new ArrayList<>();
+        this.blunoteDevices = new ArrayList<>();
         this.whiteList = new HashSet<>();
         this.whiteList.add(BluetoothClass.Device.PHONE_SMART);
         this.whiteList.add(BluetoothClass.Device.COMPUTER_HANDHELD_PC_PDA);
@@ -86,13 +89,13 @@ public class BluetoothScanner extends BroadcastReceiver {
         } else if (BluetoothDevice.ACTION_UUID.equals(action)) {
             handleActionUUID(intent);
 
-            if (!this.mDevices.isEmpty()) {
-                BluetoothDevice nextDevice = this.mDevices.remove(0);
+            if (!this.discoveredDevices.isEmpty()) {
+                BluetoothDevice nextDevice = this.discoveredDevices.remove(0);
                 nextDevice.fetchUuidsWithSdp();
             } else {
                 Log.v(TAG, "Fetching UUIDs Completed, Deregister Receiver");
                 context.unregisterReceiver(this);
-                handshakeDevices(this.networkDevices);
+                handshakeDevices(this.blunoteDevices);
             }
         }
     }
@@ -104,17 +107,17 @@ public class BluetoothScanner extends BroadcastReceiver {
         Log.v(TAG, String.format("Discovered: %s %s %d", name, address, bluetoothClass));
         if (name != null && address != null) {
             if (this.whiteList.contains(bluetoothClass)) {
-                if (!this.mDevices.contains(device)) {
-                    this.mDevices.add(device);
+                if (!this.discoveredDevices.contains(device)) {
+                    this.discoveredDevices.add(device);
                 }
             }
         }
     }
 
     private void handleActionDiscoveryFinished() {
-        Log.v(TAG, "Discovery Completed, Fetching UUIDs for " + this.mDevices.size() + " device(s)");
-        if (!this.mDevices.isEmpty()) {
-            BluetoothDevice device = mDevices.remove(0);
+        Log.v(TAG, "Discovery Completed, Fetching UUIDs for " + this.discoveredDevices.size() + " device(s)");
+        if (!this.discoveredDevices.isEmpty()) {
+            BluetoothDevice device = discoveredDevices.remove(0);
             device.fetchUuidsWithSdp();
         } else
             this.dialog.hide();
@@ -129,7 +132,7 @@ public class BluetoothScanner extends BroadcastReceiver {
                 Log.v(TAG, uuid.toString());
                 if (this.uuid.toString().equals(uuid.toString())) {
                     Log.v(TAG, String.format("Blunote Device Found: %s", device.getName()));
-                    this.networkDevices.add(device.getAddress());
+                    this.blunoteDevices.add(device.getAddress());
                     break;
                 }
             }
@@ -138,23 +141,33 @@ public class BluetoothScanner extends BroadcastReceiver {
 
     private void handshakeDevices(ArrayList<String> macAddresses) {
         Log.v(TAG, String.format("Requesting handshake from %d device(s)", macAddresses.size()));
-        ArrayList<BluetoothGreeter> greeters = new ArrayList<>();
+        ArrayList<Pair<Thread, ClientHandshake>> threads = new ArrayList<>();
         for (String macAddress : macAddresses) {
-            BluetoothGreeter greeter = new BluetoothGreeter(macAddress, this.uuid);
-            greeter.start();
-            greeters.add(greeter);
+            BluetoothConnector2 bluetoothConnector2 = new BluetoothConnector2(this.bluetoothAdapter.getRemoteDevice(macAddress),
+                    false, this.bluetoothAdapter, Collections.singletonList(this.uuid));
+            try {
+                BluetoothConnector2.BluetoothSocketWrapper socket = bluetoothConnector2.connect();
+                BlunoteSocket blunoteSocket = new BlunoteBluetoothSocket(socket.getUnderlyingSocket());
+                ClientHandshake clientHandshake = new ClientHandshake(blunoteSocket, false);
+                Thread thread = new Thread(clientHandshake);
+                thread.start();
+                threads.add(new Pair<>(thread, clientHandshake));
+            } catch (IOException e) {
+                Log.v(TAG, String.format("Failure to setup Handshake: %s", e.getMessage()));
+            }
         }
 
         ArrayList<NetworkPacket> networkPackets = new ArrayList<>();
-        for (BluetoothGreeter greeter : greeters) {
+        for (Pair<Thread, ClientHandshake> pair : threads) {
             try {
-                greeter.join();
-                NetworkPacket packet = greeter.getPacket();
-                if (packet != null) {
-                    networkPackets.add(packet);
+                Thread thread = pair.first;
+                thread.join();
+                ClientHandshake clientHandshake = pair.second;
+                if (clientHandshake.getSuccess()){
+                    networkPackets.add(clientHandshake.getNetworkPacket());
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.v(TAG, String.format("ClientHandshake thread interrupted while waiting for join: %s", e.getMessage()));
             }
         }
         Log.v(TAG, String.format("Handshaking completed, gathered %d packet(s)", networkPackets.size()));
@@ -169,7 +182,7 @@ public class BluetoothScanner extends BroadcastReceiver {
                     ConnectionListItem item = new ConnectionListItem(networkMap, welcomePacket);
                     this.arrayAdapter.add(item);
                 } catch (InvalidProtocolBufferException e) {
-                    e.printStackTrace();
+                    Log.v(TAG, String.format("Error parsing Welcome Packet data: %s", e.getMessage()));
                 }
             }
         }

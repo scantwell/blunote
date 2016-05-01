@@ -18,40 +18,41 @@ public class ClientHandshake implements Runnable {
     private BlunoteSocket socket;
     private BlunoteInputStream inputStream;
     private BlunoteOutputStream outputStream;
-    private Router router;
     private NetworkPacket networkPacket;
     private boolean maintain;
+    private boolean success;
 
-    public ClientHandshake(BlunoteSocket socket, Router router, boolean maintain) throws IOException {
+    public ClientHandshake(BlunoteSocket socket, boolean maintain) throws IOException {
         this.socket = socket;
-        this.router = router;
         this.maintain = maintain;
         this.inputStream = socket.getInputStream();
         this.outputStream = socket.getOutputStream();
     }
 
     public void run() {
-        this.networkPacket = read();
+        try {
+            this.networkPacket = this.inputStream.read();
 
-        NetworkPacket.Builder builder = NetworkPacket.newBuilder();
-        if (this.maintain) {
-            builder.setType(NetworkPacket.Type.NEW);
-        } else {
-            builder.setType(NetworkPacket.Type.DROP);
-        }
-        NetworkPacket response = builder.build();
-        write(response.toByteString());
+            NetworkPacket.Builder builder = NetworkPacket.newBuilder();
+            if (this.maintain) {
+                builder.setType(NetworkPacket.Type.NEW);
+            } else {
+                builder.setType(NetworkPacket.Type.DROP);
+            }
+            NetworkPacket response = builder.build();
+            this.outputStream.write(response.toByteString());
 
-        if (this.maintain) {
-            try {
-                this.router.addUpstream(socket);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (!this.maintain) {
                 this.close();
             }
-        } else {
-            this.close();
+            this.success = true;
+        } catch (IOException e) {
+            this.success = false;
         }
+    }
+
+    public boolean getSuccess() {
+        return this.success;
     }
 
     public NetworkPacket getNetworkPacket() {
@@ -63,24 +64,6 @@ public class ClientHandshake implements Runnable {
             this.socket.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private NetworkPacket read() {
-        try {
-            return this.inputStream.read();
-        } catch (IOException e) {
-            Log.e(TAG, String.format("Unable to read from input stream: %s", e.getMessage()));
-            return null;
-        }
-    }
-
-    private int write(ByteString byteString) {
-        try {
-            return this.outputStream.write(byteString);
-        } catch (IOException e) {
-            Log.e(TAG, String.format("Unable to write to output stream: %s", e.getMessage()));
-            return 0;
         }
     }
 }

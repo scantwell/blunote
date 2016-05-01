@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
@@ -12,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.drexelsp.blunote.blunote.BlunoteMessages;
 import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
 import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration;
 import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
@@ -26,6 +28,10 @@ import com.google.protobuf.ByteString;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 /**
@@ -135,15 +141,18 @@ public class NetworkService extends Service {
         this.configuration = config;
         this.router = createRouter(config);
         this.router.start();
-        BluetoothConnector bluetoothConnector = new BluetoothConnector(this.router, this.uuid, config.getNetworkMap());
-        bluetoothConnector.start();
-        // TODO: On successful connection, start serverListener and makeDiscoverable
-        /*BlunoteRouter.getInstance().setClientMode(getApplicationContext());
-        BluetoothConnector bluetoothConnector = new BluetoothConnector(uuid);
-        bluetoothConnector.connectToDevice(device);
-        mBluetoothServerListener = new BluetoothServerListener(uuid);
-        makeDiscoverable();
-        */
+        BlunoteSocket blunoteSocket = this.getBestConnection(config.getNetworkMap());
+        if (blunoteSocket != null) {
+            try {
+                this.router.addUpstream(blunoteSocket);
+                mBluetoothServerListener = new BluetoothServerListener(this.router, this.uuid, this.configuration.getHandshake().toByteArray());
+                makeDiscoverable();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // TODO: Send Failure to Connect Event
+        }
     }
 
     public void disconnect() {
@@ -246,6 +255,28 @@ public class NetworkService extends Service {
     }
 
     // Private
+    private BlunoteSocket getBestConnection(BlunoteMessages.NetworkMap networkMap) {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        for (String macAddress : networkMap.getMacAddressesList()) {
+
+            BluetoothConnector2 bluetoothConnector2 = new BluetoothConnector2(bluetoothAdapter.getRemoteDevice(macAddress),
+                    false, bluetoothAdapter, Collections.singletonList(uuid));
+            try {
+                BluetoothConnector2.BluetoothSocketWrapper socket = bluetoothConnector2.connect();
+                BlunoteSocket blunoteSocket = new BlunoteBluetoothSocket(socket.getUnderlyingSocket());
+                ClientHandshake clientHandshake = new ClientHandshake(blunoteSocket, true);
+                clientHandshake.run();
+                if (clientHandshake.getSuccess()) {
+                    return blunoteSocket;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Log.e(TAG, "Unable to connect to any devices in the network map");
+        return null;
+    }
+
     private void createNotification() {
         Notification note =
                 new NotificationCompat.Builder(this)
