@@ -17,9 +17,12 @@ import com.drexelsp.blunote.events.NextSongEvent;
 import com.drexelsp.blunote.events.PauseSongEvent;
 import com.drexelsp.blunote.events.PlaySongEvent;
 import com.drexelsp.blunote.events.PreviousSongEvent;
+import com.drexelsp.blunote.events.SeekEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Brisbin on 1/29/2016.
@@ -31,7 +34,7 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
     TextView artistName;
     TextView albumName;
     TextView ownerName;
-    TextView currentMusticLocation;
+    TextView currentMusicLocation;
     TextView musicDuration;
     ImageButton previous;
     ToggleButton playPause;
@@ -55,7 +58,7 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
         artistName = (TextView) findViewById(R.id.artist_name);
         albumName = (TextView) findViewById(R.id.album_name);
         ownerName = (TextView) findViewById(R.id.song_owner_name);
-        currentMusticLocation = (TextView) findViewById(R.id.musicCurrentLoc);
+        currentMusicLocation = (TextView) findViewById(R.id.musicCurrentLoc);
         musicDuration = (TextView) findViewById(R.id.musicDuration);
         previous = (ImageButton) findViewById(R.id.previous);
         playPause = (ToggleButton) findViewById(R.id.playPauseButton);
@@ -112,17 +115,25 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
     @Subscribe
     public void onPlaySong(PlaySongEvent event)
     {
-
+        songName.setText(event.title);
+        artistName.setText(event.artist);
+        albumName.setText(event.album);
+        currentMusicLocation.setText("0");
+        musicDuration.setText(durationToTime(Integer.parseInt(event.duration)));
+        seekBar.setMax(Integer.parseInt(event.duration));
     }
 
-    public void updateTrackInformation()
+    private String durationToTime(int duration)
     {
-
+        return String.format("%02d:%02d",
+                TimeUnit.SECONDS.toMinutes(duration), // The change is in this line
+                TimeUnit.SECONDS.toSeconds(duration) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(duration)));
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+        EventBus.getDefault().post(new SeekEvent(progress));
     }
 
     @Override

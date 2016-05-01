@@ -11,6 +11,7 @@ import com.drexelsp.blunote.events.PauseSongEvent;
 import com.drexelsp.blunote.events.PreviousSongEvent;
 import com.drexelsp.blunote.events.SeekEvent;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
@@ -120,8 +121,8 @@ public class Player implements Runnable {
     }
 
     @Subscribe
-    public void onSeek(SeekEvent evet)
+    public void onSeek(SeekEvent event)
     {
-
+        player.seekTo((int)event.position * 1000);
     }
 }
