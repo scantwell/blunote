@@ -40,7 +40,8 @@ public class BluetoothConnector extends Thread {
                         .createInsecureRfcommSocketToServiceRecord(this.uuid);
                 bluetoothSocket.connect();
                 BlunoteSocket blunoteSocket = new BlunoteBluetoothSocket(bluetoothSocket);
-                new Thread(new ClientHandshake(blunoteSocket, router, true)).start();
+                ClientHandshake clientHandshake = new ClientHandshake(blunoteSocket, router, true);
+                new Thread(clientHandshake).start();
                 Log.v(TAG, "Connection to a host Accepted, starting handshake");
                 return;
             } catch (IOException e) {

@@ -41,7 +41,7 @@ public class Handshake implements Runnable {
 
         DeliveryInfo.Builder dinfoBuilder = DeliveryInfo.newBuilder();
         dinfoBuilder.setTimestamp(System.currentTimeMillis());
-        dinfoBuilder.setUsername(BluetoothAdapter.getDefaultAdapter().getAddress());
+        dinfoBuilder.setAddress(BluetoothAdapter.getDefaultAdapter().getAddress());
 
         Pdu.Builder pduBuilder = Pdu.newBuilder();
         pduBuilder.setDeliveryInfo(dinfoBuilder.build());

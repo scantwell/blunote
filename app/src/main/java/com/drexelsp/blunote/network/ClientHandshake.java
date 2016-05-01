@@ -22,21 +22,15 @@ public class ClientHandshake implements Runnable {
     private NetworkPacket networkPacket;
     private boolean maintain;
 
-    public ClientHandshake(BlunoteSocket socket, Router router, boolean maintain) {
+    public ClientHandshake(BlunoteSocket socket, Router router, boolean maintain) throws IOException {
         this.socket = socket;
         this.router = router;
         this.maintain = maintain;
+        this.inputStream = socket.getInputStream();
+        this.outputStream = socket.getOutputStream();
     }
 
     public void run() {
-        try {
-            this.inputStream = socket.getInputStream();
-            this.outputStream = socket.getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
         this.networkPacket = read();
 
         NetworkPacket.Builder builder = NetworkPacket.newBuilder();
@@ -46,7 +40,6 @@ public class ClientHandshake implements Runnable {
             builder.setType(NetworkPacket.Type.DROP);
         }
         NetworkPacket response = builder.build();
-
         write(response.toByteString());
 
         if (this.maintain) {
