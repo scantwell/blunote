@@ -10,12 +10,12 @@
         app:showAsAction="always">
         <menu>
             <item
-                android:id="@+id/action_network"
-                android:title="Network Settings"
+                android:id="@+id/action_settings_page"
+                android:title="Settings"
                 app:showAsAction="always" />
             <item
-                android:id="@+id/action_preferences"
-                android:title="Preferences"
+                android:id="@+id/action_leave_network"
+                android:title="Leave Network"
                 app:showAsAction="always" />
         </menu>
     </item>

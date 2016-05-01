@@ -52,7 +52,8 @@ message MetadataUpdate {
 	repeated Album albums = 2; /// A list of albums to update
 	repeated Artist artists = 3; /// A list of artists to update
 	required string owner = 4; /// The user that can supply the song data
-	repeated Song songs = 5; /// A list of songs to update
+	required string user_id = 5; /// The user's mac address to use as a key to the user
+	repeated Song songs = 6; /// A list of songs to update
 }
 
 /**
@@ -95,9 +96,9 @@ message Recommendation {
 	enum Type {  ARTIST = 1; ALBUM = 2; SONG = 3;}
 	required string username = 1;
 	required Type type = 2;
-	optional Artist artist = 3;
-	optional Album album = 4;
-	optional Song song = 5;
+	optional string artist = 3;
+	optional string album = 4;
+	optional string song = 5;
 }
 
 /**
@@ -151,4 +152,18 @@ message DeliveryInfo {
 message Pdu {
 	required DeliveryInfo deliveryInfo = 1;
 	required WrapperMessage message = 2;
+}
+
+message WelcomePacket {
+	required string networkName = 1;
+	required string numUsers = 2;
+	required string numSongs = 3;
+}
+
+message NetworkPacket {
+	enum Type { DOWNSTREAM = 1; DROP = 2; NETWORK_DATA_UPDATE = 3; NEW = 4; UPSTREAM = 5; }
+
+	repeated string macAddresses = 1;
+	optional bytes pdu = 2;
+	required Type type = 3;
 }

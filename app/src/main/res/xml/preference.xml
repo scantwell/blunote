@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <PreferenceCategory
+        android:title="General Settings"
+        android:key="pref_key_general_settings" >
+
+        <EditTextPreference
+            android:key="pref_key_user_name"
+            android:title="User Name"
+            android:summary="User Display Name"
+            android:defaultValue="@string/user_name_default"/>
+
+        <CheckBoxPreference
+            android:key="pref_key_notifications"
+            android:title="Notifications"
+            android:summary="Enable notifications"
+            android:defaultValue="@bool/notifications_default" />
+
+        <CheckBoxPreference
+            android:key="pref_key_ghost_client"
+            android:title="Ghost mode"
+            android:summary="Enable ghost mode"
+            android:defaultValue="@bool/ghost_mode_default" />
+
+        <CheckBoxPreference
+            android:key="pref_key_share_songs"
+            android:title="Share songs"
+            android:summary="Share song list with users"
+            android:defaultValue="@bool/share_songs_default" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Network Settings"
+        android:key="pref_key_network_settings" >
+
+
+        <EditTextPreference
+            android:key="pref_key_network_name"
+            android:title="Network Name"
+            android:summary="Network Display Name"
+            android:defaultValue="@string/network_name_default"/>
+
+        <EditTextPreference
+            android:key="pref_key_network_password"
+            android:title="Network Password"
+            android:summary="Network Password (Optional)" />
+
+        <EditTextPreference
+            android:key="pref_key_queue_size"
+            android:title="Queue size"
+            android:summary="Size of song queue list"
+            android:defaultValue="@integer/queue_size_default"/>
+
+        <CheckBoxPreference
+            android:key="pref_key_client_voting"
+            android:title="Client Voting"
+            android:summary="Enable Client Voting"
+            android:defaultValue="@bool/client_voting_default" />
+
+        <EditTextPreference
+            android:key="pref_key_votes_per_user"
+            android:title="Votes per user"
+            android:summary="Number of votes per user"
+            android:dependency="pref_key_client_voting"
+            android:defaultValue="@integer/user_votes_default" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

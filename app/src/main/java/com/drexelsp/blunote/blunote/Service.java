@@ -2,7 +2,6 @@ package com.drexelsp.blunote.blunote;
 
 import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
 import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
@@ -10,15 +9,13 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.Pdu;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
-import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
+import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
 import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.network.ClientService;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
 
 /**
  * Created by scantwell on 2/15/2016.
@@ -33,7 +30,7 @@ public class Service extends ClientService {
     }
 
     private String TAG = "Service";
-    private ArrayList<MessageHandler> handlers = new ArrayList<MessageHandler>();
+    private User user;
 
     public Service() {
         IBinder mBinder = new LocalBinder();
@@ -41,18 +38,12 @@ public class Service extends ClientService {
     }
 
     @Override
-    public void onReceived(byte[] data) {
-        //Log.v(TAG, "Received a message.");
+    public void onReceive(byte[] data) {
         try {
             Pdu pdu = Pdu.parseFrom(data);
             DeliveryInfo dinfo = pdu.getDeliveryInfo();
             WrapperMessage message = pdu.getMessage();
-
-            for (MessageHandler handler : handlers) {
-                if (handler.processMessage(dinfo, message)) {
-                    break;
-                }
-            }
+            this.user.onReceive(dinfo, message);
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
         }
@@ -64,7 +55,7 @@ public class Service extends ClientService {
         if ((bluetoothEvent.event == BluetoothEvent.CONNECTOR || bluetoothEvent.event == BluetoothEvent.SERVER_LISTENER) && bluetoothEvent.success) {
             // Gather Metadata and Send it
             Metadata metadata = new Metadata(getApplicationContext());
-            BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata();
+            BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata(getApplicationContext());
             Pdu pdu = createMessage()
                     .setMessage(WrapperMessage.newBuilder()
                             .setType(WrapperMessage.Type.METADATA_UPDATE)
@@ -75,16 +66,15 @@ public class Service extends ClientService {
 
     public void onCreate() {
         super.onCreate();
-        this.handlers.add(new Metadata(getApplicationContext()));
-        this.handlers.add(new Media(getApplicationContext(), this));
-        this.handlers.add(new VoteEngine());
     }
 
     public void startNetwork() {
+        this.user = new Host(this, getApplicationContext());
         super.startNetwork();
     }
 
     public void connectToNetwork(String macAddress) {
+        this.user = new User(this, getApplicationContext());
         super.connectToNetwork(macAddress);
     }
 
@@ -137,15 +127,11 @@ public class Service extends ClientService {
     public DeliveryInfo createDeliveryInfo() {
         DeliveryInfo.Builder dinfoBuilder = DeliveryInfo.newBuilder();
         dinfoBuilder.setTimestamp(getTimestamp());
-        dinfoBuilder.setUsername(getUsername());
+        dinfoBuilder.setUsername(user.getName());
         return dinfoBuilder.build();
     }
 
     private long getTimestamp() {
         return System.currentTimeMillis() / 1000;
-    }
-
-    public String getUsername() {
-        return "FakeUser";
     }
 }

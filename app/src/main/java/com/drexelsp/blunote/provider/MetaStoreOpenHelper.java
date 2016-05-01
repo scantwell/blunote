@@ -20,6 +20,8 @@ class MetaStoreOpenHelper extends SQLiteOpenHelper {
         db.execSQL(DbSchema.DDL_CREATE_TBL_TRACK);
         db.execSQL(DbSchema.DDL_CREATE_TBL_ARTIST);
         db.execSQL(DbSchema.DDL_CREATE_TBL_ALBUM);
+        db.execSQL(DbSchema.DDL_CREATE_TBL_USER);
+        db.execSQL(DbSchema.DDL_CREATE_TBL_USER_TRACKS);
     }
 
     @Override
@@ -27,6 +29,8 @@ class MetaStoreOpenHelper extends SQLiteOpenHelper {
         db.execSQL(DbSchema.DDL_DROP_TBL_TRACK);
         db.execSQL(DbSchema.DDL_DROP_TBL_ARTIST);
         db.execSQL(DbSchema.DDL_DROP_TBL_ALBUMS);
+        db.execSQL(DbSchema.DDL_DROP_TBL_USER);
+        db.execSQL(DbSchema.DDL_DROP_TBL_USER_TRACKS);
         onCreate(db);
     }
 }

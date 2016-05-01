@@ -19,7 +19,7 @@ abstract public class ClientService extends Service {
     protected Receiver receiver = new Receiver(this);
     protected IBinder mBinder = null;
 
-    abstract public void onReceived(byte[] data);
+    abstract public void onReceive(byte[] data);
 
     abstract public void onNetworkEvent(BluetoothEvent bluetoothEvent);
 
