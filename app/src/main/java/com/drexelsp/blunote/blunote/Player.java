@@ -7,36 +7,42 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.drexelsp.blunote.events.NextSongEvent;
+import com.drexelsp.blunote.events.PauseSongEvent;
 import com.drexelsp.blunote.events.PreviousSongEvent;
+import com.drexelsp.blunote.events.SeekEvent;
 
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.Deque;
+import java.util.LinkedList;
 
 /**
  * Created by scantwell on 3/14/2016.
  */
 public class Player implements Runnable {
 
-    private BlockingQueue<Uri> mQueue;
-    private MediaPlayer mPlayer;
-    private Context mContext;
-    private String lastSong;
+    private static final String TAG = "BlunoteMediaPlayer";
+    private Deque<Uri> queue;
+    private MediaPlayer player;
+    private Context context;
+    private Uri lastSong;
+    private Uri currentSong;
 
     public Player(Context context)
     {
-        this.mContext = context;
-        this.mQueue = new ArrayBlockingQueue<>(10);
-        this.mPlayer = new MediaPlayer();
-        this.mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        this.currentSong = null;
+        this.lastSong = null;
+        this.context = context;
+        this.queue = new LinkedList<>();
+        this.player = new MediaPlayer();
+        this.player.setAudioStreamType(AudioManager.STREAM_MUSIC);
     }
 
     public synchronized void addSongUri(Uri uri)
     {
-        Log.v("PLAYER", "ADDING A SONG TO QUEUE");
-        mQueue.add(uri);
+        Log.v(TAG, String.format("Adding song to queue. Queue size %d", queue.size()));
+        queue.add(uri);
         this.notify();
     }
 
@@ -44,52 +50,70 @@ public class Player implements Runnable {
     public void run() {
         while (true)
         {
-            sleep();
-            Log.v("PLAYER", String.format("QUEUE SIZE %d", mQueue.size()));
-            while(mQueue.size() > 0)
-            {
-                playSong();
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+            waitOnQueueOrPlayer();
+            playSong();
         }
     }
 
-    private synchronized void sleep()
+    private synchronized void waitOnQueueOrPlayer()
     {
-        try {
-            this.wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        while (queue.size() < 1 || player.isPlaying())
+        {
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+        lastSong = currentSong;
     }
 
     public void playSong()
     {
         try {
-            if (!mPlayer.isPlaying())
-            {
-                Uri uri = mQueue.remove();
-                mPlayer.reset();
-                mPlayer.setDataSource(mContext, uri);
-                mPlayer.prepare();
-                mPlayer.start();
-            }
+            Uri uri = queue.remove();
+            currentSong = uri;
+            player.reset();
+            player.setDataSource(context, uri);
+            player.prepare();
+            player.start();
+            Log.v(TAG, String.format("Playing song. Queue size %d", queue.size()));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @Subscribe
-    public void nextSongEvent(NextSongEvent event)
+    public void onNextSongEvent(NextSongEvent event)
     {
+        player.stop();
+        notify();
     }
 
     @Subscribe
-    public void previousSongEvent(PreviousSongEvent event)
+    public void onPreviousSongEvent(PreviousSongEvent event)
+    {
+        if (lastSong != null)
+        {
+            queue.addFirst(lastSong);
+            lastSong = null;
+            player.stop();
+        }
+    }
+
+    @Subscribe
+    public void onPauseSong(PauseSongEvent event)
+    {
+        if (player.isPlaying())
+        {
+            player.pause();
+        } else {
+            player.start();
+        }
+    }
+
+    @Subscribe
+    public void onSeek(SeekEvent evet)
     {
 
     }

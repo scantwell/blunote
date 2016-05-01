@@ -7,12 +7,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.events.NextSongEvent;
+import com.drexelsp.blunote.events.PauseSongEvent;
 import com.drexelsp.blunote.events.PlaySongEvent;
 import com.drexelsp.blunote.events.PreviousSongEvent;
 
@@ -23,7 +25,7 @@ import org.greenrobot.eventbus.Subscribe;
  * Created by Brisbin on 1/29/2016.
  */
 public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnClickListener,
-        CompoundButton.OnCheckedChangeListener {
+        CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener {
     FloatingActionButton playlistFAB;
     TextView songName;
     TextView artistName;
@@ -31,11 +33,10 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
     TextView ownerName;
     TextView currentMusticLocation;
     TextView musicDuration;
-    ImageButton downVote;
     ImageButton previous;
     ToggleButton playPause;
     ImageButton next;
-    ImageButton upVote;
+    SeekBar seekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,23 +50,21 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
             }
         });
 
+        seekBar = (SeekBar) findViewById(R.id.musicSeekBar);
         songName = (TextView) findViewById(R.id.song_name);
         artistName = (TextView) findViewById(R.id.artist_name);
         albumName = (TextView) findViewById(R.id.album_name);
         ownerName = (TextView) findViewById(R.id.song_owner_name);
         currentMusticLocation = (TextView) findViewById(R.id.musicCurrentLoc);
         musicDuration = (TextView) findViewById(R.id.musicDuration);
-        downVote = (ImageButton) findViewById(R.id.downvote);
         previous = (ImageButton) findViewById(R.id.previous);
         playPause = (ToggleButton) findViewById(R.id.playPauseButton);
         next = (ImageButton) findViewById(R.id.nextButton);
-        upVote = (ImageButton) findViewById(R.id.upvote);
 
-        downVote.setOnClickListener(this);
+        seekBar.setOnSeekBarChangeListener(this);
         previous.setOnClickListener(this);
         playPause.setOnCheckedChangeListener(this);
         next.setOnClickListener(this);
-        upVote.setOnClickListener(this);
     }
 
     @Override
@@ -103,6 +102,11 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
             NextSongEvent nextSong = new NextSongEvent();
             EventBus.getDefault().post(nextSong);
         }
+        else if (v == playPause)
+        {
+            PauseSongEvent pauseSong = new PauseSongEvent();
+            EventBus.getDefault().post(pauseSong);
+        }
     }
 
     @Subscribe
@@ -111,7 +115,23 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
 
     }
 
-    public void updateTrackInformation() {
+    public void updateTrackInformation()
+    {
+
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
 
     }
 }
