@@ -93,12 +93,19 @@ public class Player implements Runnable {
     @Subscribe
     public void onPreviousSongEvent(PreviousSongEvent event)
     {
-        if (lastSong != null)
+        if (lastSong != null || getCurrentTimePercentage() > 0.05)
         {
             queue.addFirst(lastSong);
             lastSong = null;
             player.stop();
+        } else {
+            player.start();
         }
+    }
+
+    private float getCurrentTimePercentage()
+    {
+        return player.getCurrentPosition()/player.getDuration();
     }
 
     @Subscribe
