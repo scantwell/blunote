@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -36,8 +37,8 @@ public class Metadata {
     public Metadata(Context context) {
 
         mContentResolver = context.getContentResolver();
-        BlunoteMessages.MetadataUpdate metedata = getMetadata(context);
-        this.addMetadata(metedata);
+        BlunoteMessages.MetadataUpdate metadata = getMetadata(context);
+        this.addMetadata(metadata);
     }
 
     public BlunoteMessages.MetadataUpdate getMetadata(Context context) {
@@ -275,6 +276,121 @@ public class Metadata {
         return albumList;
     }
 
+    public BlunoteMessages.MetadataUpdate getDownstreamMetadata()
+    {
+        BlunoteMessages.MetadataUpdate.Builder mdBuilder = BlunoteMessages.MetadataUpdate.newBuilder();
+        mdBuilder.setAction(BlunoteMessages.MetadataUpdate.Action.ADD);
+        mdBuilder.addAllAlbums(getAlbumMetaForServer());
+        mdBuilder.addAllArtists(getArtistMetaForServer());
+        mdBuilder.addAllSongs(getTrackMetaForServer());
+        mdBuilder.setOwner("");
+        mdBuilder.setUserId(BluetoothAdapter.getDefaultAdapter().getAddress());
+        return mdBuilder.build();
+    }
+
+    public List<BlunoteMessages.Album> getAlbumMetaForServer() {
+        ArrayList<BlunoteMessages.Album> albums = new ArrayList<BlunoteMessages.Album>();
+        Cursor cur = mContentResolver.query(MetaStoreContract.Album.CONTENT_URI,
+                MetaStoreContract.Album.PROJECTION_ALL, null, null, null);
+        BlunoteMessages.Album.Builder albumsBuilder = BlunoteMessages.Album.newBuilder();
+
+        String album, artist, first_year, last_year, num_of_songs;
+        byte[] album_art;
+        byte[] album_art_bytes;
+
+        while (cur.moveToNext()) {
+            album = cur.getString(cur.getColumnIndex(MetaStoreContract.Album.ALBUM));
+            album_art = cur.getBlob(cur.getColumnIndex(MetaStoreContract.Album.ALBUM_ART));
+            artist = cur.getString(cur.getColumnIndex(MetaStoreContract.Album.ARTIST));
+            first_year = cur.getString(cur.getColumnIndex(MetaStoreContract.Album.FIRST_YEAR));
+            last_year = cur.getString(cur.getColumnIndex(MetaStoreContract.Album.LAST_YEAR));
+            num_of_songs = cur.getString(cur.getColumnIndex(MetaStoreContract.Album.NUMBER_OF_SONGS));
+
+            album = album == null ? "" : album;
+            artist = artist == null ? "" : artist;
+            first_year = first_year == null ? "" : first_year;
+            last_year = last_year == null ? "" : last_year;
+            num_of_songs = num_of_songs == null ? "" : num_of_songs;
+
+            //Temp Disable album art
+            //album_art_bytes = getAlbumArt(album_art);
+            album_art_bytes = new byte[0];
+
+            albumsBuilder.setAlbum(album);
+            albumsBuilder.setAlbumArt(ByteString.copyFrom(album_art_bytes));
+            albumsBuilder.setArtist(artist);
+            albumsBuilder.setFirstYear(first_year);
+            albumsBuilder.setLastYear(last_year);
+            albumsBuilder.setNumberOfSongs(num_of_songs);
+            albums.add(albumsBuilder.build());
+        }
+        cur.close();
+        return albums;
+    }
+
+    public List<BlunoteMessages.Artist> getArtistMetaForServer() {
+        ArrayList<Artist> artists = new ArrayList<Artist>();
+        Cursor cur = mContentResolver.query(MetaStoreContract.Artist.CONTENT_URI,
+                MetaStoreContract.Artist.PROJECTION_ALL, null, null, null);
+        Artist.Builder artistsBuilder = Artist.newBuilder();
+
+        String artist, number_of_albums, number_of_track;
+        while (cur.moveToNext()) {
+            artist = cur.getString(cur.getColumnIndex(MetaStoreContract.Artist.ARTIST));
+            number_of_albums = cur.getString(cur.getColumnIndex(MetaStoreContract.Artist.NUMBER_OF_ALBUMS));
+            number_of_track = cur.getString(cur.getColumnIndex(MetaStoreContract.Artist.NUMBER_OF_TRACKS));
+
+            artist = artist == null ? "" : artist;
+            number_of_albums = number_of_albums == null ? "" : number_of_albums;
+            number_of_track = number_of_track == null ? "" : number_of_track;
+
+            artistsBuilder.setArtist(artist);
+            artistsBuilder.setNumberOfAlbums(number_of_albums);
+            artistsBuilder.setNumberOfTracks(number_of_track);
+            artists.add(artistsBuilder.build());
+        }
+        cur.close();
+        return artists;
+    }
+
+    public List<BlunoteMessages.Song> getTrackMetaForServer() {
+        ArrayList<BlunoteMessages.Song> songs = new ArrayList<BlunoteMessages.Song>();
+        Cursor cur = mContentResolver.query(MetaStoreContract.Track.CONTENT_URI,
+                MetaStoreContract.Track.PROJECTION_ALL, null, null, null);
+        BlunoteMessages.Song.Builder songBuilder = BlunoteMessages.Song.newBuilder();
+
+        String album, artist, duration, song_id, title, track, year;
+
+        while (cur.moveToNext()) {
+            album = cur.getString(cur.getColumnIndex(MetaStoreContract.Track.ALBUM));
+            artist = cur.getString(cur.getColumnIndex(MetaStoreContract.Track.ARTIST));
+            duration = cur.getString(cur.getColumnIndex(MetaStoreContract.Track.DURATION));
+            song_id = cur.getString(cur.getColumnIndex(MetaStoreContract.Track._ID));
+            title = cur.getString(cur.getColumnIndex(MetaStoreContract.Track.TITLE));
+            track = cur.getString(cur.getColumnIndex(MetaStoreContract.Track.TRACK_NO));
+            year = cur.getString(cur.getColumnIndex(MetaStoreContract.Track.YEAR));
+
+            album = album == null ? "" : album;
+            artist = artist == null ? "" : artist;
+            duration = duration == null ? "" : duration;
+            song_id = song_id == null ? "-1" : song_id;
+            title = title == null ? "" : title;
+            track = track == null ? "" : track;
+            year = year == null ? "" : year;
+
+            songBuilder.setAlbum(album);
+            songBuilder.setArtist(artist);
+            songBuilder.setDuration(duration);
+            songBuilder.setSongId(Integer.parseInt(song_id));
+            songBuilder.setTitle(title);
+            songBuilder.setTrack(track);
+            songBuilder.setYear(year);
+            songs.add(songBuilder.build());
+        }
+        cur.close();
+        return songs;
+    }
+
     public void addMetadata(BlunoteMessages.MetadataUpdate message) {
         ContentValues[] songs = getSongValues(message.getSongsList());
         ContentValues[] artists = getArtistValues(message.getArtistsList());
@@ -344,7 +460,7 @@ public class Metadata {
         String album, album_art, artist, first_year, last_year, num_of_songs;
         byte[] album_art_bytes;
 
-        while (cur.moveToNext()) {
+        while (cur != null && cur.moveToNext()) {
             album = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
             album_art = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
             artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ARTIST));
@@ -371,7 +487,9 @@ public class Metadata {
             albumsBuilder.setNumberOfSongs(num_of_songs);
             albums.add(albumsBuilder.build());
         }
-        cur.close();
+        if (cur != null) {
+            cur.close();
+        }
         return albums;
     }
 
@@ -430,7 +548,7 @@ public class Metadata {
         Artist.Builder artistsBuilder = Artist.newBuilder();
 
         String artist, number_of_albums, number_of_track, artist_id;
-        while (cur.moveToNext()) {
+        while (cur != null && cur.moveToNext()) {
             artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST));
             artist_id = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media._ID));
             number_of_albums = cur.getString(cur.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS));
@@ -446,7 +564,9 @@ public class Metadata {
             artistsBuilder.setNumberOfTracks(number_of_track);
             artists.add(artistsBuilder.build());
         }
-        cur.close();
+        if (cur != null) {
+            cur.close();
+        }
         return artists;
     }
 
@@ -505,7 +625,7 @@ public class Metadata {
 
         String album, artist, duration, song_id, title, track, year;
 
-        while (cur.moveToNext()) {
+        while (cur != null && cur.moveToNext()) {
             album = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM));
             artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST));
             duration = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DURATION));
@@ -531,7 +651,9 @@ public class Metadata {
             songBuilder.setYear(year);
             songs.add(songBuilder.build());
         }
-        cur.close();
+        if (cur != null) {
+            cur.close();
+        }
         return songs;
     }
 
