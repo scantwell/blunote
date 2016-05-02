@@ -93,6 +93,8 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         //Only needs to handle the play/pause button since it's the only toggle button
+        PauseSongEvent pauseSong = new PauseSongEvent();
+        EventBus.getDefault().post(pauseSong);
     }
 
     @Override
@@ -104,11 +106,6 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
         } else if (v == next) {
             NextSongEvent nextSong = new NextSongEvent();
             EventBus.getDefault().post(nextSong);
-        }
-        else if (v == playPause)
-        {
-            PauseSongEvent pauseSong = new PauseSongEvent();
-            EventBus.getDefault().post(pauseSong);
         }
     }
 

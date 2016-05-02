@@ -38,6 +38,7 @@ public class Player implements Runnable {
         this.queue = new LinkedList<>();
         this.player = new MediaPlayer();
         this.player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        EventBus.getDefault().register(this);
     }
 
     public synchronized void addSongUri(Uri uri)
