@@ -92,6 +92,11 @@ public class User {
             ArrayList<BlunoteMessages.SongFragment> frags = this.media.getSongFragments(message.getSongId());
             for (BlunoteMessages.SongFragment frag : frags) {
                 service.send(frag);
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
