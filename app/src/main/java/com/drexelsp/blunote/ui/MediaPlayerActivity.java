@@ -46,6 +46,7 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        EventBus.getDefault().register(this);
         playlistFAB = (FloatingActionButton) findViewById(R.id.playlist_FAB);
         playlistFAB.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
