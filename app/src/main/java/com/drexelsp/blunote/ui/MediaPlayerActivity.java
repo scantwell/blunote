@@ -48,7 +48,6 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EventBus.getDefault().register(this);
         playlistFAB = (FloatingActionButton) findViewById(R.id.playlist_FAB);
         playlistFAB.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -148,5 +147,17 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
     public void onStopTrackingTouch(SeekBar seekBar) {
         Log.v("MediaPlayerActivity", String.format("Our progress is %d", progress));
         EventBus.getDefault().post(new SeekEvent(progress));
+    }
+
+    public void onStart()
+    {
+        EventBus.getDefault().register(this);
+        super.onStart();
+    }
+
+    public void onStop()
+    {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 }
