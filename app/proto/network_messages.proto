@@ -1,0 +1,32 @@
+/**
+* BluNote Application Messages
+* This file describes all communication messages being sent to and from devices on a BluNote server.
+*/
+package blunote;
+
+option java_package = "com.drexelsp.blunote.network";
+option java_outer_classname = "NetworkMessages";
+
+
+/**
+* Stores metadata about the message being sent
+*/
+message DeliveryInfo {
+	required int64 timestamp = 1;
+	optional string username = 2;
+	optional int32 id = 3;
+}
+
+/**
+* Used to couple the WrapperMessage and DeliveryInfo
+*/
+message Pdu {
+	required DeliveryInfo deliveryInfo = 1;
+	required bytes data = 2;
+}
+
+message DataFragment {
+	required bytes data = 1;
+	required int64 fragmentId = 2;
+	required int64 totalFragments = 3;
+}

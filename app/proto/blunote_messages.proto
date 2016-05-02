@@ -152,3 +152,9 @@ message Pdu {
 	required DeliveryInfo deliveryInfo = 1;
 	required WrapperMessage message = 2;
 }
+
+message DataFragment {
+	required bytes data = 1;
+	required int64 fragmentId = 2;
+	required int64 totalFragments = 3;
+}
