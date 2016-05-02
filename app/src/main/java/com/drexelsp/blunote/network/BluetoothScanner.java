@@ -142,6 +142,8 @@ public class BluetoothScanner extends BroadcastReceiver {
     private void handshakeDevices(ArrayList<String> macAddresses) {
         Log.v(TAG, String.format("Requesting handshake from %d device(s)", macAddresses.size()));
         ArrayList<Pair<Thread, ClientHandshake>> threads = new ArrayList<>();
+
+        // Create a thread for each device to handshake
         for (String macAddress : macAddresses) {
             BluetoothConnector bluetoothConnector = new BluetoothConnector(this.bluetoothAdapter.getRemoteDevice(macAddress),
                     false, this.bluetoothAdapter, Collections.singletonList(this.uuid));
@@ -157,6 +159,7 @@ public class BluetoothScanner extends BroadcastReceiver {
             }
         }
 
+        // Wait for Handshake Threads to complete
         ArrayList<NetworkPacket> networkPackets = new ArrayList<>();
         for (Pair<Thread, ClientHandshake> pair : threads) {
             try {
@@ -172,9 +175,35 @@ public class BluetoothScanner extends BroadcastReceiver {
         }
         Log.v(TAG, String.format("Handshaking completed, gathered %d packet(s)", networkPackets.size()));
 
-        // TODO: remove duplicate packets
-
+        // Remove Duplicate NetworkPackets
+        ArrayList<NetworkPacket> uniqueNetworkPackets = new ArrayList<>();
         for (NetworkPacket networkPacket : networkPackets) {
+            boolean temp = true;
+            WelcomePacket welcomePacket;
+            try {
+                welcomePacket = WelcomePacket.parseFrom(networkPacket.getPdu().getData());
+            } catch (InvalidProtocolBufferException e) {
+                e.printStackTrace();
+                continue;
+            }
+
+            for (NetworkPacket uniqueNetworkPacket : uniqueNetworkPackets) {
+                try {
+                    WelcomePacket uniqueWelcomePacket = WelcomePacket.parseFrom(uniqueNetworkPacket.getPdu().getData());
+                    if (welcomePacket.getNetworkName().equals(uniqueWelcomePacket.getNetworkName())){
+                        temp = false;
+                    }
+                } catch (InvalidProtocolBufferException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (temp) {
+                uniqueNetworkPackets.add(networkPacket);
+            }
+        }
+
+        // Convert Unique Network Packets to Connection List Items
+        for (NetworkPacket networkPacket : uniqueNetworkPackets) {
             if (networkPacket.hasNetworkMap()) {
                 NetworkMap networkMap = networkPacket.getNetworkMap();
                 try {
