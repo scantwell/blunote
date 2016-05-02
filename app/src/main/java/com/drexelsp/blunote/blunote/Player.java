@@ -35,7 +35,7 @@ public class Player implements Runnable, MediaPlayer.OnCompletionListener{
 
     public Player(Context context)
     {
-        this.isPaused.set(false);
+        this.isPaused = new AtomicBoolean(false);
         this.currentSong = null;
         this.lastSong = null;
         this.context = context;
