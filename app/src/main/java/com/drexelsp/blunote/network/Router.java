@@ -252,7 +252,6 @@ public class Router extends Thread {
                 outs.get(i).write(data);
             } catch (IOException e) {
                 e.printStackTrace();
-
             }
         }
     }
