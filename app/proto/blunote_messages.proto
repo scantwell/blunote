@@ -125,7 +125,7 @@ message SongFragment {
 */
 message WrapperMessage {
 
-	enum Type { METADATA_UPDATE = 1; MULTI_ANSWER = 2; RECOMMEND = 3; SINGLE_ANSWER= 4; SONG_FRAGMENT = 5; SONG_REQUEST = 6; VOTE = 7;}
+	enum Type { METADATA_UPDATE = 1; MULTI_ANSWER = 2; RECOMMEND = 3; SINGLE_ANSWER= 4; SONG_FRAGMENT = 5; SONG_REQUEST = 6; VOTE = 7; WELCOME_PACKET = 8;}
 
 	required Type type = 1;
 	optional MetadataUpdate metadataUpdate = 2;
@@ -135,6 +135,7 @@ message WrapperMessage {
 	optional SongFragment songFragment = 6;
 	optional SongRequest songRequest = 7;
 	optional Vote vote = 8;
+	optional WelcomePacket welcomePacket = 9;
 }
 
 /**
@@ -142,7 +143,7 @@ message WrapperMessage {
 */
 message DeliveryInfo {
 	required int64 timestamp = 1;
-	optional string username = 2;
+	optional string address = 2;
 	optional int32 id = 3;
 }
 
@@ -151,7 +152,7 @@ message DeliveryInfo {
 */
 message Pdu {
 	required DeliveryInfo deliveryInfo = 1;
-	required WrapperMessage message = 2;
+	required bytes data = 2;
 }
 
 message WelcomePacket {
@@ -160,10 +161,25 @@ message WelcomePacket {
 	required string numSongs = 3;
 }
 
-message NetworkPacket {
-	enum Type { DOWNSTREAM = 1; DROP = 2; NETWORK_DATA_UPDATE = 3; NEW = 4; UPSTREAM = 5; }
-
+message NetworkMap {
 	repeated string macAddresses = 1;
-	optional bytes pdu = 2;
+}
+
+message NetworkPacket {
+	enum Type { DOWNSTREAM = 1; DROP = 2; HANDSHAKE = 3; NETWORK_DATA_UPDATE = 4; NEW = 5; UPSTREAM = 6; }
+
+	optional NetworkMap networkMap = 1;
+	optional Pdu pdu = 2;
 	required Type type = 3;
+}
+
+message NetworkConfiguration {
+	optional bytes handshake = 1;
+	optional bool notifyOnDisconnectDownstream = 2 [default = false];
+	optional bool notifyOnDisconnectUpstream = 3 [default = false];
+	optional bool notifyOnConnectDownstream = 4 [default = false];
+	optional bool notifyOnConnectUpstream = 5 [default = false];
+	optional bool receiveUpstream = 6 [default = false]; /// Receive callbacks with client data
+	optional bool receiveDownstream = 7 [default = false]; /// Receive callbacks with host data
+	optional NetworkMap networkMap = 8;
 }

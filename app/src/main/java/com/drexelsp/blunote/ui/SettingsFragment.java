@@ -12,7 +12,7 @@ import com.drexelsp.blunote.blunote.R;
 /**
  * Settings Fragment
  * Does Fragment Things...
- * <p/>
+ *
  * Created by omnia on 4/7/16.
  */
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {

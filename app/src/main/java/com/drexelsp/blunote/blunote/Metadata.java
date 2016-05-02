@@ -52,6 +52,13 @@ public class Metadata {
         return mdBuilder.build();
     }
 
+    public String getSongCount()
+    {
+        String[] projection = new String[]{MetaStoreContract.Track.TITLE};
+        Cursor mediaCursor = mContentResolver.query(MetaStoreContract.Track.CONTENT_URI, projection, null, null, null);
+        return Integer.toString(mediaCursor.getCount());
+    }
+
     public BlunoteMessages.MetadataUpdate addHostMetadata(BlunoteMessages.MetadataUpdate message)
     {
         BlunoteMessages.MetadataUpdate.Builder builder = BlunoteMessages.MetadataUpdate.newBuilder();

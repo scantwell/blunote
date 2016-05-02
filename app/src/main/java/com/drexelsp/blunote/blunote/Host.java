@@ -29,24 +29,46 @@ public class Host extends User implements Observer {
     protected static String TAG = "HOST";
     private Player player;
     private ConcurrentHashMap<Long, Song> songHash;
+    private String serverName;
+    private int numUsers;
 
     public Host(Service service, Context context) {
         super(service, context);
         this.songHash = new ConcurrentHashMap<>();
+        this.numUsers = 1;
+        this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_user_name", BluetoothAdapter.getDefaultAdapter().getName());
+        this.serverName = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_server_name", "Party Jamz");
         this.player = new Player(context);
         new Thread(this.player).start();
     }
 
+    public void addUser()
+    {
+        this.numUsers++;
+    }
+
+    public void removeUser()
+    {
+        if (this.numUsers < 2)
+        {
+            return;
+        }
+        this.numUsers--;
+    }
 
     @Override
     public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message)
     {
         BlunoteMessages.MetadataUpdate update;
         if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
+            addUser();
             update = this.metadata.addHostMetadata(message);
         } else {
+            removeUser();
             update = this.metadata.deleteHostMetadata(message);
         }
+        updateWelcomePacket();
+    }
 
         this.service.send(update);
     }
@@ -150,5 +172,19 @@ public class Host extends User implements Observer {
     private void playerSongById(long id) {
         String uri = this.media.getSongUri(id);
         player.addSongUri(Uri.parse(uri));
+    }
+
+    private void updateWelcomePacket() {
+        WelcomePacket wp = getWelcomePacket();
+        this.service.updateHandshake(wp.toByteArray());
+        this.service.send(wp);
+    }
+
+    public WelcomePacket getWelcomePacket() {
+        WelcomePacket.Builder wp = WelcomePacket.newBuilder();
+        wp.setNetworkName(this.serverName);
+        wp.setNumSongs(this.metadata.getSongCount());
+        wp.setNumUsers(Integer.toString(this.numUsers));
+        return wp.build();
     }
 }
