@@ -7,14 +7,16 @@ package blunote;
 option java_package = "com.drexelsp.blunote.network";
 option java_outer_classname = "NetworkMessages";
 
+message NetworkPacket {
+	enum Type { DOWNSTREAM = 1; DROP = 2; HANDSHAKE = 3; NETWORK_DATA_UPDATE = 4; NEW = 5; UPSTREAM = 6; }
 
-/**
-* Stores metadata about the message being sent
-*/
-message DeliveryInfo {
-	required int64 timestamp = 1;
-	optional string username = 2;
-	optional int32 id = 3;
+	optional NetworkMap networkMap = 1;
+	optional Pdu pdu = 2;
+	required Type type = 3;
+}
+
+message NetworkMap {
+	repeated string macAddresses = 1;
 }
 
 /**
@@ -25,8 +27,28 @@ message Pdu {
 	required bytes data = 2;
 }
 
+/**
+* Stores metadata about the message being sent
+*/
+message DeliveryInfo {
+	required int64 timestamp = 1;
+	optional string address = 2;
+	optional int32 id = 3;
+}
+
 message DataFragment {
 	required bytes data = 1;
 	required int64 fragmentId = 2;
 	required int64 totalFragments = 3;
+}
+
+message NetworkConfiguration {
+	optional bytes handshake = 1;
+	optional bool notifyOnDisconnectDownstream = 2 [default = false];
+	optional bool notifyOnDisconnectUpstream = 3 [default = false];
+	optional bool notifyOnConnectDownstream = 4 [default = false];
+	optional bool notifyOnConnectUpstream = 5 [default = false];
+	optional bool receiveUpstream = 6 [default = false]; /// Receive callbacks with client data
+	optional bool receiveDownstream = 7 [default = false]; /// Receive callbacks with host data
+	optional NetworkMap networkMap = 8;
 }

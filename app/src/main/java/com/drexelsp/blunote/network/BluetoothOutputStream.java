@@ -2,7 +2,7 @@ package com.drexelsp.blunote.network;
 
 import android.bluetooth.BluetoothSocket;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages;
+import com.drexelsp.blunote.network.NetworkMessages.NetworkPacket;
 import com.google.protobuf.ByteString;
 
 import java.io.BufferedOutputStream;
@@ -21,7 +21,7 @@ public class BluetoothOutputStream implements BlunoteOutputStream {
         this.outputStream = socket.getOutputStream();
     }
 
-    public int write(BlunoteMessages.NetworkPacket networkPacket) throws IOException {
+    public int write(NetworkPacket networkPacket) throws IOException {
         byte[] bytes = networkPacket.toByteArray();
         return this.write(bytes);
     }

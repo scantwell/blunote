@@ -12,11 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages;
-import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
-import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration;
-import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
-import com.drexelsp.blunote.blunote.BlunoteMessages.Pdu;
+import com.drexelsp.blunote.network.NetworkMessages.*;
 import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.events.OnConnectionEvent;
 import com.drexelsp.blunote.events.OnDisconnectionEvent;
@@ -252,7 +248,7 @@ public class NetworkService extends Service {
     }
 
     // Private
-    private BlunoteSocket getBestConnection(BlunoteMessages.NetworkMap networkMap) {
+    private BlunoteSocket getBestConnection(NetworkMap networkMap) {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         for (String macAddress : networkMap.getMacAddressesList()) {
 

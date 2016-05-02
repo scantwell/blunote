@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.greenrobot.eventbus.Subscribe;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
+import com.drexelsp.blunote.network.NetworkMessages.DeliveryInfo;
 import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;

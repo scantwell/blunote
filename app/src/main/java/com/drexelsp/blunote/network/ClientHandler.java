@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration;
+import com.drexelsp.blunote.network.NetworkMessages.NetworkConfiguration;
 import com.google.protobuf.ByteString;
 
 import java.io.ByteArrayOutputStream;

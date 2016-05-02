@@ -11,10 +11,18 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration;
+import com.drexelsp.blunote.network.NetworkMessages.NetworkConfiguration;
+import com.drexelsp.blunote.network.NetworkMessages.DeliveryInfo;
 import com.drexelsp.blunote.events.BluetoothEvent;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 abstract public class ClientService extends Service {
+
+    protected enum Direction
+    {
+        UPSTREAM, DOWNSTREAM
+    }
+
     private String TAG = "ClientService";
     protected final NetworkServiceConnection mConnection = new NetworkServiceConnection();
     protected Receiver receiver = new Receiver(this);
@@ -24,9 +32,7 @@ abstract public class ClientService extends Service {
 
     abstract public void onConnectionUpstream(String address);
 
-    abstract public void onReceiveDownstream(byte[] data);
-
-    abstract public void onReceiveUpstream(byte[] data);
+    abstract public void onReceive(Direction dir, DeliveryInfo dinfo, byte[] data);
 
     abstract public void onDisconnectionDownstream(String address);
 
@@ -62,6 +68,29 @@ abstract public class ClientService extends Service {
             e.printStackTrace();
         }
     }
+
+    public void onReceiveDownstream(byte[] data)
+    {
+        this.onReceive(Direction.DOWNSTREAM, data);
+    }
+
+    public void onReceiveUpstream(byte[] data)
+    {
+        this.onReceive(Direction.UPSTREAM, data);
+    }
+
+    private void onReceive(Direction dir, byte[] data)
+    {
+        try {
+            NetworkMessages.Pdu pdu = NetworkMessages.Pdu.parseFrom(data);
+            DeliveryInfo dinfo = pdu.getDeliveryInfo();
+            // Determine if the data is good to send to
+            this.onReceive(dir, dinfo, pdu.getData().toByteArray());
+        } catch (InvalidProtocolBufferException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     protected void startNetwork(NetworkConfiguration config) {
         Log.v(TAG, "Starting Network.");

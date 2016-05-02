@@ -1,23 +1,23 @@
 package com.drexelsp.blunote.events;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages;
+import com.drexelsp.blunote.network.NetworkMessages.NetworkPacket;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 /**
  * Created by stephencantwell on 4/26/16.
  */
 public class OnReceiveDownstream {
-    private BlunoteMessages.NetworkPacket networkPacket;
+    private NetworkPacket networkPacket;
 
     public OnReceiveDownstream(byte[] data) {
         try {
-            this.networkPacket = BlunoteMessages.NetworkPacket.parseFrom(data);
+            this.networkPacket = NetworkPacket.parseFrom(data);
         } catch (InvalidProtocolBufferException e) {
             this.networkPacket = null;
         }
     }
 
-    public BlunoteMessages.NetworkPacket getNetworkPacket() {
+    public NetworkPacket getNetworkPacket() {
         return networkPacket;
     }
 }

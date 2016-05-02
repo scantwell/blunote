@@ -5,6 +5,7 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 
 import com.drexelsp.blunote.events.SongRecommendationEvent;
+import com.drexelsp.blunote.network.NetworkMessages.DeliveryInfo;
 import com.drexelsp.blunote.ui.PreferencesActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,7 +42,7 @@ public class User {
         return BlunoteMessages.WelcomePacket.newBuilder().build();
     }
 
-    public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.WrapperMessage message) {
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.WrapperMessage message) {
         if (BlunoteMessages.WrapperMessage.Type.METADATA_UPDATE.equals(message.getType())) {
             this.onReceive(dinfo, message.getMetadataUpdate());
         } else if (BlunoteMessages.WrapperMessage.Type.MULTI_ANSWER.equals(message.getType())) {
@@ -63,7 +64,7 @@ public class User {
         }
     }
 
-    public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message) {
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message) {
         if (!message.getOwner().equals(this.name)) {
             if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
                 this.metadata.addMetadata(message);
@@ -73,23 +74,23 @@ public class User {
         }
     }
 
-    public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.MultiAnswer message) {
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MultiAnswer message) {
         throw new RuntimeException("User cannot handle 'BlunoteMessages.MultiAnswer'. Is not a host.");
     }
 
-    public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.Recommendation message) {
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.Recommendation message) {
         throw new RuntimeException("User cannot handle 'BlunoteMessages.Recommendation'. Is not a host.");
     }
 
-    public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.SingleAnswer message) {
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.SingleAnswer message) {
         throw new RuntimeException("User cannot handle 'BlunoteMessages.Vote'. Is not a host.");
     }
 
-    public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.SongFragment message) {
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.SongFragment message) {
         throw new RuntimeException("User cannot handle 'BlunoteMessages.SongFragment'. Is not a host.");
     }
 
-    public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.SongRequest message) {
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.SongRequest message) {
         if (message.getUsername().equals(this.name)) {
             ArrayList<BlunoteMessages.SongFragment> frags = this.media.getSongFragments(message.getSongId());
             for (BlunoteMessages.SongFragment frag : frags) {
@@ -103,11 +104,11 @@ public class User {
         }
     }
 
-    public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.WelcomePacket message) {
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.WelcomePacket message) {
         this.service.updateHandshake(message.toByteArray());
     }
 
-    public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.Vote message) {
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.Vote message) {
         throw new RuntimeException("User cannot handle 'BlunoteMessages.Vote'. Not implemented.");
     }
 

@@ -1,6 +1,6 @@
 package com.drexelsp.blunote.beans;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap;
+import com.drexelsp.blunote.network.NetworkMessages.NetworkMap;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket;
 
 /**

@@ -2,7 +2,7 @@ package com.drexelsp.blunote.blunote;
 
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
+import com.drexelsp.blunote.network.NetworkMessages.DeliveryInfo;
 import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;
@@ -13,10 +13,9 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
  * Created by scantwell on 2/16/2016.
  * Handles vote requests, generating popup notifications for the user, and creating responses.
  */
-public class VoteEngine implements MessageHandler {
+public class VoteEngine {
     private final String TAG = "VoteEngine";
 
-    @Override
     public boolean processMessage(DeliveryInfo dinfo, WrapperMessage message) {
         if (WrapperMessage.Type.MULTI_ANSWER.equals(message.getType())) {
         } else if (WrapperMessage.Type.RECOMMEND.equals(message.getType())) {

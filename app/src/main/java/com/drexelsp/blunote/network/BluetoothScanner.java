@@ -14,8 +14,8 @@ import android.util.Pair;
 import android.widget.ArrayAdapter;
 
 import com.drexelsp.blunote.beans.ConnectionListItem;
-import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap;
-import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
+import com.drexelsp.blunote.network.NetworkMessages.NetworkMap;
+import com.drexelsp.blunote.network.NetworkMessages.NetworkPacket;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket;
 import com.google.protobuf.InvalidProtocolBufferException;
 

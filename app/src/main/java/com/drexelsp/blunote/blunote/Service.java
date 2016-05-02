@@ -3,12 +3,11 @@ package com.drexelsp.blunote.blunote;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
+import com.drexelsp.blunote.network.NetworkMessages.DeliveryInfo;
 import com.drexelsp.blunote.blunote.BlunoteMessages.MetadataUpdate;
 import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
-import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration;
-import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap;
-import com.drexelsp.blunote.blunote.BlunoteMessages.Pdu;
+import com.drexelsp.blunote.network.NetworkMessages.NetworkConfiguration;
+import com.drexelsp.blunote.network.NetworkMessages.NetworkMap;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
@@ -47,15 +46,10 @@ public class Service extends ClientService {
         super.setBinder(mBinder);
     }
 
-    public void onReceiveDownstream(byte[] data) {
-        this.onReceiveUpstream(data);
-    }
-
-    public void onReceiveUpstream(byte[] data) {
+    public void onReceive(Direction dir, DeliveryInfo dinfo, byte[] data)
+    {
         try {
-            Pdu pdu = Pdu.parseFrom(data);
-            DeliveryInfo dinfo = pdu.getDeliveryInfo();
-            WrapperMessage message = WrapperMessage.parseFrom(pdu.getData());
+            WrapperMessage message = WrapperMessage.parseFrom(data);
             this.user.onReceive(dinfo, message);
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();

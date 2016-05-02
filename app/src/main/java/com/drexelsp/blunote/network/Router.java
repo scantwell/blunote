@@ -2,7 +2,7 @@ package com.drexelsp.blunote.network;
 
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages;
+import com.drexelsp.blunote.network.NetworkMessages.NetworkMap;
 import com.drexelsp.blunote.events.OnConnectionEvent;
 import com.drexelsp.blunote.events.OnDisconnectionEvent;
 import com.drexelsp.blunote.events.OnReceiveDownstream;
@@ -163,9 +163,9 @@ public class Router extends Thread {
         }
     }
 
-    public BlunoteMessages.NetworkMap getNetworkMap()
+    public NetworkMap getNetworkMap()
     {
-        BlunoteMessages.NetworkMap.Builder builder = BlunoteMessages.NetworkMap.newBuilder();
+        NetworkMap.Builder builder = NetworkMap.newBuilder();
         builder.addAllMacAddresses(networkList);
         return builder.build();
     }

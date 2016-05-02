@@ -1,6 +1,6 @@
 package com.drexelsp.blunote.network;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
+import com.drexelsp.blunote.network.NetworkMessages.NetworkPacket;
 import com.google.protobuf.ByteString;
 
 import java.io.IOException;

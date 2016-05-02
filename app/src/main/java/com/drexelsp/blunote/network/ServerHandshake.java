@@ -3,9 +3,9 @@ package com.drexelsp.blunote.network;
 import android.bluetooth.BluetoothAdapter;
 import android.util.Log;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.Pdu;
-import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
-import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
+import com.drexelsp.blunote.network.NetworkMessages.Pdu;
+import com.drexelsp.blunote.network.NetworkMessages.DeliveryInfo;
+import com.drexelsp.blunote.network.NetworkMessages.NetworkPacket;
 import com.google.protobuf.ByteString;
 
 import java.io.IOException;

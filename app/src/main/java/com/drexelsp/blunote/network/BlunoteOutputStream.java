@@ -1,6 +1,6 @@
 package com.drexelsp.blunote.network;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages;
+import com.drexelsp.blunote.network.NetworkMessages.NetworkPacket;
 import com.google.protobuf.ByteString;
 
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.io.IOException;
  */
 public interface BlunoteOutputStream {
 
-    int write(BlunoteMessages.NetworkPacket networkPacket) throws IOException;
+    int write(NetworkPacket networkPacket) throws IOException;
 
     int write(ByteString data) throws IOException;
 
