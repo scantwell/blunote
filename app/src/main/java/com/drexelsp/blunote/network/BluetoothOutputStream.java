@@ -33,7 +33,7 @@ public class BluetoothOutputStream implements BlunoteOutputStream {
     }
 
     public int write(byte[] data) throws IOException {
-        DataOutputStream dataOutputStream = new DataOutputStream(outputStream); //new BufferedOutputStream(outputStream, 4 + data.length);
+        DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(outputStream)); //new BufferedOutputStream(outputStream, 4 + data.length);
         dataOutputStream.writeInt(data.length);
         int offset = 0, count;
         while (offset < data.length) {

@@ -22,6 +22,7 @@ import com.drexelsp.blunote.events.SeekEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.concurrent.TimeUnit;
 
@@ -111,7 +112,7 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
         }
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlaySong(PlaySongEvent event)
     {
         songName.setText(event.title);

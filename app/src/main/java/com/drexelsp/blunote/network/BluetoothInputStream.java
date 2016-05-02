@@ -33,7 +33,7 @@ public class BluetoothInputStream implements BlunoteInputStream {
 
     @Override
     public byte[] rawRead() throws IOException {
-        DataInputStream dataInputStream = new DataInputStream(inputStream);
+        DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(inputStream));
         int messageSize, bytes;
         byte[] buffer;
         messageSize = dataInputStream.readInt();
