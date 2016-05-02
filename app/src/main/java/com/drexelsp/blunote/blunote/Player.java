@@ -18,11 +18,12 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.IOException;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by scantwell on 3/14/2016.
  */
-public class Player implements Runnable {
+public class Player implements Runnable, MediaPlayer.OnCompletionListener{
 
     private static final String TAG = "BlunoteMediaPlayer";
     private Deque<Uri> queue;
@@ -30,9 +31,11 @@ public class Player implements Runnable {
     private Context context;
     private Uri lastSong;
     private Uri currentSong;
+    private AtomicBoolean isPaused;
 
     public Player(Context context)
     {
+        this.isPaused.set(false);
         this.currentSong = null;
         this.lastSong = null;
         this.context = context;
@@ -60,7 +63,7 @@ public class Player implements Runnable {
 
     private synchronized void waitOnQueueOrPlayer()
     {
-        while (queue.size() < 1 || player.isPlaying())
+        while (queue.size() < 1 || player.isPlaying() || isPaused.get())
         {
             try {
                 this.wait();
@@ -97,14 +100,15 @@ public class Player implements Runnable {
     @Subscribe
     public void onPreviousSongEvent(PreviousSongEvent event)
     {
-        if (lastSong != null || getCurrentTimePercentage() > 0.05)
+        if (lastSong == null || getCurrentTimePercentage() > 0.05)
         {
+            player.seekTo(0);
+        } else {
+            queue.addFirst(currentSong);
             queue.addFirst(lastSong);
             lastSong = null;
             player.stop();
             wakeUp();
-        } else {
-            player.seekTo(0);
         }
     }
 
@@ -124,7 +128,9 @@ public class Player implements Runnable {
         if (player.isPlaying())
         {
             player.pause();
+            isPaused.set(true);
         } else {
+            isPaused.set(false);
             player.start();
         }
     }
@@ -133,5 +139,10 @@ public class Player implements Runnable {
     public void onSeek(SeekEvent event)
     {
         player.seekTo((int)event.position);
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        wakeUp();
     }
 }

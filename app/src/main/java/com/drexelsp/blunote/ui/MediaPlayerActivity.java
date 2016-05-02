@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -122,14 +123,17 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
 
     private String durationToTime(int duration)
     {
-        return String.format("%02d:%02d",
-                TimeUnit.MILLISECONDS.toMinutes(duration), // The change is in this line
-                TimeUnit.MILLISECONDS.toSeconds(duration) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
+        String dur = String.format("%02d:%02d",
+                    TimeUnit.MILLISECONDS.toMinutes(duration), // The change is in this line
+                    TimeUnit.MILLISECONDS.toSeconds(duration) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
+        Log.v("MediaPlayerActivity", String.format("Created time duration string %s from %d.", dur, duration));
+        return dur;
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        Log.v("MediaPlayerActivity", String.format("Our progress is %d", progress));
         EventBus.getDefault().post(new SeekEvent(progress));
     }
 
