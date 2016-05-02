@@ -17,8 +17,10 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Vote;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -36,7 +38,8 @@ public class Host extends User implements Observer {
         super(service, context);
         this.songHash = new ConcurrentHashMap<>();
         this.numUsers = 1;
-        this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_user_name", BluetoothAdapter.getDefaultAdapter().getName());
+        this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_user_name", BluetoothAdapter
+                .getDefaultAdapter().getName());
         this.serverName = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_server_name", "Party Jamz");
         this.player = new Player(context);
         new Thread(this.player).start();
@@ -68,8 +71,6 @@ public class Host extends User implements Observer {
             update = this.metadata.deleteHostMetadata(message);
         }
         updateWelcomePacket();
-    }
-
         this.service.send(update);
     }
 
@@ -175,13 +176,13 @@ public class Host extends User implements Observer {
     }
 
     private void updateWelcomePacket() {
-        WelcomePacket wp = getWelcomePacket();
+        BlunoteMessages.WelcomePacket wp = getWelcomePacket();
         this.service.updateHandshake(wp.toByteArray());
         this.service.send(wp);
     }
 
-    public WelcomePacket getWelcomePacket() {
-        WelcomePacket.Builder wp = WelcomePacket.newBuilder();
+    public BlunoteMessages.WelcomePacket getWelcomePacket() {
+        BlunoteMessages.WelcomePacket.Builder wp = BlunoteMessages.WelcomePacket.newBuilder();
         wp.setNetworkName(this.serverName);
         wp.setNumSongs(this.metadata.getSongCount());
         wp.setNumUsers(Integer.toString(this.numUsers));

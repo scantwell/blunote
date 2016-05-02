@@ -1,10 +1,20 @@
 package com.drexelsp.blunote.blunote;
 
-import android.os.Binder;
-import android.os.IBinder;
-import android.util.Log;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
-import com.drexelsp.blunote.blunote.BlunoteMessages.*;
+import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
+import com.drexelsp.blunote.blunote.BlunoteMessages.MetadataUpdate;
+import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration;
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Pdu;
+import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
+import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;
+import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
+import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
+import com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket;
+import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
 import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.events.OnDisconnectionEvent;
 import com.drexelsp.blunote.events.OnLeaveNetworkEvent;
@@ -12,8 +22,9 @@ import com.drexelsp.blunote.network.ClientService;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
+import android.os.Binder;
+import android.os.IBinder;
+import android.util.Log;
 
 /**
  * Created by scantwell on 2/15/2016.
@@ -147,17 +158,11 @@ public class Service extends ClientService {
         super.sendDownstream(WrapperMessage.newBuilder()
                 .setType(WrapperMessage.Type.WELCOME_PACKET)
                 .setWelcomePacket(message).build().toByteArray());
-    public void send(MetadataUpdate message) {
-        Pdu pdu = createMessage()
-                .setMessage(WrapperMessage.newBuilder()
-                        .setType(WrapperMessage.Type.METADATA_UPDATE)
-                        .setMetadataUpdate(message)).build();
-        super.send(pdu.toByteArray());
     }
 
-    public Pdu.Builder createMessage() {
-        Pdu.Builder pduBuilder = Pdu.newBuilder();
-        pduBuilder.setDeliveryInfo(createDeliveryInfo());
-        return pduBuilder;
+    public void send(MetadataUpdate message) {
+        super.sendDownstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.METADATA_UPDATE)
+                .setMetadataUpdate(message).build().toByteArray());
     }
 }
