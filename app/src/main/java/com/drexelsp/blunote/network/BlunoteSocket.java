@@ -1,17 +1,19 @@
 package com.drexelsp.blunote.network;
 
-import android.os.Message;
+import java.io.IOException;
 
 /**
  * Created by omnia on 2/12/16.
- * <p/>
+ * <p>
  * Interface for BluNote Sockets
  * Currently supports BlunoteBluetoothSocket
  */
 public interface BlunoteSocket {
-    int numMessages();
+    BlunoteInputStream getInputStream() throws IOException;
 
-    Message readMessage();
+    BlunoteOutputStream getOutputStream() throws IOException;
 
-    boolean writeMessage(Message msg);
+    String getAddress();
+
+    void close() throws IOException;
 }

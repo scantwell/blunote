@@ -1,8 +1,12 @@
 package com.drexelsp.blunote.blunote;
 
-import android.content.Context;
-import android.net.Uri;
-import android.util.Log;
+import java.io.File;
+import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
 import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
@@ -13,13 +17,11 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Vote;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
 
-import org.greenrobot.eventbus.Subscribe;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.concurrent.ConcurrentHashMap;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
+import android.net.Uri;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 /**
  * Created by scantwell on 3/31/2016.
@@ -29,24 +31,48 @@ public class Host extends User implements Observer {
     protected static String TAG = "HOST";
     private Player player;
     private ConcurrentHashMap<Long, Song> songHash;
+    private String serverName;
+    private int numUsers;
 
     public Host(Service service, Context context) {
         super(service, context);
         this.songHash = new ConcurrentHashMap<>();
+        this.numUsers = 1;
+        this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_user_name", BluetoothAdapter
+                .getDefaultAdapter().getName());
+        this.serverName = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_server_name", "Party Jamz");
         this.player = new Player(context);
         new Thread(this.player).start();
     }
 
-   /* public void onReceive(DeliveryInfo dinfo, MetadataUpdate message)
+    public void addUser()
     {
-        if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
-            this.metadata.addMetadata(message);
-        } else {
-            this.metadata.deleteMetadata(message);
+        this.numUsers++;
+    }
+
+    public void removeUser()
+    {
+        if (this.numUsers < 2)
+        {
+            return;
         }
-        // Contains the removal of metadata
-        //this.service.send(BlunoteMessages.MetadataUpdate);
-    }*/
+        this.numUsers--;
+    }
+
+    @Override
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message)
+    {
+        BlunoteMessages.MetadataUpdate update;
+        if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
+            addUser();
+            update = this.metadata.addHostMetadata(message);
+        } else {
+            removeUser();
+            update = this.metadata.deleteHostMetadata(message);
+        }
+        updateWelcomePacket();
+        this.service.send(update);
+    }
 
     @Override
     public void onReceive(DeliveryInfo dinfo, MultiAnswer message) {
@@ -147,5 +173,19 @@ public class Host extends User implements Observer {
     private void playerSongById(long id) {
         String uri = this.media.getSongUri(id);
         player.addSongUri(Uri.parse(uri));
+    }
+
+    private void updateWelcomePacket() {
+        BlunoteMessages.WelcomePacket wp = getWelcomePacket();
+        this.service.updateHandshake(wp.toByteArray());
+        this.service.send(wp);
+    }
+
+    public BlunoteMessages.WelcomePacket getWelcomePacket() {
+        BlunoteMessages.WelcomePacket.Builder wp = BlunoteMessages.WelcomePacket.newBuilder();
+        wp.setNetworkName(this.serverName);
+        wp.setNumSongs(this.metadata.getSongCount());
+        wp.setNumUsers(Integer.toString(this.numUsers));
+        return wp.build();
     }
 }

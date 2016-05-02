@@ -1,5 +1,12 @@
 package com.drexelsp.blunote.ui;
 
+import org.greenrobot.eventbus.EventBus;
+
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.events.SongRecommendationEvent;
+import com.drexelsp.blunote.provider.MetaStoreContract;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,13 +19,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.drexelsp.blunote.blunote.Constants;
-import com.drexelsp.blunote.blunote.R;
-import com.drexelsp.blunote.events.SongRecommendationEvent;
-import com.drexelsp.blunote.provider.MetaStoreContract;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by U6020377 on 1/25/2016.
@@ -133,27 +133,14 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
     }
 
     private String getUsername(String title, String artist, String album) {
-        String username;
-        String[] selection = {};
-        String where = "title = ? AND artist = ? AND album = ?";
-        String[] args = {title, artist, album};
-        Cursor cursor = getContentResolver().query(MetaStoreContract.UserTracks.CONTENT_URI, selection, where, args, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            String userId = cursor.getString(cursor.getColumnIndex("user_id"));
-            cursor.close();
+        String username = "";
+        Uri uri = MetaStoreContract.FIND_USERNAME_URI;
+        String[] params = new String[]{title, artist, album};
+        Cursor c = getContentResolver().query(uri, null, null, params, null);
 
-            where = "user_id = ?";
-            args = new String[]{userId};
-            cursor = getContentResolver().query(MetaStoreContract.User.CONTENT_URI, selection, where, args, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                username = cursor.getString(cursor.getColumnIndex("username"));
-                cursor.close();
-            } else {
-                username = "";
-            }
-
-        } else {
-            username = "";
+        if(c != null) {
+            c.moveToFirst();
+            username = c.getString(c.getColumnIndex(MetaStoreContract.User.USERNAME));
         }
         return username;
     }

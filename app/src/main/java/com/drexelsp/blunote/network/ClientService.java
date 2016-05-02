@@ -11,6 +11,7 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration;
 import com.drexelsp.blunote.events.BluetoothEvent;
 
 abstract public class ClientService extends Service {
@@ -19,14 +20,39 @@ abstract public class ClientService extends Service {
     protected Receiver receiver = new Receiver(this);
     protected IBinder mBinder = null;
 
-    abstract public void onReceive(byte[] data);
+    abstract public void onConnectionDownstream(String address);
 
-    abstract public void onNetworkEvent(BluetoothEvent bluetoothEvent);
+    abstract public void onConnectionUpstream(String address);
+
+    abstract public void onReceiveDownstream(byte[] data);
+
+    abstract public void onReceiveUpstream(byte[] data);
+
+    abstract public void onDisconnectionDownstream(String address);
+
+    abstract public void onDisconnectionUpstream(String address);
 
     // Sends to another application via bluetooth/etc
-    protected void send(byte[] data) {
+    protected void sendUpstream(byte[] data) { this.send(ClientHandler.SEND_UPSTREAM, data); }
+
+    // Sends to another application via bluetooth/etc
+    protected void sendDownstream(byte[] data) {
+        this.send(ClientHandler.SEND_DOWNSTREAM, data);
+    }
+
+    // Sends to another application via bluetooth/etc
+    private void send(int direction, byte[] data) {
         Log.v(TAG, "Sending message.");
-        Message msg = Message.obtain(null, ClientHandler.SEND, 0, 0);
+        Message msg;
+        if ( direction == ClientHandler.SEND_DOWNSTREAM )
+        {
+            msg = Message.obtain(null, ClientHandler.SEND_DOWNSTREAM, 0, 0);
+        }
+        else
+        {
+            msg = Message.obtain(null, ClientHandler.SEND_UPSTREAM, 0, 0);
+        }
+
         Bundle bundle = new Bundle(1);
         bundle.putByteArray("data", data);
         msg.setData(bundle);
@@ -37,9 +63,12 @@ abstract public class ClientService extends Service {
         }
     }
 
-    protected void startNetwork() {
+    protected void startNetwork(NetworkConfiguration config) {
         Log.v(TAG, "Starting Network.");
         Message msg = Message.obtain(null, ClientHandler.START_NEW_NETWORK, 0, 0);
+        Bundle b = new Bundle();
+        b.putByteArray("configuration", config.toByteArray());
+        msg.setData(b);
         try {
             mConnection.send(msg);
         } catch (RemoteException e) {
@@ -47,11 +76,34 @@ abstract public class ClientService extends Service {
         }
     }
 
-    protected void connectToNetwork(String macAddress) {
-        Log.v(TAG, String.format("Connecting To Network %s", macAddress));
+    protected void connectToNetwork(NetworkConfiguration config) {
+        //Log.v(TAG, String.format("Connecting To Network %s", macAddress));
         Message msg = Message.obtain(null, ClientHandler.CONNECT_TO_NETWORK, 0, 0);
         Bundle bundle = new Bundle(1);
-        bundle.putString("MacAddress", macAddress);
+        bundle.putByteArray("configuration", config.toByteArray());
+        msg.setData(bundle);
+        try {
+            mConnection.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void disconnect() {
+        Message msg = Message.obtain(null, ClientHandler.DISCONNECT, 0, 0);
+        Bundle bundle = new Bundle(1);
+        msg.setData(bundle);
+        try {
+            mConnection.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateHandshake(byte[] handshake) {
+        Message msg = Message.obtain(null, ClientHandler.UPDATE_HANDSHAKE, 0, 0);
+        Bundle bundle = new Bundle(1);
+        bundle.putByteArray("handshake", handshake);
         msg.setData(bundle);
         try {
             mConnection.send(msg);
