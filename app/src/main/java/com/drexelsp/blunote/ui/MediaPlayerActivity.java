@@ -42,6 +42,7 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
     ToggleButton playPause;
     ImageButton next;
     SeekBar seekBar;
+    int progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +113,7 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onPlaySong(PlaySongEvent event)
     {
         songName.setText(event.title);
@@ -135,8 +136,7 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        Log.v("MediaPlayerActivity", String.format("Our progress is %d", progress));
-        EventBus.getDefault().post(new SeekEvent(progress));
+        this.progress = progress;
     }
 
     @Override
@@ -146,6 +146,7 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-
+        Log.v("MediaPlayerActivity", String.format("Our progress is %d", progress));
+        EventBus.getDefault().post(new SeekEvent(progress));
     }
 }
