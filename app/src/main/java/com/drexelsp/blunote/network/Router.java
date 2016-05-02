@@ -124,12 +124,22 @@ public class Router extends Thread {
     public synchronized void addUpstreamMessage(byte[] data) {
         this.upBucket.add(data);
         Log.d(TAG, String.format("Added upstream message to queue. New size %d", this.upBucket.size()));
+        if (notifyOnReceiveUpstream) {
+            Log.d(TAG, String.format("Posting OnReceiveUpstream for messsage"));
+            OnReceiveUpstream event = new OnReceiveUpstream(data);
+            EventBus.getDefault().post(event);
+        }
         notifyAll();
     }
 
     public synchronized void addDownstreamMessage(byte[] data) {
         this.downBucket.add(data);
         Log.d(TAG, String.format("Added downstream message to queue. New size %d", this.downBucket.size()));
+        if (notifyOnReceiveDownstream) {
+            Log.d(TAG, String.format("Posting OnReceiveDownstream for message."));
+            OnReceiveDownstream event = new OnReceiveDownstream(data);
+            EventBus.getDefault().post(event);
+        }
         notifyAll();
     }
 
@@ -217,21 +227,11 @@ public class Router extends Thread {
     private void sendDownstream(byte[] data) {
         send(data, downOuts);
         Log.d(TAG, String.format("Sent downstream message."));
-        if (notifyOnReceiveDownstream) {
-            Log.d(TAG, String.format("Posting OnReceiveDownstream for message."));
-            OnReceiveDownstream event = new OnReceiveDownstream(data);
-            EventBus.getDefault().post(event);
-        }
     }
 
     private void sendUpstream(byte[] data) {
         Log.d(TAG, String.format("Sending upstream message."));
         send(data, upOuts);
-        if (notifyOnReceiveUpstream) {
-            Log.d(TAG, String.format("Posting OnReceiveUpstream for messsage"));
-            OnReceiveUpstream event = new OnReceiveUpstream(data);
-            EventBus.getDefault().post(event);
-        }
     }
 
     private void send(byte[] data, CopyOnWriteArrayList<BlunoteOutputStream> outs) {
