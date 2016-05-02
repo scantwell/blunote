@@ -1,5 +1,12 @@
 package com.drexelsp.blunote.ui;
 
+import org.greenrobot.eventbus.EventBus;
+
+import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.events.SongRecommendationEvent;
+import com.drexelsp.blunote.provider.MetaStoreContract;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,13 +20,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.drexelsp.blunote.blunote.Constants;
-import com.drexelsp.blunote.blunote.R;
-import com.drexelsp.blunote.provider.MetaStoreContract;
-import com.drexelsp.blunote.events.SongRecommendationEvent;
-
-import org.greenrobot.eventbus.EventBus;
-
 /**
  * Created by U6020377 on 1/25/2016.
  */
@@ -31,6 +31,12 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
     TextView songViewAlbum;
     TextView songViewOwner;
     Button song_view_add_to_queue;
+
+    String id;
+    String username;
+    String title;
+    String artist;
+    String album;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +78,8 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         if (v == song_view_add_to_queue) {
-            Intent intent = getIntent();
-            String id = intent.getStringExtra("_id");
-            SongRecommendationEvent event = new SongRecommendationEvent(id, "FakeUser");
+            SongRecommendationEvent event = new SongRecommendationEvent(
+                    id, title, artist, album, username);
             EventBus.getDefault().post(event);
         }
 
@@ -82,40 +87,61 @@ public class SongViewActivity extends BaseBluNoteActivity implements View.OnClic
 
     public void populateSongDetails() {
         Intent intent = getIntent();
-        String id = intent.getStringExtra("_id");
-        String[] selection = { "song_id", "title", "artist", "album" };
+        id = intent.getStringExtra("_id");
+        String[] selection = {"song_id", "title", "artist", "album"};
         String where = "song_id = ?";
-        String[] args = { id };
+        String[] args = {id};
         Cursor cursor = getContentResolver().query(MetaStoreContract.Track.CONTENT_URI, selection, where, args, null);
 
         if (cursor != null && cursor.moveToNext()) {
             Log.v(TAG, "Results found");
-            String title = cursor.getString(cursor.getColumnIndex("title"));
-            songViewTitle.setText(title);
-            String artist = cursor.getString(cursor.getColumnIndex("artist"));
-            songViewArtist.setText(artist);
-            String album = cursor.getString(cursor.getColumnIndex("album"));
-            songViewAlbum.setText(album);
-            String owner = "SongOwner";
-            songViewOwner.setText(owner);
-            //Log.v(TAG, String.format("Title: %s, Artist: %s, Album: %s, Owner: %s", title, artist, album, owner));
+            String songTitle = cursor.getString(cursor.getColumnIndex("title"));
+            songViewTitle.setText(songTitle);
+            String songArtist = cursor.getString(cursor.getColumnIndex("artist"));
+            songViewArtist.setText(songArtist);
+            String songAlbum = cursor.getString(cursor.getColumnIndex("album"));
+            songViewAlbum.setText(songAlbum);
             cursor.close();
 
+            title = songTitle;
+            artist = songArtist;
+            album = songAlbum;
 
-            Uri uri1 = MetaStoreContract.Album.CONTENT_URI;
-            String selection1[] = {"album_art"};
-            String where1 = "album = ?";
-            String[] args1 = { album };
-            Cursor cursor1 = getContentResolver().query(uri1, selection1, where1, args1, null);
+            username = getUsername(songTitle, songArtist, songAlbum);
+            songViewOwner.setText(username);
 
-            if (cursor1 != null && cursor1.moveToNext()) {
-                //Log.v(TAG, "Album Found");
-                byte[] albumArt = cursor1.getBlob(cursor1.getColumnIndex("album_art"));
-                Bitmap bitmap = BitmapFactory.decodeByteArray(albumArt, 0, albumArt.length);
-                songViewAlbumArt.setImageBitmap(bitmap);
-                cursor1.close();
-            }
+            songViewAlbumArt.setImageBitmap(getAlbumArt(songAlbum));
         }
 
+    }
+
+    private Bitmap getAlbumArt(String album) {
+        Uri uri = MetaStoreContract.Album.CONTENT_URI;
+        String selection[] = {"album_art"};
+        String where = "album = ?";
+        String[] args = {album};
+        Cursor cursor = getContentResolver().query(uri, selection, where, args, null);
+
+        if (cursor != null && cursor.moveToNext()) {
+            byte[] albumArt = cursor.getBlob(cursor.getColumnIndex("album_art"));
+            cursor.close();
+
+            return BitmapFactory.decodeByteArray(albumArt, 0, albumArt.length);
+        } else {
+            return null;
+        }
+    }
+
+    private String getUsername(String title, String artist, String album) {
+        String username = "";
+        Uri uri = MetaStoreContract.FIND_USERNAME_URI;
+        String[] params = new String[]{title, artist, album};
+        Cursor c = getContentResolver().query(uri, null, null, params, null);
+
+        if(c != null) {
+            c.moveToFirst();
+            username = c.getString(c.getColumnIndex(MetaStoreContract.User.USERNAME));
+        }
+        return username;
     }
 }

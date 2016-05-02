@@ -16,11 +16,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.events.OnDisconnectionEvent;
+import com.drexelsp.blunote.events.OnLeaveNetworkEvent;
 import com.drexelsp.blunote.provider.MetaStoreContract;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -101,12 +107,13 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
         Intent intent;
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_network) {
-            intent = new Intent(getCurrentContext(), NetworkSettingsActivity.class);
+        if (id == R.id.action_settings_page) {
+            intent = new Intent(getCurrentContext(), SettingsActivity.class);
             startActivity(intent);
             return true;
-        } else if (id == R.id.action_preferences) {
-            intent = new Intent(getCurrentContext(), PreferencesActivity.class);
+        } else if (id == R.id.action_leave_network) {
+            EventBus.getDefault().post(new OnLeaveNetworkEvent());
+            intent = new Intent(getCurrentContext(), LoginActivity.class);
             startActivity(intent);
             return true;
         } else if (id == R.id.action_songList) {
@@ -253,5 +260,13 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
         public void onChange(boolean selfChange, Uri uri) {
             handleOnMetaStoreChange();
         }
+    }
+
+    @Subscribe
+    public void OnDisconnectionEvent(OnDisconnectionEvent event)
+    {
+        Toast.makeText(getCurrentContext(), "Disconnected from host.", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getCurrentContext(), LoginActivity.class);
+        startActivity(intent);
     }
 }

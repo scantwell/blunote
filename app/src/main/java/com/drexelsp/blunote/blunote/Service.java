@@ -1,24 +1,30 @@
 package com.drexelsp.blunote.blunote;
 
-import android.os.Binder;
-import android.os.IBinder;
-import android.util.Log;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
+import com.drexelsp.blunote.blunote.BlunoteMessages.MetadataUpdate;
 import com.drexelsp.blunote.blunote.BlunoteMessages.MultiAnswer;
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration;
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkMap;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Pdu;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
-import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
+import com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket;
+import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
 import com.drexelsp.blunote.events.BluetoothEvent;
+import com.drexelsp.blunote.events.OnDisconnectionEvent;
+import com.drexelsp.blunote.events.OnLeaveNetworkEvent;
 import com.drexelsp.blunote.network.ClientService;
+import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
+import android.os.Binder;
+import android.os.IBinder;
+import android.util.Log;
 
 /**
  * Created by scantwell on 2/15/2016.
@@ -26,6 +32,7 @@ import java.util.ArrayList;
  * Handles incoming messages via the onReceived method and sends messages via the send overloads.
  */
 public class Service extends ClientService {
+
     public class LocalBinder extends Binder {
         public Service getService() {
             return Service.this;
@@ -33,119 +40,129 @@ public class Service extends ClientService {
     }
 
     private String TAG = "Service";
-    private ArrayList<MessageHandler> handlers = new ArrayList<MessageHandler>();
+    private User user;
 
     public Service() {
         IBinder mBinder = new LocalBinder();
         super.setBinder(mBinder);
     }
 
-    @Override
-    public void onReceived(byte[] data) {
-        //Log.v(TAG, "Received a message.");
+    public void onReceiveDownstream(byte[] data) {
+        this.onReceiveUpstream(data);
+    }
+
+    public void onReceiveUpstream(byte[] data) {
         try {
             Pdu pdu = Pdu.parseFrom(data);
             DeliveryInfo dinfo = pdu.getDeliveryInfo();
-            WrapperMessage message = pdu.getMessage();
-
-            for (MessageHandler handler : handlers) {
-                if (handler.processMessage(dinfo, message)) {
-                    break;
-                }
-            }
+            WrapperMessage message = WrapperMessage.parseFrom(pdu.getData());
+            this.user.onReceive(dinfo, message);
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void onNetworkEvent(BluetoothEvent bluetoothEvent) {
-        EventBus.getDefault().post(bluetoothEvent);
-        if ((bluetoothEvent.event == BluetoothEvent.CONNECTOR || bluetoothEvent.event == BluetoothEvent.SERVER_LISTENER) && bluetoothEvent.success) {
-            // Gather Metadata and Send it
-            Metadata metadata = new Metadata(getApplicationContext());
-            BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata();
-            Pdu pdu = createMessage()
-                    .setMessage(WrapperMessage.newBuilder()
-                            .setType(WrapperMessage.Type.METADATA_UPDATE)
-                            .setMetadataUpdate(metadataUpdate)).build();
-            super.send(pdu.toByteArray());
-        }
+    public void onConnectionUpstream(String address)
+    {
+        // Should throw a connection event
+        BluetoothEvent event = new BluetoothEvent(BluetoothEvent.CONNECTOR, true, address);
+        EventBus.getDefault().post(event);
+
+        Metadata metadata = new Metadata(getApplicationContext());
+        BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata(getApplicationContext());
+        super.sendUpstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.METADATA_UPDATE)
+                .setMetadataUpdate(metadataUpdate).build().toByteArray());
+    }
+
+    public void onConnectionDownstream(String address) { Log.v(TAG, "Client has connected to us."); }
+
+    public void onDisconnectionDownstream(String address) { Log.v(TAG, "Client has disconnected from us."); }
+
+    public void onDisconnectionUpstream(String address) {
+        EventBus.getDefault().post(new OnDisconnectionEvent(OnDisconnectionEvent.UPSTREAM, address));
     }
 
     public void onCreate() {
+        EventBus.getDefault().register(this);
         super.onCreate();
-        this.handlers.add(new Metadata(getApplicationContext()));
-        this.handlers.add(new Media(getApplicationContext(), this));
-        this.handlers.add(new VoteEngine());
     }
 
     public void startNetwork() {
-        super.startNetwork();
+        this.user = new Host(this, getApplicationContext());
+        NetworkConfiguration.Builder configBuilder = NetworkConfiguration.newBuilder();
+        configBuilder.setHandshake(ByteString.copyFrom(WelcomePacket.newBuilder().setNetworkName("Party Jamz HardCoded").setNumSongs("0").setNumUsers("0").build().toByteArray()));
+        configBuilder.setNotifyOnConnectDownstream(true);
+        configBuilder.setNotifyOnConnectUpstream(true);
+        configBuilder.setNotifyOnDisconnectDownstream(true);
+        configBuilder.setNotifyOnDisconnectUpstream(true);
+        configBuilder.setReceiveUpstream(true);
+        configBuilder.setHandshake(ByteString.copyFrom(user.getWelcomePacket().toByteArray()));
+        super.startNetwork(configBuilder.build());
     }
 
-    public void connectToNetwork(String macAddress) {
-        super.connectToNetwork(macAddress);
+    public void connectToNetwork(NetworkMap networkMap) {
+        this.user = new User(this, getApplicationContext());
+        NetworkConfiguration.Builder configBuilder = NetworkConfiguration.newBuilder();
+        configBuilder.setNotifyOnConnectDownstream(true);
+        configBuilder.setNotifyOnConnectUpstream(true);
+        configBuilder.setNotifyOnDisconnectDownstream(true);
+        configBuilder.setNotifyOnDisconnectUpstream(true);
+        configBuilder.setReceiveDownstream(true);
+        configBuilder.setNetworkMap(networkMap);
+        super.connectToNetwork(configBuilder.build());
+    }
+
+    @Subscribe
+    public void onLeaveNetworkEvent(OnLeaveNetworkEvent event)
+    {
+        Log.v(TAG, "Disconnecting");
+        this.disconnect();
+    }
+
+    public void disconnect() {
+        super.disconnect();
     }
 
     public void send(SingleAnswer message) {
-        Pdu pdu = createMessage()
-                .setMessage(WrapperMessage.newBuilder()
-                        .setType(WrapperMessage.Type.SINGLE_ANSWER)
-                        .setSingleAnswer(message)).build();
-        super.send(pdu.toByteArray());
+        super.sendUpstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.SINGLE_ANSWER)
+                .setSingleAnswer(message).build().toByteArray());
     }
 
     public void send(MultiAnswer message) {
-        Pdu pdu = createMessage()
-                .setMessage(WrapperMessage.newBuilder()
-                        .setType(WrapperMessage.Type.MULTI_ANSWER)
-                        .setMultiAnswer(message)).build();
-        super.send(pdu.toByteArray());
+        super.sendUpstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.MULTI_ANSWER)
+                .setMultiAnswer(message).build().toByteArray());
     }
 
     public void send(SongFragment message) {
-        Pdu pdu = createMessage()
-                .setMessage(WrapperMessage.newBuilder()
-                        .setType(WrapperMessage.Type.SONG_FRAGMENT)
-                        .setSongFragment(message)).build();
-        super.send(pdu.toByteArray());
+        super.sendUpstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.SONG_FRAGMENT)
+                .setSongFragment(message).build().toByteArray());
     }
 
     public void send(Recommendation message) {
-        Pdu pdu = createMessage()
-                .setMessage(WrapperMessage.newBuilder()
-                        .setType(WrapperMessage.Type.RECOMMEND)
-                        .setRecommendation(message)).build();
-        super.send(pdu.toByteArray());
+        super.sendUpstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.RECOMMEND)
+                .setRecommendation(message).build().toByteArray());
     }
 
     public void send(SongRequest message) {
-        Pdu pdu = createMessage()
-                .setMessage(WrapperMessage.newBuilder()
-                        .setType(WrapperMessage.Type.SONG_REQUEST)
-                        .setSongRequest(message)).build();
-        super.send(pdu.toByteArray());
+        super.sendDownstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.SONG_REQUEST)
+                .setSongRequest(message).build().toByteArray());
     }
 
-    public Pdu.Builder createMessage() {
-        Pdu.Builder pduBuilder = Pdu.newBuilder();
-        pduBuilder.setDeliveryInfo(createDeliveryInfo());
-        return pduBuilder;
+    public void send(WelcomePacket message) {
+        super.sendDownstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.WELCOME_PACKET)
+                .setWelcomePacket(message).build().toByteArray());
     }
 
-    public DeliveryInfo createDeliveryInfo() {
-        DeliveryInfo.Builder dinfoBuilder = DeliveryInfo.newBuilder();
-        dinfoBuilder.setTimestamp(getTimestamp());
-        dinfoBuilder.setUsername(getUsername());
-        return dinfoBuilder.build();
-    }
-
-    private long getTimestamp() {
-        return System.currentTimeMillis() / 1000;
-    }
-
-    public String getUsername() {
-        return "FakeUser";
+    public void send(MetadataUpdate message) {
+        super.sendDownstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.METADATA_UPDATE)
+                .setMetadataUpdate(message).build().toByteArray());
     }
 }

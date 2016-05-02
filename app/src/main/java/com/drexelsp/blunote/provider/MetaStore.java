@@ -1,5 +1,11 @@
 package com.drexelsp.blunote.provider;
 
+import com.drexelsp.blunote.provider.MetaStoreContract.Album;
+import com.drexelsp.blunote.provider.MetaStoreContract.Artist;
+import com.drexelsp.blunote.provider.MetaStoreContract.Track;
+import com.drexelsp.blunote.provider.MetaStoreContract.User;
+import com.drexelsp.blunote.provider.MetaStoreContract.UserTracks;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -11,10 +17,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-
-import com.drexelsp.blunote.provider.MetaStoreContract.Album;
-import com.drexelsp.blunote.provider.MetaStoreContract.Artist;
-import com.drexelsp.blunote.provider.MetaStoreContract.Track;
 
 /**
  * Created by scantwell on 3/10/2016.
@@ -28,6 +30,14 @@ public final class MetaStore extends ContentProvider {
     private static final int ARTIST_ID = 4;
     private static final int TRACK_LIST = 5;
     private static final int TRACK_ID = 6;
+    private static final int USER_LIST = 7;
+    private static final int USER_ID = 8;
+    private static final int USER_TRACKS_LIST = 9;
+    private static final int USER_TRACKS_ID = 10;
+    private static final int FIND_USERNAME = 11;
+    private static final int SONG_DELETION = 12;
+    private static final int ALBUM_DELETION = 13;
+    private static final int ARTIST_DELETION = 14;
     private static final UriMatcher URI_MATCHER;
     private MetaStoreOpenHelper mHelper = null;
 
@@ -39,6 +49,14 @@ public final class MetaStore extends ContentProvider {
         URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "artist/#", ARTIST_ID);
         URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "track", TRACK_LIST);
         URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "track/#", TRACK_ID);
+        URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "user", USER_LIST);
+        URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "user/#", USER_ID);
+        URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "user_tracks", USER_TRACKS_LIST);
+        URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "user_tracks/#", USER_TRACKS_ID);
+        URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "find_username", FIND_USERNAME);
+        URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "song_deletion", SONG_DELETION);
+        URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "album_deletion", ALBUM_DELETION);
+        URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "artist_deletion", ARTIST_DELETION);
     }
 
     @Override
@@ -81,6 +99,28 @@ public final class MetaStore extends ContentProvider {
                     long id =
                             db.insert(
                                     DbSchema.TBL_TRACK,
+                                    null,
+                                    values[i]);
+                }
+                db.setTransactionSuccessful();
+                db.endTransaction();
+                break;
+            case USER_LIST:
+                db.beginTransaction();
+                for (int i = 0; i < values.length; ++i) {
+                    long id =
+                            db.insert(DbSchema.TBL_USER,
+                                    null,
+                                    values[i]);
+                }
+                db.setTransactionSuccessful();
+                db.endTransaction();
+                break;
+            case USER_TRACKS_LIST:
+                db.beginTransaction();
+                for (int i = 0; i < values.length; ++i) {
+                    long id =
+                            db.insert(DbSchema.TBL_USER_TRACKS,
                                     null,
                                     values[i]);
                 }
@@ -136,6 +176,38 @@ public final class MetaStore extends ContentProvider {
                 builder.appendWhere(Track._ID + " = " +
                         uri.getLastPathSegment());
                 break;
+            case USER_LIST:
+                builder.setTables(DbSchema.TBL_USER);
+                if (TextUtils.isEmpty(sortOrder)) {
+                    sortOrder = User.SORT_ORDER_DEFAULT;
+                }
+                break;
+            case USER_ID:
+                builder.setTables(DbSchema.TBL_USER);
+                // limit query to one row at most:
+                builder.appendWhere(User._ID + " = " +
+                        uri.getLastPathSegment());
+                break;
+            case USER_TRACKS_LIST:
+                builder.setTables(DbSchema.TBL_USER_TRACKS);
+                if (TextUtils.isEmpty(sortOrder)) {
+                    sortOrder = UserTracks.SORT_ORDER_DEFAULT;
+                }
+                break;
+            case USER_TRACKS_ID:
+                builder.setTables(DbSchema.TBL_USER_TRACKS);
+                // limit query to one row at most:
+                builder.appendWhere(UserTracks._ID + " = " +
+                        uri.getLastPathSegment());
+                break;
+            case FIND_USERNAME:
+                return songUsernameQuery(db, selectionArgs);
+            case SONG_DELETION:
+                return songDeletion(db);
+            case ALBUM_DELETION:
+                return albumDeletion(db);
+            case ARTIST_DELETION:
+                return artistDeletion(db);
             default:
                 throw new IllegalArgumentException(
                         "Unsupported URI: " + uri);
@@ -167,17 +239,25 @@ public final class MetaStore extends ContentProvider {
     public String getType(Uri uri) {
         switch (URI_MATCHER.match(uri)) {
             case ALBUM_LIST:
-                return MetaStoreContract.Album.CONTENT_TYPE;
+                return Album.CONTENT_TYPE;
             case ALBUM_ID:
-                return MetaStoreContract.Album.CONTENT_ITEM_TYPE;
+                return Album.CONTENT_ITEM_TYPE;
             case ARTIST_LIST:
-                return MetaStoreContract.Artist.CONTENT_TYPE;
+                return Artist.CONTENT_TYPE;
             case ARTIST_ID:
-                return MetaStoreContract.Artist.CONTENT_ITEM_TYPE;
+                return Artist.CONTENT_ITEM_TYPE;
             case TRACK_LIST:
-                return MetaStoreContract.Track.CONTENT_TYPE;
+                return Track.CONTENT_TYPE;
             case TRACK_ID:
-                return MetaStoreContract.Track.CONTENT_ITEM_TYPE;
+                return Track.CONTENT_ITEM_TYPE;
+            case USER_LIST:
+                return User.CONTENT_TYPE;
+            case USER_ID:
+                return User.CONTENT_ITEM_TYPE;
+            case USER_TRACKS_LIST:
+                return UserTracks.CONTENT_TYPE;
+            case USER_TRACKS_ID:
+                return UserTracks.CONTENT_ITEM_TYPE;
             default:
                 return null;
         }
@@ -205,6 +285,20 @@ public final class MetaStore extends ContentProvider {
             long id =
                     db.insert(
                             DbSchema.TBL_TRACK,
+                            null,
+                            values);
+            return getUriForId(id, uri);
+        } else if (URI_MATCHER.match(uri) == USER_LIST) {
+            long id =
+                    db.insert(
+                            DbSchema.TBL_USER,
+                            null,
+                            values);
+            return getUriForId(id, uri);
+        } else if (URI_MATCHER.match(uri) == USER_TRACKS_LIST) {
+            long id =
+                    db.insert(
+                            DbSchema.TBL_USER_TRACKS,
                             null,
                             values);
             return getUriForId(id, uri);
@@ -279,6 +373,40 @@ public final class MetaStore extends ContentProvider {
                 }
                 delCount = db.delete(
                         DbSchema.TBL_TRACK,
+                        where,
+                        selectionArgs);
+                break;
+            case USER_LIST:
+                delCount = db.delete(
+                        DbSchema.TBL_USER,
+                        selection,
+                        selectionArgs);
+                break;
+            case USER_ID:
+                idStr = uri.getLastPathSegment();
+                where = User._ID + " = " + idStr;
+                if (!TextUtils.isEmpty(selection)) {
+                    where += " AND " + selection;
+                }
+                delCount = db.delete(
+                        DbSchema.TBL_USER,
+                        where,
+                        selectionArgs);
+                break;
+            case USER_TRACKS_LIST:
+                delCount = db.delete(
+                        DbSchema.TBL_USER_TRACKS,
+                        selection,
+                        selectionArgs);
+                break;
+            case USER_TRACKS_ID:
+                idStr = uri.getLastPathSegment();
+                where = UserTracks._ID + " = " + idStr;
+                if (!TextUtils.isEmpty(selection)) {
+                    where += " AND " + selection;
+                }
+                delCount = db.delete(
+                        DbSchema.TBL_USER_TRACKS,
                         where,
                         selectionArgs);
                 break;
@@ -358,6 +486,44 @@ public final class MetaStore extends ContentProvider {
                         where,
                         selectionArgs);
                 break;
+            case USER_LIST:
+                updateCount = db.update(
+                        DbSchema.TBL_USER,
+                        values,
+                        selection,
+                        selectionArgs);
+                break;
+            case USER_ID:
+                idStr = uri.getLastPathSegment();
+                where = User._ID + " = " + idStr;
+                if (!TextUtils.isEmpty(selection)) {
+                    where += " AND " + selection;
+                }
+                updateCount = db.update(
+                        DbSchema.TBL_USER,
+                        values,
+                        where,
+                        selectionArgs);
+                break;
+            case USER_TRACKS_LIST:
+                updateCount = db.update(
+                        DbSchema.TBL_USER_TRACKS,
+                        values,
+                        selection,
+                        selectionArgs);
+                break;
+            case USER_TRACKS_ID:
+                idStr = uri.getLastPathSegment();
+                where = UserTracks._ID + " = " + idStr;
+                if (!TextUtils.isEmpty(selection)) {
+                    where += " AND " + selection;
+                }
+                updateCount = db.update(
+                        DbSchema.TBL_USER_TRACKS,
+                        values,
+                        where,
+                        selectionArgs);
+                break;
             default:
                 // no support for updating photos or entities!
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
@@ -367,5 +533,25 @@ public final class MetaStore extends ContentProvider {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return updateCount;
+    }
+
+    public Cursor songUsernameQuery(SQLiteDatabase db, String[] selectionArgs){
+        String QUERY = "SELECT u.username FROM user u INNER JOIN user_tracks ut ON ut.user_id = u.user_id WHERE ut.title=? AND ut.artist=? AND ut.album=?";
+        return db.rawQuery(QUERY, selectionArgs);
+    }
+
+    public Cursor songDeletion(SQLiteDatabase db) {
+        String QUERY = "SELECT * FROM track t LEFT OUTER JOIN user_tracks ut ON t.title = ut.title AND t.album = ut.album AND t.artist = ut.artist WHERE ut._id IS NULL";
+        return db.rawQuery(QUERY, null);
+    }
+
+    public Cursor artistDeletion(SQLiteDatabase db) {
+        String QUERY = "SELECT * FROM artist a LEFT OUTER JOIN user_tracks ut ON a.artist = ut.artist WHERE ut._id IS NULL";
+        return db.rawQuery(QUERY, null);
+    }
+
+    public Cursor albumDeletion(SQLiteDatabase db) {
+        String QUERY = "SELECT * FROM album a LEFT OUTER JOIN user_tracks ut ON a.album = ut.album AND a.artist = ut.artist WHERE ut._id IS NULL";
+        return db.rawQuery(QUERY, null);
     }
 }

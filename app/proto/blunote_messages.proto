@@ -52,7 +52,8 @@ message MetadataUpdate {
 	repeated Album albums = 2; /// A list of albums to update
 	repeated Artist artists = 3; /// A list of artists to update
 	required string owner = 4; /// The user that can supply the song data
-	repeated Song songs = 5; /// A list of songs to update
+	required string user_id = 5; /// The user's mac address to use as a key to the user
+	repeated Song songs = 6; /// A list of songs to update
 }
 
 /**
@@ -95,9 +96,9 @@ message Recommendation {
 	enum Type {  ARTIST = 1; ALBUM = 2; SONG = 3;}
 	required string username = 1;
 	required Type type = 2;
-	optional Artist artist = 3;
-	optional Album album = 4;
-	optional Song song = 5;
+	optional string artist = 3;
+	optional string album = 4;
+	optional string song = 5;
 }
 
 /**
@@ -124,7 +125,7 @@ message SongFragment {
 */
 message WrapperMessage {
 
-	enum Type { METADATA_UPDATE = 1; MULTI_ANSWER = 2; RECOMMEND = 3; SINGLE_ANSWER= 4; SONG_FRAGMENT = 5; SONG_REQUEST = 6; VOTE = 7;}
+	enum Type { METADATA_UPDATE = 1; MULTI_ANSWER = 2; RECOMMEND = 3; SINGLE_ANSWER= 4; SONG_FRAGMENT = 5; SONG_REQUEST = 6; VOTE = 7; WELCOME_PACKET = 8;}
 
 	required Type type = 1;
 	optional MetadataUpdate metadataUpdate = 2;
@@ -134,6 +135,7 @@ message WrapperMessage {
 	optional SongFragment songFragment = 6;
 	optional SongRequest songRequest = 7;
 	optional Vote vote = 8;
+	optional WelcomePacket welcomePacket = 9;
 }
 
 /**
@@ -141,7 +143,7 @@ message WrapperMessage {
 */
 message DeliveryInfo {
 	required int64 timestamp = 1;
-	optional string username = 2;
+	optional string address = 2;
 	optional int32 id = 3;
 }
 
@@ -150,9 +152,37 @@ message DeliveryInfo {
 */
 message Pdu {
 	required DeliveryInfo deliveryInfo = 1;
-	required WrapperMessage message = 2;
+	required bytes data = 2;
 }
 
+message WelcomePacket {
+	required string networkName = 1;
+	required string numUsers = 2;
+	required string numSongs = 3;
+}
+
+message NetworkMap {
+	repeated string macAddresses = 1;
+}
+
+message NetworkPacket {
+	enum Type { DOWNSTREAM = 1; DROP = 2; HANDSHAKE = 3; NETWORK_DATA_UPDATE = 4; NEW = 5; UPSTREAM = 6; }
+
+	optional NetworkMap networkMap = 1;
+	optional Pdu pdu = 2;
+	required Type type = 3;
+}
+
+message NetworkConfiguration {
+	optional bytes handshake = 1;
+	optional bool notifyOnDisconnectDownstream = 2 [default = false];
+	optional bool notifyOnDisconnectUpstream = 3 [default = false];
+	optional bool notifyOnConnectDownstream = 4 [default = false];
+	optional bool notifyOnConnectUpstream = 5 [default = false];
+	optional bool receiveUpstream = 6 [default = false]; /// Receive callbacks with client data
+	optional bool receiveDownstream = 7 [default = false]; /// Receive callbacks with host data
+	optional NetworkMap networkMap = 8;
+}
 message DataFragment {
 	required bytes data = 1;
 	required int64 fragmentId = 2;

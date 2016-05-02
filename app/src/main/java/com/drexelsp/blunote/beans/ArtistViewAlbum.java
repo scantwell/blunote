@@ -5,8 +5,7 @@ import android.graphics.Bitmap;
 /**
  * Created by Brisbin on 3/14/2016.
  */
-public class ArtistViewAlbum
-{
+public class ArtistViewAlbum {
     private Bitmap albumArtwork;
     private String albumName;
     private String numberOfTracks;

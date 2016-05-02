@@ -92,7 +92,7 @@ public class ArtistViewAdapter extends BaseAdapter {
             }
         } else {
             if (type == TYPE_ALBUM) {
-                albumViewHolder = (AlbumViewHolder)convertView.getTag();
+                albumViewHolder = (AlbumViewHolder) convertView.getTag();
                 albumViewHolder.albumArt.setImageBitmap(
                         ((ArtistViewAlbum) mData.get(position)).getAlbumArtwork());
                 albumViewHolder.albumName.setText(
@@ -102,7 +102,7 @@ public class ArtistViewAdapter extends BaseAdapter {
                 albumViewHolder.albumYear.setText(
                         ((ArtistViewAlbum) mData.get(position)).getAlbumYear());
             } else {
-                trackViewHolder = (TrackViewHolder)convertView.getTag();
+                trackViewHolder = (TrackViewHolder) convertView.getTag();
                 trackViewHolder.title.setText(
                         ((ArtistViewTrack) mData.get(position)).getTrackName());
             }
