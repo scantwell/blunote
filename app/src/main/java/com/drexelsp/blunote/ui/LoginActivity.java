@@ -1,13 +1,16 @@
 package com.drexelsp.blunote.ui;
 
+import android.Manifest;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
@@ -33,15 +36,14 @@ import java.util.Iterator;
 
 public class LoginActivity extends BaseBluNoteActivity implements View.OnClickListener, ServiceConnection {
 
+    final String TAG = "LoginActivity";
     Button joinNetworkButton;
     Button createNetworkButton;
     Button refreshButton;
     ListView networkListView;
     NetworkArrayAdapter adapter;
-
-    final String TAG = "LoginActivity";
-    private Service mService = null;
     boolean mBound;
+    private Service mService = null;
     private BluetoothScanner mScanner;
     private NetworkArrayAdapter mAdapter;
 
@@ -164,42 +166,6 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         super.onStop();
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v == joinNetworkButton) {
-            int position = networkListView.getCheckedItemPosition();
-            if (position == AdapterView.INVALID_POSITION) {
-                Toast toast = Toast.makeText(getCurrentContext(), "No Network Selected", Toast.LENGTH_SHORT);
-                toast.show();
-            } else if (mBound && mService != null) {
-                ConnectionListItem network = mAdapter.getItem(position);
-                mService.connectToNetwork(network.getNetworkMap());
-            }
-        } else if (v == createNetworkButton) {
-            if (mBound && mService != null) {
-                // Call Start Network
-                mService.startNetwork();
-                // Wait for success callback?
-                // Start Media Player Activity
-                Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
-                startActivity(intent);
-            } else {
-                Log.v(TAG, "Failed to start network, service not bound.");
-            }
-            // Temp commented out
-            //Intent intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);
-            //startActivity(intent);
-        } else if (v == refreshButton) {
-            if (mScanner == null)
-            {
-                // Launch Scanner
-                mScanner = new BluetoothScanner(getCurrentContext(), mAdapter);
-            }
-            mAdapter.clear();
-            mScanner.startDiscovery();
-        }
-    }
-
     @Subscribe
     public void onMessageEvent(BluetoothEvent bluetoothEvent) {
         Log.v(TAG, "BluetoothEvent Received");
@@ -210,6 +176,123 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             } else {
                 Toast.makeText(getCurrentContext(), "Connection Error", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == joinNetworkButton) {
+            if (BluNotecheckPermission(Manifest.permission.BLUETOOTH, 2))
+                if (BluNotecheckPermission(Manifest.permission.BLUETOOTH_ADMIN, 2))
+                    if (BluNotecheckPermission(Manifest.permission.ACCESS_COARSE_LOCATION, 2))
+                        joinNetworkClicked();
+        } else if (v == createNetworkButton) {
+            if (BluNotecheckPermission(Manifest.permission.BLUETOOTH, 2))
+                if (BluNotecheckPermission(Manifest.permission.BLUETOOTH_ADMIN, 2))
+                    if (BluNotecheckPermission(Manifest.permission.ACCESS_COARSE_LOCATION, 2))
+                        createNetworkClicked();
+            // Temp commented out
+            //Intent intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);
+            //startActivity(intent);
+        } else if (v == refreshButton) {
+            if (BluNotecheckPermission(Manifest.permission.BLUETOOTH, 1))
+                if (BluNotecheckPermission(Manifest.permission.BLUETOOTH_ADMIN, 1))
+                    if (BluNotecheckPermission(Manifest.permission.ACCESS_COARSE_LOCATION, 1))
+                        if (BluNotecheckPermission(Manifest.permission.READ_EXTERNAL_STORAGE, 1))
+                            refreshButtonClickedSuccessfully();
+        }
+    }
+
+    private void refreshButtonClickedSuccessfully() {
+        if (mScanner == null) {
+            // Launch Scanner
+            mScanner = new BluetoothScanner(getCurrentContext(), mAdapter);
+            mAdapter.clear();
+            mScanner.startDiscovery();
+        }
+    }
+
+    private void joinNetworkClicked() {
+        int position = networkListView.getCheckedItemPosition();
+        if (position == AdapterView.INVALID_POSITION) {
+            Toast toast = Toast.makeText(getCurrentContext(), "No Network Selected", Toast.LENGTH_SHORT);
+            toast.show();
+        } else if (mBound && mService != null) {
+            ConnectionListItem network = mAdapter.getItem(position);
+            mService.connectToNetwork(network.getNetworkMap());
+        }
+    }
+
+    private void createNetworkClicked() {
+        if (mBound && mService != null) {
+            // Call Start Network
+            mService.startNetwork();
+            // Wait for success callback?
+            // Start Media Player Activity
+            Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
+            startActivity(intent);
+        } else {
+            Log.v(TAG, "Failed to start network, service not bound.");
+        }
+    }
+
+    private boolean BluNotecheckPermission(String permission, int out) {
+        Log.v(TAG, "Checking Permission for " + permission);
+        if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+            // need to ask for permission
+            Log.v(TAG, "Asking Permssions for " + permission);
+            ActivityCompat.requestPermissions(this,
+                    new String[]{permission}, out);
+        } else {
+            Log.v(TAG, "Already granted for " + permission);
+            //already have permission
+            return true;
+        }
+        Log.v(TAG, "Not approved for " + permission);
+        //already denied permission
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        Log.v(TAG, "just asked for " + permissions[0]);
+        switch (requestCode) {
+            case 1: {//refresh
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    refreshButtonClickedSuccessfully();
+                } else {
+                    //TODO pop up saying can't use app and force close
+                    Log.v(TAG, "Rejected for " + permissions[0]);
+                }
+                return;
+            }
+            case 2: {
+                //create network
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    createNetworkClicked();
+                } else {
+                    //TODO pop up saying can't use app and force close
+                    Log.v(TAG, "Rejected for " + permissions[0]);
+                }
+                return;
+            }
+            case 3: {
+                //join network
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    joinNetworkClicked();
+                } else {
+                    //TODO pop up saying can't use app and force close
+                    Log.v(TAG, "Rejected for " + permissions[0]);
+                }
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
 
