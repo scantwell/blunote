@@ -64,10 +64,12 @@ public class User {
     }
 
     public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message) {
-        if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
-            this.metadata.addMetadata(message);
-        } else {
-            this.metadata.deleteMetadata(message);
+        if (!message.getOwner().equals(this.name)) {
+            if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
+                this.metadata.addMetadata(message);
+            } else {
+                this.metadata.deleteMetadata(message);
+            }
         }
     }
 
