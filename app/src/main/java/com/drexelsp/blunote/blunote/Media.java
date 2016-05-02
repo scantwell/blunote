@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * from which SongRequests and SongFragments are acknowledged and generated respectively.
  */
 public class Media {
-    private final static int FRAGMENT_SIZE = 1024 * 10;
+    private final static int FRAGMENT_SIZE = 1024 * 100;
     private final String TAG = "Media";
 
     private ContentResolver contentResolver;

@@ -48,6 +48,14 @@ public class Metadata {
         return mdBuilder.build();
     }
 
+    public String getSongCount()
+    {
+        String[] projection = new String[]{MetaStoreContract.Track.TITLE};
+        Cursor mediaCursor = mContentResolver.query(MetaStoreContract.Track.CONTENT_URI, projection, null, null, null);
+        return Integer.toString(mediaCursor.getCount());
+    }
+
+
     public void addMetadata(BlunoteMessages.MetadataUpdate message) {
         ContentValues[] songs = getSongValues(message.getSongsList());
         ContentValues[] artists = getArtistValues(message.getArtistsList());

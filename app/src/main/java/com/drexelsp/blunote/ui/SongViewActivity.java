@@ -15,14 +15,12 @@ import android.widget.TextView;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.provider.MetaStoreContract;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
 import com.drexelsp.blunote.provider.MetaStoreContract;
 
 import org.greenrobot.eventbus.EventBus;
 
-/**
- * Created by U6020377 on 1/25/2016.
- */
 public class SongViewActivity extends BaseBluNoteActivity implements View.OnClickListener {
     private static final String TAG = "Song View Activity";
     ImageView songViewAlbumArt;

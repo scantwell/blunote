@@ -85,10 +85,6 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             ArrayList<ConnectionListItem> mNetworks = new ArrayList<>();
             mAdapter = new NetworkArrayAdapter(this, mNetworks);
             networkListView.setAdapter(mAdapter);
-
-            // Launch Scanner
-            mScanner = new BluetoothScanner(getCurrentContext(), mAdapter);
-            mScanner.startDiscovery();
         }
 
         //dialog.hide();
@@ -177,9 +173,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
                 toast.show();
             } else if (mBound && mService != null) {
                 ConnectionListItem network = mAdapter.getItem(position);
-                String macAddress = network.getMacAddress();
-                mService.connectToNetwork(macAddress);
-
+                mService.connectToNetwork(network.getNetworkMap());
             }
         } else if (v == createNetworkButton) {
             if (mBound && mService != null) {
@@ -196,6 +190,11 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             //Intent intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);
             //startActivity(intent);
         } else if (v == refreshButton) {
+            if (mScanner == null)
+            {
+                // Launch Scanner
+                mScanner = new BluetoothScanner(getCurrentContext(), mAdapter);
+            }
             mAdapter.clear();
             mScanner.startDiscovery();
         }

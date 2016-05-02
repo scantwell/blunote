@@ -5,6 +5,7 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 
 import com.drexelsp.blunote.events.SongRecommendationEvent;
+import com.drexelsp.blunote.ui.PreferencesActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,6 +36,10 @@ public class User {
     public String getName() {
         return name;
     }
+    
+    public BlunoteMessages.WelcomePacket getWelcomePacket() {
+        return BlunoteMessages.WelcomePacket.newBuilder().build();
+    }
 
     public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.WrapperMessage message) {
         if (BlunoteMessages.WrapperMessage.Type.METADATA_UPDATE.equals(message.getType())) {
@@ -51,6 +56,8 @@ public class User {
             this.onReceive(dinfo, message.getSongRequest());
         } else if (BlunoteMessages.WrapperMessage.Type.VOTE.equals(message.getType())) {
             this.onReceive(dinfo, message.getVote());
+        } else if (BlunoteMessages.WrapperMessage.Type.WELCOME_PACKET.equals(message.getType())) {
+            this.onReceive(dinfo, message.getWelcomePacket());
         } else {
             throw new RuntimeException(String.format("Unhandled message of type '%s'", message.getType().name()));
         }
@@ -85,8 +92,17 @@ public class User {
             ArrayList<BlunoteMessages.SongFragment> frags = this.media.getSongFragments(message.getSongId());
             for (BlunoteMessages.SongFragment frag : frags) {
                 service.send(frag);
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
+    }
+
+    public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.WelcomePacket message) {
+        this.service.updateHandshake(message.toByteArray());
     }
 
     public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.Vote message) {
