@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.drexelsp.blunote.events.NextSongEvent;
 import com.drexelsp.blunote.events.PauseSongEvent;
+import com.drexelsp.blunote.events.PlaySongEvent;
 import com.drexelsp.blunote.events.PreviousSongEvent;
 import com.drexelsp.blunote.events.SeekEvent;
 
@@ -79,6 +80,7 @@ public class Player implements Runnable {
             player.setDataSource(context, uri);
             player.prepare();
             player.start();
+            EventBus.getDefault().post(new PlaySongEvent("", "", "", Integer.toString(player.getDuration())));
             Log.v(TAG, String.format("Playing song. Queue size %d", queue.size()));
         } catch (IOException e) {
             e.printStackTrace();
@@ -89,7 +91,7 @@ public class Player implements Runnable {
     public void onNextSongEvent(NextSongEvent event)
     {
         player.stop();
-        notify();
+        wakeUp();
     }
 
     @Subscribe
@@ -100,9 +102,15 @@ public class Player implements Runnable {
             queue.addFirst(lastSong);
             lastSong = null;
             player.stop();
+            wakeUp();
         } else {
-            player.start();
+            player.seekTo(0);
         }
+    }
+
+    private synchronized void wakeUp()
+    {
+        notify();
     }
 
     private float getCurrentTimePercentage()
@@ -124,6 +132,6 @@ public class Player implements Runnable {
     @Subscribe
     public void onSeek(SeekEvent event)
     {
-        player.seekTo((int)event.position * 1000);
+        player.seekTo((int)event.position);
     }
 }

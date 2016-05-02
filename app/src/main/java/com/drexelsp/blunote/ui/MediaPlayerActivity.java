@@ -123,9 +123,9 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
     private String durationToTime(int duration)
     {
         return String.format("%02d:%02d",
-                TimeUnit.SECONDS.toMinutes(duration), // The change is in this line
-                TimeUnit.SECONDS.toSeconds(duration) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(duration)));
+                TimeUnit.MILLISECONDS.toMinutes(duration), // The change is in this line
+                TimeUnit.MILLISECONDS.toSeconds(duration) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
     }
 
     @Override
