@@ -149,13 +149,11 @@ public class Router extends Thread {
             waitForMessages();
             if (downBucket.size() > 0) {
                 Log.d(TAG, "Processing downstream message queue.");
-                byte[] data = downBucket.remove();
-                this.sendDownstream(data);
+                this.sendDownstream();
             }
             if (upBucket.size() > 0) {
                 Log.d(TAG, "Processing upstream message queue.");
-                byte[] data = upBucket.remove();
-                this.sendUpstream(data);
+                this.sendUpstream();
             }
         }
         cleanUp();
@@ -224,14 +222,28 @@ public class Router extends Thread {
         }
     }
 
-    private void sendDownstream(byte[] data) {
-        send(data, downOuts);
-        Log.d(TAG, String.format("Sent downstream message."));
+    private void sendDownstream() {
+        byte[] data = downBucket.remove();
+        for (int i = 0; i < downOuts.size(); i++) {
+            try {
+                downOuts.get(i).write(data);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Log.d(TAG, String.format("Sending downstream message."));
     }
 
-    private void sendUpstream(byte[] data) {
+    private void sendUpstream() {
+        byte[] data = upBucket.remove();
+        for (int i = 0; i < upOuts.size(); i++) {
+            try {
+                upOuts.get(i).write(data);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         Log.d(TAG, String.format("Sending upstream message."));
-        send(data, upOuts);
     }
 
     private void send(byte[] data, CopyOnWriteArrayList<BlunoteOutputStream> outs) {
