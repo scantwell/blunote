@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -88,6 +89,8 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             mAdapter = new NetworkArrayAdapter(this, mNetworks);
             networkListView.setAdapter(mAdapter);
         }
+
+        BlunoteCheckPermission();
 
         //dialog.hide();
 
@@ -182,24 +185,11 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (v == joinNetworkButton) {
-            if (BluNotecheckPermission(Manifest.permission.BLUETOOTH, 2))
-                if (BluNotecheckPermission(Manifest.permission.BLUETOOTH_ADMIN, 2))
-                    if (BluNotecheckPermission(Manifest.permission.ACCESS_COARSE_LOCATION, 2))
-                        joinNetworkClicked();
+            joinNetworkClicked();
         } else if (v == createNetworkButton) {
-            if (BluNotecheckPermission(Manifest.permission.BLUETOOTH, 2))
-                if (BluNotecheckPermission(Manifest.permission.BLUETOOTH_ADMIN, 2))
-                    if (BluNotecheckPermission(Manifest.permission.ACCESS_COARSE_LOCATION, 2))
-                        createNetworkClicked();
-            // Temp commented out
-            //Intent intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);
-            //startActivity(intent);
+            createNetworkClicked();
         } else if (v == refreshButton) {
-            if (BluNotecheckPermission(Manifest.permission.BLUETOOTH, 1))
-                if (BluNotecheckPermission(Manifest.permission.BLUETOOTH_ADMIN, 1))
-                    if (BluNotecheckPermission(Manifest.permission.ACCESS_COARSE_LOCATION, 1))
-                        if (BluNotecheckPermission(Manifest.permission.READ_EXTERNAL_STORAGE, 1))
-                            refreshButtonClickedSuccessfully();
+            refreshButtonClickedSuccessfully();
         }
     }
 
@@ -236,64 +226,47 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         }
     }
 
-    private boolean BluNotecheckPermission(String permission, int out) {
-        Log.v(TAG, "Checking Permission for " + permission);
-        if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-            // need to ask for permission
-            Log.v(TAG, "Asking Permssions for " + permission);
-            ActivityCompat.requestPermissions(this,
-                    new String[]{permission}, out);
-        } else {
-            Log.v(TAG, "Already granted for " + permission);
-            //already have permission
-            return true;
+    private void BlunoteCheckPermission() {
+        Log.v(TAG, "Checking Permissions");
+        ArrayList<String> permissionsToGrant = new ArrayList<>();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+            Log.v(TAG, "Need to request permission for Bluetooth");
+            permissionsToGrant.add(Manifest.permission.BLUETOOTH);
         }
-        Log.v(TAG, "Not approved for " + permission);
-        //already denied permission
-        return false;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
+            Log.v(TAG, "Need to request permission for Bluetooth Admin");
+            permissionsToGrant.add(Manifest.permission.BLUETOOTH_ADMIN);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.v(TAG, "Need to request permission for Coarse Location");
+            permissionsToGrant.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Log.v(TAG, "Need to request permission for External Storage");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                permissionsToGrant.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+        }
+
+        if (permissionsToGrant.size() > 0) {
+            Log.v(TAG, "Requesting permissions");
+            ActivityCompat.requestPermissions(this, permissionsToGrant.toArray(new String[permissionsToGrant.size()]), 1);
+        } else {
+            Log.v(TAG, "All permissions have been granted");
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        Log.v(TAG, "just asked for " + permissions[0]);
-        switch (requestCode) {
-            case 1: {//refresh
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    refreshButtonClickedSuccessfully();
-                } else {
-                    //TODO pop up saying can't use app and force close
-                    Log.v(TAG, "Rejected for " + permissions[0]);
-                }
-                return;
-            }
-            case 2: {
-                //create network
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    createNetworkClicked();
-                } else {
-                    //TODO pop up saying can't use app and force close
-                    Log.v(TAG, "Rejected for " + permissions[0]);
-                }
-                return;
-            }
-            case 3: {
-                //join network
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    joinNetworkClicked();
-                } else {
-                    //TODO pop up saying can't use app and force close
-                    Log.v(TAG, "Rejected for " + permissions[0]);
-                }
-            }
-            // other 'case' lines to check for other
-            // permissions this app might request
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            this.finish();
+            System.exit(0);
         }
+
     }
 
     /**
