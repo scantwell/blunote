@@ -2732,6 +2732,15 @@ public final class NetworkMessages {
      * <code>required int64 totalFragments = 3;</code>
      */
     long getTotalFragments();
+
+    /**
+     * <code>required int64 id = 4;</code>
+     */
+    boolean hasId();
+    /**
+     * <code>required int64 id = 4;</code>
+     */
+    long getId();
   }
   /**
    * Protobuf type {@code blunote.DataFragment}
@@ -2798,6 +2807,11 @@ public final class NetworkMessages {
             case 24: {
               bitField0_ |= 0x00000004;
               totalFragments_ = input.readInt64();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              id_ = input.readInt64();
               break;
             }
           }
@@ -2885,10 +2899,26 @@ public final class NetworkMessages {
       return totalFragments_;
     }
 
+    public static final int ID_FIELD_NUMBER = 4;
+    private long id_;
+    /**
+     * <code>required int64 id = 4;</code>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>required int64 id = 4;</code>
+     */
+    public long getId() {
+      return id_;
+    }
+
     private void initFields() {
       data_ = com.google.protobuf.ByteString.EMPTY;
       fragmentId_ = 0L;
       totalFragments_ = 0L;
+      id_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2908,6 +2938,10 @@ public final class NetworkMessages {
         memoizedIsInitialized = 0;
         return false;
       }
+      if (!hasId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -2923,6 +2957,9 @@ public final class NetworkMessages {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt64(3, totalFragments_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt64(4, id_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -2944,6 +2981,10 @@ public final class NetworkMessages {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(3, totalFragments_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(4, id_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3068,6 +3109,8 @@ public final class NetworkMessages {
         bitField0_ = (bitField0_ & ~0x00000002);
         totalFragments_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000004);
+        id_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -3108,6 +3151,10 @@ public final class NetworkMessages {
           to_bitField0_ |= 0x00000004;
         }
         result.totalFragments_ = totalFragments_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.id_ = id_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3133,6 +3180,9 @@ public final class NetworkMessages {
         if (other.hasTotalFragments()) {
           setTotalFragments(other.getTotalFragments());
         }
+        if (other.hasId()) {
+          setId(other.getId());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -3147,6 +3197,10 @@ public final class NetworkMessages {
           return false;
         }
         if (!hasTotalFragments()) {
+          
+          return false;
+        }
+        if (!hasId()) {
           
           return false;
         }
@@ -3267,6 +3321,38 @@ public final class NetworkMessages {
       public Builder clearTotalFragments() {
         bitField0_ = (bitField0_ & ~0x00000004);
         totalFragments_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long id_ ;
+      /**
+       * <code>required int64 id = 4;</code>
+       */
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>required int64 id = 4;</code>
+       */
+      public long getId() {
+        return id_;
+      }
+      /**
+       * <code>required int64 id = 4;</code>
+       */
+      public Builder setId(long value) {
+        bitField0_ |= 0x00000008;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int64 id = 4;</code>
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        id_ = 0L;
         onChanged();
         return this;
       }
@@ -4452,18 +4538,19 @@ public final class NetworkMessages {
       "Addresses\030\001 \003(\t\"@\n\003Pdu\022+\n\014deliveryInfo\030\001" +
       " \002(\0132\025.blunote.DeliveryInfo\022\014\n\004data\030\002 \002(" +
       "\014\">\n\014DeliveryInfo\022\021\n\ttimestamp\030\001 \002(\003\022\017\n\007",
-      "address\030\002 \001(\t\022\n\n\002id\030\003 \001(\005\"H\n\014DataFragmen" +
+      "address\030\002 \001(\t\022\n\n\002id\030\003 \001(\005\"T\n\014DataFragmen" +
       "t\022\014\n\004data\030\001 \002(\014\022\022\n\nfragmentId\030\002 \002(\003\022\026\n\016t" +
-      "otalFragments\030\003 \002(\003\"\276\002\n\024NetworkConfigura" +
-      "tion\022\021\n\thandshake\030\001 \001(\014\022+\n\034notifyOnDisco" +
-      "nnectDownstream\030\002 \001(\010:\005false\022)\n\032notifyOn" +
-      "DisconnectUpstream\030\003 \001(\010:\005false\022(\n\031notif" +
-      "yOnConnectDownstream\030\004 \001(\010:\005false\022&\n\027not" +
-      "ifyOnConnectUpstream\030\005 \001(\010:\005false\022\036\n\017rec" +
-      "eiveUpstream\030\006 \001(\010:\005false\022 \n\021receiveDown" +
-      "stream\030\007 \001(\010:\005false\022\'\n\nnetworkMap\030\010 \001(\0132",
-      "\023.blunote.NetworkMapB/\n\034com.drexelsp.blu" +
-      "note.networkB\017NetworkMessages"
+      "otalFragments\030\003 \002(\003\022\n\n\002id\030\004 \002(\003\"\276\002\n\024Netw" +
+      "orkConfiguration\022\021\n\thandshake\030\001 \001(\014\022+\n\034n" +
+      "otifyOnDisconnectDownstream\030\002 \001(\010:\005false" +
+      "\022)\n\032notifyOnDisconnectUpstream\030\003 \001(\010:\005fa" +
+      "lse\022(\n\031notifyOnConnectDownstream\030\004 \001(\010:\005" +
+      "false\022&\n\027notifyOnConnectUpstream\030\005 \001(\010:\005" +
+      "false\022\036\n\017receiveUpstream\030\006 \001(\010:\005false\022 \n" +
+      "\021receiveDownstream\030\007 \001(\010:\005false\022\'\n\nnetwo",
+      "rkMap\030\010 \001(\0132\023.blunote.NetworkMapB/\n\034com." +
+      "drexelsp.blunote.networkB\017NetworkMessage" +
+      "s"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -4506,7 +4593,7 @@ public final class NetworkMessages {
     internal_static_blunote_DataFragment_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_blunote_DataFragment_descriptor,
-        new java.lang.String[] { "Data", "FragmentId", "TotalFragments", });
+        new java.lang.String[] { "Data", "FragmentId", "TotalFragments", "Id", });
     internal_static_blunote_NetworkConfiguration_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_blunote_NetworkConfiguration_fieldAccessorTable = new

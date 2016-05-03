@@ -11,10 +11,14 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.drexelsp.blunote.blunote.BlunoteMessages;
 import com.drexelsp.blunote.network.NetworkMessages.NetworkConfiguration;
 import com.drexelsp.blunote.network.NetworkMessages.DeliveryInfo;
-import com.drexelsp.blunote.events.BluetoothEvent;
+import com.drexelsp.blunote.network.NetworkMessages.DataFragment;
+import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+
+import java.util.ArrayList;
 
 abstract public class ClientService extends Service {
 
@@ -23,10 +27,12 @@ abstract public class ClientService extends Service {
         UPSTREAM, DOWNSTREAM
     }
 
+    private static final int MAX_PACKET_SIZE = 1024 * 100;
     private String TAG = "ClientService";
     protected final NetworkServiceConnection mConnection = new NetworkServiceConnection();
     protected Receiver receiver = new Receiver(this);
     protected IBinder mBinder = null;
+    private DataFragmentAssembler assembler;
 
     abstract public void onConnectionDownstream(String address);
 
@@ -39,15 +45,24 @@ abstract public class ClientService extends Service {
     abstract public void onDisconnectionUpstream(String address);
 
     // Sends to another application via bluetooth/etc
-    protected void sendUpstream(byte[] data) { this.send(ClientHandler.SEND_UPSTREAM, data); }
+    protected void sendUpstream(byte[] data) { this.sendData(ClientHandler.SEND_UPSTREAM, data); }
 
     // Sends to another application via bluetooth/etc
     protected void sendDownstream(byte[] data) {
-        this.send(ClientHandler.SEND_DOWNSTREAM, data);
+        this.sendData(ClientHandler.SEND_DOWNSTREAM, data);
     }
 
     // Sends to another application via bluetooth/etc
-    private void send(int direction, byte[] data) {
+    private void sendData(int direction, byte[] data) {
+        ArrayList<DataFragment> frags = createDataFragments(data);
+        for (DataFragment frag : frags)
+        {
+            send(direction, frag.toByteArray());
+        }
+    }
+
+    private void send(int direction, byte[] data)
+    {
         Log.v(TAG, "Sending message.");
         Message msg;
         if ( direction == ClientHandler.SEND_DOWNSTREAM )
@@ -69,6 +84,30 @@ abstract public class ClientService extends Service {
         }
     }
 
+    private ArrayList<DataFragment> createDataFragments(byte[] data)
+    {
+        ArrayList<DataFragment> frags = new ArrayList<>();
+        int total_frags = data.length / MAX_PACKET_SIZE;
+        if (data.length % MAX_PACKET_SIZE != 0) {
+            total_frags += 1;
+        }
+        int start = 0;
+        int size = MAX_PACKET_SIZE;
+        DataFragment.Builder builder = DataFragment.newBuilder();
+        builder.setTotalFragments(total_frags);
+        for (int frag_no = 1; frag_no <= total_frags; ++frag_no) {
+            if (start + size > data.length) {
+                size = data.length - start;
+            }
+            Log.v(TAG, String.format("Start: %d, End: %d, Frag#: %d", start, size, frag_no));
+            builder.setFragmentId(frag_no);
+            builder.setData(ByteString.copyFrom(data, start, size));
+            frags.add(builder.build());
+            start += size;
+        }
+        return frags;
+    }
+
     public void onReceiveDownstream(byte[] data)
     {
         this.onReceive(Direction.DOWNSTREAM, data);
@@ -84,8 +123,9 @@ abstract public class ClientService extends Service {
         try {
             NetworkMessages.Pdu pdu = NetworkMessages.Pdu.parseFrom(data);
             DeliveryInfo dinfo = pdu.getDeliveryInfo();
+            DataFragment frag = DataFragment.parseFrom(pdu.getData());
             // Determine if the data is good to send to
-            this.onReceive(dir, dinfo, pdu.getData().toByteArray());
+            assembler.onReceive(dir, dinfo, frag);
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
         }
@@ -154,7 +194,7 @@ abstract public class ClientService extends Service {
     @Override
     public void onCreate() {
         Log.v(TAG, "Created service.");
-
+        assembler = new DataFragmentAssembler(this);
         IntentFilter intentFilter = new IntentFilter("networkservice.onrecieved");
         registerReceiver(receiver, intentFilter);
 
