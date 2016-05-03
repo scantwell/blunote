@@ -3,6 +3,7 @@ package com.drexelsp.blunote.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.drexelsp.blunote.blunote.Constants;
+import com.drexelsp.blunote.blunote.Player;
 import com.drexelsp.blunote.blunote.R;
 import com.drexelsp.blunote.events.NextSongEvent;
 import com.drexelsp.blunote.events.PauseSongEvent;
@@ -43,6 +45,7 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
     ImageButton next;
     SeekBar seekBar;
     int progress;
+    Player player = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,19 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
         previous.setOnClickListener(this);
         playPause.setOnCheckedChangeListener(this);
         next.setOnClickListener(this);
+
+        final Handler mHandler = new Handler();
+        MediaPlayerActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (player != null) {
+                    int mCurrentPosition = player.getCurrentMillisecond();
+                    seekBar.setProgress(mCurrentPosition);
+                    currentMusicLocation.setText(durationToTime(mCurrentPosition));
+                }
+                mHandler.postDelayed(this, 1000);
+            }
+        });
     }
 
     @Override
@@ -113,22 +129,21 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onPlaySong(PlaySongEvent event)
-    {
+    public void onPlaySong(PlaySongEvent event) {
         songName.setText(event.title);
         artistName.setText(event.artist);
         albumName.setText(event.album);
         currentMusicLocation.setText("0");
         musicDuration.setText(durationToTime(Integer.parseInt(event.duration)));
         seekBar.setMax(Integer.parseInt(event.duration));
+        this.player = event.player;
     }
 
-    private String durationToTime(int duration)
-    {
+    private String durationToTime(int duration) {
         String dur = String.format("%02d:%02d",
-                    TimeUnit.MILLISECONDS.toMinutes(duration), // The change is in this line
-                    TimeUnit.MILLISECONDS.toSeconds(duration) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
+                TimeUnit.MILLISECONDS.toMinutes(duration), // The change is in this line
+                TimeUnit.MILLISECONDS.toSeconds(duration) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
         Log.v("MediaPlayerActivity", String.format("Created time duration string %s from %d.", dur, duration));
         return dur;
     }
@@ -149,14 +164,12 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
         EventBus.getDefault().post(new SeekEvent(progress));
     }
 
-    public void onStart()
-    {
+    public void onStart() {
         EventBus.getDefault().register(this);
         super.onStart();
     }
 
-    public void onStop()
-    {
+    public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
