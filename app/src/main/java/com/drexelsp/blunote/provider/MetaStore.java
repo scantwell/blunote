@@ -560,7 +560,7 @@ public final class MetaStore extends ContentProvider {
     }
 
     public Cursor randomSong(SQLiteDatabase db) {
-        String QUERY = "SELECT t.song_id, u.username FROM track t INNER JOIN user_tracks ut " +
+        String QUERY = "SELECT t.song_id, t.title, t.album, t.artist, u.username FROM track t INNER JOIN user_tracks ut " +
                 "ON t.title = ut.title AND t.album = ut.album AND t.artist = ut.artist " +
                 "INNER JOIN user u ON ut.user_id = u.user_id ORDER BY RANDOM() LIMIT 1";
         return db.rawQuery(QUERY, null);

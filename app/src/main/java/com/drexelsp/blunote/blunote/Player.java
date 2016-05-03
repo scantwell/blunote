@@ -27,11 +27,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Player extends Observable implements Runnable, MediaPlayer.OnCompletionListener {
 
     private static final String TAG = "BlunoteMediaPlayer";
-    private Deque<Uri> queue;
+    private Deque<Song> queue;
     private MediaPlayer player;
     private Context context;
-    private Uri lastSong;
-    private Uri currentSong;
+    private Song lastSong;
+    private Song currentSong;
     private AtomicBoolean isPaused;
 
     public Player(Context context) {
@@ -46,9 +46,9 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
         EventBus.getDefault().register(this);
     }
 
-    public synchronized void addSongUri(Uri uri) {
+    public synchronized void addSong(Song song) {
         Log.v(TAG, String.format("Adding song to queue. Queue size %d", queue.size()));
-        queue.add(uri);
+        queue.add(song);
         this.notify();
     }
 
@@ -87,14 +87,14 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
 
     public void playSong() {
         try {
-            Uri uri = queue.remove();
-            currentSong = uri;
+            Song song = queue.remove();
+            currentSong = song;
             player.reset();
-            player.setDataSource(context, uri);
+            player.setDataSource(context, song.getUri());
             player.prepare();
             player.start();
-            player.getTrackInfo();
-            EventBus.getDefault().postSticky(new PlaySongEvent("", "", "", Integer.toString(player.getDuration()), this));
+            EventBus.getDefault().postSticky(new PlaySongEvent(song.getTitle(), song.getArtist(),
+                    song.getAlbum(), song.getOwner(), Integer.toString(player.getDuration()), this));
             Log.v(TAG, String.format("Playing song. Queue size %d", queue.size()));
         } catch (IOException e) {
             e.printStackTrace();

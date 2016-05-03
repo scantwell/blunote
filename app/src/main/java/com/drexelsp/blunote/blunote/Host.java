@@ -92,7 +92,8 @@ public class Host extends User implements Observer {
         String username = message.getUsername().isEmpty() ?
                 media.findSongUsername(message.getSong(), message.getArtist(), message.getAlbum()) : message.getUsername();
         if (username.equals(this.getName())) {
-            playerSongById(id);
+            Song song = new Song(id, null, message.getSong(), message.getAlbum(), message.getArtist(), username);
+            playerSongById(id, song);
         } else {
             addSongRequest(username, id);
         }
@@ -131,7 +132,8 @@ public class Host extends User implements Observer {
         String owner = event.owner;
 
         if (owner.equals(this.name)) {
-            playerSongById(id);
+            Song song = new Song(id, null, event.song, event.album, event.artist, event.owner);
+            playerSongById(id, song);
         } else {
             addSongRequest(event.owner, id);
         }
@@ -141,16 +143,20 @@ public class Host extends User implements Observer {
     public void update(Observable observable, Object data) {
         if (observable instanceof Song) {
             Song song = (Song) observable;
-            player.addSongUri(song.getUri());
+            player.addSong(song);
             songHash.remove(song.getId());
         }
         else if (observable instanceof Player) {
             Cursor c = metadata.getRandomSong();
             c.moveToFirst();
             String username = c.getString(c.getColumnIndex(MetaStoreContract.User.USERNAME));
+            String title = c.getString(c.getColumnIndex(MetaStoreContract.Track.TITLE));
+            String album = c.getString(c.getColumnIndex(MetaStoreContract.Track.ALBUM));
+            String artist = c.getString(c.getColumnIndex(MetaStoreContract.Track.ARTIST));
             int id = c.getInt(c.getColumnIndex(MetaStoreContract.Track.SONG_ID));
             if (username.equals(this.name)) {
-                playerSongById(id);
+                Song song = new Song(id, null, title, album, artist, username);
+                playerSongById(id, song);
             }
             else {
                 addSongRequest(username, id);
@@ -190,9 +196,10 @@ public class Host extends User implements Observer {
         return File.createTempFile(java.util.UUID.randomUUID().toString(), ".mp3", this.context.getCacheDir());
     }
 
-    private void playerSongById(long id) {
+    private void playerSongById(long id, Song song) {
         String uri = this.media.getSongUri(id);
-        player.addSongUri(Uri.parse(uri));
+        song.setUri(Uri.parse(uri));
+        player.addSong(song);
     }
 
     private void updateWelcomePacket() {
