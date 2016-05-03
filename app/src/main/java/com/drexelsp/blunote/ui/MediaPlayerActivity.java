@@ -145,7 +145,7 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
                 TimeUnit.MILLISECONDS.toMinutes(duration), // The change is in this line
                 TimeUnit.MILLISECONDS.toSeconds(duration) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
-        Log.v("MediaPlayerActivity", String.format("Created time duration string %s from %d.", dur, duration));
+        //Log.v("MediaPlayerActivity", String.format("Created time duration string %s from %d.", dur, duration));
         return dur;
     }
 

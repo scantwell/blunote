@@ -33,9 +33,11 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
     private Song lastSong;
     private Song currentSong;
     private AtomicBoolean isPaused;
+    private AtomicBoolean isPlaying;
 
     public Player(Context context) {
         this.isPaused = new AtomicBoolean(false);
+        this.isPlaying = new AtomicBoolean(false);
         this.currentSong = null;
         this.lastSong = null;
         this.context = context;
@@ -74,7 +76,7 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
     }
 
     private synchronized void waitOnQueueOrPlayer() {
-        while (queue.size() < 1 || player.isPlaying() || isPaused.get()) {
+        while (queue.size() < 1 || isPlaying.get() || isPaused.get()) {
             try {
                 this.wait();
             } catch (InterruptedException e) {
@@ -87,6 +89,7 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
 
     public void playSong() {
         try {
+            this.isPlaying.set(true);
             Song song = queue.remove();
             currentSong = song;
             player.reset();
@@ -140,10 +143,12 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
 
     @Subscribe
     public void onPauseSong(PauseSongEvent event) {
-        if (player.isPlaying()) {
+        if (this.isPlaying.get()) {
             player.pause();
+            isPlaying.set(false);
             isPaused.set(true);
         } else {
+            isPlaying.set(true);
             isPaused.set(false);
             player.start();
         }
@@ -157,6 +162,7 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
     @Override
     public void onCompletion(MediaPlayer mp) {
         Log.v(TAG, "OnCompletion Called");
+        this.isPlaying.set(false);
         wakeUp();
     }
 }
