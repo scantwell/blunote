@@ -41,6 +41,7 @@ public class Service extends ClientService {
 
     private String TAG = "Service";
     private User user;
+    Metadata metadata;
 
     public Service() {
         IBinder mBinder = new LocalBinder();
@@ -68,14 +69,23 @@ public class Service extends ClientService {
         BluetoothEvent event = new BluetoothEvent(BluetoothEvent.CONNECTOR, true, address);
         EventBus.getDefault().post(event);
 
-        Metadata metadata = new Metadata(getApplicationContext());
+        metadata = new Metadata(getApplicationContext());
         BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getMetadata(getApplicationContext());
         super.sendUpstream(WrapperMessage.newBuilder()
                 .setType(WrapperMessage.Type.METADATA_UPDATE)
                 .setMetadataUpdate(metadataUpdate).build().toByteArray());
     }
 
-    public void onConnectionDownstream(String address) { Log.v(TAG, "Client has connected to us."); }
+    public void onConnectionDownstream(String address) {
+        Log.v(TAG, "Client has connected to us.");
+        if (metadata == null) {
+            metadata = new Metadata(getApplicationContext());
+        }
+        BlunoteMessages.MetadataUpdate metadataUpdate = metadata.getDownstreamMetadata();
+        super.sendDownstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.METADATA_UPDATE)
+                .setMetadataUpdate(metadataUpdate).build().toByteArray());
+    }
 
     public void onDisconnectionDownstream(String address) { Log.v(TAG, "Client has disconnected from us."); }
 
