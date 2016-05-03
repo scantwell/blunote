@@ -77,7 +77,6 @@ public class Player implements Runnable, MediaPlayer.OnCompletionListener {
             player.setDataSource(context, uri);
             player.prepare();
             player.start();
-            player.getTrackInfo();
             EventBus.getDefault().postSticky(new PlaySongEvent("", "", "", Integer.toString(player.getDuration()), this));
             Log.v(TAG, String.format("Playing song. Queue size %d", queue.size()));
         } catch (IOException e) {
