@@ -89,7 +89,7 @@ public class Host extends User implements Observer {
         Log.v(TAG, "Entered on received");
         int id = media.findSongId(message.getSong(),
                 message.getArtist(), message.getAlbum());
-        String username = message.getUsername().isEmpty() ?
+        String username = message.getUsername().isEmpty() || message.getUsername().equals("") ?
                 media.findSongUsername(message.getSong(), message.getArtist(), message.getAlbum()) : message.getUsername();
         if (username.equals(this.getName())) {
             Song song = new Song(id, null, message.getSong(), message.getAlbum(), message.getArtist(), username);
