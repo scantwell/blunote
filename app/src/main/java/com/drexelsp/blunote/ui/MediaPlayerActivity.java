@@ -133,6 +133,7 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
         songName.setText(event.title);
         artistName.setText(event.artist);
         albumName.setText(event.album);
+        ownerName.setText(event.owner);
         currentMusicLocation.setText("0");
         musicDuration.setText(durationToTime(Integer.parseInt(event.duration)));
         seekBar.setMax(Integer.parseInt(event.duration));
