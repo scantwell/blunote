@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by scantwell on 3/14/2016.
  */
-public class Player implements Runnable, MediaPlayer.OnCompletionListener{
+public class Player implements Runnable, MediaPlayer.OnCompletionListener {
 
     private static final String TAG = "BlunoteMediaPlayer";
     private Deque<Uri> queue;
@@ -33,8 +33,7 @@ public class Player implements Runnable, MediaPlayer.OnCompletionListener{
     private Uri currentSong;
     private AtomicBoolean isPaused;
 
-    public Player(Context context)
-    {
+    public Player(Context context) {
         this.isPaused = new AtomicBoolean(false);
         this.currentSong = null;
         this.lastSong = null;
@@ -45,8 +44,7 @@ public class Player implements Runnable, MediaPlayer.OnCompletionListener{
         EventBus.getDefault().register(this);
     }
 
-    public synchronized void addSongUri(Uri uri)
-    {
+    public synchronized void addSongUri(Uri uri) {
         Log.v(TAG, String.format("Adding song to queue. Queue size %d", queue.size()));
         queue.add(uri);
         this.notify();
@@ -54,17 +52,14 @@ public class Player implements Runnable, MediaPlayer.OnCompletionListener{
 
     @Override
     public void run() {
-        while (true)
-        {
+        while (true) {
             waitOnQueueOrPlayer();
             playSong();
         }
     }
 
-    private synchronized void waitOnQueueOrPlayer()
-    {
-        while (queue.size() < 1 || player.isPlaying() || isPaused.get())
-        {
+    private synchronized void waitOnQueueOrPlayer() {
+        while (queue.size() < 1 || player.isPlaying() || isPaused.get()) {
             try {
                 this.wait();
             } catch (InterruptedException e) {
@@ -74,8 +69,7 @@ public class Player implements Runnable, MediaPlayer.OnCompletionListener{
         lastSong = currentSong;
     }
 
-    public void playSong()
-    {
+    public void playSong() {
         try {
             Uri uri = queue.remove();
             currentSong = uri;
@@ -83,7 +77,8 @@ public class Player implements Runnable, MediaPlayer.OnCompletionListener{
             player.setDataSource(context, uri);
             player.prepare();
             player.start();
-            EventBus.getDefault().postSticky(new PlaySongEvent("", "", "", Integer.toString(player.getDuration())));
+            player.getTrackInfo();
+            EventBus.getDefault().postSticky(new PlaySongEvent("", "", "", Integer.toString(player.getDuration()), this));
             Log.v(TAG, String.format("Playing song. Queue size %d", queue.size()));
         } catch (IOException e) {
             e.printStackTrace();
@@ -91,17 +86,14 @@ public class Player implements Runnable, MediaPlayer.OnCompletionListener{
     }
 
     @Subscribe
-    public void onNextSongEvent(NextSongEvent event)
-    {
+    public void onNextSongEvent(NextSongEvent event) {
         player.stop();
         wakeUp();
     }
 
     @Subscribe
-    public void onPreviousSongEvent(PreviousSongEvent event)
-    {
-        if (lastSong == null || getCurrentTimePercentage() > 0.05)
-        {
+    public void onPreviousSongEvent(PreviousSongEvent event) {
+        if (lastSong == null || getCurrentTimePercentage() > 0.05) {
             player.seekTo(0);
         } else {
             queue.addFirst(currentSong);
@@ -112,21 +104,21 @@ public class Player implements Runnable, MediaPlayer.OnCompletionListener{
         }
     }
 
-    private synchronized void wakeUp()
-    {
+    private synchronized void wakeUp() {
         notify();
     }
 
-    private float getCurrentTimePercentage()
-    {
-        return player.getCurrentPosition()/player.getDuration();
+    private float getCurrentTimePercentage() {
+        return player.getCurrentPosition() / player.getDuration();
+    }
+
+    public int getCurrentMillisecond() {
+        return (int) player.getCurrentPosition();
     }
 
     @Subscribe
-    public void onPauseSong(PauseSongEvent event)
-    {
-        if (player.isPlaying())
-        {
+    public void onPauseSong(PauseSongEvent event) {
+        if (player.isPlaying()) {
             player.pause();
             isPaused.set(true);
         } else {
@@ -136,9 +128,8 @@ public class Player implements Runnable, MediaPlayer.OnCompletionListener{
     }
 
     @Subscribe
-    public void onSeek(SeekEvent event)
-    {
-        player.seekTo((int)event.position);
+    public void onSeek(SeekEvent event) {
+        player.seekTo((int) event.position);
     }
 
     @Override
