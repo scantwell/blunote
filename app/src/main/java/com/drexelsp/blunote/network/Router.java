@@ -239,8 +239,8 @@ public class Router extends Thread {
             try {
                 outs.get(i).write(data);
             } catch (IOException e) {
+                String macAddress = outs.get(i).getMacAddress();
                 e.printStackTrace();
-
             }
         }
     }

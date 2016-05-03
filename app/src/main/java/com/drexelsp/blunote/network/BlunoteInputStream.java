@@ -15,4 +15,6 @@ public interface BlunoteInputStream {
     ByteString readByteString() throws IOException;
 
     byte[] rawRead() throws IOException;
+
+    String getMacAddress();
 }

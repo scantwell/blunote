@@ -16,9 +16,11 @@ import java.io.InputStream;
 public class BluetoothInputStream implements BlunoteInputStream {
     private final InputStream inputStream;
     private static int BUFFERSIZE = 1024;
+    private final String macAddress;
 
     public BluetoothInputStream(BluetoothSocket socket) throws IOException {
         this.inputStream = socket.getInputStream();
+        this.macAddress = socket.getRemoteDevice().getAddress();
     }
 
     public NetworkPacket read() throws IOException {
@@ -44,6 +46,10 @@ public class BluetoothInputStream implements BlunoteInputStream {
             bytes += dataInputStream.read(buffer, bytes, b);
         }
         return buffer;
+    }
+
+    public String getMacAddress() {
+        return this.macAddress;
     }
 
     public void close() {

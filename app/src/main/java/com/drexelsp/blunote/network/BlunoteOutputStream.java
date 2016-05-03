@@ -15,4 +15,6 @@ public interface BlunoteOutputStream {
     int write(ByteString data) throws IOException;
 
     int write(byte[] data) throws IOException;
+
+    String getMacAddress();
 }
