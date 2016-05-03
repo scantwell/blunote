@@ -14,6 +14,7 @@ public final class MetaStoreContract {
     public static final Uri SONG_DELETION_URI = Uri.withAppendedPath(CONTENT_URI, "song_deletion");
     public static final Uri ALBUM_DELETION_URI = Uri.withAppendedPath(CONTENT_URI, "album_deletion");
     public static final Uri ARTIST_DELETION_URI = Uri.withAppendedPath(CONTENT_URI, "artist_deletion");
+    public static final Uri RANDOM_SONG_URI = Uri.withAppendedPath(CONTENT_URI, "random_track");
 
     public static final class Track implements CommonColumns {
         public static final String DURATION = "duration";

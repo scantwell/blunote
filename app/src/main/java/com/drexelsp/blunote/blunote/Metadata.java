@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Blob;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -35,7 +36,6 @@ public class Metadata {
     private static final ContentValues[] EMPTY_CONTENT_ARRAY = new ContentValues[0];
 
     public Metadata(Context context) {
-
         mContentResolver = context.getContentResolver();
         BlunoteMessages.MetadataUpdate metadata = getMetadata(context);
         this.addMetadata(metadata);
@@ -679,5 +679,9 @@ public class Metadata {
             valuesList[i] = values;
         }
         return valuesList;
+    }
+
+    public Cursor getRandomSong() {
+        return mContentResolver.query(MetaStoreContract.RANDOM_SONG_URI, null, null, null, null);
     }
 }

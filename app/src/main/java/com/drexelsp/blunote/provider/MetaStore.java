@@ -38,6 +38,7 @@ public final class MetaStore extends ContentProvider {
     private static final int SONG_DELETION = 12;
     private static final int ALBUM_DELETION = 13;
     private static final int ARTIST_DELETION = 14;
+    private static final int RANDOM_TRACK = 15;
     private static final UriMatcher URI_MATCHER;
     private MetaStoreOpenHelper mHelper = null;
 
@@ -57,6 +58,7 @@ public final class MetaStore extends ContentProvider {
         URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "song_deletion", SONG_DELETION);
         URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "album_deletion", ALBUM_DELETION);
         URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "artist_deletion", ARTIST_DELETION);
+        URI_MATCHER.addURI(MetaStoreContract.AUTHORITY, "random_track", RANDOM_TRACK);
     }
 
     @Override
@@ -208,6 +210,8 @@ public final class MetaStore extends ContentProvider {
                 return albumDeletion(db);
             case ARTIST_DELETION:
                 return artistDeletion(db);
+            case RANDOM_TRACK:
+                return randomSong(db);
             default:
                 throw new IllegalArgumentException(
                         "Unsupported URI: " + uri);
@@ -552,6 +556,13 @@ public final class MetaStore extends ContentProvider {
 
     public Cursor albumDeletion(SQLiteDatabase db) {
         String QUERY = "SELECT * FROM album a LEFT OUTER JOIN user_tracks ut ON a.album = ut.album AND a.artist = ut.artist WHERE ut._id IS NULL";
+        return db.rawQuery(QUERY, null);
+    }
+
+    public Cursor randomSong(SQLiteDatabase db) {
+        String QUERY = "SELECT t.song_id, t.title, t.album, t.artist, u.username FROM track t INNER JOIN user_tracks ut " +
+                "ON t.title = ut.title AND t.album = ut.album AND t.artist = ut.artist " +
+                "INNER JOIN user u ON ut.user_id = u.user_id ORDER BY RANDOM() LIMIT 1";
         return db.rawQuery(QUERY, null);
     }
 }
