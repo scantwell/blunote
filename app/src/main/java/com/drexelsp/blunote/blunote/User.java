@@ -37,7 +37,7 @@ public class User {
     public String getName() {
         return name;
     }
-    
+
     public BlunoteMessages.WelcomePacket getWelcomePacket() {
         return BlunoteMessages.WelcomePacket.newBuilder().build();
     }
@@ -62,7 +62,7 @@ public class User {
         } else if (BlunoteMessages.WrapperMessage.Type.USERNAME_UPDATE.equals(message.getType())) {
             this.onReceive(dinfo, message.getUsernameUpdate());
         } else {
-                throw new RuntimeException(String.format("Unhandled message of type '%s'", message.getType().name()));
+            throw new RuntimeException(String.format("Unhandled message of type '%s'", message.getType().name()));
         }
     }
 
@@ -121,6 +121,8 @@ public class User {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(PREF_USERNAME, message.getNewUsername());
             editor.commit();
+            this.name = message.getNewUsername();
+            metadata.updateUsername(message.getNewUsername(), message.getOldUsername(), message.getUserId());
         }
     }
 

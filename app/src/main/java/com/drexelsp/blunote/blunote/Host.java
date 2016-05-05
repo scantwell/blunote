@@ -48,23 +48,19 @@ public class Host extends User implements Observer {
         this.player.addObserver(this);
     }
 
-    public void addUser()
-    {
+    public void addUser() {
         this.numUsers++;
     }
 
-    public void removeUser()
-    {
-        if (this.numUsers < 2)
-        {
+    public void removeUser() {
+        if (this.numUsers < 2) {
             return;
         }
         this.numUsers--;
     }
 
     @Override
-    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message)
-    {
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message) {
         BlunoteMessages.MetadataUpdate update;
         String username = message.getOwner();
         if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
@@ -151,8 +147,7 @@ public class Host extends User implements Observer {
             Song song = (Song) observable;
             player.addSong(song);
             songHash.remove(song.getId());
-        }
-        else if (observable instanceof Player) {
+        } else if (observable instanceof Player) {
             Cursor c = metadata.getRandomSong();
             c.moveToFirst();
             String username = c.getString(c.getColumnIndex(MetaStoreContract.User.USERNAME));
@@ -163,8 +158,7 @@ public class Host extends User implements Observer {
             if (username.equals(this.name)) {
                 Song song = new Song(id, null, title, album, artist, username);
                 playerSongById(id, song);
-            }
-            else {
+            } else {
                 addSongRequest(username, id);
             }
             c.close();
