@@ -2,7 +2,6 @@ package com.drexelsp.blunote.blunote;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +16,6 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Vote;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
-import com.drexelsp.blunote.provider.MetaStore;
 import com.drexelsp.blunote.provider.MetaStoreContract;
 
 import android.bluetooth.BluetoothAdapter;
@@ -68,9 +66,17 @@ public class Host extends User implements Observer {
     public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message)
     {
         BlunoteMessages.MetadataUpdate update;
+        String username = message.getOwner();
         if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
             addUser();
             update = this.metadata.addHostMetadata(message);
+            if (!username.equals(update.getOwner())) {
+                BlunoteMessages.UsernameUpdate.Builder builder = BlunoteMessages.UsernameUpdate.newBuilder();
+                builder.setOldUsername(username);
+                builder.setNewUsername(update.getOwner());
+                builder.setUserId(message.getUserId());
+                this.service.send(builder.build());
+            }
         } else {
             removeUser();
             update = this.metadata.deleteHostMetadata(message);

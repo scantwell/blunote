@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Blob;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -65,13 +63,14 @@ public class Metadata {
         BlunoteMessages.MetadataUpdate.Builder builder = BlunoteMessages.MetadataUpdate.newBuilder();
         builder.setAction(message.getAction());
         builder.setUserId(message.getUserId());
-        builder.setOwner(message.getOwner());
+        String username = checkUsername(message.getOwner(), message.getUserId());
+        builder.setOwner(username);
 
         ContentValues[] songs = removeSongAddDuplicates(getSongValues(message.getSongsList()));
         ContentValues[] artists = removeArtistAddDuplicates(getArtistValues(message.getArtistsList()));
         ContentValues[] albums = removeAlbumAddDuplicates(getAlbumValues(message.getAlbumsList()));
         ContentValues[] user_tracks = getUserTracks(message.getSongsList(), message.getUserId());
-        insertNewUser(message.getOwner(), message.getUserId()/* Should add latency here when implemented */);
+        insertNewUser(username, message.getUserId()/* Should add latency here when implemented */);
         mContentResolver.bulkInsert(MetaStoreContract.Track.CONTENT_URI, songs);
         mContentResolver.bulkInsert(MetaStoreContract.Artist.CONTENT_URI, artists);
         mContentResolver.bulkInsert(MetaStoreContract.Album.CONTENT_URI, albums);
@@ -683,5 +682,22 @@ public class Metadata {
 
     public Cursor getRandomSong() {
         return mContentResolver.query(MetaStoreContract.RANDOM_SONG_URI, null, null, null, null);
+    }
+
+    private String checkUsername(String oldUsername, String mac) {
+        String username = oldUsername;
+        String[] selectionArgs = new String[]{oldUsername};
+        String where = "username=?";
+        Cursor c = mContentResolver.query(MetaStoreContract.User.CONTENT_URI, null, where, selectionArgs, null);
+
+        if (c.moveToFirst()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(username);
+            sb.append(mac.hashCode());
+            username = sb.toString();
+        }
+
+        c.close();
+        return username;
     }
 }
