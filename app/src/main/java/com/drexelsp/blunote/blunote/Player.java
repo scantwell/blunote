@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 
+import com.drexelsp.blunote.events.AddSongEvent;
 import com.drexelsp.blunote.events.NextSongEvent;
 import com.drexelsp.blunote.events.PauseSongEvent;
 import com.drexelsp.blunote.events.PlaySongEvent;
@@ -50,13 +51,14 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
 
     public synchronized void addSong(Song song) {
         Log.v(TAG, String.format("Adding song to queue. Queue size %d", queue.size()));
+        EventBus.getDefault().postSticky(new AddSongEvent(song));
         queue.add(song);
         this.notify();
     }
 
     @Override
     public void run() {
-        int size = 0;
+        int size;
         while (true)
         {
             Log.v(TAG, "New Main loop");

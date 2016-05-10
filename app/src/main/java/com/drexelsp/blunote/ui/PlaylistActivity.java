@@ -14,6 +14,12 @@ import android.widget.ListView;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
+import com.drexelsp.blunote.events.AddSongEvent;
+import com.drexelsp.blunote.events.PlaySongEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -37,7 +43,7 @@ public class PlaylistActivity extends BaseBluNoteActivity implements ListView.On
             setSimpleList(playlistView, playlist);
             registerForContextMenu(playlistView);
         }
-
+        this.playlist = new ArrayList<>();
     }
 
     @Override
@@ -106,15 +112,40 @@ public class PlaylistActivity extends BaseBluNoteActivity implements ListView.On
     }
 
     public List<String> getCurrentPlaylist() {
-        playlist = new ArrayList<>();
-        for (int i = 0; i < 20; ++i)
-            playlist.add("Song " + (i + 1));
-
-        return playlist;
+        return this.playlist;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onAddSongEvent(AddSongEvent event) {
+        this.playlist.add(String.format("Song: %s Artist: %s Album:%", event.title, event.artist, event.album));
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onPlaySong(PlaySongEvent event) {
+        removeSong(event.title);
+    }
+
+    private void removeSong(String title) {
+        for (String info: this.playlist) {
+            if (info.contains(title))
+            {
+                this.playlist.remove(info);
+            }
+        }
+    }
+
+    public void onStart() {
+        EventBus.getDefault().register(this);
+        super.onStart();
+    }
+
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 }
