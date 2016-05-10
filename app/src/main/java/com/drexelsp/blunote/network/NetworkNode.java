@@ -1,7 +1,6 @@
 package com.drexelsp.blunote.network;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -16,25 +15,42 @@ public class NetworkNode {
         this.children = new ArrayList<>();
     }
 
-    public String getValue() {
-        return this.value;
-    }
-
-    public boolean addChild(NetworkNode node) {
-        return this.children.add(node);
-    }
-
-    public boolean removeChild(NetworkNode node) {
-        return this.children.remove(node);
-    }
-
-    public boolean addToNode(String value, NetworkNode newNode) {
+    public boolean addToNode(String value, String newNode) {
         NetworkNode node = getNode(value);
         return node != null && node.addChild(newNode);
     }
 
-    public NetworkNode getNode(String value) {
-        if (this.value.equals(value)) {
+
+    public ArrayList<String> removeNodeSubTree(String value) {
+        NetworkNode node = getNode(value);
+        if (node == null) {
+            return null;
+        }
+        ArrayList<String> subTree = node.getSubTree();
+        NetworkNode parent = getParentOf(value);
+        parent.removeChild(node.getValue());
+        return subTree;
+    }
+
+    private String getValue() {
+        return this.value;
+    }
+
+    private boolean addChild(String value) {
+        return this.children.add(new NetworkNode(value));
+    }
+
+    private boolean removeChild(String value) {
+        for (NetworkNode node : this.children) {
+            if (node.getValue().equals(value)){
+                return this.children.remove(node);
+            }
+        }
+        return false;
+    }
+
+    private NetworkNode getNode(String value) {
+        if (this.getValue().equals(value)) {
             return this;
         } else {
             for (NetworkNode node : this.children) {
@@ -47,16 +63,25 @@ public class NetworkNode {
         }
     }
 
-    public ArrayList<String> getSubTree() {
+    private NetworkNode getParentOf(String value) {
+        for (NetworkNode node : this.children) {
+            if (node.getValue().equals(value)) {
+                return this;
+            }
+        }
+        for (NetworkNode node : this.children) {
+            if (node.getParentOf(value) != null) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    private ArrayList<String> getSubTree() {
         ArrayList<String> values = new ArrayList<>(Collections.singletonList(this.value));
         for (NetworkNode child : this.children) {
             values.addAll(child.getSubTree());
         }
         return values;
-    }
-
-    public ArrayList<String> getNodeSubTree(String value) {
-        NetworkNode node = getNode(value);
-        return node != null ? node.getSubTree() : null;
     }
 }
