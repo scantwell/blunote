@@ -83,6 +83,11 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
                     int mCurrentPosition = player.getCurrentMillisecond();
                     seekBar.setProgress(mCurrentPosition);
                     currentMusicLocation.setText(durationToTime(mCurrentPosition));
+                    //true=pause
+                    //false=play
+                    if (playPause.isChecked() != player.getIsPaused().get())
+                        playPause.callOnClick();
+
                 }
                 mHandler.postDelayed(this, 1000);
             }

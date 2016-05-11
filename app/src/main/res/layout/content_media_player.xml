@@ -23,9 +23,9 @@
         app:elevation="4dp" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:orientation="vertical"
         android:padding="5dp">
 
         <ImageView
@@ -34,32 +34,32 @@
             android:src="@android:drawable/sym_def_app_icon" />
 
         <TextView
-            android:gravity="center_vertical"
-            android:layout_height="wrap_content"
-            android:text="@string/song_title"
+            android:id="@+id/song_name"
             android:layout_width="fill_parent"
-            android:id="@+id/song_name" />
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/song_title" />
 
         <TextView
-            android:gravity="center_vertical"
-            android:layout_height="wrap_content"
-            android:text="@string/album_artist_name"
+            android:id="@+id/artist_name"
             android:layout_width="fill_parent"
-            android:id="@+id/artist_name" />
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/album_artist_name" />
 
         <TextView
-            android:gravity="center_vertical"
-            android:layout_height="wrap_content"
-            android:text="@string/album_name"
+            android:id="@+id/album_name"
             android:layout_width="fill_parent"
-            android:id="@+id/album_name" />
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/album_name" />
 
         <TextView
-            android:gravity="center_vertical"
-            android:layout_height="wrap_content"
-            android:text="@string/owner_name"
+            android:id="@+id/song_owner_name"
             android:layout_width="fill_parent"
-            android:id="@+id/song_owner_name" />
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/owner_name" />
 
         <TextView
             android:layout_width="match_parent"
@@ -74,8 +74,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_weight=".5"
-                android:layout_height="0dp">
+                android:layout_height="0dp"
+                android:layout_weight=".5">
 
                 <TextView
                     android:id="@+id/musicCurrentLoc"
@@ -99,8 +99,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_weight=".5"
-                android:layout_height="0dp">
+                android:layout_height="0dp"
+                android:layout_weight=".5">
 
                 <ImageButton
                     android:id="@+id/downvote"
@@ -124,8 +124,9 @@
                     android:layout_height="50dp"
                     android:layout_marginRight="16dp"
                     android:background="@drawable/ic_play_pause"
-                    android:textOn=""
-                    android:textOff=""></ToggleButton>
+                    android:checked="true"
+                    android:textOff=""
+                    android:textOn=""></ToggleButton>
 
                 <ImageButton
                     android:id="@+id/nextButton"

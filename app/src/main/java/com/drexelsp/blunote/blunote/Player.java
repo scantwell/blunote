@@ -3,7 +3,6 @@ package com.drexelsp.blunote.blunote;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.util.Log;
 
 import com.drexelsp.blunote.events.NextSongEvent;
@@ -46,6 +45,10 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
         this.player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         this.player.setOnCompletionListener(this);
         EventBus.getDefault().register(this);
+    }
+
+    public AtomicBoolean getIsPaused() {
+        return isPaused;
     }
 
     public synchronized void addSong(Song song) {
@@ -138,7 +141,7 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
     }
 
     public int getCurrentMillisecond() {
-        return (int) player.getCurrentPosition();
+        return player.getCurrentPosition();
     }
 
     @Subscribe
