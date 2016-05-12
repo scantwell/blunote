@@ -24,10 +24,10 @@ import java.util.List;
  * Need to handle a long press for options menu
  */
 public class PlaylistActivity extends BaseBluNoteActivity implements ListView.OnItemClickListener {
+    private static final String TAG = "PlaylistActivity";
     protected List<String> playlist;
     ArrayAdapter playlistAdapter;
     ListView playlistView;
-    private static final String TAG = "PlaylistActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,15 +68,15 @@ public class PlaylistActivity extends BaseBluNoteActivity implements ListView.On
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onAddSongEvent(AddSongEvent event) {
-        this.playlist.add(String.format("Song: %s Artist: %s Album:%", event.title, event.artist, event.album));
-        Log.v(TAG, String.format("Added song to playlist {0}", event.title));
+        this.playlist.add(String.format("Song: %s Artist: %s Album:%s", event.title, event.artist, event.album));
+        Log.v(TAG, String.format("Added song to playlist {%s}", event.title));
         this.playlistAdapter.notifyDataSetChanged();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onPlaySong(PlaySongEvent event) {
         removeSong(event.title);
-        Log.v(TAG, String.format("Removed song to playlist {0}", event.title));
+        Log.v(TAG, String.format("Removed song to playlist {%s}", event.title));
         this.playlistAdapter.notifyDataSetChanged();
     }
 
