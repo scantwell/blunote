@@ -71,13 +71,15 @@ public class PlaylistActivity extends BaseBluNoteActivity implements ListView.On
         this.playlist.add(String.format("Song: %s Artist: %s Album:%s", event.title, event.artist, event.album));
         Log.v(TAG, String.format("Added song to playlist {%s}", event.title));
         this.playlistAdapter.notifyDataSetChanged();
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onPlaySong(PlaySongEvent event) {
         removeSong(event.title);
-        Log.v(TAG, String.format("Removed song to playlist {%s}", event.title));
+        Log.v(TAG, String.format("Removed song from playlist %s", event.title));
         this.playlistAdapter.notifyDataSetChanged();
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     private void removeSong(String title) {
