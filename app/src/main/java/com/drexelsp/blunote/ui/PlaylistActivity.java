@@ -1,12 +1,8 @@
 package com.drexelsp.blunote.ui;
 
-import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
-import android.view.ContextMenu;
-import android.view.Menu;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,7 +18,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -32,14 +27,17 @@ public class PlaylistActivity extends BaseBluNoteActivity implements ListView.On
     protected List<String> playlist;
     ArrayAdapter playlistAdapter;
     ListView playlistView;
+    private static final String TAG = "PlaylistActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         playlistView = (ListView) findViewById(R.id.playlist_list);
-        this.playlist = new ArrayList<>();
-        setSimpleList(playlistView, playlist);
+        playlist = new ArrayList<>();
+        playlistAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, playlist);
+        playlistView.setAdapter(playlistAdapter);
         registerForContextMenu(playlistView);
     }
 
@@ -63,10 +61,6 @@ public class PlaylistActivity extends BaseBluNoteActivity implements ListView.On
         return true;
     }
 
-    public List<String> getCurrentPlaylist() {
-        return this.playlist;
-    }
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -75,19 +69,20 @@ public class PlaylistActivity extends BaseBluNoteActivity implements ListView.On
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onAddSongEvent(AddSongEvent event) {
         this.playlist.add(String.format("Song: %s Artist: %s Album:%", event.title, event.artist, event.album));
+        Log.v(TAG, String.format("Added song to playlist {0}", event.title));
         this.playlistAdapter.notifyDataSetChanged();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onPlaySong(PlaySongEvent event) {
         removeSong(event.title);
+        Log.v(TAG, String.format("Removed song to playlist {0}", event.title));
         this.playlistAdapter.notifyDataSetChanged();
     }
 
     private void removeSong(String title) {
-        for (String info: this.playlist) {
-            if (info.contains(title))
-            {
+        for (String info : this.playlist) {
+            if (info.contains(title)) {
                 this.playlist.remove(info);
             }
         }
