@@ -68,26 +68,36 @@ public class PlaylistActivity extends BaseBluNoteActivity implements ListView.On
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onAddSongEvent(AddSongEvent event) {
-        this.playlist.add(String.format("Song: %s Artist: %s Album:%s", event.title, event.artist, event.album));
-        Log.v(TAG, String.format("Added song to playlist {%s}", event.title));
-        this.playlistAdapter.notifyDataSetChanged();
-        EventBus.getDefault().removeStickyEvent(event);
+        if (event != null)
+        {
+            EventBus.getDefault().removeStickyEvent(event);
+            this.playlist.add(String.format("Song: %s Artist: %s Album: %s", event.title, event.artist, event.album));
+            Log.v(TAG, String.format("Added song to playlist %s", event.title));
+            this.playlistAdapter.notifyDataSetChanged();
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onPlaySong(PlaySongEvent event) {
-        removeSong(event.title);
-        Log.v(TAG, String.format("Removed song from playlist %s", event.title));
-        this.playlistAdapter.notifyDataSetChanged();
-        EventBus.getDefault().removeStickyEvent(event);
+        if (event != null)
+        {
+            EventBus.getDefault().removeStickyEvent(event);
+            Log.v(TAG, String.format("Received PlaySongEvent for song %s", event.title));
+            if (removeSong(event.title)) {
+                Log.v(TAG, String.format("Removed song from playlist %s", event.title));
+            }
+            this.playlistAdapter.notifyDataSetChanged();
+        }
     }
 
-    private void removeSong(String title) {
+    private boolean removeSong(String title) {
         for (String info : this.playlist) {
             if (info.contains(title)) {
                 this.playlist.remove(info);
+                return true;
             }
         }
+        return false;
     }
 
     public void onStart() {
