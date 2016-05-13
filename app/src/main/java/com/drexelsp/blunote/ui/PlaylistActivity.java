@@ -72,6 +72,7 @@ public class PlaylistActivity extends BaseBluNoteActivity implements ListView.On
         if (event != null)
         {
             Log.v(TAG, "Received PlaylistUpdateEvent. Copying playlist");
+            this.playlist.clear();
             for (String s : event.playlist)
             {
                 this.playlist.add(s);
