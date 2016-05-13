@@ -6,10 +6,10 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 
-import com.drexelsp.blunote.events.AddSongEvent;
 import com.drexelsp.blunote.events.NextSongEvent;
 import com.drexelsp.blunote.events.PauseSongEvent;
 import com.drexelsp.blunote.events.PlaySongEvent;
+import com.drexelsp.blunote.events.PlaylistUpdateEvent;
 import com.drexelsp.blunote.events.PreviousSongEvent;
 import com.drexelsp.blunote.events.SeekEvent;
 
@@ -17,6 +17,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Observable;
@@ -47,11 +48,12 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
         this.player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         this.player.setOnCompletionListener(this);
         EventBus.getDefault().register(this);
+
     }
 
     public synchronized void addSong(Song song) {
         Log.v(TAG, String.format("Adding song to queue. Queue size %d", queue.size()));
-        EventBus.getDefault().postSticky(new AddSongEvent(song));
+        EventBus.getDefault().postSticky(new PlaylistUpdateEvent(getPlaylist()));
         queue.add(song);
         this.notify();
     }
@@ -98,12 +100,23 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
             player.setDataSource(context, song.getUri());
             player.prepare();
             player.start();
+            EventBus.getDefault().postSticky(new PlaylistUpdateEvent(getPlaylist()));
             EventBus.getDefault().postSticky(new PlaySongEvent(song.getTitle(), song.getArtist(),
                     song.getAlbum(), song.getOwner(), Integer.toString(player.getDuration()), this));
             Log.v(TAG, String.format("Playing song. Queue size %d", queue.size()));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private ArrayList<Song> getPlaylist()
+    {
+        ArrayList<Song> plist = new ArrayList<>();
+        for (Song s : queue)
+        {
+            plist.add(s);
+        }
+        return plist;
     }
 
     @Override
