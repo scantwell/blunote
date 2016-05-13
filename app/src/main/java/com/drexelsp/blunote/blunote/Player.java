@@ -53,8 +53,8 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
 
     public synchronized void addSong(Song song) {
         Log.v(TAG, String.format("Adding song to queue. Queue size %d", queue.size()));
-        EventBus.getDefault().postSticky(new PlaylistUpdateEvent(getPlaylist()));
         queue.add(song);
+        EventBus.getDefault().postSticky(new PlaylistUpdateEvent(getPlaylist()));
         this.notify();
     }
 
