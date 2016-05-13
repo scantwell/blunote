@@ -13,6 +13,7 @@ public class PlaylistUpdateEvent {
 
     public PlaylistUpdateEvent(ArrayList<Song> songs)
     {
+        this.playlist = new ArrayList<>();
         initPlaylist(songs);
     }
 
