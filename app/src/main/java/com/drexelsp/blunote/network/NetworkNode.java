@@ -15,8 +15,8 @@ public class NetworkNode {
         this.children = new ArrayList<>();
     }
 
-    public boolean addToNode(String value, String newNode) {
-        NetworkNode node = getNode(value);
+    public boolean addToNode(String existingNode, String newNode) {
+        NetworkNode node = getNode(existingNode);
         return node != null && node.addChild(newNode);
     }
 

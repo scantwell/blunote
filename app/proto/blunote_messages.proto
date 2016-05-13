@@ -161,6 +161,14 @@ message WelcomePacket {
 	required string numSongs = 3;
 }
 
+message NetworkConnection {
+	enum Type { CONNECTION = 1; DISCONNECTION = 2; }
+
+	required Type type = 1;
+	required string macAddress = 2;
+	optional string hostMacAddress = 3;
+}
+
 message NetworkMap {
 	repeated string macAddresses = 1;
 }

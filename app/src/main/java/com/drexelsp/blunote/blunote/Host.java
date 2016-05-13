@@ -2,6 +2,7 @@ package com.drexelsp.blunote.blunote;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,6 +17,7 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Vote;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
+import com.drexelsp.blunote.network.NetworkNode;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
@@ -33,11 +35,13 @@ public class Host extends User implements Observer {
     private ConcurrentHashMap<Long, Song> songHash;
     private String serverName;
     private int numUsers;
+    private NetworkNode networkTree;
 
     public Host(Service service, Context context) {
         super(service, context);
         this.songHash = new ConcurrentHashMap<>();
         this.numUsers = 1;
+        this.networkTree = new NetworkNode(BluetoothAdapter.getDefaultAdapter().getAddress());
         this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_user_name", BluetoothAdapter
                 .getDefaultAdapter().getName());
         this.serverName = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_server_name", "Party Jamz");
@@ -57,6 +61,20 @@ public class Host extends User implements Observer {
             return;
         }
         this.numUsers--;
+    }
+
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.NetworkConnection message) {
+        if (message.getType() == BlunoteMessages.NetworkConnection.Type.CONNECTION) {
+            String macAddress = message.getMacAddress();
+            String hostMacAddress = message.getHostMacAddress();
+            this.networkTree.addToNode(hostMacAddress, macAddress);
+        } else if (message.getType() == BlunoteMessages.NetworkConnection.Type.DISCONNECTION) {
+            String macAddress = message.getMacAddress();
+            ArrayList<String> droppedConnections = this.networkTree.removeNodeSubTree(macAddress);
+            for (String droppedConnection : droppedConnections) {
+                // TODO : Remove metadata related to all droppedConnections
+            }
+        }
     }
 
     @Override
