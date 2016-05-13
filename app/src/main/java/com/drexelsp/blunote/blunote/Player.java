@@ -3,7 +3,6 @@ package com.drexelsp.blunote.blunote;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.util.Log;
 
 import com.drexelsp.blunote.events.NextSongEvent;
@@ -61,15 +60,13 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
     @Override
     public void run() {
         int size;
-        while (true)
-        {
+        while (true) {
             Log.v(TAG, "New Main loop");
-            synchronized (queue){
+            synchronized (queue) {
                 size = queue.size();
                 Log.v(TAG, "Setting size = to queue.size");
             }
-            if (size < 1)
-            {
+            if (size < 1) {
                 Log.v(TAG, "Notifying Observers");
                 notifyObservers();
                 Log.v(TAG, "Notified Observers");
@@ -109,11 +106,9 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
         }
     }
 
-    private ArrayList<Song> getPlaylist()
-    {
+    private ArrayList<Song> getPlaylist() {
         ArrayList<Song> plist = new ArrayList<>();
-        for (Song s : queue)
-        {
+        for (Song s : queue) {
             plist.add(s);
         }
         return plist;
@@ -128,19 +123,24 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
     @Subscribe
     public void onNextSongEvent(NextSongEvent event) {
         player.stop();
+        isPlaying.set(false);
+        isPaused.set(false);
         wakeUp();
     }
 
     @Subscribe
     public void onPreviousSongEvent(PreviousSongEvent event) {
-        if (lastSong == null || getCurrentTimePercentage() > 0.05) {
-            player.seekTo(0);
-        } else {
+        if (getCurrentTimePercentage() > 5 && lastSong != null) {
             queue.addFirst(currentSong);
             queue.addFirst(lastSong);
             lastSong = null;
+            currentSong = null;
             player.stop();
+            isPlaying.set(false);
+            isPaused.set(false);
             wakeUp();
+        } else {
+            player.seekTo(0);
         }
     }
 
@@ -148,12 +148,14 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
         notify();
     }
 
-    private float getCurrentTimePercentage() {
-        return player.getCurrentPosition() / player.getDuration();
+    private int getCurrentTimePercentage() {
+        double current = player.getCurrentPosition() / 1000.00;
+        double duration = player.getDuration() / 1000.00;
+        return (int) (current / duration * 100);
     }
 
     public int getCurrentMillisecond() {
-        return (int) player.getCurrentPosition();
+        return player.getCurrentPosition();
     }
 
     @Subscribe
