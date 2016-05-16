@@ -14,8 +14,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -29,7 +27,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -132,12 +129,6 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         handleIntent(intent);
-    }
-
-    protected void setSimpleList(ListView listView, List<String> list) {
-        ArrayAdapter adapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list);
-        listView.setAdapter(adapter);
     }
 
     public boolean showSettingsCog() {
@@ -263,8 +254,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void OnDisconnectionEvent(OnDisconnectionEvent event)
-    {
+    public void OnDisconnectionEvent(OnDisconnectionEvent event) {
         Toast.makeText(getCurrentContext(), "Disconnected from host.", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getCurrentContext(), LoginActivity.class);
         startActivity(intent);

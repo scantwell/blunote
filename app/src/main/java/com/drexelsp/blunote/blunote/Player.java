@@ -8,6 +8,7 @@ import android.util.Log;
 import com.drexelsp.blunote.events.NextSongEvent;
 import com.drexelsp.blunote.events.PauseSongEvent;
 import com.drexelsp.blunote.events.PlaySongEvent;
+import com.drexelsp.blunote.events.PlaylistUpdateEvent;
 import com.drexelsp.blunote.events.PreviousSongEvent;
 import com.drexelsp.blunote.events.SeekEvent;
 
@@ -15,13 +16,15 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Created by scantwell on 3/14/2016.
+ * Manages the android.MediaPlayer to include queueing properties of Blunote.Song's and post/receive
+ * necessary events to/from the UI layer.
  */
 public class Player extends Observable implements Runnable, MediaPlayer.OnCompletionListener {
 
@@ -47,6 +50,11 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
         EventBus.getDefault().register(this);
     }
 
+    /**
+     * Synchronized method to add a Blunote.Song to the player's queue to be played.
+     *
+     * @param song
+     */
     public AtomicBoolean getIsPaused() {
         return isPaused;
     }
@@ -54,27 +62,142 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
     public synchronized void addSong(Song song) {
         Log.v(TAG, String.format("Adding song to queue. Queue size %d", queue.size()));
         queue.add(song);
+        EventBus.getDefault().postSticky(new PlaylistUpdateEvent(getPlaylist()));
         this.notify();
+    }
+
+    /**
+     * Returns the current position of the song in milliseconds.
+     *
+     * @return millis
+     */
+    public int getCurrentMillisecond() {
+        return player.getCurrentPosition();
+    }
+
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        Log.v(TAG, "OnCompletion Called");
+        this.isPlaying.set(false);
+        wakeUp();
+    }
+
+    /**
+     * An EventBus event that notifies the player that the user has clicked the next button on the UI.
+     *
+     * @param event
+     */
+    @Subscribe
+    public void onNextSongEvent(NextSongEvent event) {
+        player.stop();
+        isPlaying.set(false);
+        isPaused.set(false);
+        wakeUp();
+    }
+
+    /**
+     * An EventBus event that notifies the player that the user has clicked the play/pause button on the UI.
+     *
+     * @param event
+     */
+    @Subscribe
+    public void onPauseSong(PauseSongEvent event) {
+        if (this.isPlaying.get()) {
+            player.pause();
+            isPlaying.set(false);
+            isPaused.set(true);
+        } else {
+            isPlaying.set(true);
+            isPaused.set(false);
+            player.start();
+        }
+    }
+
+    /**
+     * An EventBus event that notifies the player that the user has clicked the previous button on the UI.
+     *
+     * @param event
+     */
+    @Subscribe
+    public void onPreviousSongEvent(PreviousSongEvent event) {
+        if (lastSong == null || getCurrentTimePercentage() > 5) {
+            player.seekTo(0);
+        } else {
+            queue.addFirst(currentSong);
+            queue.addFirst(lastSong);
+            lastSong = null;
+            currentSong = null;
+            player.stop();
+            isPlaying.set(false);
+            isPaused.set(false);
+            wakeUp();
+        }
+    }
+
+    /**
+     * An EventBus event that notifies the player that the user moved the seek bar on the UI.
+     *
+     * @param event
+     */
+    @Subscribe
+    public void onSeek(SeekEvent event) {
+        player.seekTo((int) event.position);
     }
 
     @Override
     public void run() {
-        int size = 0;
-        while (true)
-        {
-            Log.v(TAG, "New Main loop");
-            synchronized (queue){
+        int size;
+        while (true) {
+            synchronized (queue) {
                 size = queue.size();
                 Log.v(TAG, "Setting size = to queue.size");
             }
-            if (size < 1)
-            {
+            if (size < 1) {
                 Log.v(TAG, "Notifying Observers");
-                notifyObservers();
+                setChanged();
+                super.notifyObservers();
                 Log.v(TAG, "Notified Observers");
             }
             waitOnQueueOrPlayer();
             playSong();
+        }
+    }
+
+    /**
+     * Returns the percentage of the song that has currently been played.
+     *
+     * @return percent
+     */
+    private int getCurrentTimePercentage() {
+        double current = player.getCurrentPosition() / 1000.00;
+        double duration = player.getDuration() / 1000.00;
+        return (int) (current / duration * 100);
+    }
+
+    private ArrayList<Song> getPlaylist() {
+        ArrayList<Song> plist = new ArrayList<>();
+        for (Song s : queue) {
+            plist.add(s);
+        }
+        return plist;
+    }
+
+    private void playSong() {
+        try {
+            this.isPlaying.set(true);
+            Song song = queue.remove();
+            currentSong = song;
+            player.reset();
+            player.setDataSource(context, song.getUri());
+            player.prepare();
+            player.start();
+            EventBus.getDefault().postSticky(new PlaylistUpdateEvent(getPlaylist()));
+            EventBus.getDefault().postSticky(new PlaySongEvent(song.getTitle(), song.getArtist(),
+                    song.getAlbum(), song.getOwner(), Integer.toString(player.getDuration()), this));
+            Log.v(TAG, String.format("Playing song. Queue size %d", queue.size()));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -90,48 +213,6 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
         lastSong = currentSong;
     }
 
-    public void playSong() {
-        try {
-            this.isPlaying.set(true);
-            Song song = queue.remove();
-            currentSong = song;
-            player.reset();
-            player.setDataSource(context, song.getUri());
-            player.prepare();
-            player.start();
-            EventBus.getDefault().postSticky(new PlaySongEvent(song.getTitle(), song.getArtist(),
-                    song.getAlbum(), song.getOwner(), Integer.toString(player.getDuration()), this));
-            Log.v(TAG, String.format("Playing song. Queue size %d", queue.size()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void notifyObservers() {
-        setChanged();
-        super.notifyObservers();
-    }
-
-    @Subscribe
-    public void onNextSongEvent(NextSongEvent event) {
-        player.stop();
-        wakeUp();
-    }
-
-    @Subscribe
-    public void onPreviousSongEvent(PreviousSongEvent event) {
-        if (lastSong == null || getCurrentTimePercentage() > 0.05) {
-            player.seekTo(0);
-        } else {
-            queue.addFirst(currentSong);
-            queue.addFirst(lastSong);
-            lastSong = null;
-            player.stop();
-            wakeUp();
-        }
-    }
-
     private synchronized void wakeUp() {
         notify();
     }
@@ -141,7 +222,7 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
     }
 
     public int getCurrentMillisecond() {
-        return player.getCurrentPosition();
+        return (int) player.getCurrentPosition();
     }
 
     @Subscribe

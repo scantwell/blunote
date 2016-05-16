@@ -14,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -142,11 +143,18 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
 
     @Override
     public boolean showSearchMenuItem() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean showSettingsCog() {
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.getItem(Constants.MENU_ITEM_SEARCH).setVisible(false);
         return true;
     }
 
