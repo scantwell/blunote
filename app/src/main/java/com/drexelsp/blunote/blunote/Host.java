@@ -68,9 +68,11 @@ public class Host extends User implements Observer {
             String macAddress = message.getMacAddress();
             String hostMacAddress = message.getHostMacAddress();
             this.networkTree.addToNode(hostMacAddress, macAddress);
+            Log.v(TAG, String.format("Connection, Mac: %s, Host: %s", macAddress, hostMacAddress));
         } else if (message.getType() == BlunoteMessages.NetworkConnection.Type.DISCONNECTION) {
             String macAddress = message.getMacAddress();
             ArrayList<String> droppedConnections = this.networkTree.removeNodeSubTree(macAddress);
+            Log.v(TAG, String.format("Disconnection, Macs to remove: %s", droppedConnections.toString()));
             for (String droppedConnection : droppedConnections) {
                 // TODO : Remove metadata related to all droppedConnections
             }

@@ -11993,6 +11993,19 @@ public final class BlunoteMessages {
      * <code>optional .blunote.WelcomePacket welcomePacket = 9;</code>
      */
     com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacketOrBuilder getWelcomePacketOrBuilder();
+
+    /**
+     * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+     */
+    boolean hasNetworkConnection();
+    /**
+     * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+     */
+    com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection getNetworkConnection();
+    /**
+     * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+     */
+    com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnectionOrBuilder getNetworkConnectionOrBuilder();
   }
   /**
    * Protobuf type {@code blunote.WrapperMessage}
@@ -12166,6 +12179,19 @@ public final class BlunoteMessages {
               bitField0_ |= 0x00000100;
               break;
             }
+            case 82: {
+              com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000200) == 0x00000200)) {
+                subBuilder = networkConnection_.toBuilder();
+              }
+              networkConnection_ = input.readMessage(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(networkConnection_);
+                networkConnection_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000200;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -12242,6 +12268,10 @@ public final class BlunoteMessages {
        * <code>WELCOME_PACKET = 8;</code>
        */
       WELCOME_PACKET(7, 8),
+      /**
+       * <code>NETWORK_CONNECTION = 9;</code>
+       */
+      NETWORK_CONNECTION(8, 9),
       ;
 
       /**
@@ -12276,6 +12306,10 @@ public final class BlunoteMessages {
        * <code>WELCOME_PACKET = 8;</code>
        */
       public static final int WELCOME_PACKET_VALUE = 8;
+      /**
+       * <code>NETWORK_CONNECTION = 9;</code>
+       */
+      public static final int NETWORK_CONNECTION_VALUE = 9;
 
 
       public final int getNumber() { return value; }
@@ -12290,6 +12324,7 @@ public final class BlunoteMessages {
           case 6: return SONG_REQUEST;
           case 7: return VOTE;
           case 8: return WELCOME_PACKET;
+          case 9: return NETWORK_CONNECTION;
           default: return null;
         }
       }
@@ -12525,6 +12560,27 @@ public final class BlunoteMessages {
       return welcomePacket_;
     }
 
+    public static final int NETWORKCONNECTION_FIELD_NUMBER = 10;
+    private com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection networkConnection_;
+    /**
+     * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+     */
+    public boolean hasNetworkConnection() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+     */
+    public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection getNetworkConnection() {
+      return networkConnection_;
+    }
+    /**
+     * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+     */
+    public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnectionOrBuilder getNetworkConnectionOrBuilder() {
+      return networkConnection_;
+    }
+
     private void initFields() {
       type_ = com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage.Type.METADATA_UPDATE;
       metadataUpdate_ = com.drexelsp.blunote.blunote.BlunoteMessages.MetadataUpdate.getDefaultInstance();
@@ -12535,6 +12591,7 @@ public final class BlunoteMessages {
       songRequest_ = com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest.getDefaultInstance();
       vote_ = com.drexelsp.blunote.blunote.BlunoteMessages.Vote.getDefaultInstance();
       welcomePacket_ = com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket.getDefaultInstance();
+      networkConnection_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -12594,6 +12651,12 @@ public final class BlunoteMessages {
           return false;
         }
       }
+      if (hasNetworkConnection()) {
+        if (!getNetworkConnection().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -12627,6 +12690,9 @@ public final class BlunoteMessages {
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         output.writeMessage(9, welcomePacket_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeMessage(10, networkConnection_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -12672,6 +12738,10 @@ public final class BlunoteMessages {
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(9, welcomePacket_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(10, networkConnection_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -12795,6 +12865,7 @@ public final class BlunoteMessages {
           getSongRequestFieldBuilder();
           getVoteFieldBuilder();
           getWelcomePacketFieldBuilder();
+          getNetworkConnectionFieldBuilder();
         }
       }
       private static Builder create() {
@@ -12853,6 +12924,12 @@ public final class BlunoteMessages {
           welcomePacketBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000100);
+        if (networkConnectionBuilder_ == null) {
+          networkConnection_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection.getDefaultInstance();
+        } else {
+          networkConnectionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -12949,6 +13026,14 @@ public final class BlunoteMessages {
         } else {
           result.welcomePacket_ = welcomePacketBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        if (networkConnectionBuilder_ == null) {
+          result.networkConnection_ = networkConnection_;
+        } else {
+          result.networkConnection_ = networkConnectionBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -12991,6 +13076,9 @@ public final class BlunoteMessages {
         }
         if (other.hasWelcomePacket()) {
           mergeWelcomePacket(other.getWelcomePacket());
+        }
+        if (other.hasNetworkConnection()) {
+          mergeNetworkConnection(other.getNetworkConnection());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -13045,6 +13133,12 @@ public final class BlunoteMessages {
         }
         if (hasWelcomePacket()) {
           if (!getWelcomePacket().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasNetworkConnection()) {
+          if (!getNetworkConnection().isInitialized()) {
             
             return false;
           }
@@ -14032,6 +14126,122 @@ public final class BlunoteMessages {
           welcomePacket_ = null;
         }
         return welcomePacketBuilder_;
+      }
+
+      private com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection networkConnection_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection.Builder, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnectionOrBuilder> networkConnectionBuilder_;
+      /**
+       * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+       */
+      public boolean hasNetworkConnection() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+       */
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection getNetworkConnection() {
+        if (networkConnectionBuilder_ == null) {
+          return networkConnection_;
+        } else {
+          return networkConnectionBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+       */
+      public Builder setNetworkConnection(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection value) {
+        if (networkConnectionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          networkConnection_ = value;
+          onChanged();
+        } else {
+          networkConnectionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+       */
+      public Builder setNetworkConnection(
+          com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection.Builder builderForValue) {
+        if (networkConnectionBuilder_ == null) {
+          networkConnection_ = builderForValue.build();
+          onChanged();
+        } else {
+          networkConnectionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+       */
+      public Builder mergeNetworkConnection(com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection value) {
+        if (networkConnectionBuilder_ == null) {
+          if (((bitField0_ & 0x00000200) == 0x00000200) &&
+              networkConnection_ != com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection.getDefaultInstance()) {
+            networkConnection_ =
+              com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection.newBuilder(networkConnection_).mergeFrom(value).buildPartial();
+          } else {
+            networkConnection_ = value;
+          }
+          onChanged();
+        } else {
+          networkConnectionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      /**
+       * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+       */
+      public Builder clearNetworkConnection() {
+        if (networkConnectionBuilder_ == null) {
+          networkConnection_ = com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection.getDefaultInstance();
+          onChanged();
+        } else {
+          networkConnectionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000200);
+        return this;
+      }
+      /**
+       * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+       */
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection.Builder getNetworkConnectionBuilder() {
+        bitField0_ |= 0x00000200;
+        onChanged();
+        return getNetworkConnectionFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+       */
+      public com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnectionOrBuilder getNetworkConnectionOrBuilder() {
+        if (networkConnectionBuilder_ != null) {
+          return networkConnectionBuilder_.getMessageOrBuilder();
+        } else {
+          return networkConnection_;
+        }
+      }
+      /**
+       * <code>optional .blunote.NetworkConnection networkConnection = 10;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection.Builder, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnectionOrBuilder> 
+          getNetworkConnectionFieldBuilder() {
+        if (networkConnectionBuilder_ == null) {
+          networkConnectionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection.Builder, com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnectionOrBuilder>(
+                  getNetworkConnection(),
+                  getParentForChildren(),
+                  isClean());
+          networkConnection_ = null;
+        }
+        return networkConnectionBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:blunote.WrapperMessage)
@@ -19621,7 +19831,7 @@ public final class BlunoteMessages {
       "\010\n\004SONG\020\003\"/\n\013SongRequest\022\020\n\010username\030\001 \002" +
       "(\t\022\016\n\006songId\030\002 \002(\003\"\\\n\014SongFragment\022\016\n\006so" +
       "ngId\030\001 \002(\003\022\020\n\010fragment\030\003 \002(\014\022\022\n\nfragment",
-      "Id\030\004 \002(\003\022\026\n\016totalFragments\030\005 \002(\005\"\257\004\n\016Wra" +
+      "Id\030\004 \002(\003\022\026\n\016totalFragments\030\005 \002(\005\"\376\004\n\016Wra" +
       "pperMessage\022*\n\004type\030\001 \002(\0162\034.blunote.Wrap" +
       "perMessage.Type\022/\n\016metadataUpdate\030\002 \001(\0132" +
       "\027.blunote.MetadataUpdate\022)\n\013multiAnswer\030" +
@@ -19632,35 +19842,37 @@ public final class BlunoteMessages {
       "agment\022)\n\013songRequest\030\007 \001(\0132\024.blunote.So" +
       "ngRequest\022\033\n\004vote\030\010 \001(\0132\r.blunote.Vote\022-",
       "\n\rwelcomePacket\030\t \001(\0132\026.blunote.WelcomeP" +
-      "acket\"\222\001\n\004Type\022\023\n\017METADATA_UPDATE\020\001\022\020\n\014M" +
-      "ULTI_ANSWER\020\002\022\r\n\tRECOMMEND\020\003\022\021\n\rSINGLE_A" +
-      "NSWER\020\004\022\021\n\rSONG_FRAGMENT\020\005\022\020\n\014SONG_REQUE" +
-      "ST\020\006\022\010\n\004VOTE\020\007\022\022\n\016WELCOME_PACKET\020\010\">\n\014De" +
-      "liveryInfo\022\021\n\ttimestamp\030\001 \002(\003\022\017\n\007address" +
-      "\030\002 \001(\t\022\n\n\002id\030\003 \001(\005\"@\n\003Pdu\022+\n\014deliveryInf" +
-      "o\030\001 \002(\0132\025.blunote.DeliveryInfo\022\014\n\004data\030\002" +
-      " \002(\014\"H\n\rWelcomePacket\022\023\n\013networkName\030\001 \002" +
-      "(\t\022\020\n\010numUsers\030\002 \002(\t\022\020\n\010numSongs\030\003 \002(\t\"\231",
-      "\001\n\021NetworkConnection\022-\n\004type\030\001 \002(\0162\037.blu" +
-      "note.NetworkConnection.Type\022\022\n\nmacAddres" +
-      "s\030\002 \002(\t\022\026\n\016hostMacAddress\030\003 \001(\t\")\n\004Type\022" +
-      "\016\n\nCONNECTION\020\001\022\021\n\rDISCONNECTION\020\002\"\"\n\nNe" +
-      "tworkMap\022\024\n\014macAddresses\030\001 \003(\t\"\337\001\n\rNetwo" +
-      "rkPacket\022\'\n\nnetworkMap\030\001 \001(\0132\023.blunote.N" +
-      "etworkMap\022\031\n\003pdu\030\002 \001(\0132\014.blunote.Pdu\022)\n\004" +
-      "type\030\003 \002(\0162\033.blunote.NetworkPacket.Type\"" +
-      "_\n\004Type\022\016\n\nDOWNSTREAM\020\001\022\010\n\004DROP\020\002\022\r\n\tHAN" +
-      "DSHAKE\020\003\022\027\n\023NETWORK_DATA_UPDATE\020\004\022\007\n\003NEW",
-      "\020\005\022\014\n\010UPSTREAM\020\006\"\276\002\n\024NetworkConfiguratio" +
-      "n\022\021\n\thandshake\030\001 \001(\014\022+\n\034notifyOnDisconne" +
-      "ctDownstream\030\002 \001(\010:\005false\022)\n\032notifyOnDis" +
-      "connectUpstream\030\003 \001(\010:\005false\022(\n\031notifyOn" +
-      "ConnectDownstream\030\004 \001(\010:\005false\022&\n\027notify" +
-      "OnConnectUpstream\030\005 \001(\010:\005false\022\036\n\017receiv" +
-      "eUpstream\030\006 \001(\010:\005false\022 \n\021receiveDownstr" +
-      "eam\030\007 \001(\010:\005false\022\'\n\nnetworkMap\030\010 \001(\0132\023.b" +
-      "lunote.NetworkMapB/\n\034com.drexelsp.blunot" +
-      "e.blunoteB\017BlunoteMessages"
+      "acket\0225\n\021networkConnection\030\n \001(\0132\032.bluno" +
+      "te.NetworkConnection\"\252\001\n\004Type\022\023\n\017METADAT" +
+      "A_UPDATE\020\001\022\020\n\014MULTI_ANSWER\020\002\022\r\n\tRECOMMEN" +
+      "D\020\003\022\021\n\rSINGLE_ANSWER\020\004\022\021\n\rSONG_FRAGMENT\020" +
+      "\005\022\020\n\014SONG_REQUEST\020\006\022\010\n\004VOTE\020\007\022\022\n\016WELCOME" +
+      "_PACKET\020\010\022\026\n\022NETWORK_CONNECTION\020\t\">\n\014Del" +
+      "iveryInfo\022\021\n\ttimestamp\030\001 \002(\003\022\017\n\007address\030" +
+      "\002 \001(\t\022\n\n\002id\030\003 \001(\005\"@\n\003Pdu\022+\n\014deliveryInfo" +
+      "\030\001 \002(\0132\025.blunote.DeliveryInfo\022\014\n\004data\030\002 ",
+      "\002(\014\"H\n\rWelcomePacket\022\023\n\013networkName\030\001 \002(" +
+      "\t\022\020\n\010numUsers\030\002 \002(\t\022\020\n\010numSongs\030\003 \002(\t\"\231\001" +
+      "\n\021NetworkConnection\022-\n\004type\030\001 \002(\0162\037.blun" +
+      "ote.NetworkConnection.Type\022\022\n\nmacAddress" +
+      "\030\002 \002(\t\022\026\n\016hostMacAddress\030\003 \001(\t\")\n\004Type\022\016" +
+      "\n\nCONNECTION\020\001\022\021\n\rDISCONNECTION\020\002\"\"\n\nNet" +
+      "workMap\022\024\n\014macAddresses\030\001 \003(\t\"\337\001\n\rNetwor" +
+      "kPacket\022\'\n\nnetworkMap\030\001 \001(\0132\023.blunote.Ne" +
+      "tworkMap\022\031\n\003pdu\030\002 \001(\0132\014.blunote.Pdu\022)\n\004t" +
+      "ype\030\003 \002(\0162\033.blunote.NetworkPacket.Type\"_",
+      "\n\004Type\022\016\n\nDOWNSTREAM\020\001\022\010\n\004DROP\020\002\022\r\n\tHAND" +
+      "SHAKE\020\003\022\027\n\023NETWORK_DATA_UPDATE\020\004\022\007\n\003NEW\020" +
+      "\005\022\014\n\010UPSTREAM\020\006\"\276\002\n\024NetworkConfiguration" +
+      "\022\021\n\thandshake\030\001 \001(\014\022+\n\034notifyOnDisconnec" +
+      "tDownstream\030\002 \001(\010:\005false\022)\n\032notifyOnDisc" +
+      "onnectUpstream\030\003 \001(\010:\005false\022(\n\031notifyOnC" +
+      "onnectDownstream\030\004 \001(\010:\005false\022&\n\027notifyO" +
+      "nConnectUpstream\030\005 \001(\010:\005false\022\036\n\017receive" +
+      "Upstream\030\006 \001(\010:\005false\022 \n\021receiveDownstre" +
+      "am\030\007 \001(\010:\005false\022\'\n\nnetworkMap\030\010 \001(\0132\023.bl",
+      "unote.NetworkMapB/\n\034com.drexelsp.blunote" +
+      ".blunoteB\017BlunoteMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -19739,7 +19951,7 @@ public final class BlunoteMessages {
     internal_static_blunote_WrapperMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_blunote_WrapperMessage_descriptor,
-        new java.lang.String[] { "Type", "MetadataUpdate", "MultiAnswer", "Recommendation", "SingleAnswer", "SongFragment", "SongRequest", "Vote", "WelcomePacket", });
+        new java.lang.String[] { "Type", "MetadataUpdate", "MultiAnswer", "Recommendation", "SingleAnswer", "SongFragment", "SongRequest", "Vote", "WelcomePacket", "NetworkConnection", });
     internal_static_blunote_DeliveryInfo_descriptor =
       getDescriptor().getMessageTypes().get(11);
     internal_static_blunote_DeliveryInfo_fieldAccessorTable = new

@@ -301,14 +301,24 @@ public class NetworkService extends Service {
         connectionBuilder.setType(NetworkConnection.Type.CONNECTION);
         connectionBuilder.setMacAddress(macAddress);
         connectionBuilder.setHostMacAddress(BluetoothAdapter.getDefaultAdapter().getAddress());
-        return createNetworkPacket(connectionBuilder.build().toByteArray());
+
+        BlunoteMessages.WrapperMessage.Builder wrapperBuilder = BlunoteMessages.WrapperMessage.newBuilder();
+        wrapperBuilder.setType(BlunoteMessages.WrapperMessage.Type.NETWORK_CONNECTION);
+        wrapperBuilder.setNetworkConnection(connectionBuilder);
+
+        return createNetworkPacket(wrapperBuilder.build().toByteArray());
     }
 
     private NetworkPacket.Builder createDisconnectionNetworkPacket(String macAddress) {
         NetworkConnection.Builder connectionBuilder = NetworkConnection.newBuilder();
         connectionBuilder.setType(NetworkConnection.Type.DISCONNECTION);
         connectionBuilder.setMacAddress(macAddress);
-        return createNetworkPacket(connectionBuilder.build().toByteArray());
+
+        BlunoteMessages.WrapperMessage.Builder wrapperBuilder = BlunoteMessages.WrapperMessage.newBuilder();
+        wrapperBuilder.setType(BlunoteMessages.WrapperMessage.Type.NETWORK_CONNECTION);
+        wrapperBuilder.setNetworkConnection(connectionBuilder);
+
+        return createNetworkPacket(wrapperBuilder.build().toByteArray());
     }
 
     private NetworkPacket.Builder createNetworkPacket(byte[] data) {

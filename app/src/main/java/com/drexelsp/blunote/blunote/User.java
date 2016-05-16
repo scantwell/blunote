@@ -58,6 +58,8 @@ public class User {
             this.onReceive(dinfo, message.getVote());
         } else if (BlunoteMessages.WrapperMessage.Type.WELCOME_PACKET.equals(message.getType())) {
             this.onReceive(dinfo, message.getWelcomePacket());
+        } else if (BlunoteMessages.WrapperMessage.Type.NETWORK_CONNECTION.equals(message.getType())) {
+            this.onReceive(dinfo, message.getNetworkConnection());
         } else {
             throw new RuntimeException(String.format("Unhandled message of type '%s'", message.getType().name()));
         }
@@ -109,6 +111,10 @@ public class User {
 
     public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.Vote message) {
         throw new RuntimeException("User cannot handle 'BlunoteMessages.Vote'. Not implemented.");
+    }
+
+    public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.NetworkConnection message) {
+        throw new RuntimeException("User cannot handle 'BlunoteMessages.NetworkConnection'. Is not a host.");
     }
 
     @Subscribe

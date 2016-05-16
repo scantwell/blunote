@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by stephencantwell on 4/25/16.
@@ -27,7 +28,7 @@ public class Router extends Thread {
     private CopyOnWriteArrayList<BlunoteSocket> downSockets;
     private CopyOnWriteArrayList<BlunoteOutputStream> upOuts;
     private CopyOnWriteArrayList<BlunoteOutputStream> downOuts;
-    private boolean isRunning;
+    private AtomicBoolean isRunning;
     private ArrayList<String> networkList;
     private boolean notifyOnReceiveUpstream;
     private boolean notifyOnReceiveDownstream;
@@ -39,7 +40,8 @@ public class Router extends Thread {
 
 
     public Router(String address) {
-        this.isRunning = false;
+        this.isRunning = new AtomicBoolean();
+        this.isRunning.set(false);
         this.upSockets = new CopyOnWriteArrayList<>();
         this.downSockets = new CopyOnWriteArrayList<>();
         this.upBucket = new ConcurrentLinkedQueue<>();
@@ -53,13 +55,16 @@ public class Router extends Thread {
     public void start() {
         Log.d(TAG, "Starting router.");
         super.start();
-        this.isRunning = true;
+        this.isRunning.set(true);
     }
 
-    public void shutdown() {
-
+    public synchronized void shutdown() {
         Log.d(TAG, "Shutting down router.");
-        this.isRunning = false;
+        this.isRunning.set(false);
+        while(this.isRunning.get()) {
+            Log.v(TAG, "Still True....");
+        }
+        notifyAll();
     }
 
     public void setNotifyOnReceiveUpstream(boolean notifyOnReceiveUpstream) {
@@ -133,9 +138,29 @@ public class Router extends Thread {
         notifyAll();
     }
 
+    public void cleanUpstreamSocket(BlunoteSocket socket) {
+        this.upSockets.remove(socket);
+        try {
+            this.upOuts.remove(socket.getOutputStream());
+        } catch (IOException e) {
+            Log.v(TAG, e.getMessage());
+        }
+        postOnUpstreamDisconnection(socket);
+    }
+
+    public void cleanDownstreamSocket(BlunoteSocket socket) {
+        this.downSockets.remove(socket);
+        try {
+            this.downOuts.remove(socket.getOutputStream());
+            } catch (IOException e) {
+            Log.v(TAG, e.getMessage());
+        }
+        postOnDownstreamDisconnection(socket);
+    }
+
     @Override
     public void run() {
-        while (this.isRunning) {
+        while (this.isRunning.get()) {
             waitForMessages();
             if (downBucket.size() > 0) {
                 Log.d(TAG, "Processing downstream message queue.");
@@ -152,7 +177,7 @@ public class Router extends Thread {
     }
 
     protected synchronized void waitForMessages() {
-        while (downBucket.size() < 1 && upBucket.size() < 1) {
+        while (downBucket.size() < 1 && upBucket.size() < 1 && this.isRunning.get()) {
             try {
                 Log.d(TAG, String.format("Router thread going to sleep, awaiting incoming messages."));
                 wait();
@@ -239,7 +264,6 @@ public class Router extends Thread {
             try {
                 outs.get(i).write(data);
             } catch (IOException e) {
-                String macAddress = outs.get(i).getMacAddress();
                 e.printStackTrace();
             }
         }
