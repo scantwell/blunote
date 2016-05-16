@@ -10,8 +10,6 @@ import android.widget.ListView;
 
 import com.drexelsp.blunote.blunote.Constants;
 import com.drexelsp.blunote.blunote.R;
-import com.drexelsp.blunote.events.AddSongEvent;
-import com.drexelsp.blunote.events.PlaySongEvent;
 import com.drexelsp.blunote.events.PlaylistUpdateEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -67,31 +65,21 @@ public class PlaylistActivity extends BaseBluNoteActivity implements ListView.On
 
     }
 
+    /**
+     * An EventBus event that notifies the user a song has been added to the queue/playlist.
+     *
+     * @param event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onPlaylistUpdate(PlaylistUpdateEvent event) {
-        if (event != null)
-        {
+        if (event != null) {
             Log.v(TAG, "Received PlaylistUpdateEvent. Copying playlist");
             this.playlist.clear();
-            for (String s : event.playlist)
-            {
+            for (String s : event.playlist) {
                 this.playlist.add(s);
             }
-            printPlaylist();
             this.playlistAdapter.notifyDataSetChanged();
         }
-    }
-
-    private void printPlaylist()
-    {
-        Log.v(TAG, String.format("Printing Playlist"));
-        int count = 1;
-        for (String s : playlist)
-        {
-            Log.v(TAG, String.format("%d: %s", count, s));
-            count++;
-        }
-        this.playlistAdapter.notifyDataSetChanged();
     }
 
     public void onStart() {
