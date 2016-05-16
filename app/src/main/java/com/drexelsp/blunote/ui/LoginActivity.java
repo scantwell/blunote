@@ -1,11 +1,14 @@
 package com.drexelsp.blunote.ui;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,11 +16,13 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.SearchView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -91,10 +96,62 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             networkListView.setAdapter(mAdapter);
         }
 
-        BlunoteCheckPermission();
+        blunoteCheckPermission();
+        promptForDefaultSettings();
+    }
 
-        //dialog.hide();
+    private void promptForDefaultSettings()
+    {
+        if (hasDefaultUsername())
+        {
+            promptForSettings("Change default username?", "pref_key_user_name", getResources().getString(R.string.user_name_default));
+        }
+        if (hasDefaultServername())
+        {
+            Log.v(TAG, "CHANGING SERVER NAME");
+            promptForSettings("Change default servername?", "pref_key_network_name", getResources().getString(R.string.network_name_default));
+        }
+    }
 
+    private void promptForSettings(String title, String key, String default_string)
+    {
+        final String pref_key = key;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setText(default_string);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String m_Text = input.getText().toString();
+                if (m_Text.trim().isEmpty()) {
+                    Toast.makeText(getCurrentContext(), "Cannot have a blank username.", Toast.LENGTH_SHORT).show();
+                } else {
+                    SharedPreferences.Editor pref = PreferenceManager.getDefaultSharedPreferences(getCurrentContext()).edit();
+                    pref.putString(pref_key, m_Text);
+                    pref.commit();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private boolean hasDefaultUsername()
+    {
+        String def = getResources().getString(R.string.user_name_default);
+        String username = PreferenceManager.getDefaultSharedPreferences(getCurrentContext()).getString("pref_key_user_name", "");
+        return def.equals(username);
+    }
+
+    private boolean hasDefaultServername()
+    {
+        String def = getResources().getString(R.string.network_name_default);
+        String username = PreferenceManager.getDefaultSharedPreferences(getCurrentContext()).getString("pref_key_network_name", "");
+        return def.equals(username);
     }
 
     @Override
@@ -235,7 +292,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         }
     }
 
-    private void BlunoteCheckPermission() {
+    private void blunoteCheckPermission() {
         Log.v(TAG, "Checking Permissions");
         ArrayList<String> permissionsToGrant = new ArrayList<>();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
