@@ -38,28 +38,28 @@
             android:layout_height="wrap_content"
             android:text="@string/song_title"
             android:layout_width="fill_parent"
-            android:id="@+id/song_name" />
+            android:id="@+id/mp_song_name" />
 
         <TextView
             android:gravity="center_vertical"
             android:layout_height="wrap_content"
             android:text="@string/album_artist_name"
             android:layout_width="fill_parent"
-            android:id="@+id/artist_name" />
+            android:id="@+id/mp_artist_name" />
 
         <TextView
             android:gravity="center_vertical"
             android:layout_height="wrap_content"
             android:text="@string/album_name"
             android:layout_width="fill_parent"
-            android:id="@+id/album_name" />
+            android:id="@+id/mp_album_name" />
 
         <TextView
             android:gravity="center_vertical"
             android:layout_height="wrap_content"
             android:text="@string/owner_name"
             android:layout_width="fill_parent"
-            android:id="@+id/song_owner_name" />
+            android:id="@+id/mp_song_owner_name" />
 
         <TextView
             android:layout_width="match_parent"
