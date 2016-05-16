@@ -118,7 +118,9 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
      */
     @Subscribe
     public void onPreviousSongEvent(PreviousSongEvent event) {
-        if (getCurrentTimePercentage() > 5 && lastSong != null) {
+        if (lastSong == null || getCurrentTimePercentage() > 5) {
+            player.seekTo(0);
+        } else {
             queue.addFirst(currentSong);
             queue.addFirst(lastSong);
             lastSong = null;
@@ -127,8 +129,6 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
             isPlaying.set(false);
             isPaused.set(false);
             wakeUp();
-        } else {
-            player.seekTo(0);
         }
     }
 
