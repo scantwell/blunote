@@ -83,7 +83,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
     @Override
     public void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
+            String query = intent.getStringExtra(SearchManager.QUERY).toLowerCase();
             mediaListView = (ListView) findViewById(R.id.media_list);
             //use the query to search your data somehow
 
@@ -91,7 +91,7 @@ public class MediaListActivity extends BaseBluNoteActivity implements CompoundBu
 
             Iterator<String> i = mediaList.iterator();
             while (i.hasNext()) {
-                String item = i.next();
+                String item = i.next().toLowerCase();
                 if (!item.contains(query)) {
                     i.remove();
                 }
