@@ -70,8 +70,9 @@ public class NetworkNode {
             }
         }
         for (NetworkNode node : this.children) {
-            if (node.getParentOf(value) != null) {
-                return node;
+            NetworkNode newNode = node.getParentOf(value);
+            if (newNode != null) {
+                return newNode;
             }
         }
         return null;
