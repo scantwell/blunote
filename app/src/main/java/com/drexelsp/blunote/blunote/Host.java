@@ -149,7 +149,6 @@ public class Host extends User implements Observer {
             songHash.remove(song.getId());
         } else if (observable instanceof Player) {
             Cursor c = metadata.getRandomSong();
-            Log.v(TAG,c.getCount()+"");
             if (c.getCount() > 0) {
                 c.moveToFirst();
                 String username = c.getString(c.getColumnIndex(MetaStoreContract.User.USERNAME));
