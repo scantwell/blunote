@@ -60,10 +60,10 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
         });
 
         seekBar = (SeekBar) findViewById(R.id.musicSeekBar);
-        songName = (TextView) findViewById(R.id.song_name);
-        artistName = (TextView) findViewById(R.id.artist_name);
-        albumName = (TextView) findViewById(R.id.album_name);
-        ownerName = (TextView) findViewById(R.id.song_owner_name);
+        songName = (TextView) findViewById(R.id.mp_song_name);
+        artistName = (TextView) findViewById(R.id.mp_artist_name);
+        albumName = (TextView) findViewById(R.id.mp_album_name);
+        ownerName = (TextView) findViewById(R.id.mp_song_owner_name);
         currentMusicLocation = (TextView) findViewById(R.id.musicCurrentLoc);
         musicDuration = (TextView) findViewById(R.id.musicDuration);
         previous = (ImageButton) findViewById(R.id.previous);
@@ -130,10 +130,10 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onPlaySong(PlaySongEvent event) {
-        songName.setText(event.title);
-        artistName.setText(event.artist);
-        albumName.setText(event.album);
-        ownerName.setText(event.owner);
+        songName.setText("Song: " + event.title);
+        artistName.setText("Artist: " + event.artist);
+        albumName.setText("Album: " + event.album);
+        ownerName.setText("Owner: " + event.owner);
         currentMusicLocation.setText("0");
         musicDuration.setText(durationToTime(Integer.parseInt(event.duration)));
         seekBar.setMax(Integer.parseInt(event.duration));
