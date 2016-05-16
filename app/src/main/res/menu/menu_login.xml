@@ -14,6 +14,10 @@
                 android:title="Settings"
                 app:showAsAction="always" />
             <item
+                android:id="@+id/action_make_discoverable"
+                android:title="Make Discoverable"
+                app:showAsAction="always" />
+            <item
                 android:id="@+id/action_leave_network"
                 android:title="Leave Network"
                 app:showAsAction="always" />

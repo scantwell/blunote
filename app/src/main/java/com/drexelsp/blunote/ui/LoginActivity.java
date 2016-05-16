@@ -205,9 +205,9 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         if (mScanner == null) {
             // Launch Scanner
             mScanner = new BluetoothScanner(getCurrentContext(), mAdapter);
-            mAdapter.clear();
-            mScanner.startDiscovery();
         }
+        mAdapter.clear();
+        mScanner.startDiscovery();
     }
 
     private void joinNetworkClicked() {
@@ -227,6 +227,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             mService.startNetwork();
             // Wait for success callback?
             // Start Media Player Activity
+            makeDiscoverable();
             Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
             startActivity(intent);
         } else {

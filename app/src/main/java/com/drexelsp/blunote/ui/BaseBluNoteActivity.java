@@ -1,6 +1,7 @@
 package com.drexelsp.blunote.ui;
 
 import android.app.SearchManager;
+import android.bluetooth.BluetoothAdapter;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -121,9 +122,18 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
             intent = new Intent(getCurrentContext(), MediaPlayerActivity.class);
             startActivity(intent);
             return true;
+        } else if (id == R.id.action_make_discoverable) {
+            makeDiscoverable();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void makeDiscoverable() {
+        Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     @Override
