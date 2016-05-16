@@ -1,15 +1,20 @@
 package com.drexelsp.blunote.ui;
 
+import android.Manifest;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -33,15 +38,14 @@ import java.util.Iterator;
 
 public class LoginActivity extends BaseBluNoteActivity implements View.OnClickListener, ServiceConnection {
 
+    final String TAG = "LoginActivity";
     Button joinNetworkButton;
     Button createNetworkButton;
     Button refreshButton;
     ListView networkListView;
     NetworkArrayAdapter adapter;
-
-    final String TAG = "LoginActivity";
-    private Service mService = null;
     boolean mBound;
+    private Service mService = null;
     private BluetoothScanner mScanner;
     private NetworkArrayAdapter mAdapter;
 
@@ -86,6 +90,8 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             mAdapter = new NetworkArrayAdapter(this, mNetworks);
             networkListView.setAdapter(mAdapter);
         }
+
+        BlunoteCheckPermission();
 
         //dialog.hide();
 
@@ -137,11 +143,18 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
 
     @Override
     public boolean showSearchMenuItem() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean showSettingsCog() {
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.getItem(Constants.MENU_ITEM_SEARCH).setVisible(false);
         return true;
     }
 
@@ -164,42 +177,6 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         super.onStop();
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v == joinNetworkButton) {
-            int position = networkListView.getCheckedItemPosition();
-            if (position == AdapterView.INVALID_POSITION) {
-                Toast toast = Toast.makeText(getCurrentContext(), "No Network Selected", Toast.LENGTH_SHORT);
-                toast.show();
-            } else if (mBound && mService != null) {
-                ConnectionListItem network = mAdapter.getItem(position);
-                mService.connectToNetwork(network.getNetworkMap());
-            }
-        } else if (v == createNetworkButton) {
-            if (mBound && mService != null) {
-                // Call Start Network
-                mService.startNetwork();
-                // Wait for success callback?
-                // Start Media Player Activity
-                Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
-                startActivity(intent);
-            } else {
-                Log.v(TAG, "Failed to start network, service not bound.");
-            }
-            // Temp commented out
-            //Intent intent = new Intent(LoginActivity.this, NetworkSettingsActivity.class);
-            //startActivity(intent);
-        } else if (v == refreshButton) {
-            if (mScanner == null)
-            {
-                // Launch Scanner
-                mScanner = new BluetoothScanner(getCurrentContext(), mAdapter);
-            }
-            mAdapter.clear();
-            mScanner.startDiscovery();
-        }
-    }
-
     @Subscribe
     public void onMessageEvent(BluetoothEvent bluetoothEvent) {
         Log.v(TAG, "BluetoothEvent Received");
@@ -211,6 +188,94 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
                 Toast.makeText(getCurrentContext(), "Connection Error", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == joinNetworkButton) {
+            joinNetworkClicked();
+        } else if (v == createNetworkButton) {
+            createNetworkClicked();
+        } else if (v == refreshButton) {
+            refreshButtonClickedSuccessfully();
+        }
+    }
+
+    private void refreshButtonClickedSuccessfully() {
+        if (mScanner == null) {
+            // Launch Scanner
+            mScanner = new BluetoothScanner(getCurrentContext(), mAdapter);
+        }
+        mAdapter.clear();
+        mScanner.startDiscovery();
+    }
+
+    private void joinNetworkClicked() {
+        int position = networkListView.getCheckedItemPosition();
+        if (position == AdapterView.INVALID_POSITION) {
+            Toast toast = Toast.makeText(getCurrentContext(), "No Network Selected", Toast.LENGTH_SHORT);
+            toast.show();
+        } else if (mBound && mService != null) {
+            ConnectionListItem network = mAdapter.getItem(position);
+            mService.connectToNetwork(network.getNetworkMap());
+        }
+    }
+
+    private void createNetworkClicked() {
+        if (mBound && mService != null) {
+            // Call Start Network
+            mService.startNetwork();
+            // Wait for success callback?
+            // Start Media Player Activity
+            makeDiscoverable();
+            Intent intent = new Intent(LoginActivity.this, MediaPlayerActivity.class);
+            startActivity(intent);
+        } else {
+            Log.v(TAG, "Failed to start network, service not bound.");
+        }
+    }
+
+    private void BlunoteCheckPermission() {
+        Log.v(TAG, "Checking Permissions");
+        ArrayList<String> permissionsToGrant = new ArrayList<>();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+            Log.v(TAG, "Need to request permission for Bluetooth");
+            permissionsToGrant.add(Manifest.permission.BLUETOOTH);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
+            Log.v(TAG, "Need to request permission for Bluetooth Admin");
+            permissionsToGrant.add(Manifest.permission.BLUETOOTH_ADMIN);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.v(TAG, "Need to request permission for Coarse Location");
+            permissionsToGrant.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Log.v(TAG, "Need to request permission for External Storage");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                permissionsToGrant.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+        }
+
+        if (permissionsToGrant.size() > 0) {
+            Log.v(TAG, "Requesting permissions");
+            ActivityCompat.requestPermissions(this, permissionsToGrant.toArray(new String[permissionsToGrant.size()]), 1);
+        } else {
+            Log.v(TAG, "All permissions have been granted");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            this.finish();
+            System.exit(0);
+        }
+
     }
 
     /**

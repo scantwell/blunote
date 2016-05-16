@@ -23,6 +23,19 @@ public class Song extends Observable {
     private Uri uri;
     private long target;
     private HashMap<Long, BlunoteMessages.SongFragment> cache;
+    private String title;
+    private String album;
+    private String artist;
+    private String owner;
+
+    public Song(long id, Uri uri, String title, String album, String artist, String owner) {
+        this.id = id;
+        this.uri = uri;
+        this.title = title;
+        this.album = album;
+        this.artist = artist;
+        this.owner = owner;
+    }
 
     public Song(long id, File file) throws FileNotFoundException {
         this.id = id;
@@ -53,6 +66,8 @@ public class Song extends Observable {
         return uri;
     }
 
+    public void setUri(Uri uri) { this.uri = uri; }
+
     private void writeFragment(BlunoteMessages.SongFragment frag) {
         if (frag.getFragmentId() >= target) {
             cache.put(frag.getFragmentId(), frag);
@@ -78,5 +93,21 @@ public class Song extends Observable {
             String s = ex.toString();
             ex.printStackTrace();
         }
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public String getOwner() {
+        return owner;
     }
 }

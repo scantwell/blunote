@@ -18,9 +18,11 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Vote;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
 import com.drexelsp.blunote.network.NetworkNode;
+import com.drexelsp.blunote.provider.MetaStoreContract;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -47,17 +49,15 @@ public class Host extends User implements Observer {
         this.serverName = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_server_name", "Party Jamz");
         this.player = new Player(context);
         new Thread(this.player).start();
+        this.player.addObserver(this);
     }
 
-    public void addUser()
-    {
+    public void addUser() {
         this.numUsers++;
     }
 
-    public void removeUser()
-    {
-        if (this.numUsers < 2)
-        {
+    public void removeUser() {
+        if (this.numUsers < 2) {
             return;
         }
         this.numUsers--;
@@ -81,12 +81,21 @@ public class Host extends User implements Observer {
     }
 
     @Override
-    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message)
-    {
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message) {
         BlunoteMessages.MetadataUpdate update;
         addUser();
         update = this.metadata.addHostMetadata(message);
 
+        String username = message.getOwner();
+        addUser();
+        update = this.metadata.addHostMetadata(message);
+        if (!username.equals(update.getOwner())) {
+            BlunoteMessages.UsernameUpdate.Builder builder = BlunoteMessages.UsernameUpdate.newBuilder();
+            builder.setOldUsername(username);
+            builder.setNewUsername(update.getOwner());
+            builder.setUserId(message.getUserId());
+            this.service.send(builder.build());
+        }
         updateWelcomePacket();
         this.service.send(update);
     }
@@ -101,10 +110,11 @@ public class Host extends User implements Observer {
         Log.v(TAG, "Entered on received");
         int id = media.findSongId(message.getSong(),
                 message.getArtist(), message.getAlbum());
-        String username = message.getUsername().isEmpty() ?
+        String username = message.getUsername().isEmpty() || message.getUsername().equals("") ?
                 media.findSongUsername(message.getSong(), message.getArtist(), message.getAlbum()) : message.getUsername();
         if (username.equals(this.getName())) {
-            playerSongById(id);
+            Song song = new Song(id, null, message.getSong(), message.getAlbum(), message.getArtist(), username);
+            playerSongById(id, song);
         } else {
             addSongRequest(username, id);
         }
@@ -143,7 +153,8 @@ public class Host extends User implements Observer {
         String owner = event.owner;
 
         if (owner.equals(this.name)) {
-            playerSongById(id);
+            Song song = new Song(id, null, event.song, event.album, event.artist, event.owner);
+            playerSongById(id, song);
         } else {
             addSongRequest(event.owner, id);
         }
@@ -151,9 +162,28 @@ public class Host extends User implements Observer {
 
     @Override
     public void update(Observable observable, Object data) {
-        Song song = (Song) observable;
-        player.addSongUri(song.getUri());
-        songHash.remove(song.getId());
+        if (observable instanceof Song) {
+            Song song = (Song) observable;
+            player.addSong(song);
+            songHash.remove(song.getId());
+        } else if (observable instanceof Player) {
+            Cursor c = metadata.getRandomSong();
+            if (c.getCount() > 1) {
+                c.moveToFirst();
+                String username = c.getString(c.getColumnIndex(MetaStoreContract.User.USERNAME));
+                String title = c.getString(c.getColumnIndex(MetaStoreContract.Track.TITLE));
+                String album = c.getString(c.getColumnIndex(MetaStoreContract.Track.ALBUM));
+                String artist = c.getString(c.getColumnIndex(MetaStoreContract.Track.ARTIST));
+                int id = c.getInt(c.getColumnIndex(MetaStoreContract.Track.SONG_ID));
+                if (username.equals(this.name)) {
+                    Song song = new Song(id, null, title, album, artist, username);
+                    playerSongById(id, song);
+                } else {
+                    addSongRequest(username, id);
+                }
+            }
+            c.close();
+        }
     }
 
     private void addSongRequest(String username, long id) {
@@ -187,9 +217,10 @@ public class Host extends User implements Observer {
         return File.createTempFile(java.util.UUID.randomUUID().toString(), ".mp3", this.context.getCacheDir());
     }
 
-    private void playerSongById(long id) {
+    private void playerSongById(long id, Song song) {
         String uri = this.media.getSongUri(id);
-        player.addSongUri(Uri.parse(uri));
+        song.setUri(Uri.parse(uri));
+        player.addSong(song);
     }
 
     private void updateWelcomePacket() {

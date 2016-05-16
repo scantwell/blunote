@@ -1,6 +1,7 @@
 package com.drexelsp.blunote.ui;
 
 import android.app.SearchManager;
+import android.bluetooth.BluetoothAdapter;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +15,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -29,7 +28,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -124,20 +122,23 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
             intent = new Intent(getCurrentContext(), MediaPlayerActivity.class);
             startActivity(intent);
             return true;
+        } else if (id == R.id.action_make_discoverable) {
+            makeDiscoverable();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    protected void makeDiscoverable() {
+        Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         handleIntent(intent);
-    }
-
-    protected void setSimpleList(ListView listView, List<String> list) {
-        ArrayAdapter adapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list);
-        listView.setAdapter(adapter);
     }
 
     public boolean showSettingsCog() {
@@ -263,8 +264,7 @@ public abstract class BaseBluNoteActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void OnDisconnectionEvent(OnDisconnectionEvent event)
-    {
+    public void OnDisconnectionEvent(OnDisconnectionEvent event) {
         Toast.makeText(getCurrentContext(), "Disconnected from host.", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getCurrentContext(), LoginActivity.class);
         startActivity(intent);

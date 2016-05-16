@@ -121,11 +121,20 @@ message SongFragment {
 }
 
 /**
+* Message used to indicate that the username of the user that has just joined is already in use.
+*/
+message UsernameUpdate {
+	required string newUsername = 1;
+	required string oldUsername = 2;
+	required string user_id = 3;
+}
+
+/**
 * Used to send any BluNote message
 */
 message WrapperMessage {
 
-	enum Type { METADATA_UPDATE = 1; MULTI_ANSWER = 2; RECOMMEND = 3; SINGLE_ANSWER= 4; SONG_FRAGMENT = 5; SONG_REQUEST = 6; VOTE = 7; WELCOME_PACKET = 8; NETWORK_CONNECTION = 9;}
+	enum Type { METADATA_UPDATE = 1; MULTI_ANSWER = 2; RECOMMEND = 3; SINGLE_ANSWER= 4; SONG_FRAGMENT = 5; SONG_REQUEST = 6; VOTE = 7; WELCOME_PACKET = 8; USERNAME_UPDATE = 9; NETWORK_CONNECTION = 10;}
 
 	required Type type = 1;
 	optional MetadataUpdate metadataUpdate = 2;
@@ -136,7 +145,8 @@ message WrapperMessage {
 	optional SongRequest songRequest = 7;
 	optional Vote vote = 8;
 	optional WelcomePacket welcomePacket = 9;
-	optional NetworkConnection networkConnection = 10;
+	optional UsernameUpdate usernameUpdate = 10;
+	optional NetworkConnection networkConnection = 11;
 }
 
 /**
