@@ -88,10 +88,10 @@ public class AlbumViewActivity extends BaseBluNoteActivity implements ListView.O
 
     public void populateAlbumTrackList() {
         Intent intent = getIntent();
-        String album = intent.getStringExtra("album");
+        String album_id = intent.getStringExtra("_id");
         String[] selection = {"album", "artist", "number_of_songs", "first_year", "album_art"};
-        String where = "album = ?";
-        String[] args = {album};
+        String where = "_id = ?";
+        String[] args = {album_id};
         Cursor cursor = getContentResolver().query(MetaStoreContract.Album.CONTENT_URI,
                 selection, where, args, null);
 
@@ -132,7 +132,7 @@ public class AlbumViewActivity extends BaseBluNoteActivity implements ListView.O
             cursor.close();
         }
 
-        trackListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, trackList);
+        trackListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, trackList);
         trackListView.setAdapter(trackListAdapter);
     }
 

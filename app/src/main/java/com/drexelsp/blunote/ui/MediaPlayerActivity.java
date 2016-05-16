@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -87,6 +88,13 @@ public class MediaPlayerActivity extends BaseBluNoteActivity implements View.OnC
                 mHandler.postDelayed(this, 1000);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.getItem(Constants.MENU_ITEM_SEARCH).setVisible(false);
+        return true;
     }
 
     @Override
