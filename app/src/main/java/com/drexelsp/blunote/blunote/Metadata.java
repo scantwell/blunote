@@ -200,14 +200,23 @@ public class Metadata {
         return mContentResolver.query(MetaStoreContract.Album.CONTENT_URI, null, where, selectionArgs, null);
     }
 
-    public BlunoteMessages.MetadataUpdate deleteHostMetadata(BlunoteMessages.MetadataUpdate message)
+    public BlunoteMessages.MetadataUpdate deleteHostMetadata(String user_id)
     {
+        String username = "";
         BlunoteMessages.MetadataUpdate.Builder builder = BlunoteMessages.MetadataUpdate.newBuilder();
-        builder.setAction(message.getAction());
-        builder.setUserId(message.getUserId());
-        builder.setOwner(message.getOwner());
+        builder.setAction(BlunoteMessages.MetadataUpdate.Action.REMOVE);
+        builder.setUserId(user_id);
 
-        deleteUserAndTracks(message.getOwner(), message.getUserId());
+        String where = "user_id=?";
+        String[] selection = new String[]{"username"};
+        String[] selectionArgs = new String[]{user_id};
+        Cursor c = mContentResolver.query(MetaStoreContract.User.CONTENT_URI, selection, where, selectionArgs, null);
+        if (c != null && c.moveToFirst()) {
+            username = c.getString(c.getColumnIndex(MetaStoreContract.User.USERNAME));
+        }
+        builder.setOwner(username);
+
+        deleteUserAndTracks(username, user_id);
         List<BlunoteMessages.Song> songs = findSongDeletions();
         List<BlunoteMessages.Artist> artists = findArtistDeletions();
         List<BlunoteMessages.Album> albums = findAlbumDeletions();

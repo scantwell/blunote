@@ -73,8 +73,9 @@ public class Host extends User implements Observer {
             String macAddress = message.getMacAddress();
             ArrayList<String> droppedConnections = this.networkTree.removeNodeSubTree(macAddress);
             Log.v(TAG, String.format("Disconnection, Macs to remove: %s", droppedConnections.toString()));
-            for (String droppedConnection : droppedConnections) {
-                // TODO : Remove metadata related to all droppedConnections
+            for (String user_id : droppedConnections) {
+                BlunoteMessages.MetadataUpdate update = metadata.deleteHostMetadata(user_id);
+                service.send(update);
             }
         }
     }
@@ -83,13 +84,9 @@ public class Host extends User implements Observer {
     public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message)
     {
         BlunoteMessages.MetadataUpdate update;
-        if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
-            addUser();
-            update = this.metadata.addHostMetadata(message);
-        } else {
-            removeUser();
-            update = this.metadata.deleteHostMetadata(message);
-        }
+        addUser();
+        update = this.metadata.addHostMetadata(message);
+
         updateWelcomePacket();
         this.service.send(update);
     }
