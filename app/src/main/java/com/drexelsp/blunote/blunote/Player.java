@@ -1,8 +1,10 @@
 package com.drexelsp.blunote.blunote;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.drexelsp.blunote.events.NextSongEvent;
@@ -149,14 +151,21 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
                 size = queue.size();
                 Log.v(TAG, "Setting size = to queue.size");
             }
-            if (size < 1) {
+            boolean autoplay = PreferenceManager.getDefaultSharedPreferences(context)
+                    .getBoolean("pref_autoplay", true);
+            if (size < 1 && autoplay) {
                 Log.v(TAG, "Notifying Observers");
                 setChanged();
                 super.notifyObservers();
                 Log.v(TAG, "Notified Observers");
             }
-            waitOnQueueOrPlayer();
-            playSong();
+            synchronized (queue) {
+                size = queue.size();
+            }
+            if (size > 0) {
+                waitOnQueueOrPlayer();
+                playSong();
+            }
         }
     }
 

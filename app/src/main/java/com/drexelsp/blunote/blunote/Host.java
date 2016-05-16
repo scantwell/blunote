@@ -149,17 +149,19 @@ public class Host extends User implements Observer {
             songHash.remove(song.getId());
         } else if (observable instanceof Player) {
             Cursor c = metadata.getRandomSong();
-            c.moveToFirst();
-            String username = c.getString(c.getColumnIndex(MetaStoreContract.User.USERNAME));
-            String title = c.getString(c.getColumnIndex(MetaStoreContract.Track.TITLE));
-            String album = c.getString(c.getColumnIndex(MetaStoreContract.Track.ALBUM));
-            String artist = c.getString(c.getColumnIndex(MetaStoreContract.Track.ARTIST));
-            int id = c.getInt(c.getColumnIndex(MetaStoreContract.Track.SONG_ID));
-            if (username.equals(this.name)) {
-                Song song = new Song(id, null, title, album, artist, username);
-                playerSongById(id, song);
-            } else {
-                addSongRequest(username, id);
+            if (c.getCount() > 1) {
+                c.moveToFirst();
+                String username = c.getString(c.getColumnIndex(MetaStoreContract.User.USERNAME));
+                String title = c.getString(c.getColumnIndex(MetaStoreContract.Track.TITLE));
+                String album = c.getString(c.getColumnIndex(MetaStoreContract.Track.ALBUM));
+                String artist = c.getString(c.getColumnIndex(MetaStoreContract.Track.ARTIST));
+                int id = c.getInt(c.getColumnIndex(MetaStoreContract.Track.SONG_ID));
+                if (username.equals(this.name)) {
+                    Song song = new Song(id, null, title, album, artist, username);
+                    playerSongById(id, song);
+                } else {
+                    addSongRequest(username, id);
+                }
             }
             c.close();
         }

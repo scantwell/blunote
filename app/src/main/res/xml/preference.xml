@@ -17,6 +17,11 @@
             android:title="Notifications"
             android:summary="Enable notifications"
             android:defaultValue="@bool/notifications_default" />
+        <CheckBoxPreference
+            android:key="pref_autoplay"
+            android:title="Autoplay"
+            android:summary="Enable autoplay of music"
+            android:defaultValue="@bool/autoplay_default" />
 
         <CheckBoxPreference
             android:key="pref_key_ghost_client"
