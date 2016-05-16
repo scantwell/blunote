@@ -539,8 +539,8 @@ public final class MetaStore extends ContentProvider {
         return updateCount;
     }
 
-    public Cursor songUsernameQuery(SQLiteDatabase db, String[] selectionArgs){
-        String QUERY = "SELECT u.username FROM user u INNER JOIN user_tracks ut ON ut.user_id = u.user_id WHERE ut.title=? AND ut.artist=? AND ut.album=?";
+    public Cursor songUsernameQuery(SQLiteDatabase db, String[] selectionArgs) {
+        String QUERY = "SELECT u.username FROM user u INNER JOIN user_tracks ut ON ut.user_id = u.user_id WHERE ut.title=? AND ut.artist=? AND ut.album=? ORDER BY u.username";
         return db.rawQuery(QUERY, selectionArgs);
     }
 

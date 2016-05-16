@@ -2,7 +2,6 @@ package com.drexelsp.blunote.blunote;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +16,6 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Vote;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
-import com.drexelsp.blunote.provider.MetaStore;
 import com.drexelsp.blunote.provider.MetaStoreContract;
 
 import android.bluetooth.BluetoothAdapter;
@@ -50,27 +48,31 @@ public class Host extends User implements Observer {
         this.player.addObserver(this);
     }
 
-    public void addUser()
-    {
+    public void addUser() {
         this.numUsers++;
     }
 
-    public void removeUser()
-    {
-        if (this.numUsers < 2)
-        {
+    public void removeUser() {
+        if (this.numUsers < 2) {
             return;
         }
         this.numUsers--;
     }
 
     @Override
-    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message)
-    {
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message) {
         BlunoteMessages.MetadataUpdate update;
+        String username = message.getOwner();
         if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
             addUser();
             update = this.metadata.addHostMetadata(message);
+            if (!username.equals(update.getOwner())) {
+                BlunoteMessages.UsernameUpdate.Builder builder = BlunoteMessages.UsernameUpdate.newBuilder();
+                builder.setOldUsername(username);
+                builder.setNewUsername(update.getOwner());
+                builder.setUserId(message.getUserId());
+                this.service.send(builder.build());
+            }
         } else {
             removeUser();
             update = this.metadata.deleteHostMetadata(message);
@@ -145,8 +147,7 @@ public class Host extends User implements Observer {
             Song song = (Song) observable;
             player.addSong(song);
             songHash.remove(song.getId());
-        }
-        else if (observable instanceof Player) {
+        } else if (observable instanceof Player) {
             Cursor c = metadata.getRandomSong();
             c.moveToFirst();
             String username = c.getString(c.getColumnIndex(MetaStoreContract.User.USERNAME));
@@ -157,8 +158,7 @@ public class Host extends User implements Observer {
             if (username.equals(this.name)) {
                 Song song = new Song(id, null, title, album, artist, username);
                 playerSongById(id, song);
-            }
-            else {
+            } else {
                 addSongRequest(username, id);
             }
             c.close();

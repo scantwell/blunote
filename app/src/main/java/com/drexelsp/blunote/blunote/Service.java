@@ -13,6 +13,7 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.Recommendation;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SingleAnswer;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
+import com.drexelsp.blunote.blunote.BlunoteMessages.UsernameUpdate;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WelcomePacket;
 import com.drexelsp.blunote.blunote.BlunoteMessages.WrapperMessage;
 import com.drexelsp.blunote.events.BluetoothEvent;
@@ -174,5 +175,11 @@ public class Service extends ClientService {
         super.sendDownstream(WrapperMessage.newBuilder()
                 .setType(WrapperMessage.Type.METADATA_UPDATE)
                 .setMetadataUpdate(message).build().toByteArray());
+    }
+
+    public void send(UsernameUpdate message) {
+        super.sendDownstream(WrapperMessage.newBuilder()
+                .setType(WrapperMessage.Type.USERNAME_UPDATE)
+                .setUsernameUpdate(message).build().toByteArray());
     }
 }
