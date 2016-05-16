@@ -1,16 +1,16 @@
 package com.drexelsp.blunote.blunote;
 
-import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
-import android.preference.PreferenceManager;
-
-import com.drexelsp.blunote.events.SongRecommendationEvent;
-import com.drexelsp.blunote.ui.PreferencesActivity;
+import java.util.ArrayList;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
+import com.drexelsp.blunote.events.SongRecommendationEvent;
+
+import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 /**
  * Created by scantwell on 3/31/2016.
@@ -23,9 +23,10 @@ public class User {
     protected Context context;
     protected Metadata metadata;
     protected Media media;
+    protected static String PREF_USERNAME = "pref_key_user_name";
 
     public User(Service service, Context context) {
-        this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_user_name", BluetoothAdapter.getDefaultAdapter().getName());
+        this.name = PreferenceManager.getDefaultSharedPreferences(context).getString(PREF_USERNAME, BluetoothAdapter.getDefaultAdapter().getName());
         this.service = service;
         this.context = context;
         this.media = new Media(context.getContentResolver());
@@ -36,7 +37,7 @@ public class User {
     public String getName() {
         return name;
     }
-    
+
     public BlunoteMessages.WelcomePacket getWelcomePacket() {
         return BlunoteMessages.WelcomePacket.newBuilder().build();
     }
@@ -58,6 +59,8 @@ public class User {
             this.onReceive(dinfo, message.getVote());
         } else if (BlunoteMessages.WrapperMessage.Type.WELCOME_PACKET.equals(message.getType())) {
             this.onReceive(dinfo, message.getWelcomePacket());
+        } else if (BlunoteMessages.WrapperMessage.Type.USERNAME_UPDATE.equals(message.getType())) {
+            this.onReceive(dinfo, message.getUsernameUpdate());
         } else {
             throw new RuntimeException(String.format("Unhandled message of type '%s'", message.getType().name()));
         }
@@ -109,6 +112,18 @@ public class User {
 
     public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.Vote message) {
         throw new RuntimeException("User cannot handle 'BlunoteMessages.Vote'. Not implemented.");
+    }
+
+    public void onReceive(BlunoteMessages.DeliveryInfo dinfo, BlunoteMessages.UsernameUpdate message) {
+        if (message.getOldUsername().equals(this.getName()) && BluetoothAdapter.getDefaultAdapter()
+                .getAddress().equals(message.getUserId())) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(PREF_USERNAME, message.getNewUsername());
+            editor.commit();
+            this.name = message.getNewUsername();
+            metadata.updateUsername(message.getNewUsername(), message.getOldUsername(), message.getUserId());
+        }
     }
 
     @Subscribe
