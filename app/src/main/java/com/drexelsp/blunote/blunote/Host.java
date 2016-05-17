@@ -84,9 +84,6 @@ public class Host extends User implements Observer {
     @Override
     public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message) {
         BlunoteMessages.MetadataUpdate update;
-        addUser();
-        update = this.metadata.addHostMetadata(message);
-
         String username = message.getOwner();
         addUser();
         update = this.metadata.addHostMetadata(message);
