@@ -110,11 +110,11 @@ public class Host extends User implements Observer {
                 message.getArtist(), message.getAlbum());
         String username = message.getUsername().isEmpty() || message.getUsername().equals("") ?
                 media.findSongUsername(message.getSong(), message.getArtist(), message.getAlbum()) : message.getUsername();
+        Song song = new Song(id, null, message.getSong(), message.getAlbum(), message.getArtist(), username);
         if (username.equals(this.getName())) {
-            Song song = new Song(id, null, message.getSong(), message.getAlbum(), message.getArtist(), username);
             playerSongById(id, song);
         } else {
-            addSongRequest(username, id);
+            addSongRequest(username, song);
         }
         //throw new RuntimeException("Not implemented.");
     }
@@ -149,12 +149,11 @@ public class Host extends User implements Observer {
     public void onSongRecommendation(SongRecommendationEvent event) {
         long id = Long.parseLong(event.songId);
         String owner = event.owner;
-
+        Song song = new Song(id, null, event.song, event.album, event.artist, event.owner);
         if (owner.equals(this.name)) {
-            Song song = new Song(id, null, event.song, event.album, event.artist, event.owner);
             playerSongById(id, song);
         } else {
-            addSongRequest(event.owner, id);
+            addSongRequest(event.owner, song);
         }
     }
 
@@ -173,20 +172,20 @@ public class Host extends User implements Observer {
                 String album = c.getString(c.getColumnIndex(MetaStoreContract.Track.ALBUM));
                 String artist = c.getString(c.getColumnIndex(MetaStoreContract.Track.ARTIST));
                 int id = c.getInt(c.getColumnIndex(MetaStoreContract.Track.SONG_ID));
+                Song song = new Song(id, null, title, album, artist, username);
                 if (username.equals(this.name)) {
-                    Song song = new Song(id, null, title, album, artist, username);
                     playerSongById(id, song);
                 } else {
-                    addSongRequest(username, id);
+                    addSongRequest(username, song);
                 }
             }
             c.close();
         }
     }
 
-    private void addSongRequest(String username, long id) {
-        sendSongRequest(username, id);
-        addNewSong(id);
+    private void addSongRequest(String username, Song song) {
+        sendSongRequest(username, song.getId());
+        addNewSong(song);
     }
 
     private void sendSongRequest(String username, long id) {
@@ -196,15 +195,15 @@ public class Host extends User implements Observer {
         service.send(builder.build());
     }
 
-    private void addNewSong(long songId) {
-        if (songHash.containsKey(songId)) {
+    private void addNewSong(Song song) {
+        if (songHash.containsKey(song.getId())) {
             return;
         } else {
             try {
                 File file = createTempFile();
-                Song s = new Song(songId, file);
-                s.addObserver(this);
-                songHash.put(songId, s);
+                song.createFileURI(file);
+                song.addObserver(this);
+                songHash.put(song.getId(), song);
             } catch (IOException e) {
                 e.printStackTrace();
             }

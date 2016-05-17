@@ -39,10 +39,7 @@ public class Song extends Observable {
 
     public Song(long id, File file) throws FileNotFoundException {
         this.id = id;
-        this.target = 1;
-        this.cache = new HashMap<>();
-        this.fos = new FileOutputStream(file);
-        this.uri = Uri.fromFile(file);
+
     }
 
     public synchronized boolean addFragment(BlunoteMessages.SongFragment frag) {
@@ -95,19 +92,42 @@ public class Song extends Observable {
         }
     }
 
+    public void createFileURI(File f) throws FileNotFoundException{
+        this.target = 1;
+        this.cache = new HashMap<>();
+        this.fos = new FileOutputStream(f);
+        this.uri = Uri.fromFile(f);
+    }
+
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getAlbum() {
         return album;
     }
 
+    public void setAlbum(String album) {
+        this.album = album;
+    }
+
     public String getArtist() {
         return artist;
     }
 
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
     public String getOwner() {
         return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

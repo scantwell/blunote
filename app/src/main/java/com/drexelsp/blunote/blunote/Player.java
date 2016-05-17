@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Manages the android.MediaPlayer to include queueing properties of Blunote.Song's and post/receive
  * necessary events to/from the UI layer.
  */
-public class Player extends Observable implements Runnable, MediaPlayer.OnCompletionListener {
+public class Player extends Observable implements Runnable, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener {
 
     private static final String TAG = "BlunoteMediaPlayer";
     private Deque<Song> queue;
@@ -38,10 +38,12 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
     private Song currentSong;
     private AtomicBoolean isPaused;
     private AtomicBoolean isPlaying;
+    private AtomicBoolean isPreparing;
 
     public Player(Context context) {
         this.isPaused = new AtomicBoolean(false);
         this.isPlaying = new AtomicBoolean(false);
+        this.isPreparing = new AtomicBoolean(false);
         this.currentSong = null;
         this.lastSong = null;
         this.context = context;
@@ -77,6 +79,14 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
         return (int) player.getCurrentPosition();
     }
 
+    public void onPrepared(MediaPlayer player) {
+        this.isPreparing.set(false);
+        this.isPlaying.set(true);
+        this.player.start();
+        EventBus.getDefault().postSticky(new PlaylistUpdateEvent(getPlaylist()));
+        EventBus.getDefault().postSticky(new PlaySongEvent(currentSong.getTitle(), currentSong.getArtist(),
+                currentSong.getAlbum(), currentSong.getOwner(), Integer.toString(player.getDuration()), this));
+    }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
@@ -194,16 +204,15 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
 
     private void playSong() {
         try {
-            this.isPlaying.set(true);
+            //this.isPlaying.set(true);
+            this.isPreparing.set(true);
             Song song = queue.remove();
             currentSong = song;
             player.reset();
             player.setDataSource(context, song.getUri());
-            player.prepare();
-            player.start();
-            EventBus.getDefault().postSticky(new PlaylistUpdateEvent(getPlaylist()));
-            EventBus.getDefault().postSticky(new PlaySongEvent(song.getTitle(), song.getArtist(),
-                    song.getAlbum(), song.getOwner(), Integer.toString(player.getDuration()), this));
+            player.setOnPreparedListener(this);
+            player.prepareAsync();
+            //player.start();
             Log.v(TAG, String.format("Playing song. Queue size %d", queue.size()));
         } catch (IOException e) {
             e.printStackTrace();
@@ -211,7 +220,7 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
     }
 
     private synchronized void waitOnQueueOrPlayer() {
-        while (queue.size() < 1 || isPlaying.get() || isPaused.get()) {
+        while (queue.size() < 1 || isPlaying.get() || isPaused.get() || isPreparing.get()) {
             try {
                 this.wait();
             } catch (InterruptedException e) {
