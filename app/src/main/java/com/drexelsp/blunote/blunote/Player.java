@@ -52,11 +52,6 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
         EventBus.getDefault().register(this);
     }
 
-    /**
-     * Synchronized method to add a Blunote.Song to the player's queue to be played.
-     *
-     * @param song
-     */
     public AtomicBoolean getIsPaused() {
         return isPaused;
     }
