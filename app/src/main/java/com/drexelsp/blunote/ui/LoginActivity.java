@@ -97,19 +97,22 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         }
 
         blunoteCheckPermission();
-        promptForDefaultSettings();
+        promptForDefaultUsername();
     }
 
-    private void promptForDefaultSettings()
+    private void promptForDefaultUsername()
     {
         if (hasDefaultUsername())
         {
             promptForSettings("Change default username?", "pref_key_user_name", getResources().getString(R.string.user_name_default));
         }
+    }
+
+    private void promptForDefaultServername()
+    {
         if (hasDefaultServername())
         {
-            Log.v(TAG, "CHANGING SERVER NAME");
-            promptForSettings("Change default network name?", "pref_key_network_name", getResources().getString(R.string.network_name_default));
+            promptForSettings("Change default servername?", "pref_key_network_name", getResources().getString(R.string.network_name_default));
         }
     }
 
@@ -247,6 +250,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         if (v == joinNetworkButton) {
             joinNetworkClicked();
         } else if (v == createNetworkButton) {
+            promptForDefaultServername();
             createNetworkClicked();
         } else if (v == refreshButton) {
             refreshButtonClickedSuccessfully();
@@ -307,6 +311,11 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 permissionsToGrant.add(Manifest.permission.READ_EXTERNAL_STORAGE);
             }
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.v(TAG, "Need to request permission for Fine Location");
+            permissionsToGrant.add(Manifest.permission.ACCESS_FINE_LOCATION);
+
         }
 
         if (permissionsToGrant.size() > 0) {
