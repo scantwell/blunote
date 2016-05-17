@@ -101,9 +101,9 @@ public class Service extends ClientService {
     }
 
     public void startNetwork() {
+        deleteContent();
         this.user = new Host(this, getApplicationContext());
         NetworkConfiguration.Builder configBuilder = NetworkConfiguration.newBuilder();
-        deleteContent();
         configBuilder.setHandshake(ByteString.copyFrom(user.getWelcomePacket().toByteArray()));
         configBuilder.setNotifyOnConnectDownstream(true);
         configBuilder.setNotifyOnConnectUpstream(true);
@@ -115,9 +115,9 @@ public class Service extends ClientService {
     }
 
     public void connectToNetwork(NetworkMap networkMap) {
+        deleteContent();
         this.user = new User(this, getApplicationContext());
         NetworkConfiguration.Builder configBuilder = NetworkConfiguration.newBuilder();
-        deleteContent();
         configBuilder.setNotifyOnConnectDownstream(true);
         configBuilder.setNotifyOnConnectUpstream(true);
         configBuilder.setNotifyOnDisconnectDownstream(true);

@@ -26,9 +26,13 @@ public class Reader implements Runnable {
                 byte[] buf = this.inputStream.rawRead();
                 callback.onReceivePacket(buf);
             } catch (IOException e) {
-                Log.w("Reader", String.format("Failed to read from connection %s", socket.getAddress()));
-                callback.onReadFailure(socket);
-                return;
+                try {
+                    this.inputStream = socket.getInputStream();
+                } catch (IOException e1) {
+                    Log.w("Reader", String.format("Failed to read from connection %s. %s", socket.getAddress(), e1.getMessage()));
+                    callback.onReadFailure(socket);
+                    return;
+                }
             }
         }
     }

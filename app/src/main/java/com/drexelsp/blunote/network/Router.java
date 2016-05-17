@@ -11,6 +11,7 @@ import com.drexelsp.blunote.events.OnReceiveUpstream;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -150,20 +151,24 @@ public class Router extends Thread {
 
     public void cleanUpstreamSocket(BlunoteSocket socket) {
         this.upSockets.remove(socket);
-        try {
-            this.upOuts.remove(socket.getOutputStream());
-        } catch (IOException e) {
-            Log.v(TAG, e.getMessage());
+        String macAddress = socket.getAddress();
+        for (BlunoteOutputStream stream : this.upOuts) {
+            if (stream.getMacAddress().equals(macAddress)) {
+                this.upOuts.remove(stream);
+                break;
+            }
         }
         postOnUpstreamDisconnection(socket);
     }
 
     public void cleanDownstreamSocket(BlunoteSocket socket) {
         this.downSockets.remove(socket);
-        try {
-            this.downOuts.remove(socket.getOutputStream());
-            } catch (IOException e) {
-            Log.v(TAG, e.getMessage());
+        String macAddress = socket.getAddress();
+        for (BlunoteOutputStream stream : this.downOuts) {
+            if (stream.getMacAddress().equals(macAddress)) {
+                this.downOuts.remove(stream);
+                break;
+            }
         }
         postOnDownstreamDisconnection(socket);
     }
