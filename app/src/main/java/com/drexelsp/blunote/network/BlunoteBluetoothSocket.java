@@ -31,6 +31,8 @@ public class BlunoteBluetoothSocket implements BlunoteSocket {
     }
 
     public void close() throws IOException {
+        this.socket.getInputStream().close();
+        this.socket.getOutputStream().close();
         this.socket.close();
     }
 }

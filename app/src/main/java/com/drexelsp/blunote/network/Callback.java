@@ -6,4 +6,5 @@ package com.drexelsp.blunote.network;
 public interface Callback {
 
     void onReceivePacket(byte[] data);
+    void onReadFailure(BlunoteSocket socket);
 }

@@ -134,7 +134,7 @@ message UsernameUpdate {
 */
 message WrapperMessage {
 
-	enum Type { METADATA_UPDATE = 1; MULTI_ANSWER = 2; RECOMMEND = 3; SINGLE_ANSWER= 4; SONG_FRAGMENT = 5; SONG_REQUEST = 6; VOTE = 7; WELCOME_PACKET = 8; USERNAME_UPDATE = 9;}
+	enum Type { METADATA_UPDATE = 1; MULTI_ANSWER = 2; RECOMMEND = 3; SINGLE_ANSWER= 4; SONG_FRAGMENT = 5; SONG_REQUEST = 6; VOTE = 7; WELCOME_PACKET = 8; USERNAME_UPDATE = 9; NETWORK_CONNECTION = 10;}
 
 	required Type type = 1;
 	optional MetadataUpdate metadataUpdate = 2;
@@ -146,6 +146,7 @@ message WrapperMessage {
 	optional Vote vote = 8;
 	optional WelcomePacket welcomePacket = 9;
 	optional UsernameUpdate usernameUpdate = 10;
+	optional NetworkConnection networkConnection = 11;
 }
 
 /**
@@ -169,6 +170,14 @@ message WelcomePacket {
 	required string networkName = 1;
 	required string numUsers = 2;
 	required string numSongs = 3;
+}
+
+message NetworkConnection {
+	enum Type { CONNECTION = 1; DISCONNECTION = 2; }
+
+	required Type type = 1;
+	required string macAddress = 2;
+	optional string hostMacAddress = 3;
 }
 
 message NetworkMap {

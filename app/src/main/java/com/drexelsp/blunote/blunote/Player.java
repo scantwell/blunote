@@ -56,6 +56,11 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
         return isPaused;
     }
 
+    /**
+     * Synchronized method to add a Blunote.Song to the player's queue to be played.
+     *
+     * @param song
+     */
     public synchronized void addSong(Song song) {
         Log.v(TAG, String.format("Adding song to queue. Queue size %d", queue.size()));
         queue.add(song);
@@ -220,7 +225,4 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
     private synchronized void wakeUp() {
         notify();
     }
-
-
-
 }

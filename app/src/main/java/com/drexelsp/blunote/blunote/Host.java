@@ -2,6 +2,7 @@ package com.drexelsp.blunote.blunote;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,6 +17,7 @@ import com.drexelsp.blunote.blunote.BlunoteMessages.SongFragment;
 import com.drexelsp.blunote.blunote.BlunoteMessages.SongRequest;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Vote;
 import com.drexelsp.blunote.events.SongRecommendationEvent;
+import com.drexelsp.blunote.network.NetworkNode;
 import com.drexelsp.blunote.provider.MetaStoreContract;
 
 import android.bluetooth.BluetoothAdapter;
@@ -35,14 +37,15 @@ public class Host extends User implements Observer {
     private ConcurrentHashMap<Long, Song> songHash;
     private String serverName;
     private int numUsers;
+    private NetworkNode networkTree;
 
     public Host(Service service, Context context) {
         super(service, context);
         this.songHash = new ConcurrentHashMap<>();
         this.numUsers = 1;
+        this.networkTree = new NetworkNode(BluetoothAdapter.getDefaultAdapter().getAddress());
         this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_user_name", BluetoothAdapter
                 .getDefaultAdapter().getName());
-        this.serverName = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_server_name", "Party Jamz");
         this.player = new Player(context);
         new Thread(this.player).start();
         this.player.addObserver(this);
@@ -59,23 +62,40 @@ public class Host extends User implements Observer {
         this.numUsers--;
     }
 
+    public void onReceive(DeliveryInfo dinfo, BlunoteMessages.NetworkConnection message) {
+        if (message.getType() == BlunoteMessages.NetworkConnection.Type.CONNECTION) {
+            String macAddress = message.getMacAddress();
+            String hostMacAddress = message.getHostMacAddress();
+            this.networkTree.addToNode(hostMacAddress, macAddress);
+            Log.v(TAG, String.format("Connection, Mac: %s, Host: %s", macAddress, hostMacAddress));
+        } else if (message.getType() == BlunoteMessages.NetworkConnection.Type.DISCONNECTION) {
+            String macAddress = message.getMacAddress();
+            ArrayList<String> droppedConnections = this.networkTree.removeNodeSubTree(macAddress);
+            Log.v(TAG, String.format("Disconnection, Macs to remove: %s", droppedConnections.toString()));
+            for (String user_id : droppedConnections) {
+                BlunoteMessages.MetadataUpdate update = metadata.deleteHostMetadata(user_id);
+                service.send(update);
+                removeUser();
+                updateWelcomePacket();
+            }
+        }
+    }
+
     @Override
     public void onReceive(DeliveryInfo dinfo, BlunoteMessages.MetadataUpdate message) {
         BlunoteMessages.MetadataUpdate update;
+        addUser();
+        update = this.metadata.addHostMetadata(message);
+
         String username = message.getOwner();
-        if (message.getAction() == BlunoteMessages.MetadataUpdate.Action.ADD) {
-            addUser();
-            update = this.metadata.addHostMetadata(message);
-            if (!username.equals(update.getOwner())) {
-                BlunoteMessages.UsernameUpdate.Builder builder = BlunoteMessages.UsernameUpdate.newBuilder();
-                builder.setOldUsername(username);
-                builder.setNewUsername(update.getOwner());
-                builder.setUserId(message.getUserId());
-                this.service.send(builder.build());
-            }
-        } else {
-            removeUser();
-            update = this.metadata.deleteHostMetadata(message);
+        addUser();
+        update = this.metadata.addHostMetadata(message);
+        if (!username.equals(update.getOwner())) {
+            BlunoteMessages.UsernameUpdate.Builder builder = BlunoteMessages.UsernameUpdate.newBuilder();
+            builder.setOldUsername(username);
+            builder.setNewUsername(update.getOwner());
+            builder.setUserId(message.getUserId());
+            this.service.send(builder.build());
         }
         updateWelcomePacket();
         this.service.send(update);
@@ -181,7 +201,7 @@ public class Host extends User implements Observer {
 
     private void addNewSong(long songId) {
         if (songHash.containsKey(songId)) {
-            throw new RuntimeException("Song has already been registered.");
+            return;
         } else {
             try {
                 File file = createTempFile();
@@ -212,7 +232,7 @@ public class Host extends User implements Observer {
 
     public BlunoteMessages.WelcomePacket getWelcomePacket() {
         BlunoteMessages.WelcomePacket.Builder wp = BlunoteMessages.WelcomePacket.newBuilder();
-        wp.setNetworkName(this.serverName);
+        wp.setNetworkName(PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_network_name", "Party Jamz"));
         wp.setNumSongs(this.metadata.getSongCount());
         wp.setNumUsers(Integer.toString(this.numUsers));
         return wp.build();

@@ -27,7 +27,7 @@ public class Reader implements Runnable {
                 callback.onReceivePacket(buf);
             } catch (IOException e) {
                 Log.w("Reader", String.format("Failed to read from connection %s", socket.getAddress()));
-                e.printStackTrace();
+                callback.onReadFailure(socket);
                 return;
             }
         }

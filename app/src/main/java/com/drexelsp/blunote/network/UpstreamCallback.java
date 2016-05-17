@@ -14,4 +14,8 @@ public class UpstreamCallback implements Callback {
     public void onReceivePacket(byte[] data) {
         router.addDownstreamMessage(data);
     }
+
+    public void onReadFailure(BlunoteSocket socket) {
+        router.cleanUpstreamSocket(socket);
+    }
 }

@@ -15,6 +15,7 @@ import android.util.Log;
 import com.drexelsp.blunote.blunote.BlunoteMessages;
 import com.drexelsp.blunote.blunote.BlunoteMessages.DeliveryInfo;
 import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConfiguration;
+import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkConnection;
 import com.drexelsp.blunote.blunote.BlunoteMessages.NetworkPacket;
 import com.drexelsp.blunote.blunote.BlunoteMessages.Pdu;
 import com.drexelsp.blunote.blunote.R;
@@ -57,6 +58,11 @@ public class NetworkService extends Service {
                 sendBroadcast(intent);
             }
         } else if (event.direction == OnConnectionEvent.DOWNSTREAM) {
+            if (this.configuration.getReceiveUpstream()) {
+                onReceiveUpstream(new OnReceiveUpstream(createConnectionNetworkPacket(event.macAddress).build().toByteArray()));
+            } else {
+                sendUpstream(createConnectionNetworkPacket(event.macAddress).build().toByteArray());
+            }
             if (this.configuration.getNotifyOnConnectDownstream()) {
                 Intent intent = new Intent();
                 intent.setAction("networkservice.onrecieved");
@@ -78,6 +84,11 @@ public class NetworkService extends Service {
                 sendBroadcast(intent);
             }
         } else if (event.direction == OnDisconnectionEvent.DOWNSTREAM) {
+            if (this.configuration.getReceiveUpstream()) {
+                onReceiveUpstream(new OnReceiveUpstream(createDisconnectionNetworkPacket(event.macAddress).build().toByteArray()));
+            } else {
+                sendUpstream(createDisconnectionNetworkPacket(event.macAddress).build().toByteArray());
+            }
             if (this.configuration.getNotifyOnDisconnectUpstream()) {
                 Intent intent = new Intent();
                 intent.setAction("networkservice.onrecieved");
@@ -264,6 +275,31 @@ public class NetworkService extends Service {
         note.flags |= Notification.FLAG_NO_CLEAR;
         NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         nManager.notify(NOTIFICATION_ID, note);
+    }
+
+    private NetworkPacket.Builder createConnectionNetworkPacket(String macAddress) {
+        NetworkConnection.Builder connectionBuilder = NetworkConnection.newBuilder();
+        connectionBuilder.setType(NetworkConnection.Type.CONNECTION);
+        connectionBuilder.setMacAddress(macAddress);
+        connectionBuilder.setHostMacAddress(BluetoothAdapter.getDefaultAdapter().getAddress());
+
+        BlunoteMessages.WrapperMessage.Builder wrapperBuilder = BlunoteMessages.WrapperMessage.newBuilder();
+        wrapperBuilder.setType(BlunoteMessages.WrapperMessage.Type.NETWORK_CONNECTION);
+        wrapperBuilder.setNetworkConnection(connectionBuilder);
+
+        return createNetworkPacket(wrapperBuilder.build().toByteArray());
+    }
+
+    private NetworkPacket.Builder createDisconnectionNetworkPacket(String macAddress) {
+        NetworkConnection.Builder connectionBuilder = NetworkConnection.newBuilder();
+        connectionBuilder.setType(NetworkConnection.Type.DISCONNECTION);
+        connectionBuilder.setMacAddress(macAddress);
+
+        BlunoteMessages.WrapperMessage.Builder wrapperBuilder = BlunoteMessages.WrapperMessage.newBuilder();
+        wrapperBuilder.setType(BlunoteMessages.WrapperMessage.Type.NETWORK_CONNECTION);
+        wrapperBuilder.setNetworkConnection(connectionBuilder);
+
+        return createNetworkPacket(wrapperBuilder.build().toByteArray());
     }
 
     private NetworkPacket.Builder createNetworkPacket(byte[] data) {
