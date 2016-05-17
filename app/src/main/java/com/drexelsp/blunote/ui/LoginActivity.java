@@ -109,7 +109,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         if (hasDefaultServername())
         {
             Log.v(TAG, "CHANGING SERVER NAME");
-            promptForSettings("Change default servername?", "pref_key_network_name", getResources().getString(R.string.network_name_default));
+            promptForSettings("Change default network name?", "pref_key_network_name", getResources().getString(R.string.network_name_default));
         }
     }
 
@@ -217,11 +217,6 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
 
     @Override
     protected void onStart() {
-        getApplicationContext().getContentResolver().delete(MetaStoreContract.Album.CONTENT_URI, null, null);
-        getApplicationContext().getContentResolver().delete(MetaStoreContract.Artist.CONTENT_URI, null, null);
-        getApplicationContext().getContentResolver().delete(MetaStoreContract.Track.CONTENT_URI, null, null);
-        getApplicationContext().getContentResolver().delete(MetaStoreContract.User.CONTENT_URI, null, null);
-        getApplicationContext().getContentResolver().delete(MetaStoreContract.UserTracks.CONTENT_URI, null, null);
         super.onStart();
         bindService(new Intent(this, Service.class), this, Context.BIND_AUTO_CREATE);
         EventBus.getDefault().register(this);

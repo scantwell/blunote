@@ -545,17 +545,17 @@ public final class MetaStore extends ContentProvider {
     }
 
     public Cursor songDeletion(SQLiteDatabase db) {
-        String QUERY = "SELECT * FROM track t LEFT OUTER JOIN user_tracks ut ON t.title = ut.title AND t.album = ut.album AND t.artist = ut.artist WHERE ut._id IS NULL";
+        String QUERY = "SELECT t.album, t.artist, t.duration, t.song_id, t.title, t.track, t.year FROM track t LEFT OUTER JOIN user_tracks ut ON t.title = ut.title AND t.album = ut.album AND t.artist = ut.artist WHERE ut._id IS NULL";
         return db.rawQuery(QUERY, null);
     }
 
     public Cursor artistDeletion(SQLiteDatabase db) {
-        String QUERY = "SELECT * FROM artist a LEFT OUTER JOIN user_tracks ut ON a.artist = ut.artist WHERE ut._id IS NULL";
+        String QUERY = "SELECT a.artist, a.number_of_albums, a.number_of_tracks FROM artist a LEFT OUTER JOIN user_tracks ut ON a.artist = ut.artist WHERE ut._id IS NULL";
         return db.rawQuery(QUERY, null);
     }
 
     public Cursor albumDeletion(SQLiteDatabase db) {
-        String QUERY = "SELECT * FROM album a LEFT OUTER JOIN user_tracks ut ON a.album = ut.album AND a.artist = ut.artist WHERE ut._id IS NULL";
+        String QUERY = "SELECT a.album, a.album_art, a.artist, a.first_year, a.last_year, a.number_of_songs, a.number_of_songs_for_artist FROM album a LEFT OUTER JOIN user_tracks ut ON a.album = ut.album AND a.artist = ut.artist WHERE ut._id IS NULL";
         return db.rawQuery(QUERY, null);
     }
 

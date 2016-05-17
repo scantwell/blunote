@@ -20,6 +20,7 @@ import com.drexelsp.blunote.events.BluetoothEvent;
 import com.drexelsp.blunote.events.OnDisconnectionEvent;
 import com.drexelsp.blunote.events.OnLeaveNetworkEvent;
 import com.drexelsp.blunote.network.ClientService;
+import com.drexelsp.blunote.provider.MetaStoreContract;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -102,7 +103,8 @@ public class Service extends ClientService {
     public void startNetwork() {
         this.user = new Host(this, getApplicationContext());
         NetworkConfiguration.Builder configBuilder = NetworkConfiguration.newBuilder();
-        configBuilder.setHandshake(ByteString.copyFrom(WelcomePacket.newBuilder().setNetworkName("Party Jamz HardCoded").setNumSongs("0").setNumUsers("0").build().toByteArray()));
+        deleteContent();
+        configBuilder.setHandshake(ByteString.copyFrom(user.getWelcomePacket().toByteArray()));
         configBuilder.setNotifyOnConnectDownstream(true);
         configBuilder.setNotifyOnConnectUpstream(true);
         configBuilder.setNotifyOnDisconnectDownstream(true);
@@ -115,6 +117,7 @@ public class Service extends ClientService {
     public void connectToNetwork(NetworkMap networkMap) {
         this.user = new User(this, getApplicationContext());
         NetworkConfiguration.Builder configBuilder = NetworkConfiguration.newBuilder();
+        deleteContent();
         configBuilder.setNotifyOnConnectDownstream(true);
         configBuilder.setNotifyOnConnectUpstream(true);
         configBuilder.setNotifyOnDisconnectDownstream(true);
@@ -128,6 +131,7 @@ public class Service extends ClientService {
     public void onLeaveNetworkEvent(OnLeaveNetworkEvent event)
     {
         Log.v(TAG, "Disconnecting");
+        deleteContent();
         this.disconnect();
     }
 
@@ -181,5 +185,13 @@ public class Service extends ClientService {
         super.sendDownstream(WrapperMessage.newBuilder()
                 .setType(WrapperMessage.Type.USERNAME_UPDATE)
                 .setUsernameUpdate(message).build().toByteArray());
+    }
+
+    private void deleteContent() {
+        getApplicationContext().getContentResolver().delete(MetaStoreContract.Album.CONTENT_URI, null, null);
+        getApplicationContext().getContentResolver().delete(MetaStoreContract.Artist.CONTENT_URI, null, null);
+        getApplicationContext().getContentResolver().delete(MetaStoreContract.Track.CONTENT_URI, null, null);
+        getApplicationContext().getContentResolver().delete(MetaStoreContract.User.CONTENT_URI, null, null);
+        getApplicationContext().getContentResolver().delete(MetaStoreContract.UserTracks.CONTENT_URI, null, null);
     }
 }

@@ -52,15 +52,15 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
         EventBus.getDefault().register(this);
     }
 
+    public AtomicBoolean getIsPaused() {
+        return isPaused;
+    }
+
     /**
      * Synchronized method to add a Blunote.Song to the player's queue to be played.
      *
      * @param song
      */
-    public AtomicBoolean getIsPaused() {
-        return isPaused;
-    }
-
     public synchronized void addSong(Song song) {
         Log.v(TAG, String.format("Adding song to queue. Queue size %d", queue.size()));
         queue.add(song);
@@ -224,38 +224,5 @@ public class Player extends Observable implements Runnable, MediaPlayer.OnComple
 
     private synchronized void wakeUp() {
         notify();
-    }
-
-    private float getCurrentTimePercentage() {
-        return player.getCurrentPosition() / player.getDuration();
-    }
-
-    public int getCurrentMillisecond() {
-        return (int) player.getCurrentPosition();
-    }
-
-    @Subscribe
-    public void onPauseSong(PauseSongEvent event) {
-        if (this.isPlaying.get()) {
-            player.pause();
-            isPlaying.set(false);
-            isPaused.set(true);
-        } else {
-            isPlaying.set(true);
-            isPaused.set(false);
-            player.start();
-        }
-    }
-
-    @Subscribe
-    public void onSeek(SeekEvent event) {
-        player.seekTo((int) event.position);
-    }
-
-    @Override
-    public void onCompletion(MediaPlayer mp) {
-        Log.v(TAG, "OnCompletion Called");
-        this.isPlaying.set(false);
-        wakeUp();
     }
 }

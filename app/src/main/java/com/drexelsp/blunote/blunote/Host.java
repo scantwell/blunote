@@ -46,7 +46,6 @@ public class Host extends User implements Observer {
         this.networkTree = new NetworkNode(BluetoothAdapter.getDefaultAdapter().getAddress());
         this.name = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_user_name", BluetoothAdapter
                 .getDefaultAdapter().getName());
-        this.serverName = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_server_name", "Party Jamz");
         this.player = new Player(context);
         new Thread(this.player).start();
         this.player.addObserver(this);
@@ -76,6 +75,8 @@ public class Host extends User implements Observer {
             for (String user_id : droppedConnections) {
                 BlunoteMessages.MetadataUpdate update = metadata.deleteHostMetadata(user_id);
                 service.send(update);
+                removeUser();
+                updateWelcomePacket();
             }
         }
     }
@@ -201,7 +202,7 @@ public class Host extends User implements Observer {
 
     private void addNewSong(long songId) {
         if (songHash.containsKey(songId)) {
-            throw new RuntimeException("Song has already been registered.");
+            return;
         } else {
             try {
                 File file = createTempFile();
@@ -232,7 +233,7 @@ public class Host extends User implements Observer {
 
     public BlunoteMessages.WelcomePacket getWelcomePacket() {
         BlunoteMessages.WelcomePacket.Builder wp = BlunoteMessages.WelcomePacket.newBuilder();
-        wp.setNetworkName(this.serverName);
+        wp.setNetworkName(PreferenceManager.getDefaultSharedPreferences(context).getString("pref_key_network_name", "Party Jamz"));
         wp.setNumSongs(this.metadata.getSongCount());
         wp.setNumUsers(Integer.toString(this.numUsers));
         return wp.build();
