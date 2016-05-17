@@ -91,7 +91,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             networkListView.setAdapter(mAdapter);
         }
 
-        BlunoteCheckPermission();
+        blunoteCheckPermission();
 
         //dialog.hide();
 
@@ -234,7 +234,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         }
     }
 
-    private void BlunoteCheckPermission() {
+    private void blunoteCheckPermission() {
         Log.v(TAG, "Checking Permissions");
         ArrayList<String> permissionsToGrant = new ArrayList<>();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
@@ -254,6 +254,11 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 permissionsToGrant.add(Manifest.permission.READ_EXTERNAL_STORAGE);
             }
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.v(TAG, "Need to request permission for Fine Location");
+            permissionsToGrant.add(Manifest.permission.ACCESS_FINE_LOCATION);
+
         }
 
         if (permissionsToGrant.size() > 0) {
