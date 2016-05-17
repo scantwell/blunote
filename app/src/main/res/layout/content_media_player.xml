@@ -124,8 +124,9 @@
                     android:layout_height="50dp"
                     android:layout_marginRight="16dp"
                     android:background="@drawable/ic_play_pause"
-                    android:textOn=""
-                    android:textOff=""></ToggleButton>
+                    android:checked="true"
+                    android:textOff=""
+                    android:textOn=""></ToggleButton>
 
                 <ImageButton
                     android:id="@+id/nextButton"

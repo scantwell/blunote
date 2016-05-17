@@ -143,7 +143,6 @@ public class NetworkService extends Service {
             try {
                 this.router.addUpstream(blunoteSocket);
                 mBluetoothServerListener = new BluetoothServerListener(this.router, this.uuid, this.configuration.getHandshake().toByteArray());
-                makeDiscoverable();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -157,14 +156,12 @@ public class NetworkService extends Service {
         this.router.shutdown();
         if(mBluetoothServerListener != null)
             this.mBluetoothServerListener.shutdown();
-        cancelDiscoverable();
     }
 
     public void startNetwork(NetworkConfiguration config) {
         this.configuration = config;
         this.router = createRouter(config);
         mBluetoothServerListener = new BluetoothServerListener(this.router, uuid, config.getHandshake().toByteArray());
-        makeDiscoverable();
         this.router.start();
     }
 
@@ -187,22 +184,6 @@ public class NetworkService extends Service {
         router.setNotifyOnReceiveDownstream(true);
         router.setNotifyOnReceiveUpstream(true);
         return router;
-    }
-
-    private void makeDiscoverable() {
-        Log.v(TAG, "Make Discoverable");
-        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
-        discoverableIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(discoverableIntent);
-    }
-
-    private void cancelDiscoverable() {
-        Log.v(TAG, "Cancel Discoverable");
-        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 1);
-        discoverableIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(discoverableIntent);
     }
 
     @Nullable
