@@ -97,18 +97,21 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         }
 
         blunoteCheckPermission();
-        promptForDefaultSettings();
+        promptForDefaultUsername();
     }
 
-    private void promptForDefaultSettings()
+    private void promptForDefaultUsername()
     {
         if (hasDefaultUsername())
         {
             promptForSettings("Change default username?", "pref_key_user_name", getResources().getString(R.string.user_name_default));
         }
+    }
+
+    private void promptForDefaultServername()
+    {
         if (hasDefaultServername())
         {
-            Log.v(TAG, "CHANGING SERVER NAME");
             promptForSettings("Change default servername?", "pref_key_network_name", getResources().getString(R.string.network_name_default));
         }
     }
@@ -252,6 +255,7 @@ public class LoginActivity extends BaseBluNoteActivity implements View.OnClickLi
         if (v == joinNetworkButton) {
             joinNetworkClicked();
         } else if (v == createNetworkButton) {
+            promptForDefaultServername();
             createNetworkClicked();
         } else if (v == refreshButton) {
             refreshButtonClickedSuccessfully();
